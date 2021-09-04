@@ -35,7 +35,8 @@ type RetryerFactory interface {
 }
 
 type Retryer interface {
-	OnFail(error) bool
+	OnFail(id int64, err error) bool
+	OnSuccess(id int64)
 }
 
 type Uploader struct {
@@ -76,7 +77,7 @@ func (u Uploader) Upload(ctx context.Context, input *UploadInput) (UploadContext
 		u.PacketizerFactory = &DefaultPacketizerFactory{}
 	}
 	if u.RetryerFactory == nil {
-		u.RetryerFactory = &NoRetryerFactory{}
+		u.RetryerFactory = DefaultRetryer
 	}
 	packetizer, err := u.PacketizerFactory.New(input.Body)
 	if err != nil {
@@ -157,7 +158,7 @@ func (uc *uploadContext) Result() (UploadOutput, error) {
 func (uc *uploadContext) single(ctx context.Context, r io.ReadSeeker, cleanup func()) {
 	defer cleanup()
 
-	if err := withRetry(ctx, uc.retryer, func() error {
+	if err := withRetry(ctx, 0, uc.retryer, func() error {
 		out, err := uc.api.PutObject(ctx, &PutObjectInput{
 			Bucket:      uc.input.Bucket,
 			Key:         uc.input.Key,
@@ -179,7 +180,7 @@ func (uc *uploadContext) single(ctx context.Context, r io.ReadSeeker, cleanup fu
 }
 
 func (uc *uploadContext) multi(ctx context.Context, r io.ReadSeeker, cleanup func()) {
-	if err := withRetry(ctx, uc.retryer, func() error {
+	if err := withRetry(ctx, 0, uc.retryer, func() error {
 		out, err := uc.api.CreateMultipartUpload(ctx, &CreateMultipartUploadInput{
 			Bucket:      uc.input.Bucket,
 			Key:         uc.input.Key,
@@ -214,7 +215,7 @@ func (uc *uploadContext) multi(ctx context.Context, r io.ReadSeeker, cleanup fun
 			uc.fail(err)
 			return
 		}
-		if err := withRetry(ctx, uc.retryer, func() error {
+		if err := withRetry(ctx, i, uc.retryer, func() error {
 			out, err := uc.api.UploadPart(ctx, &UploadPartInput{
 				Body:       r,
 				Bucket:     uc.input.Bucket,
@@ -262,7 +263,7 @@ func (uc *uploadContext) multi(ctx context.Context, r io.ReadSeeker, cleanup fun
 	}
 	sort.Sort(parts)
 
-	if err := withRetry(ctx, uc.retryer, func() error {
+	if err := withRetry(ctx, -1, uc.retryer, func() error {
 		out, err := uc.api.CompleteMultipartUpload(ctx, &CompleteMultipartUploadInput{
 			Bucket:         uc.input.Bucket,
 			Key:            uc.input.Key,
