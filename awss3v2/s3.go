@@ -131,13 +131,17 @@ func (w *wrapper) AbortMultipartUpload(ctx context.Context, input *s3iot.AbortMu
 }
 
 func (w *wrapper) UploadPart(ctx context.Context, input *s3iot.UploadPartInput) (*s3iot.UploadPartOutput, error) {
+	var pn int32
+	if input.PartNumber != nil {
+		pn = int32(*input.PartNumber)
+	}
 	out, err := w.api.UploadPart(
 		ctx,
 		&s3.UploadPartInput{
 			Body:       input.Body,
 			Bucket:     input.Bucket,
 			Key:        input.Key,
-			PartNumber: int32(*input.PartNumber),
+			PartNumber: pn,
 			UploadId:   input.UploadID,
 		})
 	if err != nil {
