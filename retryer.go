@@ -58,6 +58,7 @@ func (f ExponentialBackoffRetryerFactory) New() Retryer {
 	return &exponentialBackoffRetryer{
 		factory: f,
 		wait:    make(map[int64]time.Duration),
+		fails:   make(map[int64]int),
 	}
 }
 
@@ -65,6 +66,7 @@ type exponentialBackoffRetryer struct {
 	factory ExponentialBackoffRetryerFactory
 	mu      sync.Mutex
 	wait    map[int64]time.Duration
+	fails   map[int64]int
 }
 
 func (r *exponentialBackoffRetryer) OnFail(id int64, err error) bool {
@@ -80,9 +82,18 @@ func (r *exponentialBackoffRetryer) OnFail(id int64, err error) bool {
 		wait = r.factory.WaitBase
 	} else {
 		wait = r.wait[id] * 2
+		if wait > r.factory.WaitMax {
+			wait = r.factory.WaitMax
+		}
 		r.wait[id] = wait
 	}
+	r.fails[id]++
+	cnt := r.fails[id]
 	r.mu.Unlock()
+
+	if cnt > r.factory.RetryMax {
+		return false
+	}
 
 	time.Sleep(wait)
 	return true
@@ -92,6 +103,7 @@ func (r *exponentialBackoffRetryer) OnSuccess(id int64) {
 	r.mu.Lock()
 	if _, ok := r.wait[id]; ok {
 		delete(r.wait, id)
+		delete(r.fails, id)
 	}
 	r.mu.Unlock()
 }
