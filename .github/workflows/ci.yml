@@ -47,4 +47,4 @@ jobs:
       - uses: codecov/codecov-action@v2
         if: matrix.package != './examples/'
         with:
-          file: ./cover.out
+          file: ${{ matrix.package }}cover.out
