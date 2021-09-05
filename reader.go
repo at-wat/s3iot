@@ -35,30 +35,30 @@ func (f *WaitReadInterceptorFactory) SetMaxChunkSize(s int) {
 	f.mu.Unlock()
 }
 
-type throttleReadInterceptor struct {
+type waitReadInterceptor struct {
 	factory *WaitReadInterceptorFactory
 }
 
 func (f *WaitReadInterceptorFactory) New() ReadInterceptor {
-	return &throttleReadInterceptor{
+	return &waitReadInterceptor{
 		factory: f,
 	}
 }
 
-func (i *throttleReadInterceptor) Reader(r io.ReadSeeker) io.ReadSeeker {
-	return &throttleReader{
+func (i *waitReadInterceptor) Reader(r io.ReadSeeker) io.ReadSeeker {
+	return &waitReader{
 		ReadSeeker: r,
 		factory:    i.factory,
 	}
 }
 
-type throttleReader struct {
+type waitReader struct {
 	io.ReadSeeker
 
 	factory *WaitReadInterceptorFactory
 }
 
-func (r *throttleReader) Read(b []byte) (int, error) {
+func (r *waitReader) Read(b []byte) (int, error) {
 	r.factory.mu.RLock()
 	waitPerByte := r.factory.waitPerByte
 	maxChunkSize := r.factory.maxChunkSize
