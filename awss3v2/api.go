@@ -6,6 +6,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
 
+// S3API is the interface of S3 APIs used by s3iot.
 type S3API interface {
 	AbortMultipartUpload(ctx context.Context, params *s3.AbortMultipartUploadInput, optFns ...func(*s3.Options)) (*s3.AbortMultipartUploadOutput, error)
 	CompleteMultipartUpload(ctx context.Context, params *s3.CompleteMultipartUploadInput, optFns ...func(*s3.Options)) (*s3.CompleteMultipartUploadOutput, error)
