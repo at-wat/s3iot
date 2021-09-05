@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"os"
+	"os/signal"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -28,13 +29,15 @@ func main() {
 		log.Fatal(err)
 	}
 
+	ctx, cancel := context.WithCancel(context.Background())
+
 	wait := &s3iot.WaitReadInterceptorFactory{}
 	wait.WaitPerByte(time.Microsecond) // 1MB/s
 
 	uploader := awss3v1.NewUploader(sess,
 		s3iot.WithReadInterceptor(wait),
 	)
-	uc, err := uploader.Upload(context.TODO(), &s3iot.UploadInput{
+	uc, err := uploader.Upload(ctx, &s3iot.UploadInput{
 		Bucket: aws.String(os.Args[2]),
 		Key:    aws.String(os.Args[3]),
 		Body:   f,
@@ -51,8 +54,13 @@ func main() {
 		log.Printf("%+v", status)
 	}
 
+	sig := make(chan os.Signal, 1)
+	signal.Notify(sig, os.Interrupt)
+
 	for {
 		select {
+		case <-sig:
+			cancel()
 		case <-time.After(500 * time.Millisecond):
 			showStatus()
 		case <-uc.Done():
