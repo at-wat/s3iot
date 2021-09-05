@@ -50,22 +50,37 @@ func TestDefaultPacketizer(t *testing.T) {
 			f := &DefaultPacketizerFactory{
 				PartSize: tt.partSize,
 			}
-			readers := map[string]io.Reader{
-				"Reader": &readOnly{
-					r: bytes.NewReader(tt.input),
+			testCases := map[string]struct {
+				r io.Reader
+				n int64
+			}{
+				"Reader": {
+					r: &readOnly{
+						r: bytes.NewReader(tt.input),
+					},
+					n: -1,
 				},
-				"ReadSeeker": &readSeekOnly{
-					r: bytes.NewReader(tt.input),
+				"ReadSeeker": {
+					r: &readSeekOnly{
+						r: bytes.NewReader(tt.input),
+					},
+					n: int64(len(tt.input)),
 				},
-				"ReadSeekerAt": bytes.NewReader(tt.input),
+				"ReadSeekerAt": {
+					r: bytes.NewReader(tt.input),
+					n: int64(len(tt.input)),
+				},
 			}
 
-			for name, r := range readers {
-				r := r
+			for name, tt2 := range testCases {
+				tt2 := tt2
 				t.Run(name, func(t *testing.T) {
-					p, err := f.New(r)
+					p, err := f.New(tt2.r)
 					if err != nil {
 						t.Fatal(err)
+					}
+					if n := p.Len(); n != tt2.n {
+						t.Errorf("Packetizer reported wrong length. Expected %d, got %d", tt2.n, n)
 					}
 					for _, e := range tt.expected {
 						r, cleanup, err := p.NextReader()
