@@ -8,3 +8,5 @@ coverage:
       default:
         target: 30%
         base: pr
+ignore:
+  - "**/moq/**"
