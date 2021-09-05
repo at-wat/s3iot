@@ -8,16 +8,20 @@ import (
 	"time"
 )
 
+// Default retry parameters.
 const (
 	DefaultExponentialBackoffWaitBase = time.Second
 	DefaultExponentialBackoffWaitMax  = time.Minute
 	DefaultRetryMax                   = 8
 )
 
+// DefaultRetryer is the default Retryer used by Uploader.
 var DefaultRetryer = &ExponentialBackoffRetryerFactory{}
 
+// NoRetryerFactory disables retry.
 type NoRetryerFactory struct{}
 
+// New creates NoRetryer.
 func (NoRetryerFactory) New() Retryer {
 	return &noRetryer{}
 }
@@ -30,12 +34,17 @@ func (noRetryer) OnFail(int64, error) bool {
 
 func (noRetryer) OnSuccess(int64) {}
 
+// ExponentialBackoffRetryerFactory creates ExponentialBackoffRetryer.
+// When raw s3 upload API call is failed, the API call will be retried
+// after WaitBase. Wait duration is multiplyed by 2 if it continuously
+// failed up to WaitMax.
 type ExponentialBackoffRetryerFactory struct {
 	WaitBase time.Duration
 	WaitMax  time.Duration
 	RetryMax int
 }
 
+// New creates ExponentialBackoffRetryer.
 func (f ExponentialBackoffRetryerFactory) New() Retryer {
 	if f.WaitBase == 0 {
 		f.WaitBase = DefaultExponentialBackoffWaitBase

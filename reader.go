@@ -6,16 +6,19 @@ import (
 	"time"
 )
 
+// Default ReadInterceptor parameters.
 const (
 	DefaultWaitReadInterceptorMaxChunkSize = 4 * 1024
 )
 
+// WaitReadInterceptorFactory creates WaitInterceptor.
 type WaitReadInterceptorFactory struct {
 	mu           sync.RWMutex
 	waitPerByte  time.Duration
 	maxChunkSize int
 }
 
+// NewWaitReadInterceptorFactory creates WaitReadInterceptorFactory with wait/byte value.
 func NewWaitReadInterceptorFactory(waitPerByte time.Duration) *WaitReadInterceptorFactory {
 	return &WaitReadInterceptorFactory{
 		waitPerByte:  waitPerByte,
@@ -23,12 +26,16 @@ func NewWaitReadInterceptorFactory(waitPerByte time.Duration) *WaitReadIntercept
 	}
 }
 
+// SetWaitPerByte sets wait/byte parameter.
+// It can be changed during upload.
 func (f *WaitReadInterceptorFactory) SetWaitPerByte(w time.Duration) {
 	f.mu.Lock()
 	f.waitPerByte = w
 	f.mu.Unlock()
 }
 
+// SetMaxChunkSize sets maximum size of the uploading data chunk.
+// It can be changed during upload.
 func (f *WaitReadInterceptorFactory) SetMaxChunkSize(s int) {
 	f.mu.Lock()
 	f.maxChunkSize = s
@@ -39,6 +46,7 @@ type waitReadInterceptor struct {
 	factory *WaitReadInterceptorFactory
 }
 
+// New creates WaitReadInterceptor.
 func (f *WaitReadInterceptorFactory) New() ReadInterceptor {
 	return &waitReadInterceptor{
 		factory: f,
