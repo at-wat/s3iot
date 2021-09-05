@@ -33,6 +33,7 @@ func main() {
 
 	wait := &s3iot.WaitReadInterceptorFactory{}
 	wait.SetWaitPerByte(time.Microsecond) // 1s/MB
+	wait.SetMaxChunkSize(1024 * 1024)
 
 	uploader := awss3v1.NewUploader(sess,
 		s3iot.WithReadInterceptor(wait),

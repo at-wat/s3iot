@@ -7,13 +7,20 @@ import (
 )
 
 type WaitReadInterceptorFactory struct {
-	mu          sync.RWMutex
-	waitPerByte time.Duration
+	mu           sync.RWMutex
+	waitPerByte  time.Duration
+	maxChunkSize int
 }
 
 func (f *WaitReadInterceptorFactory) SetWaitPerByte(w time.Duration) {
 	f.mu.Lock()
 	f.waitPerByte = w
+	f.mu.Unlock()
+}
+
+func (f *WaitReadInterceptorFactory) SetMaxChunkSize(s int) {
+	f.mu.Lock()
+	f.maxChunkSize = s
 	f.mu.Unlock()
 }
 
@@ -43,7 +50,14 @@ type throttleReader struct {
 func (r *throttleReader) Read(b []byte) (int, error) {
 	r.factory.mu.RLock()
 	waitPerByte := r.factory.waitPerByte
+	maxChunkSize := r.factory.maxChunkSize
 	r.factory.mu.RUnlock()
-	time.Sleep(waitPerByte * time.Duration(len(b)))
-	return r.ReadSeeker.Read(b)
+
+	if maxChunkSize != 0 && len(b) > maxChunkSize {
+		b = b[:maxChunkSize]
+	}
+
+	n, err := r.ReadSeeker.Read(b)
+	time.Sleep(waitPerByte * time.Duration(n))
+	return n, err
 }
