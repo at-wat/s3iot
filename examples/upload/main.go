@@ -31,12 +31,10 @@ func main() {
 
 	ctx, cancel := context.WithCancel(context.Background())
 
-	wait := &s3iot.WaitReadInterceptorFactory{}
-	wait.SetWaitPerByte(time.Microsecond) // 1s/MB
-	wait.SetMaxChunkSize(1024 * 1024)
-
 	uploader := awss3v1.NewUploader(sess,
-		s3iot.WithReadInterceptor(wait),
+		s3iot.WithReadInterceptor(
+			s3iot.NewWaitReadInterceptorFactory(time.Microsecond), // 1s/MB
+		),
 	)
 	uc, err := uploader.Upload(ctx, &s3iot.UploadInput{
 		Bucket: aws.String(os.Args[2]),

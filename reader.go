@@ -6,10 +6,21 @@ import (
 	"time"
 )
 
+const (
+	DefaultWaitReadInterceptorMaxChunkSize = 4 * 1024
+)
+
 type WaitReadInterceptorFactory struct {
 	mu           sync.RWMutex
 	waitPerByte  time.Duration
 	maxChunkSize int
+}
+
+func NewWaitReadInterceptorFactory(waitPerByte time.Duration) *WaitReadInterceptorFactory {
+	return &WaitReadInterceptorFactory{
+		waitPerByte:  waitPerByte,
+		maxChunkSize: DefaultWaitReadInterceptorMaxChunkSize,
+	}
 }
 
 func (f *WaitReadInterceptorFactory) SetWaitPerByte(w time.Duration) {
