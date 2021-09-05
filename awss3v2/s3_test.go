@@ -3,7 +3,6 @@ package awss3v2_test
 import (
 	"bytes"
 	"context"
-	"sync"
 	"testing"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -16,14 +15,10 @@ import (
 
 func TestWrapper(t *testing.T) {
 	t.Run("PutObject", func(t *testing.T) {
-		call, check := expectCallCount(t, 1)
-		defer check()
-
 		r := bytes.NewReader([]byte{})
 
 		api := &s3iface.MockS3API{
 			PutObjectFunc: func(ctx context.Context, params *s3.PutObjectInput, optFns ...func(*s3.Options)) (*s3.PutObjectOutput, error) {
-				call()
 				expectStringPtr(t, "Bucket", params.Bucket)
 				expectStringPtr(t, "Key", params.Key)
 				expectString(t, "ACL", string(params.ACL))
@@ -50,16 +45,15 @@ func TestWrapper(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
+		if n := len(api.PutObjectCalls()); n != 1 {
+			t.Errorf("Expected calls: 1, actual: %d", n)
+		}
 		expectStringPtr(t, "VersionID", out.VersionID)
 		expectStringPtr(t, "ETag", out.ETag)
 	})
 	t.Run("CreateMultipartUpload", func(t *testing.T) {
-		call, check := expectCallCount(t, 1)
-		defer check()
-
 		api := &s3iface.MockS3API{
 			CreateMultipartUploadFunc: func(ctx context.Context, params *s3.CreateMultipartUploadInput, optFns ...func(*s3.Options)) (*s3.CreateMultipartUploadOutput, error) {
-				call()
 				expectStringPtr(t, "Bucket", params.Bucket)
 				expectStringPtr(t, "Key", params.Key)
 				expectString(t, "ACL", string(params.ACL))
@@ -81,15 +75,14 @@ func TestWrapper(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
+		if n := len(api.CreateMultipartUploadCalls()); n != 1 {
+			t.Errorf("Expected calls: 1, actual: %d", n)
+		}
 		expectStringPtr(t, "UploadID", out.UploadID)
 	})
 	t.Run("CompleteMultipartUpload", func(t *testing.T) {
-		call, check := expectCallCount(t, 1)
-		defer check()
-
 		api := &s3iface.MockS3API{
 			CompleteMultipartUploadFunc: func(ctx context.Context, params *s3.CompleteMultipartUploadInput, optFns ...func(*s3.Options)) (*s3.CompleteMultipartUploadOutput, error) {
-				call()
 				expectStringPtr(t, "Bucket", params.Bucket)
 				expectStringPtr(t, "Key", params.Key)
 				expectStringPtr(t, "UploadID", params.UploadId)
@@ -124,16 +117,15 @@ func TestWrapper(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
+		if n := len(api.CompleteMultipartUploadCalls()); n != 1 {
+			t.Errorf("Expected calls: 1, actual: %d", n)
+		}
 		expectStringPtr(t, "VersionID", out.VersionID)
 		expectStringPtr(t, "ETag", out.ETag)
 	})
 	t.Run("AbortMultipartUpload", func(t *testing.T) {
-		call, check := expectCallCount(t, 1)
-		defer check()
-
 		api := &s3iface.MockS3API{
 			AbortMultipartUploadFunc: func(ctx context.Context, params *s3.AbortMultipartUploadInput, optFns ...func(*s3.Options)) (*s3.AbortMultipartUploadOutput, error) {
-				call()
 				expectStringPtr(t, "Bucket", params.Bucket)
 				expectStringPtr(t, "Key", params.Key)
 				expectStringPtr(t, "UploadID", params.UploadId)
@@ -151,16 +143,15 @@ func TestWrapper(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
+		if n := len(api.AbortMultipartUploadCalls()); n != 1 {
+			t.Errorf("Expected calls: 1, actual: %d", n)
+		}
 	})
 	t.Run("UploadPart", func(t *testing.T) {
-		call, check := expectCallCount(t, 1)
-		defer check()
-
 		r := bytes.NewReader([]byte{})
 
 		api := &s3iface.MockS3API{
 			UploadPartFunc: func(ctx context.Context, params *s3.UploadPartInput, optFns ...func(*s3.Options)) (*s3.UploadPartOutput, error) {
-				call()
 				if params.Body != r {
 					t.Error("Body reader differs")
 				}
@@ -186,26 +177,12 @@ func TestWrapper(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
+		if n := len(api.UploadPartCalls()); n != 1 {
+			t.Errorf("Expected calls: 1, actual: %d", n)
+		}
 		expectStringPtr(t, "ETag", out.ETag)
 	})
 
-}
-
-func expectCallCount(t *testing.T, expected int) (func(), func()) {
-	t.Helper()
-	var mu sync.Mutex
-	var cnt int
-	return func() {
-			mu.Lock()
-			cnt++
-			mu.Unlock()
-		}, func() {
-			mu.Lock()
-			if cnt != expected {
-				t.Errorf("Expected calls: %d, actual: %d", expected, cnt)
-			}
-			mu.Unlock()
-		}
 }
 
 func expectStringPtr(t *testing.T, expected string, ptr *string) {
