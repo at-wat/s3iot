@@ -30,20 +30,33 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: ${{ matrix.go }}
+      - name: Tidy
+        run: |
+          cd ${{ matrix.package }}
+          go mod tidy
+          git diff --exit-code go.mod  # must be up-to-date and tidied
       - name: Run go test
         run: |
           cd ${{ matrix.package }}
+
+          case ${{ matrix.package }}
+            './awss3v1/' | './awss3v2/')
+              echo 'replace github.com/at-wat/s3iot => ../' >> go.mod
+              ;;
+            './examples/')
+              echo 'replace github.com/at-wat/s3iot => ../' >> go.mod
+              echo 'replace github.com/at-wat/s3iot/awss3v1/ => ../awss3v1/' >> go.mod
+              echo 'replace github.com/at-wat/s3iot/awss3v2/ => ../awss3v2/' >> go.mod
+              ;;
+          esac
+          go mod tidy
+
           go vet ./...
           go build ./...
 
           go test ./... \
             -v \
             -race -coverprofile=cover.out -covermode=atomic
-      - name: Tidy
-        run: |
-          cd ${{ matrix.package }}
-          go mod tidy
-          git diff --exit-code go.mod  # must be up-to-date and tidied
       - uses: codecov/codecov-action@v2
         if: matrix.package != './examples/'
         with:

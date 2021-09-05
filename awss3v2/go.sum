@@ -1,3 +1,5 @@
+github.com/at-wat/s3iot v0.0.0-20210905070017-936485d46cb0 h1:RLJg52w0i26H5LPg1vnXojHSiRRQaQvzvSWIRJ+0xdE=
+github.com/at-wat/s3iot v0.0.0-20210905070017-936485d46cb0/go.mod h1:I6Lt6PyZBQiPvz+RT7jIR1KbIbBWTeIfxzKRbywe4gg=
 github.com/aws/aws-sdk-go-v2 v1.9.0 h1:+S+dSqQCN3MSU5vJRu1HqHrq00cJn6heIMU7X9hcsoo=
 github.com/aws/aws-sdk-go-v2 v1.9.0/go.mod h1:cK/D0BBs0b/oWPIcX/Z/obahJK1TT7IPVjy53i/mX/4=
 github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.3.0 h1:gceOysEWNNwLd6cki65IMBZ4WAM0MwgBQq2n7kejoT8=
