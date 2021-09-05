@@ -27,12 +27,12 @@ func TestUploader(t *testing.T) {
 	t.Run("SinglePart", func(t *testing.T) {
 		buf := &bytes.Buffer{}
 		api := newMockAPI(buf)
-		u := &s3iot.Uploader{
-			API: api,
-			PacketizerFactory: s3iot.DefaultPacketizerFactory{
-				PartSize: 128,
-			},
-		}
+		u := &s3iot.Uploader{}
+		s3iot.WithAPI(api)(u)
+		s3iot.WithPacketizer(&s3iot.DefaultPacketizerFactory{PartSize: 128})(u)
+		s3iot.WithRetryer(&s3iot.NoRetryerFactory{})(u)
+		s3iot.WithReadInterceptor(nil)(u)
+
 		uc, err := u.Upload(context.TODO(), &s3iot.UploadInput{
 			Bucket: &bucket,
 			Key:    &key,
@@ -68,12 +68,12 @@ func TestUploader(t *testing.T) {
 	t.Run("MultiPart", func(t *testing.T) {
 		buf := &bytes.Buffer{}
 		api := newMockAPI(buf)
-		u := &s3iot.Uploader{
-			API: api,
-			PacketizerFactory: s3iot.DefaultPacketizerFactory{
-				PartSize: 50,
-			},
-		}
+		u := &s3iot.Uploader{}
+		s3iot.WithAPI(api)(u)
+		s3iot.WithPacketizer(&s3iot.DefaultPacketizerFactory{PartSize: 50})(u)
+		s3iot.WithRetryer(&s3iot.NoRetryerFactory{})(u)
+		s3iot.WithReadInterceptor(nil)(u)
+
 		uc, err := u.Upload(context.TODO(), &s3iot.UploadInput{
 			Bucket: &bucket,
 			Key:    &key,
