@@ -7,46 +7,65 @@ import (
 )
 
 func TestDefaultPacketizer(t *testing.T) {
-	f := &DefaultPacketizerFactory{
-		PartSize: 5,
-	}
-
-	input := []byte("0123456789abcdef")
-	expected := [][]byte{
-		[]byte("01234"),
-		[]byte("56789"),
-		[]byte("abcde"),
-		[]byte("f"),
-	}
-
-	readers := map[string]io.Reader{
-		"Reader": &readOnly{
-			r: bytes.NewReader(input),
+	testCases := map[string]struct {
+		partSize int64
+		input    []byte
+		expected [][]byte
+	}{
+		"Single": {
+			partSize: 64,
+			input:    []byte("0123456789abcdef"),
+			expected: [][]byte{
+				[]byte("0123456789abcdef"),
+			},
 		},
-		"ReadSeeker": &readSeekOnly{
-			r: bytes.NewReader(input),
+		"Multi": {
+			partSize: 5,
+			input:    []byte("0123456789abcdef"),
+			expected: [][]byte{
+				[]byte("01234"),
+				[]byte("56789"),
+				[]byte("abcde"),
+				[]byte("f"),
+			},
 		},
-		"ReadSeekerAt": bytes.NewReader(input),
 	}
-
-	for name, r := range readers {
-		r := r
+	for name, tt := range testCases {
+		tt := tt
 		t.Run(name, func(t *testing.T) {
-			p, err := f.New(r)
-			if err != nil {
-				t.Fatal(err)
+			f := &DefaultPacketizerFactory{
+				PartSize: tt.partSize,
 			}
-			for _, e := range expected {
-				r, cleanup, err := p.NextReader()
+			readers := map[string]io.Reader{
+				"Reader": &readOnly{
+					r: bytes.NewReader(tt.input),
+				},
+				"ReadSeeker": &readSeekOnly{
+					r: bytes.NewReader(tt.input),
+				},
+				"ReadSeekerAt": bytes.NewReader(tt.input),
+			}
 
-				b, err := io.ReadAll(r)
-				if err != nil {
-					t.Fatal(err)
-				}
-				cleanup()
-				if !bytes.Equal(e, b) {
-					t.Errorf("Expected: %v, got: %v", e, b)
-				}
+			for name, r := range readers {
+				r := r
+				t.Run(name, func(t *testing.T) {
+					p, err := f.New(r)
+					if err != nil {
+						t.Fatal(err)
+					}
+					for _, e := range tt.expected {
+						r, cleanup, err := p.NextReader()
+
+						b, err := io.ReadAll(r)
+						if err != nil {
+							t.Fatal(err)
+						}
+						cleanup()
+						if !bytes.Equal(e, b) {
+							t.Errorf("Expected: %v, got: %v", e, b)
+						}
+					}
+				})
 			}
 		})
 	}
