@@ -6,16 +6,19 @@ import (
 	"sync"
 )
 
+// Default packetization parametes.
 const (
 	DefaultUploadPartSize = 1024 * 1024 * 5
 	MaxUploadParts        = 10000
 )
 
+// DefaultPacketizerFactory is a factory of the default packetization logic.
 type DefaultPacketizerFactory struct {
 	PartSize       int64
 	MaxUploadParts int
 }
 
+// New creates Packetizer for the given io.Reader.
 func (f DefaultPacketizerFactory) New(r io.Reader) (Packetizer, error) {
 	if f.PartSize == 0 {
 		f.PartSize = DefaultUploadPartSize

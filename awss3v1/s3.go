@@ -1,3 +1,4 @@
+// Package awss3v1 provides s3iot.Uploader with aws-sdk-go (v1).
 package awss3v1
 
 import (
@@ -11,6 +12,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3/s3iface"
 )
 
+// NewUploader creates s3iot.Uploader from aws-sdk-go ConfigProvider (like Session).
 func NewUploader(c client.ConfigProvider, opts ...s3iot.UploaderOption) *s3iot.Uploader {
 	u := &s3iot.Uploader{
 		API: NewAPI(s3.New(c)),
@@ -21,6 +23,7 @@ func NewUploader(c client.ConfigProvider, opts ...s3iot.UploaderOption) *s3iot.U
 	return u
 }
 
+// NewAPI wraps s3iface.S3API to s3iot.S3API.
 func NewAPI(api s3iface.S3API) s3iot.S3API {
 	return &wrapper{api: api}
 }
