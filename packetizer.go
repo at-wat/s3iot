@@ -146,5 +146,5 @@ func (p *defaultPacketizerMulti) NextReader() (io.ReadSeeker, func(), error) {
 }
 
 func (p *defaultPacketizerMulti) Len() int64 {
-	return -1
+	return p.size
 }
