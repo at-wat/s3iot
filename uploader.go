@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package s3iot provides S3 uploader for IoT-ish purpose.
+// Package s3iot provides S3 uploader applicable for unreliable and congestible network.
 // Object can be uploaded with retry, pause/resume, and bandwidth limit.
 package s3iot
 
