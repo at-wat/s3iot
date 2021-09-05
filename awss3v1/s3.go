@@ -11,10 +11,14 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3/s3iface"
 )
 
-func NewUploader(c client.ConfigProvider) *s3iot.Uploader {
-	return &s3iot.Uploader{
+func NewUploader(c client.ConfigProvider, opts ...s3iot.UploaderOption) *s3iot.Uploader {
+	u := &s3iot.Uploader{
 		API: NewAPI(s3.New(c)),
 	}
+	for _, opt := range opts {
+		opt(u)
+	}
+	return u
 }
 
 func NewAPI(api s3iface.S3API) s3iot.S3API {
