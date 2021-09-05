@@ -49,7 +49,7 @@ func TestUploader(t *testing.T) {
 			tt := tt
 			t.Run(name, func(t *testing.T) {
 				buf := &bytes.Buffer{}
-				api := newMockAPI(buf, tt.num)
+				api := newMockAPI(buf, tt.num, nil)
 				u := &s3iot.Uploader{}
 				s3iot.WithAPI(api)(u)
 				s3iot.WithPacketizer(&s3iot.DefaultPacketizerFactory{PartSize: 128})(u)
@@ -110,7 +110,6 @@ func TestUploader(t *testing.T) {
 			calls int
 		}{
 			"NoAPIError": {
-				num:   map[string]int{},
 				calls: 1,
 			},
 			"OneAPIError": {
@@ -134,7 +133,7 @@ func TestUploader(t *testing.T) {
 			tt := tt
 			t.Run(name, func(t *testing.T) {
 				buf := &bytes.Buffer{}
-				api := newMockAPI(buf, tt.num)
+				api := newMockAPI(buf, tt.num, nil)
 				u := &s3iot.Uploader{}
 				s3iot.WithAPI(api)(u)
 				s3iot.WithPacketizer(&s3iot.DefaultPacketizerFactory{PartSize: 50})(u)
@@ -205,9 +204,88 @@ func TestUploader(t *testing.T) {
 			})
 		}
 	})
+	t.Run("PauseResume", func(t *testing.T) {
+		buf := &bytes.Buffer{}
+		chUpload := make(chan interface{})
+		api := newMockAPI(buf, nil, map[string]chan interface{}{
+			"upload": chUpload,
+		})
+		u := &s3iot.Uploader{}
+		s3iot.WithAPI(api)(u)
+		s3iot.WithPacketizer(&s3iot.DefaultPacketizerFactory{PartSize: 50})(u)
+		s3iot.WithRetryer(nil)(u)
+		s3iot.WithReadInterceptor(nil)(u)
+
+		uc, err := u.Upload(context.TODO(), &s3iot.UploadInput{
+			Bucket: &bucket,
+			Key:    &key,
+			Body:   bytes.NewReader(data),
+		})
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		select {
+		case <-time.After(time.Second):
+			t.Fatal("Timeout")
+		case <-chUpload:
+		}
+
+		uc.Pause()
+		go func() {
+			<-chUpload
+			<-chUpload
+		}()
+
+		status, err := uc.Status()
+		if err != nil {
+			t.Fatal(err)
+		}
+		if status.UploadID != "UPLOAD0" {
+			t.Errorf("Expected upload ID: UPLOAD0, got: %s", status.UploadID)
+		}
+
+		select {
+		case <-time.After(500 * time.Millisecond):
+		case <-uc.Done():
+			t.Fatal("Upload should be paused")
+		}
+
+		uc.Resume()
+
+		select {
+		case <-time.After(time.Second):
+			t.Fatal("Timeout")
+		case <-uc.Done():
+		}
+		if _, err = uc.Result(); err != nil {
+			t.Fatal(err)
+		}
+
+		if n := len(api.CreateMultipartUploadCalls()); n != 1 {
+			t.Fatalf("CreateMultipartUpload must be called once, but called %d times", n)
+		}
+		if n := len(api.UploadPartCalls()); n != 3 {
+			t.Fatalf("UploadPart must be called 3 times, but called %d times", n)
+		}
+		if n := len(api.CompleteMultipartUploadCalls()); n != 1 {
+			t.Fatalf("CompleteMultipartUpload must be called once, but called %d times", n)
+		}
+
+		if !bytes.Equal(data, buf.Bytes()) {
+			t.Error("Uploaded data differs")
+		}
+	})
 }
 
-func newMockAPI(buf *bytes.Buffer, num map[string]int) *mock_s3iot.MockS3API {
+func newMockAPI(buf *bytes.Buffer, num map[string]int, ch map[string]chan interface{}) *mock_s3iot.MockS3API {
+	if num == nil {
+		num = make(map[string]int)
+	}
+	if ch == nil {
+		ch = make(map[string]chan interface{})
+	}
+
 	var etag int32
 	genETag := func() *string {
 		i := atomic.AddInt32(&etag, 1)
@@ -231,11 +309,17 @@ func newMockAPI(buf *bytes.Buffer, num map[string]int) *mock_s3iot.MockS3API {
 			if count("abort") < num["abort"] {
 				return nil, errTemp
 			}
+			if c := ch["abort"]; c != nil {
+				c <- input
+			}
 			return &s3iot.AbortMultipartUploadOutput{}, nil
 		},
 		CompleteMultipartUploadFunc: func(ctx context.Context, input *s3iot.CompleteMultipartUploadInput) (*s3iot.CompleteMultipartUploadOutput, error) {
 			if count("complete") < num["complete"] {
 				return nil, errTemp
+			}
+			if c := ch["complete"]; c != nil {
+				c <- input
 			}
 			return &s3iot.CompleteMultipartUploadOutput{
 				ETag: genETag(),
@@ -245,6 +329,9 @@ func newMockAPI(buf *bytes.Buffer, num map[string]int) *mock_s3iot.MockS3API {
 			if count("create") < num["create"] {
 				return nil, errTemp
 			}
+			if c := ch["create"]; c != nil {
+				c <- input
+			}
 			return &s3iot.CreateMultipartUploadOutput{
 				UploadID: &uploadID,
 			}, nil
@@ -252,6 +339,9 @@ func newMockAPI(buf *bytes.Buffer, num map[string]int) *mock_s3iot.MockS3API {
 		PutObjectFunc: func(ctx context.Context, input *s3iot.PutObjectInput) (*s3iot.PutObjectOutput, error) {
 			if count("put") < num["put"] {
 				return nil, errTemp
+			}
+			if c := ch["put"]; c != nil {
+				c <- input
 			}
 			io.Copy(buf, input.Body)
 			return &s3iot.PutObjectOutput{
@@ -261,6 +351,9 @@ func newMockAPI(buf *bytes.Buffer, num map[string]int) *mock_s3iot.MockS3API {
 		UploadPartFunc: func(ctx context.Context, input *s3iot.UploadPartInput) (*s3iot.UploadPartOutput, error) {
 			if count("upload") < num["upload"] {
 				return nil, errTemp
+			}
+			if c := ch["upload"]; c != nil {
+				c <- input
 			}
 			io.Copy(buf, input.Body)
 			return &s3iot.UploadPartOutput{
