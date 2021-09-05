@@ -1,3 +1,4 @@
+// Package awss3v2 provides s3iot.Uploader with aws-sdk-go-v2.
 package awss3v2
 
 import (
@@ -10,6 +11,7 @@ import (
 	s3types "github.com/aws/aws-sdk-go-v2/service/s3/types"
 )
 
+// NewUploader creates s3iot.Uploader from aws-sdk-go-v2 Config.
 func NewUploader(c aws.Config, opts ...s3iot.UploaderOption) *s3iot.Uploader {
 	u := &s3iot.Uploader{
 		API: NewAPI(s3.NewFromConfig(c)),
@@ -20,6 +22,7 @@ func NewUploader(c aws.Config, opts ...s3iot.UploaderOption) *s3iot.Uploader {
 	return u
 }
 
+// NewAPI wraps s3.Client to s3iot.S3API.
 func NewAPI(api *s3.Client) s3iot.S3API {
 	return &wrapper{api: api}
 }

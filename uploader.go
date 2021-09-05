@@ -1,3 +1,5 @@
+// Package s3iot provides S3 uploader for IoT-ish purpose.
+// Object can be uploaded with retry, pause/resume, and bandwidth limit.
 package s3iot
 
 import (
@@ -7,6 +9,7 @@ import (
 	"sync"
 )
 
+// Uploader implements S3 uploader with configurable retry and bandwidth limit.
 type Uploader struct {
 	API                    S3API
 	PacketizerFactory      PacketizerFactory
@@ -28,6 +31,7 @@ func (a completedParts) Less(i, j int) bool {
 	return *a[i].PartNumber < *a[j].PartNumber
 }
 
+// Upload a file to S3.
 func (u Uploader) Upload(ctx context.Context, input *UploadInput) (UploadContext, error) {
 	if u.PacketizerFactory == nil {
 		u.PacketizerFactory = &DefaultPacketizerFactory{}
