@@ -28,7 +28,11 @@ func main() {
 		log.Fatal(err)
 	}
 
+	wait := &s3iot.WaitReadInterceptorFactory{}
+	wait.WaitPerByte(time.Microsecond) // 1MB/s
+
 	uploader := awss3v1.NewUploader(sess)
+	uploader.ReadInterceptorFactory = wait
 	uc, err := uploader.Upload(context.TODO(), &s3iot.UploadInput{
 		Bucket: aws.String(os.Args[2]),
 		Key:    aws.String(os.Args[3]),

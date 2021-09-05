@@ -39,13 +39,18 @@ func (u Uploader) Upload(ctx context.Context, input *UploadInput) (UploadContext
 	if err != nil {
 		return nil, err
 	}
+	var readInterceptor ReadInterceptor
+	if u.ReadInterceptorFactory != nil {
+		readInterceptor = u.ReadInterceptorFactory.New()
+	}
 	uc := &uploadContext{
-		api:        u.API,
-		retryer:    u.RetryerFactory.New(),
-		packetizer: packetizer,
-		input:      input,
-		done:       make(chan struct{}),
-		paused:     make(chan struct{}),
+		api:             u.API,
+		retryer:         u.RetryerFactory.New(),
+		packetizer:      packetizer,
+		readInterceptor: readInterceptor,
+		input:           input,
+		done:            make(chan struct{}),
+		paused:          make(chan struct{}),
 		status: UploadStatus{
 			Size: packetizer.Len(),
 		},
@@ -64,10 +69,11 @@ func (u Uploader) Upload(ctx context.Context, input *UploadInput) (UploadContext
 }
 
 type uploadContext struct {
-	api        S3API
-	packetizer Packetizer
-	retryer    Retryer
-	input      *UploadInput
+	api             S3API
+	packetizer      Packetizer
+	retryer         Retryer
+	readInterceptor ReadInterceptor
+	input           *UploadInput
 
 	status UploadStatus
 	output UploadOutput
@@ -113,6 +119,10 @@ func (uc *uploadContext) Result() (UploadOutput, error) {
 
 func (uc *uploadContext) single(ctx context.Context, r io.ReadSeeker, cleanup func()) {
 	defer cleanup()
+
+	if uc.readInterceptor != nil {
+		r = uc.readInterceptor.Reader(r)
+	}
 
 	if err := withRetry(ctx, 0, uc.retryer, func() error {
 		out, err := uc.api.PutObject(ctx, &PutObjectInput{
@@ -170,6 +180,9 @@ func (uc *uploadContext) multi(ctx context.Context, r io.ReadSeeker, cleanup fun
 			cleanup()
 			uc.fail(err)
 			return
+		}
+		if uc.readInterceptor != nil {
+			r = uc.readInterceptor.Reader(r)
 		}
 		if err := withRetry(ctx, i, uc.retryer, func() error {
 			out, err := uc.api.UploadPart(ctx, &UploadPartInput{

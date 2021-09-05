@@ -22,6 +22,14 @@ type Retryer interface {
 	OnSuccess(id int64)
 }
 
+type ReadInterceptorFactory interface {
+	New() ReadInterceptor
+}
+
+type ReadInterceptor interface {
+	Reader(io.ReadSeeker) io.ReadSeeker
+}
+
 type UploadStatus struct {
 	Size         int64
 	UploadedSize int64
