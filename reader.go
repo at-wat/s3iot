@@ -11,7 +11,7 @@ type WaitReadInterceptorFactory struct {
 	waitPerByte time.Duration
 }
 
-func (f *WaitReadInterceptorFactory) WaitPerByte(w time.Duration) {
+func (f *WaitReadInterceptorFactory) SetWaitPerByte(w time.Duration) {
 	f.mu.Lock()
 	f.waitPerByte = w
 	f.mu.Unlock()

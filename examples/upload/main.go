@@ -32,7 +32,7 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 
 	wait := &s3iot.WaitReadInterceptorFactory{}
-	wait.WaitPerByte(time.Microsecond) // 1MB/s
+	wait.SetWaitPerByte(time.Microsecond) // 1s/MB
 
 	uploader := awss3v1.NewUploader(sess,
 		s3iot.WithReadInterceptor(wait),
