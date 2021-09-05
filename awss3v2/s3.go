@@ -23,12 +23,12 @@ func NewUploader(c aws.Config, opts ...s3iot.UploaderOption) *s3iot.Uploader {
 }
 
 // NewAPI wraps s3.Client to s3iot.S3API.
-func NewAPI(api *s3.Client) s3iot.S3API {
+func NewAPI(api S3API) s3iot.S3API {
 	return &wrapper{api: api}
 }
 
 type wrapper struct {
-	api *s3.Client
+	api S3API
 }
 
 func (w *wrapper) PutObject(ctx context.Context, input *s3iot.PutObjectInput) (*s3iot.PutObjectOutput, error) {
