@@ -60,6 +60,7 @@ type UploadStatus struct {
 	Size         int64
 	UploadedSize int64
 	UploadID     string
+	NumRetries   int
 }
 
 // UploadOutput represents upload result.
