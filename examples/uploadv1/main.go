@@ -17,6 +17,8 @@ package main
 import (
 	"context"
 	"log"
+	"net"
+	"net/http"
 	"os"
 	"os/signal"
 	"time"
@@ -38,12 +40,33 @@ func main() {
 		log.Fatal(err)
 	}
 
-	sess, err := session.NewSession()
+	sess, err := session.NewSession(&aws.Config{
+		HTTPClient: &http.Client{
+			Transport: &http.Transport{
+				Proxy:                 http.ProxyFromEnvironment,
+				DialContext:           (&net.Dialer{Timeout: 5 * time.Second}).DialContext,
+				ForceAttemptHTTP2:     true,
+				MaxIdleConns:          10,
+				IdleConnTimeout:       90 * time.Second,
+				TLSHandshakeTimeout:   5 * time.Second,
+				ExpectContinueTimeout: 1 * time.Second,
+				WriteBufferSize:       1024, // Reduce bandwidth burst
+			},
+			Timeout: time.Minute,
+		},
+		MaxRetries: aws.Int(0), // Use retry logic in s3iot
+	})
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	ctx, cancel := context.WithCancel(context.Background())
+	sig := make(chan os.Signal, 1)
+	signal.Notify(sig, os.Interrupt)
+	go func() {
+		<-sig
+		cancel()
+	}()
 
 	uploader := awss3v1.NewUploader(sess,
 		s3iot.WithReadInterceptor(
@@ -67,14 +90,9 @@ func main() {
 		log.Printf("%+v", status)
 	}
 
-	sig := make(chan os.Signal, 1)
-	signal.Notify(sig, os.Interrupt)
-
 	for {
 		select {
-		case <-sig:
-			cancel()
-		case <-time.After(500 * time.Millisecond):
+		case <-time.After(time.Second):
 			showStatus()
 		case <-uc.Done():
 			showStatus()
