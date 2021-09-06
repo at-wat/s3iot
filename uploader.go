@@ -135,6 +135,12 @@ func (uc *uploadContext) Result() (UploadOutput, error) {
 	return uc.output, uc.err
 }
 
+func (uc *uploadContext) countRetry() {
+	uc.mu.Lock()
+	uc.status.NumRetries++
+	uc.mu.Unlock()
+}
+
 func (uc *uploadContext) single(ctx context.Context, r io.ReadSeeker, cleanup func()) {
 	defer cleanup()
 
@@ -151,6 +157,7 @@ func (uc *uploadContext) single(ctx context.Context, r io.ReadSeeker, cleanup fu
 			ContentType: uc.input.ContentType,
 		})
 		if err != nil {
+			uc.countRetry()
 			return err
 		}
 		uc.success(UploadOutput{
@@ -172,6 +179,7 @@ func (uc *uploadContext) multi(ctx context.Context, r io.ReadSeeker, cleanup fun
 			ContentType: uc.input.ContentType,
 		})
 		if err != nil {
+			uc.countRetry()
 			return err
 		}
 		uc.mu.Lock()
@@ -211,6 +219,7 @@ func (uc *uploadContext) multi(ctx context.Context, r io.ReadSeeker, cleanup fun
 				UploadID:   &uc.status.UploadID,
 			})
 			if err != nil {
+				uc.countRetry()
 				return err
 			}
 			parts = append(parts, &CompletedPart{
@@ -258,6 +267,7 @@ func (uc *uploadContext) multi(ctx context.Context, r io.ReadSeeker, cleanup fun
 			UploadID:       &uc.status.UploadID,
 		})
 		if err != nil {
+			uc.countRetry()
 			return err
 		}
 		uc.success(UploadOutput{
