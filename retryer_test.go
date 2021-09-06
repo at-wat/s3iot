@@ -21,6 +21,8 @@ import (
 	"time"
 )
 
+var errDummy = errors.New("dummy")
+
 func TestNoRetryer(t *testing.T) {
 	f := &NoRetryerFactory{}
 	r := f.New()
@@ -37,11 +39,10 @@ func TestExponentialBackoffRetryer(t *testing.T) {
 		RetryMax: 4,
 	}
 	r := f.New()
-	errTemp := &errTemp{}
 
 	ts := time.Now()
 	for i := 0; i < 4; i++ {
-		if cont := r.OnFail(context.TODO(), 0, errTemp); !cont {
+		if cont := r.OnFail(context.TODO(), 0, errDummy); !cont {
 			t.Error("Unexpected failure before reaching RetryMax")
 		}
 	}
@@ -53,21 +54,17 @@ func TestExponentialBackoffRetryer(t *testing.T) {
 		t.Errorf("Expected wait: %v, actual: %v", te.Sub(ts), expectedWait)
 	}
 
-	if cont := r.OnFail(context.TODO(), 1, errTemp); !cont {
+	if cont := r.OnFail(context.TODO(), 1, errDummy); !cont {
 		t.Error("Unexpected failure on different id")
 	}
 
-	if cont := r.OnFail(context.TODO(), 0, errTemp); cont {
+	if cont := r.OnFail(context.TODO(), 0, errDummy); cont {
 		t.Error("Unexpected retry after reaching RetryMax")
 	}
 	r.OnSuccess(0)
 
-	if cont := r.OnFail(context.TODO(), 0, errTemp); !cont {
+	if cont := r.OnFail(context.TODO(), 0, errDummy); !cont {
 		t.Error("Unexpected failure after resetting failure")
-	}
-
-	if cont := r.OnFail(context.TODO(), 2, errors.New("test")); cont {
-		t.Error("Non-temporary error must cause immediate stop")
 	}
 }
 
@@ -108,7 +105,7 @@ func TestWithRetry(t *testing.T) {
 			}()
 			switch i {
 			case 0:
-				return &errTemp{}
+				return errDummy
 			case 1:
 				return nil
 			default:
@@ -132,7 +129,7 @@ func TestWithRetry(t *testing.T) {
 			}()
 			switch i {
 			case 0, 1:
-				return &errTemp{}
+				return errDummy
 			default:
 				t.Fatal("Must not reach here")
 				return nil
@@ -147,9 +144,3 @@ func TestWithRetry(t *testing.T) {
 	})
 
 }
-
-type errTemp struct{}
-
-func (errTemp) Temporary() bool { return true }
-func (errTemp) Timeout() bool   { return true }
-func (errTemp) Error() string   { return "error" }
