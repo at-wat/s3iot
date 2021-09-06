@@ -17,11 +17,14 @@ package main
 import (
 	"context"
 	"log"
+	"net"
+	"net/http"
 	"os"
 	"os/signal"
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/aws/retry"
 	"github.com/aws/aws-sdk-go-v2/config"
 
 	"github.com/at-wat/s3iot"
@@ -38,12 +41,39 @@ func main() {
 		log.Fatal(err)
 	}
 
-	cfg, err := config.LoadDefaultConfig(context.TODO())
+	ctx, cancel := context.WithCancel(context.Background())
+	sig := make(chan os.Signal, 1)
+	signal.Notify(sig, os.Interrupt)
+	go func() {
+		<-sig
+		cancel()
+	}()
+
+	cfg, err := config.LoadDefaultConfig(ctx,
+		config.WithHTTPClient(&http.Client{
+			Transport: &http.Transport{
+				Proxy:                 http.ProxyFromEnvironment,
+				DialContext:           (&net.Dialer{Timeout: 5 * time.Second}).DialContext,
+				ForceAttemptHTTP2:     true,
+				MaxIdleConns:          10,
+				IdleConnTimeout:       90 * time.Second,
+				TLSHandshakeTimeout:   5 * time.Second,
+				ExpectContinueTimeout: 1 * time.Second,
+				WriteBufferSize:       1024, // Reduce bandwidth burst
+			},
+			Timeout: time.Minute,
+		}),
+		config.WithRetryer(func() aws.Retryer {
+			return retry.NewStandard(func(o *retry.StandardOptions) {
+				o.Retryables = []retry.IsErrorRetryable{
+					retry.IsErrorRetryableFunc(func(err error) aws.Ternary { return aws.FalseTernary }),
+				}
+			})
+		}), // Use retry logic in s3iot
+	)
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	ctx, cancel := context.WithCancel(context.Background())
 
 	uploader := awss3v2.NewUploader(cfg,
 		s3iot.WithReadInterceptor(
@@ -67,14 +97,9 @@ func main() {
 		log.Printf("%+v", status)
 	}
 
-	sig := make(chan os.Signal, 1)
-	signal.Notify(sig, os.Interrupt)
-
 	for {
 		select {
-		case <-sig:
-			cancel()
-		case <-time.After(500 * time.Millisecond):
+		case <-time.After(time.Second):
 			showStatus()
 		case <-uc.Done():
 			showStatus()
