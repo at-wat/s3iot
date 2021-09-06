@@ -15,6 +15,7 @@
 package s3iot
 
 import (
+	"context"
 	"io"
 )
 
@@ -37,8 +38,9 @@ type RetryerFactory interface {
 }
 
 // Retryer controls upload retrying logic.
+// Retryer may sleep on OnFail to control retry interval, but can be canceled by ctx.
 type Retryer interface {
-	OnFail(id int64, err error) bool
+	OnFail(ctx context.Context, id int64, err error) bool
 	OnSuccess(id int64)
 }
 
