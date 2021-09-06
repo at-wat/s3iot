@@ -16,8 +16,6 @@ package s3iot
 
 import (
 	"context"
-	"errors"
-	"net"
 	"sync"
 	"time"
 )
@@ -42,7 +40,7 @@ func (NoRetryerFactory) New() Retryer {
 
 type noRetryer struct{}
 
-func (noRetryer) OnFail(int64, error) bool {
+func (noRetryer) OnFail(context.Context, int64, error) bool {
 	return false
 }
 
@@ -83,12 +81,7 @@ type exponentialBackoffRetryer struct {
 	fails   map[int64]int
 }
 
-func (r *exponentialBackoffRetryer) OnFail(id int64, err error) bool {
-	var netErr net.Error
-	if ok := errors.As(err, &netErr); !ok || !netErr.Temporary() {
-		return false
-	}
-
+func (r *exponentialBackoffRetryer) OnFail(ctx context.Context, id int64, err error) bool {
 	var wait time.Duration
 	r.mu.Lock()
 	if _, ok := r.wait[id]; !ok {
@@ -109,8 +102,12 @@ func (r *exponentialBackoffRetryer) OnFail(id int64, err error) bool {
 		return false
 	}
 
-	time.Sleep(wait)
-	return true
+	select {
+	case <-time.After(wait):
+		return true
+	case <-ctx.Done():
+		return false
+	}
 }
 
 func (r *exponentialBackoffRetryer) OnSuccess(id int64) {
@@ -126,7 +123,7 @@ func withRetry(ctx context.Context, id int64, retryer Retryer, fn func() error) 
 	for {
 		err := fn()
 		if err != nil {
-			if ctx.Err() == nil && retryer.OnFail(id, err) {
+			if ctx.Err() == nil && retryer.OnFail(ctx, id, err) {
 				continue
 			}
 			return err
