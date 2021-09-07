@@ -50,7 +50,6 @@ func main() {
 				IdleConnTimeout:       90 * time.Second,
 				TLSHandshakeTimeout:   5 * time.Second,
 				ExpectContinueTimeout: 1 * time.Second,
-				WriteBufferSize:       1024, // Reduce bandwidth burst
 			},
 			Timeout: time.Minute,
 		},
@@ -70,7 +69,10 @@ func main() {
 
 	uploader := awss3v1.NewUploader(sess,
 		s3iot.WithReadInterceptor(
-			s3iot.NewWaitReadInterceptorFactory(time.Microsecond), // 1s/MB
+			s3iot.NewWaitReadInterceptorFactory(
+				500*time.Nanosecond, // Add 500ns delay per byte = 500ms/MB
+				s3iot.WaitReadInterceptorMaxChunkSize(16*1024),
+			),
 		),
 	)
 	uc, err := uploader.Upload(ctx, &s3iot.UploadInput{

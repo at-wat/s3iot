@@ -24,8 +24,20 @@ import (
 
 func TestWaitReadInterceptor(t *testing.T) {
 	const waitPerByte = 2 * time.Millisecond
-	f := NewWaitReadInterceptorFactory(waitPerByte)
+	f := NewWaitReadInterceptorFactory(
+		waitPerByte,
+		WaitReadInterceptorMaxChunkSize(8),
+	)
+
+	if f.maxChunkSize != 8 {
+		t.Errorf("MaxChunkSize is not configured. Expected 8, got %d", f.maxChunkSize)
+	}
+
 	f.SetMaxChunkSize(16)
+	if f.maxChunkSize != 16 {
+		t.Errorf("MaxChunkSize is not configured. Expected 16, got %d", f.maxChunkSize)
+	}
+
 	ri := f.New()
 
 	const tolerance = 50 * time.Millisecond
