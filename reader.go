@@ -32,12 +32,28 @@ type WaitReadInterceptorFactory struct {
 	maxChunkSize int
 }
 
+// WaitReadInterceptorOption configures WaitReadInterceptorFactory.
+type WaitReadInterceptorOption func(*WaitReadInterceptorFactory)
+
+// WaitReadInterceptorMaxChunkSize sets MaxChunkSize.
+func WaitReadInterceptorMaxChunkSize(s int) WaitReadInterceptorOption {
+	return func(f *WaitReadInterceptorFactory) {
+		f.mu.Lock()
+		f.maxChunkSize = s
+		f.mu.Unlock()
+	}
+}
+
 // NewWaitReadInterceptorFactory creates WaitReadInterceptorFactory with wait/byte value.
-func NewWaitReadInterceptorFactory(waitPerByte time.Duration) *WaitReadInterceptorFactory {
-	return &WaitReadInterceptorFactory{
+func NewWaitReadInterceptorFactory(waitPerByte time.Duration, opts ...WaitReadInterceptorOption) *WaitReadInterceptorFactory {
+	f := &WaitReadInterceptorFactory{
 		waitPerByte:  waitPerByte,
 		maxChunkSize: DefaultWaitReadInterceptorMaxChunkSize,
 	}
+	for _, opt := range opts {
+		opt(f)
+	}
+	return f
 }
 
 // SetWaitPerByte sets wait/byte parameter.
