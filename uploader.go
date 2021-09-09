@@ -63,7 +63,6 @@ func (u Uploader) Upload(ctx context.Context, input *UploadInput) (UploadContext
 	}
 	uc := &uploadContext{
 		api:             u.API,
-		retryer:         u.RetryerFactory.New(),
 		packetizer:      packetizer,
 		readInterceptor: readInterceptor,
 		input:           input,
@@ -73,6 +72,7 @@ func (u Uploader) Upload(ctx context.Context, input *UploadInput) (UploadContext
 			Size: packetizer.Len(),
 		},
 	}
+	uc.retryer = u.RetryerFactory.New(uc)
 	close(uc.paused)
 	uc.resumeOnce.Do(func() {})
 	r, cleanup, err := uc.packetizer.NextReader()
@@ -112,15 +112,17 @@ func (uc *uploadContext) Pause() {
 	uc.mu.Lock()
 	uc.paused = make(chan struct{})
 	uc.resumeOnce = sync.Once{}
+	uc.status.Paused = true
 	uc.mu.Unlock()
 }
 
 func (uc *uploadContext) Resume() {
-	uc.mu.RLock()
+	uc.mu.Lock()
 	uc.resumeOnce.Do(func() {
 		close(uc.paused)
 	})
-	uc.mu.RUnlock()
+	uc.status.Paused = false
+	uc.mu.Unlock()
 }
 
 func (uc *uploadContext) Status() (UploadStatus, error) {
