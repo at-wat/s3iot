@@ -69,36 +69,61 @@ func TestExponentialBackoffRetryer(t *testing.T) {
 }
 
 func TestPauseOnFailRetryer(t *testing.T) {
-	f := &PauseOnFailRetryerFactory{
-		Base: &ExponentialBackoffRetryerFactory{
-			WaitBase: 50 * time.Millisecond,
-			WaitMax:  50 * time.Millisecond,
-			RetryMax: 1,
-		},
-	}
-	uc := &dummyUploadContext{
-		chPause: make(chan struct{}, 1),
-	}
-	r := f.New(uc)
+	t.Run("WithExponentialBackoffRetryer", func(t *testing.T) {
+		f := &PauseOnFailRetryerFactory{
+			Base: &ExponentialBackoffRetryerFactory{
+				WaitBase: 50 * time.Millisecond,
+				WaitMax:  50 * time.Millisecond,
+				RetryMax: 1,
+			},
+		}
+		uc := &dummyUploadContext{
+			chPause: make(chan struct{}, 1),
+		}
+		r := f.New(uc)
 
-	if cont := r.OnFail(context.TODO(), 0, errDummy); !cont {
-		t.Error("Unexpected failure before reaching RetryMax")
-	}
-	if cont := r.OnFail(context.TODO(), 0, errDummy); !cont {
-		t.Error("PauseOnFailRetryer should not abort")
-	}
+		if cont := r.OnFail(context.TODO(), 0, errDummy); !cont {
+			t.Error("Unexpected failure before reaching RetryMax")
+		}
+		if cont := r.OnFail(context.TODO(), 0, errDummy); !cont {
+			t.Error("PauseOnFailRetryer should not abort")
+		}
 
-	select {
-	case <-uc.chPause:
-	case <-time.After(time.Second):
-		t.Fatal("Timeout")
-	}
+		select {
+		case <-uc.chPause:
+		case <-time.After(time.Second):
+			t.Fatal("Timeout")
+		}
 
-	r.OnSuccess(0)
+		r.OnSuccess(0)
 
-	if cont := r.OnFail(context.TODO(), 0, errDummy); !cont {
-		t.Error("PauseOnFailRetryer should not abort")
-	}
+		if cont := r.OnFail(context.TODO(), 0, errDummy); !cont {
+			t.Error("PauseOnFailRetryer should not abort")
+		}
+	})
+	t.Run("WithNoRetryer", func(t *testing.T) {
+		f := &PauseOnFailRetryerFactory{}
+		uc := &dummyUploadContext{
+			chPause: make(chan struct{}, 1),
+		}
+		r := f.New(uc)
+
+		if cont := r.OnFail(context.TODO(), 0, errDummy); !cont {
+			t.Error("PauseOnFailRetryer should not abort")
+		}
+
+		select {
+		case <-uc.chPause:
+		case <-time.After(time.Second):
+			t.Fatal("Timeout")
+		}
+
+		r.OnSuccess(0)
+
+		if cont := r.OnFail(context.TODO(), 0, errDummy); !cont {
+			t.Error("PauseOnFailRetryer should not abort")
+		}
+	})
 }
 
 type dummyUploadContext struct {
