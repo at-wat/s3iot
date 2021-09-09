@@ -25,7 +25,7 @@ var errDummy = errors.New("dummy")
 
 func TestNoRetryer(t *testing.T) {
 	f := &NoRetryerFactory{}
-	r := f.New()
+	r := f.New(nil)
 	if cont := r.OnFail(context.TODO(), 0, nil); cont {
 		t.Error("Unexpected retry")
 	}
@@ -38,7 +38,7 @@ func TestExponentialBackoffRetryer(t *testing.T) {
 		WaitMax:  250 * time.Millisecond,
 		RetryMax: 4,
 	}
-	r := f.New()
+	r := f.New(nil)
 
 	ts := time.Now()
 	for i := 0; i < 4; i++ {
@@ -68,6 +68,73 @@ func TestExponentialBackoffRetryer(t *testing.T) {
 	}
 }
 
+func TestPauseOnFailRetryer(t *testing.T) {
+	t.Run("WithExponentialBackoffRetryer", func(t *testing.T) {
+		f := &PauseOnFailRetryerFactory{
+			Base: &ExponentialBackoffRetryerFactory{
+				WaitBase: 50 * time.Millisecond,
+				WaitMax:  50 * time.Millisecond,
+				RetryMax: 1,
+			},
+		}
+		uc := &dummyUploadContext{
+			chPause: make(chan struct{}, 1),
+		}
+		r := f.New(uc)
+
+		if cont := r.OnFail(context.TODO(), 0, errDummy); !cont {
+			t.Error("Unexpected failure before reaching RetryMax")
+		}
+		if cont := r.OnFail(context.TODO(), 0, errDummy); !cont {
+			t.Error("PauseOnFailRetryer should not abort")
+		}
+
+		select {
+		case <-uc.chPause:
+		case <-time.After(time.Second):
+			t.Fatal("Timeout")
+		}
+
+		r.OnSuccess(0)
+
+		if cont := r.OnFail(context.TODO(), 0, errDummy); !cont {
+			t.Error("PauseOnFailRetryer should not abort")
+		}
+	})
+	t.Run("WithNoRetryer", func(t *testing.T) {
+		f := &PauseOnFailRetryerFactory{}
+		uc := &dummyUploadContext{
+			chPause: make(chan struct{}, 1),
+		}
+		r := f.New(uc)
+
+		if cont := r.OnFail(context.TODO(), 0, errDummy); !cont {
+			t.Error("PauseOnFailRetryer should not abort")
+		}
+
+		select {
+		case <-uc.chPause:
+		case <-time.After(time.Second):
+			t.Fatal("Timeout")
+		}
+
+		r.OnSuccess(0)
+
+		if cont := r.OnFail(context.TODO(), 0, errDummy); !cont {
+			t.Error("PauseOnFailRetryer should not abort")
+		}
+	})
+}
+
+type dummyUploadContext struct {
+	UploadContext
+	chPause chan struct{}
+}
+
+func (uc *dummyUploadContext) Pause() {
+	uc.chPause <- struct{}{}
+}
+
 func TestWithRetry(t *testing.T) {
 	f := &ExponentialBackoffRetryerFactory{
 		WaitBase: 1 * time.Millisecond,
@@ -75,7 +142,7 @@ func TestWithRetry(t *testing.T) {
 	}
 
 	t.Run("Success", func(t *testing.T) {
-		r := f.New()
+		r := f.New(nil)
 		var i int
 		err := withRetry(context.TODO(), 0, r, func() error {
 			defer func() {
@@ -97,7 +164,7 @@ func TestWithRetry(t *testing.T) {
 		}
 	})
 	t.Run("SuccessAfterRetry", func(t *testing.T) {
-		r := f.New()
+		r := f.New(nil)
 		var i int
 		err := withRetry(context.TODO(), 0, r, func() error {
 			defer func() {
@@ -121,7 +188,7 @@ func TestWithRetry(t *testing.T) {
 		}
 	})
 	t.Run("Failure", func(t *testing.T) {
-		r := f.New()
+		r := f.New(nil)
 		var i int
 		err := withRetry(context.TODO(), 0, r, func() error {
 			defer func() {

@@ -34,7 +34,7 @@ var DefaultRetryer = &ExponentialBackoffRetryerFactory{}
 type NoRetryerFactory struct{}
 
 // New creates NoRetryer.
-func (NoRetryerFactory) New() Retryer {
+func (NoRetryerFactory) New(UploadContext) Retryer {
 	return &noRetryer{}
 }
 
@@ -57,7 +57,7 @@ type ExponentialBackoffRetryerFactory struct {
 }
 
 // New creates ExponentialBackoffRetryer.
-func (f ExponentialBackoffRetryerFactory) New() Retryer {
+func (f ExponentialBackoffRetryerFactory) New(UploadContext) Retryer {
 	if f.WaitBase == 0 {
 		f.WaitBase = DefaultExponentialBackoffWaitBase
 	}
@@ -117,6 +117,38 @@ func (r *exponentialBackoffRetryer) OnSuccess(id int64) {
 		delete(r.fails, id)
 	}
 	r.mu.Unlock()
+}
+
+// PauseOnFailRetryerFactory creates retryer to pause on failure instead of aborting.
+type PauseOnFailRetryerFactory struct {
+	Base RetryerFactory
+}
+
+// New creates PauseOnFailRetryer.
+func (f PauseOnFailRetryerFactory) New(uc UploadContext) Retryer {
+	if f.Base == nil {
+		f.Base = &NoRetryerFactory{}
+	}
+	return &pauseOnFailRetryer{
+		base: f.Base.New(uc),
+		uc:   uc,
+	}
+}
+
+type pauseOnFailRetryer struct {
+	base Retryer
+	uc   UploadContext
+}
+
+func (r *pauseOnFailRetryer) OnFail(ctx context.Context, id int64, err error) bool {
+	if !r.base.OnFail(ctx, id, err) {
+		r.uc.Pause()
+	}
+	return true
+}
+
+func (r *pauseOnFailRetryer) OnSuccess(id int64) {
+	r.base.OnSuccess(id)
 }
 
 func withRetry(ctx context.Context, id int64, retryer Retryer, fn func() error) error {

@@ -34,7 +34,7 @@ type Packetizer interface {
 // RetryerFactory creates Retryer.
 // Retryer will be created for each Upload() call.
 type RetryerFactory interface {
-	New() Retryer
+	New(UploadContext) Retryer
 }
 
 // Retryer controls upload retrying logic.
@@ -61,6 +61,7 @@ type UploadStatus struct {
 	UploadedSize int64
 	UploadID     string
 	NumRetries   int
+	Paused       bool
 }
 
 // UploadOutput represents upload result.
