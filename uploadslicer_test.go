@@ -29,9 +29,7 @@ func TestDefaultUploadSlicer(t *testing.T) {
 		"Single": {
 			partSize: 64,
 			input:    []byte("0123456789abcdef"),
-			expected: [][]byte{
-				[]byte("0123456789abcdef"),
-			},
+			expected: [][]byte{[]byte("0123456789abcdef")},
 		},
 		"Multi": {
 			partSize: 5,
@@ -42,6 +40,20 @@ func TestDefaultUploadSlicer(t *testing.T) {
 				[]byte("abcde"),
 				[]byte("f"),
 			},
+		},
+		"MultiAligned": {
+			partSize: 4,
+			input:    []byte("0123456789abcdef"),
+			expected: [][]byte{
+				[]byte("0123"),
+				[]byte("4567"),
+				[]byte("89ab"),
+				[]byte("cdef"),
+			},
+		},
+		"DefaultParam": {
+			input:    []byte("0123456789abcdef"),
+			expected: [][]byte{[]byte("0123456789abcdef")},
 		},
 	}
 	for name, tt := range testCases {
