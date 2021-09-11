@@ -24,10 +24,10 @@ func WithAPI(a S3API) UploaderOption {
 	}
 }
 
-// WithPacketizer sets PacketizerFactory to Uploader.
-func WithPacketizer(p PacketizerFactory) UploaderOption {
+// WithUploadSlicer sets UploadSlicerFactory to Uploader.
+func WithUploadSlicer(p UploadSlicerFactory) UploaderOption {
 	return func(u *Uploader) {
-		u.PacketizerFactory = p
+		u.UploadSlicerFactory = p
 	}
 }
 
