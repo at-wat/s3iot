@@ -292,6 +292,31 @@ func TestUploader(t *testing.T) {
 			t.Error("Uploaded data differs")
 		}
 	})
+	t.Run("Unseekable", func(t *testing.T) {
+		u := &s3iot.Uploader{}
+		errSeekFailure := errors.New("seek error")
+
+		_, err := u.Upload(context.TODO(), &s3iot.UploadInput{
+			Bucket: &bucket,
+			Key:    &key,
+			Body: &seekErrorer{
+				ReadSeeker: bytes.NewReader(data),
+				err:        errSeekFailure,
+			},
+		})
+		if !errors.Is(err, errSeekFailure) {
+			t.Fatalf("Expected error: '%v', got: '%v'", errSeekFailure, err)
+		}
+	})
+}
+
+type seekErrorer struct {
+	io.ReadSeeker
+	err error
+}
+
+func (s seekErrorer) Seek(int64, int) (int64, error) {
+	return 0, s.err
 }
 
 func newUploadMockAPI(buf *bytes.Buffer, num map[string]int, ch map[string]chan interface{}) *mock_s3iot.MockS3API {
