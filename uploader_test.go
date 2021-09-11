@@ -66,7 +66,7 @@ func TestUploader(t *testing.T) {
 				api := newMockAPI(buf, tt.num, nil)
 				u := &s3iot.Uploader{}
 				s3iot.WithAPI(api)(u)
-				s3iot.WithPacketizer(&s3iot.DefaultPacketizerFactory{PartSize: 128})(u)
+				s3iot.WithUploadSlicer(&s3iot.DefaultUploadSlicerFactory{PartSize: 128})(u)
 				s3iot.WithRetryer(&s3iot.ExponentialBackoffRetryerFactory{
 					WaitBase: time.Millisecond,
 					RetryMax: 1,
@@ -150,7 +150,7 @@ func TestUploader(t *testing.T) {
 				api := newMockAPI(buf, tt.num, nil)
 				u := &s3iot.Uploader{}
 				s3iot.WithAPI(api)(u)
-				s3iot.WithPacketizer(&s3iot.DefaultPacketizerFactory{PartSize: 50})(u)
+				s3iot.WithUploadSlicer(&s3iot.DefaultUploadSlicerFactory{PartSize: 50})(u)
 				s3iot.WithRetryer(&s3iot.ExponentialBackoffRetryerFactory{
 					WaitBase: time.Millisecond,
 					RetryMax: 1,
@@ -226,7 +226,7 @@ func TestUploader(t *testing.T) {
 		})
 		u := &s3iot.Uploader{}
 		s3iot.WithAPI(api)(u)
-		s3iot.WithPacketizer(&s3iot.DefaultPacketizerFactory{PartSize: 50})(u)
+		s3iot.WithUploadSlicer(&s3iot.DefaultUploadSlicerFactory{PartSize: 50})(u)
 		s3iot.WithRetryer(nil)(u)
 		s3iot.WithReadInterceptor(nil)(u)
 

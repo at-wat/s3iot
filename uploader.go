@@ -26,7 +26,7 @@ import (
 // Uploader implements S3 uploader with configurable retry and bandwidth limit.
 type Uploader struct {
 	API                    S3API
-	PacketizerFactory      PacketizerFactory
+	UploadSlicerFactory      UploadSlicerFactory
 	RetryerFactory         RetryerFactory
 	ReadInterceptorFactory ReadInterceptorFactory
 }
@@ -47,13 +47,13 @@ func (a completedParts) Less(i, j int) bool {
 
 // Upload a file to S3.
 func (u Uploader) Upload(ctx context.Context, input *UploadInput) (UploadContext, error) {
-	if u.PacketizerFactory == nil {
-		u.PacketizerFactory = &DefaultPacketizerFactory{}
+	if u.UploadSlicerFactory == nil {
+		u.UploadSlicerFactory = &DefaultUploadSlicerFactory{}
 	}
 	if u.RetryerFactory == nil {
 		u.RetryerFactory = DefaultRetryer
 	}
-	packetizer, err := u.PacketizerFactory.New(input.Body)
+	slicer, err := u.UploadSlicerFactory.New(input.Body)
 	if err != nil {
 		return nil, err
 	}
@@ -63,19 +63,19 @@ func (u Uploader) Upload(ctx context.Context, input *UploadInput) (UploadContext
 	}
 	uc := &uploadContext{
 		api:             u.API,
-		packetizer:      packetizer,
+		slicer:      slicer,
 		readInterceptor: readInterceptor,
 		input:           input,
 		done:            make(chan struct{}),
 		paused:          make(chan struct{}),
 		status: UploadStatus{
-			Size: packetizer.Len(),
+			Size: slicer.Len(),
 		},
 	}
 	uc.retryer = u.RetryerFactory.New(uc)
 	close(uc.paused)
 	uc.resumeOnce.Do(func() {})
-	r, cleanup, err := uc.packetizer.NextReader()
+	r, cleanup, err := uc.slicer.NextReader()
 	if err == io.EOF {
 		go uc.single(ctx, r, cleanup)
 		return uc, nil
@@ -88,7 +88,7 @@ func (u Uploader) Upload(ctx context.Context, input *UploadInput) (UploadContext
 
 type uploadContext struct {
 	api             S3API
-	packetizer      Packetizer
+	slicer      UploadSlicer
 	retryer         Retryer
 	readInterceptor ReadInterceptor
 	input           *UploadInput
@@ -257,7 +257,7 @@ func (uc *uploadContext) multi(ctx context.Context, r io.ReadSeeker, cleanup fun
 			break
 		}
 
-		r, cleanup, err = uc.packetizer.NextReader()
+		r, cleanup, err = uc.slicer.NextReader()
 		switch {
 		case err == io.EOF:
 			last = true

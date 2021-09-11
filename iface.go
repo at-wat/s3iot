@@ -19,14 +19,14 @@ import (
 	"io"
 )
 
-// PacketizerFactory creates Packetizer for given io.Reader.
-// Packetizer will be created for each Upload() call.
-type PacketizerFactory interface {
-	New(io.Reader) (Packetizer, error)
+// UploadSlicerFactory creates UploadSlicer for given io.Reader.
+// UploadSlicer will be created for each Upload() call.
+type UploadSlicerFactory interface {
+	New(io.Reader) (UploadSlicer, error)
 }
 
-// Packetizer splits input data stream into multiple io.ReadSeekers.
-type Packetizer interface {
+// UploadSlicer splits input data stream into multiple io.ReadSeekers.
+type UploadSlicer interface {
 	Len() int64
 	NextReader() (io.ReadSeeker, func(), error)
 }

@@ -20,7 +20,7 @@ import (
 	"testing"
 )
 
-func TestDefaultPacketizer(t *testing.T) {
+func TestDefaultUploadSlicer(t *testing.T) {
 	testCases := map[string]struct {
 		partSize int64
 		input    []byte
@@ -47,7 +47,7 @@ func TestDefaultPacketizer(t *testing.T) {
 	for name, tt := range testCases {
 		tt := tt
 		t.Run(name, func(t *testing.T) {
-			f := &DefaultPacketizerFactory{
+			f := &DefaultUploadSlicerFactory{
 				PartSize: tt.partSize,
 			}
 			testCases := map[string]struct {
@@ -75,15 +75,15 @@ func TestDefaultPacketizer(t *testing.T) {
 			for name, tt2 := range testCases {
 				tt2 := tt2
 				t.Run(name, func(t *testing.T) {
-					p, err := f.New(tt2.r)
+					s, err := f.New(tt2.r)
 					if err != nil {
 						t.Fatal(err)
 					}
-					if n := p.Len(); n != tt2.n {
-						t.Errorf("Packetizer reported wrong length. Expected %d, got %d", tt2.n, n)
+					if n := s.Len(); n != tt2.n {
+						t.Errorf("UploadSlicer reported wrong length. Expected %d, got %d", tt2.n, n)
 					}
 					for _, e := range tt.expected {
-						r, cleanup, err := p.NextReader()
+						r, cleanup, err := s.NextReader()
 
 						b, err := io.ReadAll(r)
 						if err != nil {

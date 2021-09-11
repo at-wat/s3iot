@@ -26,14 +26,14 @@ const (
 	MaxUploadParts        = 10000
 )
 
-// DefaultPacketizerFactory is a factory of the default packetization logic.
-type DefaultPacketizerFactory struct {
+// DefaultUploadSlicerFactory is a factory of the default packetization logic.
+type DefaultUploadSlicerFactory struct {
 	PartSize       int64
 	MaxUploadParts int
 }
 
-// New creates Packetizer for the given io.Reader.
-func (f DefaultPacketizerFactory) New(r io.Reader) (Packetizer, error) {
+// New creates UploadSlicer for the given io.Reader.
+func (f DefaultUploadSlicerFactory) New(r io.Reader) (UploadSlicer, error) {
 	if f.PartSize == 0 {
 		f.PartSize = DefaultUploadPartSize
 	}
@@ -52,14 +52,14 @@ func (f DefaultPacketizerFactory) New(r io.Reader) (Packetizer, error) {
 		}
 		n := size / f.PartSize
 		if n == 0 {
-			return &defaultPacketizerSingle{
+			return &defaultUploadSlicerSingle{
 				r:    r,
 				size: size,
 			}, nil
 		}
 		switch r := r.(type) {
 		case readAtSeeker:
-			return &defaultPacketizerMultiAtSeeker{
+			return &defaultUploadSlicerMultiAtSeeker{
 				factory: f,
 				r:       r,
 				size:    size,
@@ -69,7 +69,7 @@ func (f DefaultPacketizerFactory) New(r io.Reader) (Packetizer, error) {
 	default:
 		size = -1
 	}
-	return &defaultPacketizerMulti{
+	return &defaultUploadSlicerMulti{
 		r:    r,
 		size: size,
 		pool: sync.Pool{
@@ -80,17 +80,17 @@ func (f DefaultPacketizerFactory) New(r io.Reader) (Packetizer, error) {
 	}, nil
 }
 
-type defaultPacketizerSingle struct {
+type defaultUploadSlicerSingle struct {
 	r    io.ReadSeeker
 	size int64
 }
 
-func (p *defaultPacketizerSingle) NextReader() (io.ReadSeeker, func(), error) {
-	return p.r, func() {}, io.EOF
+func (s *defaultUploadSlicerSingle) NextReader() (io.ReadSeeker, func(), error) {
+	return s.r, func() {}, io.EOF
 }
 
-func (p *defaultPacketizerSingle) Len() int64 {
-	return p.size
+func (s *defaultUploadSlicerSingle) Len() int64 {
+	return s.size
 }
 
 type readAtSeeker interface {
@@ -98,53 +98,53 @@ type readAtSeeker interface {
 	io.ReaderAt
 }
 
-type defaultPacketizerMultiAtSeeker struct {
-	factory DefaultPacketizerFactory
+type defaultUploadSlicerMultiAtSeeker struct {
+	factory DefaultUploadSlicerFactory
 	r       readAtSeeker
 	size    int64
 	offset  int64
 }
 
-func (p *defaultPacketizerMultiAtSeeker) NextReader() (io.ReadSeeker, func(), error) {
-	size := p.factory.PartSize
-	if p.offset+size >= p.size {
-		size = p.size - p.offset
+func (s *defaultUploadSlicerMultiAtSeeker) NextReader() (io.ReadSeeker, func(), error) {
+	size := s.factory.PartSize
+	if s.offset+size >= s.size {
+		size = s.size - s.offset
 	}
-	r := io.NewSectionReader(p.r, p.offset, size)
-	p.offset += p.factory.PartSize
+	r := io.NewSectionReader(s.r, s.offset, size)
+	s.offset += s.factory.PartSize
 	var err error
-	if p.offset >= p.size {
+	if s.offset >= s.size {
 		err = io.EOF
 	}
 	return r, func() {}, err
 }
 
-func (p *defaultPacketizerMultiAtSeeker) Len() int64 {
-	return p.size
+func (s *defaultUploadSlicerMultiAtSeeker) Len() int64 {
+	return s.size
 }
 
-type defaultPacketizerMulti struct {
+type defaultUploadSlicerMulti struct {
 	r      io.Reader
 	size   int64
 	offset int64
 	pool   sync.Pool
 }
 
-func (p *defaultPacketizerMulti) NextReader() (io.ReadSeeker, func(), error) {
-	buf := p.pool.Get().([]byte)
-	n, err := io.ReadFull(p.r, buf)
+func (s *defaultUploadSlicerMulti) NextReader() (io.ReadSeeker, func(), error) {
+	buf := s.pool.Get().([]byte)
+	n, err := io.ReadFull(s.r, buf)
 	switch {
 	case err == io.ErrUnexpectedEOF:
 		err = io.EOF
 	case err != nil:
 		return nil, nil, err
 	}
-	p.offset += int64(n)
+	s.offset += int64(n)
 	return bytes.NewReader(buf[:n]), func() {
-		p.pool.Put(buf)
+		s.pool.Put(buf)
 	}, err
 }
 
-func (p *defaultPacketizerMulti) Len() int64 {
-	return p.size
+func (s *defaultUploadSlicerMulti) Len() int64 {
+	return s.size
 }
