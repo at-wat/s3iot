@@ -62,7 +62,7 @@ func TestDownloader(t *testing.T) {
 			tt := tt
 			t.Run(name, func(t *testing.T) {
 				buf := bufferat.BufferAt(make([]byte, 128))
-				api := newDownloadMockAPI(t, data, tt.num, nil)
+				api := newDownloadMockAPI(t, data, tt.num, nil, nil)
 				d := &s3iot.Downloader{}
 				s3iot.WithAPI(api).ApplyToDownloader(d)
 				s3iot.WithDownloadSlicer(&s3iot.DefaultDownloadSlicerFactory{PartSize: 50}).ApplyToDownloader(d)
@@ -111,7 +111,7 @@ func TestDownloader(t *testing.T) {
 	t.Run("PauseResume", func(t *testing.T) {
 		buf := bufferat.BufferAt(make([]byte, 128))
 		chDownload := make(chan interface{})
-		api := newDownloadMockAPI(t, data, 0, chDownload)
+		api := newDownloadMockAPI(t, data, 0, chDownload, nil)
 		d := &s3iot.Downloader{}
 		s3iot.WithAPI(api).ApplyToDownloader(d)
 		s3iot.WithDownloadSlicer(&s3iot.DefaultDownloadSlicerFactory{PartSize: 50}).ApplyToDownloader(d)
@@ -170,10 +170,34 @@ func TestDownloader(t *testing.T) {
 			t.Error("Downloaded data differs")
 		}
 	})
+	t.Run("FileChangedDuringDownload", func(t *testing.T) {
+		buf := bufferat.BufferAt(make([]byte, 128))
+		api := newDownloadMockAPI(t, data, 0, nil, []string{"TAG0", "TAG1"})
+		d := &s3iot.Downloader{}
+		s3iot.WithAPI(api).ApplyToDownloader(d)
+		s3iot.WithDownloadSlicer(&s3iot.DefaultDownloadSlicerFactory{PartSize: 50}).ApplyToDownloader(d)
+		s3iot.WithRetryer(nil).ApplyToDownloader(d)
 
+		uc, err := d.Download(context.TODO(), buf, &s3iot.DownloadInput{
+			Bucket: &bucket,
+			Key:    &key,
+		})
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		select {
+		case <-time.After(time.Second):
+			t.Fatal("Timeout")
+		case <-uc.Done():
+		}
+		if _, err = uc.Result(); !errors.Is(err, s3iot.ErrChangedDuringDownload) {
+			t.Fatalf("Expected error: '%v', got: '%v'", s3iot.ErrChangedDuringDownload, err)
+		}
+	})
 }
 
-func newDownloadMockAPI(t *testing.T, data []byte, num int, ch chan interface{}) *mock_s3iot.MockS3API {
+func newDownloadMockAPI(t *testing.T, data []byte, num int, ch chan interface{}, etags []string) *mock_s3iot.MockS3API {
 	var mu sync.Mutex
 	var cnt int
 	count := func() int {
@@ -184,12 +208,15 @@ func newDownloadMockAPI(t *testing.T, data []byte, num int, ch chan interface{})
 		return count
 	}
 
-	etag := "TAG0"
-
 	return &mock_s3iot.MockS3API{
 		GetObjectFunc: func(ctx context.Context, input *s3iot.GetObjectInput) (*s3iot.GetObjectOutput, error) {
-			if count() < num {
+			i := count()
+			if i < num {
 				return nil, errTemp
+			}
+			etag := "TAG0"
+			if len(etags) > i {
+				etag = etags[i]
 			}
 			if ch != nil {
 				ch <- input
