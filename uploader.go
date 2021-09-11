@@ -23,20 +23,6 @@ import (
 	"sync"
 )
 
-type completedParts []*CompletedPart
-
-func (a completedParts) Len() int {
-	return len(a)
-}
-
-func (a completedParts) Swap(i, j int) {
-	a[i], a[j] = a[j], a[i]
-}
-
-func (a completedParts) Less(i, j int) bool {
-	return *a[i].PartNumber < *a[j].PartNumber
-}
-
 // Upload a file to S3.
 func (u Uploader) Upload(ctx context.Context, input *UploadInput) (UploadContext, error) {
 	if u.UploadSlicerFactory == nil {
