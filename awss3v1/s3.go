@@ -29,12 +29,27 @@ import (
 // NewUploader creates s3iot.Uploader from aws-sdk-go ConfigProvider (like Session).
 func NewUploader(c client.ConfigProvider, opts ...s3iot.UploaderOption) *s3iot.Uploader {
 	u := &s3iot.Uploader{
-		API: NewAPI(s3.New(c)),
+		UpDownloaderBase: s3iot.UpDownloaderBase{
+			API: NewAPI(s3.New(c)),
+		},
 	}
 	for _, opt := range opts {
-		opt(u)
+		opt.ApplyToUploader(u)
 	}
 	return u
+}
+
+// NewDownloader creates s3iot.Downloader from aws-sdk-go ConfigProvider (like Session).
+func NewDownloader(c client.ConfigProvider, opts ...s3iot.DownloaderOption) *s3iot.Downloader {
+	d := &s3iot.Downloader{
+		UpDownloaderBase: s3iot.UpDownloaderBase{
+			API: NewAPI(s3.New(c)),
+		},
+	}
+	for _, opt := range opts {
+		opt.ApplyToDownloader(d)
+	}
+	return d
 }
 
 // NewAPI wraps s3iface.S3API to s3iot.S3API.
@@ -62,6 +77,29 @@ func (w *wrapper) PutObject(ctx context.Context, input *s3iot.PutObjectInput) (*
 	return &s3iot.PutObjectOutput{
 		VersionID: out.VersionId,
 		ETag:      out.ETag,
+	}, nil
+}
+
+func (w *wrapper) GetObject(ctx context.Context, input *s3iot.GetObjectInput) (*s3iot.GetObjectOutput, error) {
+	out, err := w.api.GetObjectWithContext(
+		aws.Context(ctx),
+		&s3.GetObjectInput{
+			Bucket:    input.Bucket,
+			Key:       input.Key,
+			Range:     input.Range,
+			VersionId: input.VersionID,
+		})
+	if err != nil {
+		return nil, err
+	}
+	return &s3iot.GetObjectOutput{
+		Body:          out.Body,
+		ContentType:   out.ContentType,
+		ContentLength: out.ContentLength,
+		ContentRange:  out.ContentRange,
+		ETag:          out.ETag,
+		LastModified:  out.LastModified,
+		VersionID:     out.VersionId,
 	}, nil
 }
 

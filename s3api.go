@@ -17,6 +17,7 @@ package s3iot
 import (
 	"context"
 	"io"
+	"time"
 )
 
 // S3API is abstracted S3 API interface to support multiple major version of aws-sdk-go.
@@ -26,6 +27,7 @@ type S3API interface {
 	AbortMultipartUpload(ctx context.Context, input *AbortMultipartUploadInput) (*AbortMultipartUploadOutput, error)
 	CompleteMultipartUpload(ctx context.Context, input *CompleteMultipartUploadInput) (*CompleteMultipartUploadOutput, error)
 	PutObject(ctx context.Context, input *PutObjectInput) (*PutObjectOutput, error)
+	GetObject(ctx context.Context, input *GetObjectInput) (*GetObjectOutput, error)
 }
 
 // CreateMultipartUploadInput represents input of CreateMultipartUpload API.
@@ -98,4 +100,23 @@ type PutObjectInput struct {
 type PutObjectOutput struct {
 	VersionID *string
 	ETag      *string
+}
+
+// GetObjectInput represents input of GetObject API.
+type GetObjectInput struct {
+	Bucket    *string
+	Key       *string
+	Range     *string
+	VersionID *string
+}
+
+// GetObjectOutput represents output of GetObject API.
+type GetObjectOutput struct {
+	Body          io.ReadCloser
+	ContentType   *string
+	ContentLength *int64
+	ContentRange  *string
+	ETag          *string
+	LastModified  *time.Time
+	VersionID     *string
 }

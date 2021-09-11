@@ -34,7 +34,7 @@ var DefaultRetryer = &ExponentialBackoffRetryerFactory{}
 type NoRetryerFactory struct{}
 
 // New creates NoRetryer.
-func (NoRetryerFactory) New(UploadContext) Retryer {
+func (NoRetryerFactory) New(Pauser) Retryer {
 	return &noRetryer{}
 }
 
@@ -57,7 +57,7 @@ type ExponentialBackoffRetryerFactory struct {
 }
 
 // New creates ExponentialBackoffRetryer.
-func (f ExponentialBackoffRetryerFactory) New(UploadContext) Retryer {
+func (f ExponentialBackoffRetryerFactory) New(Pauser) Retryer {
 	if f.WaitBase == 0 {
 		f.WaitBase = DefaultExponentialBackoffWaitBase
 	}

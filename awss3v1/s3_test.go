@@ -18,15 +18,42 @@ import (
 	"bytes"
 	"context"
 	"errors"
+	"io"
 	"testing"
+	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 
 	"github.com/at-wat/s3iot"
 	"github.com/at-wat/s3iot/awss3v1/internal/moq/s3iface"
 )
+
+func TestNew(t *testing.T) {
+	sess, err := session.NewSessionWithOptions(session.Options{
+		Config: aws.Config{
+			Credentials: credentials.NewStaticCredentials("id", "secret", ""),
+		},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Run("NewUploader", func(t *testing.T) {
+		u := NewUploader(sess)
+		if _, ok := u.API.(*wrapper).api.(*s3.S3); !ok {
+			t.Errorf("Base API is expected to be *s3.S3, actually %T", u.API.(*wrapper).api)
+		}
+	})
+	t.Run("NewDownloader", func(t *testing.T) {
+		d := NewDownloader(sess)
+		if _, ok := d.API.(*wrapper).api.(*s3.S3); !ok {
+			t.Errorf("Base API is expected to be *s3.S3, actually %T", d.API.(*wrapper).api)
+		}
+	})
+}
 
 func TestWrapper(t *testing.T) {
 	t.Run("Success", func(t *testing.T) {
@@ -66,6 +93,53 @@ func TestWrapper(t *testing.T) {
 			}
 			expectStringPtr(t, "VersionID", out.VersionID)
 			expectStringPtr(t, "ETag", out.ETag)
+		})
+		t.Run("GetObject", func(t *testing.T) {
+			r := io.NopCloser(bytes.NewReader([]byte{}))
+
+			api := &s3iface.MockS3API{
+				GetObjectWithContextFunc: func(ctx context.Context, input *s3.GetObjectInput, options ...request.Option) (*s3.GetObjectOutput, error) {
+					expectStringPtr(t, "Bucket", input.Bucket)
+					expectStringPtr(t, "Key", input.Key)
+					expectStringPtr(t, "Range", input.Range)
+					expectStringPtr(t, "VersionID", input.VersionId)
+					return &s3.GetObjectOutput{
+						Body:          r,
+						ContentType:   aws.String("ContentType"),
+						ContentLength: aws.Int64(100),
+						ContentRange:  aws.String("ContentRange"),
+						ETag:          aws.String("ETag"),
+						LastModified:  aws.Time(time.Unix(1, 2)),
+						VersionId:     aws.String("VersionID"),
+					}, nil
+				},
+			}
+			w := NewAPI(api)
+			out, err := w.GetObject(context.TODO(),
+				&s3iot.GetObjectInput{
+					Bucket:    aws.String("Bucket"),
+					Key:       aws.String("Key"),
+					Range:     aws.String("Range"),
+					VersionID: aws.String("VersionID"),
+				},
+			)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if n := len(api.GetObjectWithContextCalls()); n != 1 {
+				t.Errorf("Expected calls: 1, actual: %d", n)
+			}
+			if out.Body != r {
+				t.Error("Body reader differs")
+			}
+			expectStringPtr(t, "ContentType", out.ContentType)
+			expectInt64Ptr(t, 100, out.ContentLength)
+			expectStringPtr(t, "ContentRange", out.ContentRange)
+			expectStringPtr(t, "ETag", out.ETag)
+			if !out.LastModified.Equal(time.Unix(1, 2)) {
+				t.Error("LastModified differs")
+			}
+			expectStringPtr(t, "VersionID", out.VersionID)
 		})
 		t.Run("CreateMultipartUpload", func(t *testing.T) {
 			api := &s3iface.MockS3API{

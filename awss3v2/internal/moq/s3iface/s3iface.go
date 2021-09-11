@@ -28,6 +28,9 @@ var _ S3API = &MockS3API{}
 // 			CreateMultipartUploadFunc: func(ctx context.Context, params *s3.CreateMultipartUploadInput, optFns ...func(*s3.Options)) (*s3.CreateMultipartUploadOutput, error) {
 // 				panic("mock out the CreateMultipartUpload method")
 // 			},
+// 			GetObjectFunc: func(ctx context.Context, params *s3.GetObjectInput, optFns ...func(*s3.Options)) (*s3.GetObjectOutput, error) {
+// 				panic("mock out the GetObject method")
+// 			},
 // 			PutObjectFunc: func(ctx context.Context, params *s3.PutObjectInput, optFns ...func(*s3.Options)) (*s3.PutObjectOutput, error) {
 // 				panic("mock out the PutObject method")
 // 			},
@@ -49,6 +52,9 @@ type MockS3API struct {
 
 	// CreateMultipartUploadFunc mocks the CreateMultipartUpload method.
 	CreateMultipartUploadFunc func(ctx context.Context, params *s3.CreateMultipartUploadInput, optFns ...func(*s3.Options)) (*s3.CreateMultipartUploadOutput, error)
+
+	// GetObjectFunc mocks the GetObject method.
+	GetObjectFunc func(ctx context.Context, params *s3.GetObjectInput, optFns ...func(*s3.Options)) (*s3.GetObjectOutput, error)
 
 	// PutObjectFunc mocks the PutObject method.
 	PutObjectFunc func(ctx context.Context, params *s3.PutObjectInput, optFns ...func(*s3.Options)) (*s3.PutObjectOutput, error)
@@ -85,6 +91,15 @@ type MockS3API struct {
 			// OptFns is the optFns argument value.
 			OptFns []func(*s3.Options)
 		}
+		// GetObject holds details about calls to the GetObject method.
+		GetObject []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Params is the params argument value.
+			Params *s3.GetObjectInput
+			// OptFns is the optFns argument value.
+			OptFns []func(*s3.Options)
+		}
 		// PutObject holds details about calls to the PutObject method.
 		PutObject []struct {
 			// Ctx is the ctx argument value.
@@ -107,6 +122,7 @@ type MockS3API struct {
 	lockAbortMultipartUpload    sync.RWMutex
 	lockCompleteMultipartUpload sync.RWMutex
 	lockCreateMultipartUpload   sync.RWMutex
+	lockGetObject               sync.RWMutex
 	lockPutObject               sync.RWMutex
 	lockUploadPart              sync.RWMutex
 }
@@ -225,6 +241,45 @@ func (mock *MockS3API) CreateMultipartUploadCalls() []struct {
 	mock.lockCreateMultipartUpload.RLock()
 	calls = mock.calls.CreateMultipartUpload
 	mock.lockCreateMultipartUpload.RUnlock()
+	return calls
+}
+
+// GetObject calls GetObjectFunc.
+func (mock *MockS3API) GetObject(ctx context.Context, params *s3.GetObjectInput, optFns ...func(*s3.Options)) (*s3.GetObjectOutput, error) {
+	if mock.GetObjectFunc == nil {
+		panic("MockS3API.GetObjectFunc: method is nil but S3API.GetObject was just called")
+	}
+	callInfo := struct {
+		Ctx    context.Context
+		Params *s3.GetObjectInput
+		OptFns []func(*s3.Options)
+	}{
+		Ctx:    ctx,
+		Params: params,
+		OptFns: optFns,
+	}
+	mock.lockGetObject.Lock()
+	mock.calls.GetObject = append(mock.calls.GetObject, callInfo)
+	mock.lockGetObject.Unlock()
+	return mock.GetObjectFunc(ctx, params, optFns...)
+}
+
+// GetObjectCalls gets all the calls that were made to GetObject.
+// Check the length with:
+//     len(mockedS3API.GetObjectCalls())
+func (mock *MockS3API) GetObjectCalls() []struct {
+	Ctx    context.Context
+	Params *s3.GetObjectInput
+	OptFns []func(*s3.Options)
+} {
+	var calls []struct {
+		Ctx    context.Context
+		Params *s3.GetObjectInput
+		OptFns []func(*s3.Options)
+	}
+	mock.lockGetObject.RLock()
+	calls = mock.calls.GetObject
+	mock.lockGetObject.RUnlock()
 	return calls
 }
 
