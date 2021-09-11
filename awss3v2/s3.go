@@ -68,6 +68,32 @@ func (w *wrapper) PutObject(ctx context.Context, input *s3iot.PutObjectInput) (*
 	}, nil
 }
 
+func (w *wrapper) GetObject(ctx context.Context, input *s3iot.GetObjectInput) (*s3iot.GetObjectOutput, error) {
+	out, err := w.api.GetObject(
+		ctx,
+		&s3.GetObjectInput{
+			Bucket:     input.Bucket,
+			Key:        input.Key,
+			PartNumber: int32(*input.PartNumber),
+			VersionId:  input.VersionID,
+		})
+	if err != nil {
+		return nil, err
+	}
+	var partsCount *int64
+	if out.PartsCount != 0 {
+		partsCount = aws.Int64(int64(out.PartsCount))
+	}
+	return &s3iot.GetObjectOutput{
+		Body:         out.Body,
+		ContentType:  out.ContentType,
+		ETag:         out.ETag,
+		LastModified: out.LastModified,
+		PartsCount:   partsCount,
+		VersionID:    out.VersionId,
+	}, nil
+}
+
 func (w *wrapper) CreateMultipartUpload(ctx context.Context, input *s3iot.CreateMultipartUploadInput) (*s3iot.CreateMultipartUploadOutput, error) {
 	var acl s3types.ObjectCannedACL
 	if input.ACL != nil {

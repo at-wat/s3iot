@@ -18,7 +18,9 @@ import (
 	"bytes"
 	"context"
 	"errors"
+	"io"
 	"testing"
+	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
@@ -67,6 +69,56 @@ func TestWrapper(t *testing.T) {
 			expectStringPtr(t, "VersionID", out.VersionID)
 			expectStringPtr(t, "ETag", out.ETag)
 		})
+		t.Run("GetObject", func(t *testing.T) {
+			r := io.NopCloser(bytes.NewReader([]byte{}))
+
+			api := &s3iface.MockS3API{
+				GetObjectFunc: func(ctx context.Context, params *s3.GetObjectInput, optFns ...func(*s3.Options)) (*s3.GetObjectOutput, error) {
+					expectStringPtr(t, "Bucket", params.Bucket)
+					expectStringPtr(t, "Key", params.Key)
+					if params.PartNumber != 1 {
+						t.Error("PartNumber differs")
+					}
+					expectStringPtr(t, "VersionID", params.VersionId)
+					return &s3.GetObjectOutput{
+						Body:         r,
+						ContentType:  aws.String("ContentType"),
+						ETag:         aws.String("ETag"),
+						LastModified: aws.Time(time.Unix(1, 2)),
+						PartsCount:   2,
+						VersionId:    aws.String("VersionID"),
+					}, nil
+				},
+			}
+			w := awss3v2.NewAPI(api)
+			out, err := w.GetObject(context.TODO(),
+				&s3iot.GetObjectInput{
+					Bucket:     aws.String("Bucket"),
+					Key:        aws.String("Key"),
+					PartNumber: aws.Int64(1),
+					VersionID:  aws.String("VersionID"),
+				},
+			)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if n := len(api.GetObjectCalls()); n != 1 {
+				t.Errorf("Expected calls: 1, actual: %d", n)
+			}
+			if out.Body != r {
+				t.Error("Body reader differs")
+			}
+			expectStringPtr(t, "ContentType", out.ContentType)
+			expectStringPtr(t, "ETag", out.ETag)
+			if !out.LastModified.Equal(time.Unix(1, 2)) {
+				t.Error("LastModified differs")
+			}
+			if *out.PartsCount != 2 {
+				t.Error("PartsCount differs")
+			}
+			expectStringPtr(t, "VersionID", out.VersionID)
+		})
+
 		t.Run("CreateMultipartUpload", func(t *testing.T) {
 			api := &s3iface.MockS3API{
 				CreateMultipartUploadFunc: func(ctx context.Context, params *s3.CreateMultipartUploadInput, optFns ...func(*s3.Options)) (*s3.CreateMultipartUploadOutput, error) {
