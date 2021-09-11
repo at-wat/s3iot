@@ -91,6 +91,18 @@ func TestDefaultDownloadSlicer(t *testing.T) {
 			},
 			expected: []byte("0123\0004567\00089ab\000\000"),
 		},
+		"DefaultParam": {
+			bufSize: 5,
+			write:   [][]byte{[]byte("0123")},
+			ranges: []rng.Range{
+				{
+					Unit:  rng.RangeUnitBytes,
+					Start: 0,
+					End:   5242879,
+				},
+			},
+			expected: []byte("0123\000"),
+		},
 	}
 	for name, tt := range testCases {
 		tt := tt
