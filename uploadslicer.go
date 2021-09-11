@@ -20,13 +20,13 @@ import (
 	"sync"
 )
 
-// Default packetization parametes.
+// Default upload slicing parametes.
 const (
 	DefaultUploadPartSize = 1024 * 1024 * 5
 	MaxUploadParts        = 10000
 )
 
-// DefaultUploadSlicerFactory is a factory of the default packetization logic.
+// DefaultUploadSlicerFactory is a factory of the default slicing logic.
 type DefaultUploadSlicerFactory struct {
 	PartSize       int64
 	MaxUploadParts int

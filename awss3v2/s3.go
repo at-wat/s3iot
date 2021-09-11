@@ -28,10 +28,25 @@ import (
 // NewUploader creates s3iot.Uploader from aws-sdk-go-v2 Config.
 func NewUploader(c aws.Config, opts ...s3iot.UploaderOption) *s3iot.Uploader {
 	u := &s3iot.Uploader{
-		API: NewAPI(s3.NewFromConfig(c)),
+		UpDownloaderBase: s3iot.UpDownloaderBase{
+			API: NewAPI(s3.NewFromConfig(c)),
+		},
 	}
 	for _, opt := range opts {
-		opt(u)
+		opt.ApplyToUploader(u)
+	}
+	return u
+}
+
+// NewDownloader creates s3iot.Download from aws-sdk-go-v2 Config.
+func NewDownloader(c aws.Config, opts ...s3iot.DownloaderOption) *s3iot.Downloader {
+	u := &s3iot.Downloader{
+		UpDownloaderBase: s3iot.UpDownloaderBase{
+			API: NewAPI(s3.NewFromConfig(c)),
+		},
+	}
+	for _, opt := range opts {
+		opt.ApplyToDownloader(u)
 	}
 	return u
 }
@@ -72,25 +87,22 @@ func (w *wrapper) GetObject(ctx context.Context, input *s3iot.GetObjectInput) (*
 	out, err := w.api.GetObject(
 		ctx,
 		&s3.GetObjectInput{
-			Bucket:     input.Bucket,
-			Key:        input.Key,
-			PartNumber: int32(*input.PartNumber),
-			VersionId:  input.VersionID,
+			Bucket:    input.Bucket,
+			Key:       input.Key,
+			Range:     input.Range,
+			VersionId: input.VersionID,
 		})
 	if err != nil {
 		return nil, err
 	}
-	var partsCount *int64
-	if out.PartsCount != 0 {
-		partsCount = aws.Int64(int64(out.PartsCount))
-	}
 	return &s3iot.GetObjectOutput{
-		Body:         out.Body,
-		ContentType:  out.ContentType,
-		ETag:         out.ETag,
-		LastModified: out.LastModified,
-		PartsCount:   partsCount,
-		VersionID:    out.VersionId,
+		Body:          out.Body,
+		ContentType:   out.ContentType,
+		ContentLength: &out.ContentLength,
+		ContentRange:  out.ContentRange,
+		ETag:          out.ETag,
+		LastModified:  out.LastModified,
+		VersionID:     out.VersionId,
 	}, nil
 }
 

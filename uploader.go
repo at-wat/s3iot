@@ -23,14 +23,6 @@ import (
 	"sync"
 )
 
-// Uploader implements S3 uploader with configurable retry and bandwidth limit.
-type Uploader struct {
-	API                    S3API
-	UploadSlicerFactory      UploadSlicerFactory
-	RetryerFactory         RetryerFactory
-	ReadInterceptorFactory ReadInterceptorFactory
-}
-
 type completedParts []*CompletedPart
 
 func (a completedParts) Len() int {
@@ -63,13 +55,15 @@ func (u Uploader) Upload(ctx context.Context, input *UploadInput) (UploadContext
 	}
 	uc := &uploadContext{
 		api:             u.API,
-		slicer:      slicer,
+		slicer:          slicer,
 		readInterceptor: readInterceptor,
 		input:           input,
 		done:            make(chan struct{}),
 		paused:          make(chan struct{}),
 		status: UploadStatus{
-			Size: slicer.Len(),
+			Status: Status{
+				Size: slicer.Len(),
+			},
 		},
 	}
 	uc.retryer = u.RetryerFactory.New(uc)
@@ -88,7 +82,7 @@ func (u Uploader) Upload(ctx context.Context, input *UploadInput) (UploadContext
 
 type uploadContext struct {
 	api             S3API
-	slicer      UploadSlicer
+	slicer          UploadSlicer
 	retryer         Retryer
 	readInterceptor ReadInterceptor
 	input           *UploadInput
@@ -250,7 +244,7 @@ func (uc *uploadContext) multi(ctx context.Context, r io.ReadSeeker, cleanup fun
 		}
 		cleanup()
 		uc.mu.Lock()
-		uc.status.UploadedSize += size
+		uc.status.CompletedSize += size
 		uc.mu.Unlock()
 
 		if last {

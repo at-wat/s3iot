@@ -17,6 +17,9 @@ package s3iot
 import (
 	"context"
 	"io"
+	"time"
+
+	"github.com/at-wat/s3iot/rng"
 )
 
 // UploadSlicerFactory creates UploadSlicer for given io.Reader.
@@ -31,10 +34,21 @@ type UploadSlicer interface {
 	NextReader() (io.ReadSeeker, func(), error)
 }
 
+// DownloadSlicerFactory creates DownloadSlicer for given io.WriterAt.
+// DownloadSlicer will be created for each Download() call.
+type DownloadSlicerFactory interface {
+	New(io.WriterAt) (DownloadSlicer, error)
+}
+
+// DownloadSlicer splits input data stream into multiple io.WriterAt.
+type DownloadSlicer interface {
+	NextWriter() (io.WriterAt, rng.Range, error)
+}
+
 // RetryerFactory creates Retryer.
 // Retryer will be created for each Upload() call.
 type RetryerFactory interface {
-	New(UploadContext) Retryer
+	New(Pauser) Retryer
 }
 
 // Retryer controls upload retrying logic.
@@ -55,34 +69,16 @@ type ReadInterceptor interface {
 	Reader(io.ReadSeeker) io.ReadSeeker
 }
 
-// UploadStatus represents upload status.
-type UploadStatus struct {
-	Size         int64
-	UploadedSize int64
-	UploadID     string
-	NumRetries   int
-	Paused       bool
+// Pauser provices pause/resume interface.
+type Pauser interface {
+	Pause()
+	Resume()
 }
 
-// UploadOutput represents upload result.
-type UploadOutput struct {
-	VersionID *string
-	ETag      *string
-}
-
-// UploadContext provides access to the upload progress and the result.
-type UploadContext interface {
-	// Result reutrns the upload status or error.
-	Status() (UploadStatus, error)
-	// Result reutrns the upload result or error.
-	Result() (UploadOutput, error)
+// DoneNotifier provices completion notifier.
+type DoneNotifier interface {
 	// Done returns a channel which will be closed after complete.
 	Done() <-chan struct{}
-
-	// Pause the upload.
-	Pause()
-	// Resume the upload.
-	Resume()
 }
 
 // UploadInput represents upload destination and data.
@@ -92,4 +88,68 @@ type UploadInput struct {
 	ACL         *string
 	Body        io.Reader
 	ContentType *string
+}
+
+// UploadOutput represents upload result.
+type UploadOutput struct {
+	VersionID *string
+	ETag      *string
+}
+
+// DownloadInput represents upload destination and data.
+type DownloadInput struct {
+	Bucket    *string
+	Key       *string
+	VersionID *string
+}
+
+// DownloadOutput represents download result.
+type DownloadOutput struct {
+	ContentType  *string
+	ETag         *string
+	LastModified *time.Time
+	VersionID    *string
+}
+
+// UploadContext provides access to the upload progress and the result.
+type UploadContext interface {
+	// Result reutrns the upload status or error.
+	Status() (UploadStatus, error)
+	// Result reutrns the upload result or error.
+	Result() (UploadOutput, error)
+
+	Pauser
+	DoneNotifier
+}
+
+// DownloadContext provides access to the download progress and the result.
+type DownloadContext interface {
+	// Result reutrns the upload status or error.
+	Status() (DownloadStatus, error)
+	// Result reutrns the upload result or error.
+	Result() (DownloadOutput, error)
+
+	Pauser
+	DoneNotifier
+}
+
+// Status represents upload/download status.
+type Status struct {
+	Size          int64
+	CompletedSize int64
+	NumRetries    int
+	Paused        bool
+}
+
+// UploadStatus represents upload status.
+type UploadStatus struct {
+	Status
+
+	UploadID string
+}
+
+// DownloadStatus represents download status.
+type DownloadStatus struct {
+	Status
+	DownloadOutput
 }

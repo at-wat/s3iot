@@ -34,6 +34,66 @@ func TestRange(t *testing.T) {
 			t.Errorf("Expected: '%s', got: '%s'", expected, s)
 		}
 	})
+	t.Run("ContentRange", func(t *testing.T) {
+		r := Range{
+			Unit:  RangeUnitBytes,
+			Start: 10,
+			End:   31,
+			Size:  12345,
+		}
+		s := r.ContentRange()
+		expected := "bytes 10-31/12345"
+		if s != expected {
+			t.Errorf("Expected: '%s', got: '%s'", expected, s)
+		}
+	})
+	t.Run("Parse", func(t *testing.T) {
+		testCases := map[string]struct {
+			input    string
+			err      error
+			expected Range
+		}{
+			"OK": {
+				input: "bytes=20-30",
+				expected: Range{
+					Unit:  RangeUnitBytes,
+					Start: 20,
+					End:   30,
+				},
+			},
+			"InvalidFormat": {
+				input: "bytes 1-10",
+				err:   ErrInvalidFormat,
+			},
+			"InvalidUnit": {
+				input: "meters=1-10",
+				err:   ErrInvalidUnit,
+			},
+			"InvalidRange": {
+				input: "bytes=1,10",
+				err:   ErrInvalidRange,
+			},
+		}
+		for name, tt := range testCases {
+			tt := tt
+			t.Run(name, func(t *testing.T) {
+				r, err := Parse(tt.input)
+				if err != nil {
+					if tt.err == nil {
+						t.Fatal(err)
+					}
+					if !errors.Is(err, tt.err) {
+						t.Fatalf("Expected error: '%v', got: '%v'", tt.err, err)
+					}
+					return
+				}
+				if !reflect.DeepEqual(tt.expected, *r) {
+					t.Errorf("Expected: %+v, got: %+v", tt.expected, *r)
+				}
+			})
+		}
+	})
+
 	t.Run("ParseContentRange", func(t *testing.T) {
 		testCases := map[string]struct {
 			input    string

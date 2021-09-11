@@ -30,6 +30,8 @@ import (
 	mock_s3iot "github.com/at-wat/s3iot/internal/moq/s3iot"
 )
 
+var errTemp = errors.New("dummy")
+
 func TestUploader(t *testing.T) {
 	var (
 		bucket = "Bucket"
@@ -63,15 +65,15 @@ func TestUploader(t *testing.T) {
 			tt := tt
 			t.Run(name, func(t *testing.T) {
 				buf := &bytes.Buffer{}
-				api := newMockAPI(buf, tt.num, nil)
+				api := newUploadMockAPI(buf, tt.num, nil)
 				u := &s3iot.Uploader{}
-				s3iot.WithAPI(api)(u)
-				s3iot.WithUploadSlicer(&s3iot.DefaultUploadSlicerFactory{PartSize: 128})(u)
+				s3iot.WithAPI(api).ApplyToUploader(u)
+				s3iot.WithUploadSlicer(&s3iot.DefaultUploadSlicerFactory{PartSize: 128}).ApplyToUploader(u)
 				s3iot.WithRetryer(&s3iot.ExponentialBackoffRetryerFactory{
 					WaitBase: time.Millisecond,
 					RetryMax: 1,
-				})(u)
-				s3iot.WithReadInterceptor(nil)(u)
+				}).ApplyToUploader(u)
+				s3iot.WithReadInterceptor(nil).ApplyToUploader(u)
 
 				uc, err := u.Upload(context.TODO(), &s3iot.UploadInput{
 					Bucket: &bucket,
@@ -147,15 +149,15 @@ func TestUploader(t *testing.T) {
 			tt := tt
 			t.Run(name, func(t *testing.T) {
 				buf := &bytes.Buffer{}
-				api := newMockAPI(buf, tt.num, nil)
+				api := newUploadMockAPI(buf, tt.num, nil)
 				u := &s3iot.Uploader{}
-				s3iot.WithAPI(api)(u)
-				s3iot.WithUploadSlicer(&s3iot.DefaultUploadSlicerFactory{PartSize: 50})(u)
+				s3iot.WithAPI(api).ApplyToUploader(u)
+				s3iot.WithUploadSlicer(&s3iot.DefaultUploadSlicerFactory{PartSize: 50}).ApplyToUploader(u)
 				s3iot.WithRetryer(&s3iot.ExponentialBackoffRetryerFactory{
 					WaitBase: time.Millisecond,
 					RetryMax: 1,
-				})(u)
-				s3iot.WithReadInterceptor(nil)(u)
+				}).ApplyToUploader(u)
+				s3iot.WithReadInterceptor(nil).ApplyToUploader(u)
 
 				uc, err := u.Upload(context.TODO(), &s3iot.UploadInput{
 					Bucket: &bucket,
@@ -221,14 +223,14 @@ func TestUploader(t *testing.T) {
 	t.Run("PauseResume", func(t *testing.T) {
 		buf := &bytes.Buffer{}
 		chUpload := make(chan interface{})
-		api := newMockAPI(buf, nil, map[string]chan interface{}{
+		api := newUploadMockAPI(buf, nil, map[string]chan interface{}{
 			"upload": chUpload,
 		})
 		u := &s3iot.Uploader{}
-		s3iot.WithAPI(api)(u)
-		s3iot.WithUploadSlicer(&s3iot.DefaultUploadSlicerFactory{PartSize: 50})(u)
-		s3iot.WithRetryer(nil)(u)
-		s3iot.WithReadInterceptor(nil)(u)
+		s3iot.WithAPI(api).ApplyToUploader(u)
+		s3iot.WithUploadSlicer(&s3iot.DefaultUploadSlicerFactory{PartSize: 50}).ApplyToUploader(u)
+		s3iot.WithRetryer(nil).ApplyToUploader(u)
+		s3iot.WithReadInterceptor(nil).ApplyToUploader(u)
 
 		uc, err := u.Upload(context.TODO(), &s3iot.UploadInput{
 			Bucket: &bucket,
@@ -292,7 +294,7 @@ func TestUploader(t *testing.T) {
 	})
 }
 
-func newMockAPI(buf *bytes.Buffer, num map[string]int, ch map[string]chan interface{}) *mock_s3iot.MockS3API {
+func newUploadMockAPI(buf *bytes.Buffer, num map[string]int, ch map[string]chan interface{}) *mock_s3iot.MockS3API {
 	if num == nil {
 		num = make(map[string]int)
 	}
@@ -376,11 +378,3 @@ func newMockAPI(buf *bytes.Buffer, num map[string]int, ch map[string]chan interf
 		},
 	}
 }
-
-type errTemporary struct{}
-
-func (errTemporary) Temporary() bool { return true }
-func (errTemporary) Timeout() bool   { return true }
-func (errTemporary) Error() string   { return "timeout" }
-
-var errTemp = &errTemporary{}

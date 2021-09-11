@@ -104,18 +104,19 @@ type PutObjectOutput struct {
 
 // GetObjectInput represents input of GetObject API.
 type GetObjectInput struct {
-	Bucket     *string
-	Key        *string
-	PartNumber *int64
-	VersionID  *string
+	Bucket    *string
+	Key       *string
+	Range     *string
+	VersionID *string
 }
 
 // GetObjectOutput represents output of GetObject API.
 type GetObjectOutput struct {
-	Body         io.ReadCloser
-	ContentType  *string
-	ETag         *string
-	LastModified *time.Time
-	PartsCount   *int64
-	VersionID    *string
+	Body          io.ReadCloser
+	ContentType   *string
+	ContentLength *int64
+	ContentRange  *string
+	ETag          *string
+	LastModified  *time.Time
+	VersionID     *string
 }

@@ -76,27 +76,26 @@ func TestWrapper(t *testing.T) {
 				GetObjectFunc: func(ctx context.Context, params *s3.GetObjectInput, optFns ...func(*s3.Options)) (*s3.GetObjectOutput, error) {
 					expectStringPtr(t, "Bucket", params.Bucket)
 					expectStringPtr(t, "Key", params.Key)
-					if params.PartNumber != 1 {
-						t.Error("PartNumber differs")
-					}
+					expectStringPtr(t, "Range", params.Range)
 					expectStringPtr(t, "VersionID", params.VersionId)
 					return &s3.GetObjectOutput{
-						Body:         r,
-						ContentType:  aws.String("ContentType"),
-						ETag:         aws.String("ETag"),
-						LastModified: aws.Time(time.Unix(1, 2)),
-						PartsCount:   2,
-						VersionId:    aws.String("VersionID"),
+						Body:          r,
+						ContentType:   aws.String("ContentType"),
+						ContentLength: 100,
+						ContentRange:  aws.String("ContentRange"),
+						ETag:          aws.String("ETag"),
+						LastModified:  aws.Time(time.Unix(1, 2)),
+						VersionId:     aws.String("VersionID"),
 					}, nil
 				},
 			}
 			w := awss3v2.NewAPI(api)
 			out, err := w.GetObject(context.TODO(),
 				&s3iot.GetObjectInput{
-					Bucket:     aws.String("Bucket"),
-					Key:        aws.String("Key"),
-					PartNumber: aws.Int64(1),
-					VersionID:  aws.String("VersionID"),
+					Bucket:    aws.String("Bucket"),
+					Key:       aws.String("Key"),
+					Range:     aws.String("Range"),
+					VersionID: aws.String("VersionID"),
 				},
 			)
 			if err != nil {
@@ -109,12 +108,13 @@ func TestWrapper(t *testing.T) {
 				t.Error("Body reader differs")
 			}
 			expectStringPtr(t, "ContentType", out.ContentType)
+			if *out.ContentLength != 100 {
+				t.Error("ContentLength differs")
+			}
+			expectStringPtr(t, "ContentRange", out.ContentRange)
 			expectStringPtr(t, "ETag", out.ETag)
 			if !out.LastModified.Equal(time.Unix(1, 2)) {
 				t.Error("LastModified differs")
-			}
-			if *out.PartsCount != 2 {
-				t.Error("PartsCount differs")
 			}
 			expectStringPtr(t, "VersionID", out.VersionID)
 		})
