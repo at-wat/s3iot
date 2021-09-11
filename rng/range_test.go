@@ -17,6 +17,7 @@ package rng
 import (
 	"errors"
 	"reflect"
+	"strconv"
 	"testing"
 )
 
@@ -72,6 +73,14 @@ func TestRange(t *testing.T) {
 			"InvalidRange": {
 				input: "bytes=1,10",
 				err:   ErrInvalidRange,
+			},
+			"InvalidStart": {
+				input: "bytes=$-5",
+				err:   strconv.ErrSyntax,
+			},
+			"InvalidEnd": {
+				input: "bytes=1-$",
+				err:   strconv.ErrSyntax,
 			},
 		}
 		for name, tt := range testCases {
