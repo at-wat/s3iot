@@ -65,7 +65,9 @@ func TestDownloader(t *testing.T) {
 				api := newDownloadMockAPI(t, data, tt.num, nil, nil)
 				d := &s3iot.Downloader{}
 				s3iot.WithAPI(api).ApplyToDownloader(d)
-				s3iot.WithDownloadSlicer(&s3iot.DefaultDownloadSlicerFactory{PartSize: 50}).ApplyToDownloader(d)
+				s3iot.WithDownloadSlicer(
+					&s3iot.DefaultDownloadSlicerFactory{PartSize: 50},
+				).ApplyToDownloader(d)
 				s3iot.WithRetryer(&s3iot.ExponentialBackoffRetryerFactory{
 					WaitBase: time.Millisecond,
 					RetryMax: 1,
@@ -114,7 +116,9 @@ func TestDownloader(t *testing.T) {
 		api := newDownloadMockAPI(t, data, 0, chDownload, nil)
 		d := &s3iot.Downloader{}
 		s3iot.WithAPI(api).ApplyToDownloader(d)
-		s3iot.WithDownloadSlicer(&s3iot.DefaultDownloadSlicerFactory{PartSize: 50}).ApplyToDownloader(d)
+		s3iot.WithDownloadSlicer(
+			&s3iot.DefaultDownloadSlicerFactory{PartSize: 50},
+		).ApplyToDownloader(d)
 		s3iot.WithRetryer(nil).ApplyToDownloader(d)
 
 		uc, err := d.Download(context.TODO(), buf, &s3iot.DownloadInput{
@@ -175,7 +179,9 @@ func TestDownloader(t *testing.T) {
 		api := newDownloadMockAPI(t, data, 0, nil, []string{"TAG0", "TAG1"})
 		d := &s3iot.Downloader{}
 		s3iot.WithAPI(api).ApplyToDownloader(d)
-		s3iot.WithDownloadSlicer(&s3iot.DefaultDownloadSlicerFactory{PartSize: 50}).ApplyToDownloader(d)
+		s3iot.WithDownloadSlicer(
+			&s3iot.DefaultDownloadSlicerFactory{PartSize: 50},
+		).ApplyToDownloader(d)
 		s3iot.WithRetryer(nil).ApplyToDownloader(d)
 
 		uc, err := d.Download(context.TODO(), buf, &s3iot.DownloadInput{
@@ -193,6 +199,32 @@ func TestDownloader(t *testing.T) {
 		}
 		if _, err = uc.Result(); !errors.Is(err, s3iot.ErrChangedDuringDownload) {
 			t.Fatalf("Expected error: '%v', got: '%v'", s3iot.ErrChangedDuringDownload, err)
+		}
+	})
+	t.Run("DefaultSlicer", func(t *testing.T) {
+		buf := iotest.BufferAt(make([]byte, 128))
+		api := newDownloadMockAPI(t, data, 0, nil, nil)
+		d := &s3iot.Downloader{}
+		s3iot.WithAPI(api).ApplyToDownloader(d)
+
+		dc, err := d.Download(context.TODO(), buf, &s3iot.DownloadInput{
+			Bucket: &bucket,
+			Key:    &key,
+		})
+		if err != nil {
+			t.Fatal(err)
+		}
+		select {
+		case <-time.After(time.Second):
+			t.Fatal("Timeout")
+		case <-dc.Done():
+		}
+		if _, err := dc.Result(); err != nil {
+			t.Fatal(err)
+		}
+
+		if !bytes.Equal(data, []byte(buf)) {
+			t.Error("Downloaded data differs")
 		}
 	})
 	t.Run("ContextCanceled", func(t *testing.T) {
