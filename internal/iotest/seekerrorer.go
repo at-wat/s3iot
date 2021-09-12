@@ -12,13 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package bufferat provides simple io.WriterAt based on the byte array.
-package bufferat
+package iotest
 
-// BufferAt implements simple io.WriterAt interface.
-type BufferAt []byte
+import (
+	"io"
+	"sync/atomic"
+)
 
-// WriteAt implements io.WriterAt.
-func (b BufferAt) WriteAt(p []byte, offset int64) (int, error) {
-	return copy(b[int(offset):int(offset)+len(p)], p), nil
+// SeekErrorer injects seek error.
+type SeekErrorer struct {
+	io.ReadSeeker
+	Errs []error
+
+	cnt int32
+}
+
+func (s *SeekErrorer) err() error {
+	i := atomic.AddInt32(&s.cnt, 1)
+	if len(s.Errs) > int(i-1) {
+		if err := s.Errs[i-1]; err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Seek injects error.
+func (s *SeekErrorer) Seek(o int64, w int) (int64, error) {
+	if err := s.err(); err != nil {
+		return 0, err
+	}
+	return s.ReadSeeker.Seek(o, w)
 }
