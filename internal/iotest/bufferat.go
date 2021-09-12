@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package bufferat provides simple io.WriterAt based on the byte array.
-package bufferat
+// Package iotest provides io interfaces for testing.
+package iotest
 
 // BufferAt implements simple io.WriterAt interface.
 type BufferAt []byte

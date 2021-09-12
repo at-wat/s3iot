@@ -27,6 +27,7 @@ import (
 	"time"
 
 	"github.com/at-wat/s3iot"
+	"github.com/at-wat/s3iot/internal/iotest"
 	mock_s3iot "github.com/at-wat/s3iot/internal/moq/s3iot"
 )
 
@@ -296,27 +297,33 @@ func TestUploader(t *testing.T) {
 		u := &s3iot.Uploader{}
 		errSeekFailure := errors.New("seek error")
 
-		_, err := u.Upload(context.TODO(), &s3iot.UploadInput{
-			Bucket: &bucket,
-			Key:    &key,
-			Body: &seekErrorer{
-				ReadSeeker: bytes.NewReader(data),
-				err:        errSeekFailure,
+		seekErrs := map[string][]error{
+			"FirstSeekFail": {
+				errSeekFailure,
 			},
-		})
-		if !errors.Is(err, errSeekFailure) {
-			t.Fatalf("Expected error: '%v', got: '%v'", errSeekFailure, err)
+			"SecondSeekFail": {
+				nil,
+				errSeekFailure,
+			},
+		}
+
+		for name, errs := range seekErrs {
+			errs := errs
+			t.Run(name, func(t *testing.T) {
+				_, err := u.Upload(context.TODO(), &s3iot.UploadInput{
+					Bucket: &bucket,
+					Key:    &key,
+					Body: &iotest.SeekErrorer{
+						ReadSeeker: bytes.NewReader(data),
+						Errs:       errs,
+					},
+				})
+				if !errors.Is(err, errSeekFailure) {
+					t.Fatalf("Expected error: '%v', got: '%v'", errSeekFailure, err)
+				}
+			})
 		}
 	})
-}
-
-type seekErrorer struct {
-	io.ReadSeeker
-	err error
-}
-
-func (s seekErrorer) Seek(int64, int) (int64, error) {
-	return 0, s.err
 }
 
 func newUploadMockAPI(buf *bytes.Buffer, num map[string]int, ch map[string]chan interface{}) *mock_s3iot.MockS3API {

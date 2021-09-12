@@ -25,7 +25,7 @@ import (
 	"time"
 
 	"github.com/at-wat/s3iot"
-	"github.com/at-wat/s3iot/internal/bufferat"
+	"github.com/at-wat/s3iot/internal/iotest"
 	mock_s3iot "github.com/at-wat/s3iot/internal/moq/s3iot"
 	"github.com/at-wat/s3iot/rng"
 )
@@ -61,7 +61,7 @@ func TestDownloader(t *testing.T) {
 		for name, tt := range testCases {
 			tt := tt
 			t.Run(name, func(t *testing.T) {
-				buf := bufferat.BufferAt(make([]byte, 128))
+				buf := iotest.BufferAt(make([]byte, 128))
 				api := newDownloadMockAPI(t, data, tt.num, nil, nil)
 				d := &s3iot.Downloader{}
 				s3iot.WithAPI(api).ApplyToDownloader(d)
@@ -109,7 +109,7 @@ func TestDownloader(t *testing.T) {
 		}
 	})
 	t.Run("PauseResume", func(t *testing.T) {
-		buf := bufferat.BufferAt(make([]byte, 128))
+		buf := iotest.BufferAt(make([]byte, 128))
 		chDownload := make(chan interface{})
 		api := newDownloadMockAPI(t, data, 0, chDownload, nil)
 		d := &s3iot.Downloader{}
@@ -171,7 +171,7 @@ func TestDownloader(t *testing.T) {
 		}
 	})
 	t.Run("FileChangedDuringDownload", func(t *testing.T) {
-		buf := bufferat.BufferAt(make([]byte, 128))
+		buf := iotest.BufferAt(make([]byte, 128))
 		api := newDownloadMockAPI(t, data, 0, nil, []string{"TAG0", "TAG1"})
 		d := &s3iot.Downloader{}
 		s3iot.WithAPI(api).ApplyToDownloader(d)

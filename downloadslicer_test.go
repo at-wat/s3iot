@@ -19,7 +19,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/at-wat/s3iot/internal/bufferat"
+	"github.com/at-wat/s3iot/internal/iotest"
 	"github.com/at-wat/s3iot/rng"
 )
 
@@ -110,7 +110,7 @@ func TestDefaultDownloadSlicer(t *testing.T) {
 			f := &DefaultDownloadSlicerFactory{
 				PartSize: tt.partSize,
 			}
-			buf := bufferat.BufferAt(make([]byte, tt.bufSize))
+			buf := iotest.BufferAt(make([]byte, tt.bufSize))
 			s, err := f.New(buf)
 			if err != nil {
 				t.Fatal(err)
