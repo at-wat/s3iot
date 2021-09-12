@@ -305,6 +305,17 @@ func TestUploader(t *testing.T) {
 				nil,
 				errSeekFailure,
 			},
+			"ThirdSeekFail": {
+				nil,
+				nil,
+				errSeekFailure,
+			},
+			"FourthSeekFail": {
+				nil,
+				nil,
+				nil,
+				errSeekFailure,
+			},
 		}
 
 		for name, errs := range seekErrs {
