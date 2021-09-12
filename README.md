@@ -14,11 +14,11 @@ Main features:
 ## Examples
 
 - aws-sdk-go (v1)
-  - [uploader](./examples/uploadv1/)
-  - [downloader](./examples/downloadv1/)
+  - [uploader](./examples/uploadv1/main.go)
+  - [downloader](./examples/downloadv1/main.go)
 - aws-sdk-go-v2
-  - [uploader](./examples/uploadv2/)
-  - [downloader](./examples/downloadv2/)
+  - [uploader](./examples/uploadv2/main.go)
+  - [downloader](./examples/downloadv2/main.go)
 
 ## License
 
