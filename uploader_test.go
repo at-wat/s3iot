@@ -298,6 +298,7 @@ func TestUploader(t *testing.T) {
 		s3iot.WithUploadSlicer(
 			&s3iot.DefaultUploadSlicerFactory{PartSize: 50},
 		).ApplyToUploader(u)
+		s3iot.WithRetryer(&s3iot.NoRetryerFactory{}).ApplyToUploader(u)
 
 		errSeekFailure := errors.New("seek error")
 
