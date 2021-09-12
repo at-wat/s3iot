@@ -295,6 +295,10 @@ func TestUploader(t *testing.T) {
 	})
 	t.Run("Unseekable", func(t *testing.T) {
 		u := &s3iot.Uploader{}
+		s3iot.WithUploadSlicer(
+			&s3iot.DefaultUploadSlicerFactory{PartSize: 50},
+		).ApplyToUploader(u)
+
 		errSeekFailure := errors.New("seek error")
 
 		seekErrs := map[string][]error{
@@ -333,6 +337,32 @@ func TestUploader(t *testing.T) {
 					t.Fatalf("Expected error: '%v', got: '%v'", errSeekFailure, err)
 				}
 			})
+		}
+	})
+	t.Run("DefaultSlicer", func(t *testing.T) {
+		buf := &bytes.Buffer{}
+		u := &s3iot.Uploader{}
+		s3iot.WithAPI(
+			newUploadMockAPI(buf, nil, nil),
+		).ApplyToUploader(u)
+
+		uc, err := u.Upload(context.TODO(), &s3iot.UploadInput{
+			Bucket: &bucket,
+			Key:    &key,
+			Body:   bytes.NewReader(data),
+		})
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		select {
+		case <-time.After(time.Second):
+			t.Fatal("Timeout")
+		case <-uc.Done():
+		}
+
+		if !bytes.Equal(data, buf.Bytes()) {
+			t.Error("Uploaded data differs")
 		}
 	})
 }
