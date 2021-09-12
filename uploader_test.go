@@ -294,50 +294,71 @@ func TestUploader(t *testing.T) {
 		}
 	})
 	t.Run("Unseekable", func(t *testing.T) {
-		u := &s3iot.Uploader{}
-		s3iot.WithUploadSlicer(
-			&s3iot.DefaultUploadSlicerFactory{PartSize: 50},
-		).ApplyToUploader(u)
-		s3iot.WithRetryer(&s3iot.NoRetryerFactory{}).ApplyToUploader(u)
-
 		errSeekFailure := errors.New("seek error")
 
-		seekErrs := map[string][]error{
-			"FirstSeekFail": {
-				errSeekFailure,
-			},
-			"SecondSeekFail": {
-				nil,
-				errSeekFailure,
-			},
-			"ThirdSeekFail": {
-				nil,
-				nil,
-				errSeekFailure,
-			},
-			"FourthSeekFail": {
-				nil,
-				nil,
-				nil,
-				errSeekFailure,
-			},
-		}
+		errsIn := []error{errSeekFailure}
+		for n := 1; n <= 2; n++ {
+			errs := errsIn
 
-		for name, errs := range seekErrs {
-			errs := errs
-			t.Run(name, func(t *testing.T) {
-				_, err := u.Upload(context.TODO(), &s3iot.UploadInput{
-					Bucket: &bucket,
-					Key:    &key,
-					Body: &iotest.SeekErrorer{
-						ReadSeeker: bytes.NewReader(data),
-						Errs:       errs,
-					},
+			t.Run("OuterSeeker", func(t *testing.T) {
+				buf := &bytes.Buffer{}
+				u := &s3iot.Uploader{}
+				s3iot.WithRetryer(&s3iot.NoRetryerFactory{}).ApplyToUploader(u)
+				s3iot.WithAPI(newUploadMockAPI(buf, nil, nil)).ApplyToUploader(u)
+				s3iot.WithUploadSlicer(
+					&s3iot.DefaultUploadSlicerFactory{PartSize: 50},
+				).ApplyToUploader(u)
+
+				t.Run(fmt.Sprintf("SeekErrorAt%d", n), func(t *testing.T) {
+					_, err := u.Upload(context.TODO(), &s3iot.UploadInput{
+						Bucket: &bucket,
+						Key:    &key,
+						Body: &iotest.SeekErrorer{
+							ReadSeeker: bytes.NewReader(data),
+							Errs:       errs,
+						},
+					})
+					if !errors.Is(err, errSeekFailure) {
+						t.Fatalf("Expected error: '%v', got: '%v'", errSeekFailure, err)
+					}
 				})
-				if !errors.Is(err, errSeekFailure) {
-					t.Fatalf("Expected error: '%v', got: '%v'", errSeekFailure, err)
-				}
 			})
+			t.Run("InnerSeeker", func(t *testing.T) {
+				buf := &bytes.Buffer{}
+				u := &s3iot.Uploader{}
+				s3iot.WithRetryer(&s3iot.NoRetryerFactory{}).ApplyToUploader(u)
+				s3iot.WithAPI(newUploadMockAPI(buf, nil, nil)).ApplyToUploader(u)
+				s3iot.WithUploadSlicer(
+					&seekErrorUploadSlicerFactory{
+						DefaultUploadSlicerFactory: s3iot.DefaultUploadSlicerFactory{
+							PartSize: 50,
+						},
+						errs: errs,
+					},
+				).ApplyToUploader(u)
+
+				t.Run(fmt.Sprintf("SeekErrorAt%d", n), func(t *testing.T) {
+					uc, err := u.Upload(context.TODO(), &s3iot.UploadInput{
+						Bucket: &bucket,
+						Key:    &key,
+						Body:   bytes.NewReader(data),
+					})
+					if err != nil {
+						t.Fatal(err)
+					}
+
+					select {
+					case <-time.After(time.Second):
+						t.Fatal("Timeout")
+					case <-uc.Done():
+					}
+
+					if _, err = uc.Result(); !errors.Is(err, errSeekFailure) {
+						t.Fatalf("Expected error: '%v', got: '%v'", errSeekFailure, err)
+					}
+				})
+			})
+			errsIn = append([]error{nil}, errsIn...)
 		}
 	})
 	t.Run("DefaultSlicer", func(t *testing.T) {
@@ -451,4 +472,33 @@ func newUploadMockAPI(buf *bytes.Buffer, num map[string]int, ch map[string]chan 
 			}, nil
 		},
 	}
+}
+
+type seekErrorUploadSlicerFactory struct {
+	s3iot.DefaultUploadSlicerFactory
+	errs []error
+}
+
+func (f seekErrorUploadSlicerFactory) New(r io.Reader) (s3iot.UploadSlicer, error) {
+	s, err := f.DefaultUploadSlicerFactory.New(r)
+	if err != nil {
+		return nil, err
+	}
+	return &seekErrorUploadSlicer{
+		UploadSlicer: s,
+		errs:         f.errs,
+	}, nil
+}
+
+type seekErrorUploadSlicer struct {
+	s3iot.UploadSlicer
+	errs []error
+}
+
+func (s *seekErrorUploadSlicer) NextReader() (io.ReadSeeker, func(), error) {
+	r, cleanup, err := s.UploadSlicer.NextReader()
+	if err != nil {
+		return nil, nil, err
+	}
+	return &iotest.SeekErrorer{ReadSeeker: r, Errs: s.errs}, cleanup, err
 }

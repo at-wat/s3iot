@@ -27,11 +27,20 @@ type SeekErrorer struct {
 	cnt int32
 }
 
-// Seek returns error.
-func (s *SeekErrorer) Seek(o int64, w int) (int64, error) {
+func (s *SeekErrorer) err() error {
 	i := atomic.AddInt32(&s.cnt, 1)
-	if len(s.Errs) > int(i-1) && s.Errs[i-1] != nil {
-		return 0, s.Errs[i-1]
+	if len(s.Errs) > int(i-1) {
+		if err := s.Errs[i-1]; err != nil {
+			return err
+		}
 	}
-	return s.Seek(o, w)
+	return nil
+}
+
+// Seek injects error.
+func (s *SeekErrorer) Seek(o int64, w int) (int64, error) {
+	if err := s.err(); err != nil {
+		return 0, err
+	}
+	return s.ReadSeeker.Seek(o, w)
 }
