@@ -94,6 +94,7 @@ type UploadInput struct {
 type UploadOutput struct {
 	VersionID *string
 	ETag      *string
+	Location  *string
 }
 
 // DownloadInput represents upload destination and data.

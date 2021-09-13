@@ -20,6 +20,7 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/client"
+	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3iface"
 
@@ -62,6 +63,7 @@ type wrapper struct {
 }
 
 func (w *wrapper) PutObject(ctx context.Context, input *s3iot.PutObjectInput) (*s3iot.PutObjectOutput, error) {
+	var req *request.Request
 	out, err := w.api.PutObjectWithContext(
 		aws.Context(ctx),
 		&s3.PutObjectInput{
@@ -70,13 +72,20 @@ func (w *wrapper) PutObject(ctx context.Context, input *s3iot.PutObjectInput) (*
 			ACL:         input.ACL,
 			Body:        input.Body,
 			ContentType: input.ContentType,
-		})
+		}, func(r *request.Request) {
+			req = r
+		},
+	)
 	if err != nil {
 		return nil, err
 	}
+	u := *req.HTTPResponse.Request.URL
+	u.RawQuery = ""
+	location := u.String()
 	return &s3iot.PutObjectOutput{
 		VersionID: out.VersionId,
 		ETag:      out.ETag,
+		Location:  &location,
 	}, nil
 }
 
@@ -144,6 +153,7 @@ func (w *wrapper) CompleteMultipartUpload(ctx context.Context, input *s3iot.Comp
 	return &s3iot.CompleteMultipartUploadOutput{
 		VersionID: out.VersionId,
 		ETag:      out.ETag,
+		Location:  out.Location,
 	}, nil
 }
 

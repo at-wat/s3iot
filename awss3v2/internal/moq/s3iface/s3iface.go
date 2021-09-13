@@ -6,6 +6,7 @@ package s3iface
 import (
 	"context"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"net/http"
 	"sync"
 )
 
@@ -358,5 +359,70 @@ func (mock *MockS3API) UploadPartCalls() []struct {
 	mock.lockUploadPart.RLock()
 	calls = mock.calls.UploadPart
 	mock.lockUploadPart.RUnlock()
+	return calls
+}
+
+// Ensure, that MockHTTPClient does implement HTTPClient.
+// If this is not the case, regenerate this file with moq.
+var _ HTTPClient = &MockHTTPClient{}
+
+// MockHTTPClient is a mock implementation of HTTPClient.
+//
+// 	func TestSomethingThatUsesHTTPClient(t *testing.T) {
+//
+// 		// make and configure a mocked HTTPClient
+// 		mockedHTTPClient := &MockHTTPClient{
+// 			DoFunc: func(request *http.Request) (*http.Response, error) {
+// 				panic("mock out the Do method")
+// 			},
+// 		}
+//
+// 		// use mockedHTTPClient in code that requires HTTPClient
+// 		// and then make assertions.
+//
+// 	}
+type MockHTTPClient struct {
+	// DoFunc mocks the Do method.
+	DoFunc func(request *http.Request) (*http.Response, error)
+
+	// calls tracks calls to the methods.
+	calls struct {
+		// Do holds details about calls to the Do method.
+		Do []struct {
+			// Request is the request argument value.
+			Request *http.Request
+		}
+	}
+	lockDo sync.RWMutex
+}
+
+// Do calls DoFunc.
+func (mock *MockHTTPClient) Do(request *http.Request) (*http.Response, error) {
+	if mock.DoFunc == nil {
+		panic("MockHTTPClient.DoFunc: method is nil but HTTPClient.Do was just called")
+	}
+	callInfo := struct {
+		Request *http.Request
+	}{
+		Request: request,
+	}
+	mock.lockDo.Lock()
+	mock.calls.Do = append(mock.calls.Do, callInfo)
+	mock.lockDo.Unlock()
+	return mock.DoFunc(request)
+}
+
+// DoCalls gets all the calls that were made to Do.
+// Check the length with:
+//     len(mockedHTTPClient.DoCalls())
+func (mock *MockHTTPClient) DoCalls() []struct {
+	Request *http.Request
+} {
+	var calls []struct {
+		Request *http.Request
+	}
+	mock.lockDo.RLock()
+	calls = mock.calls.Do
+	mock.lockDo.RUnlock()
 	return calls
 }

@@ -114,6 +114,9 @@ func TestUploader(t *testing.T) {
 				if *out.ETag != "TAG1" {
 					t.Errorf("Expected ETag: TAG0, got: %s", *out.ETag)
 				}
+				if *out.Location != "s3://url" {
+					t.Errorf("Expected Location: s3://url, got: %s", *out.Location)
+				}
 				if !bytes.Equal(data, buf.Bytes()) {
 					t.Error("Uploaded data differs")
 				}
@@ -203,6 +206,9 @@ func TestUploader(t *testing.T) {
 
 				if *out.ETag != "TAG4" {
 					t.Errorf("Expected ETag: TAG0, got: %s", *out.ETag)
+				}
+				if *out.Location != "s3://url" {
+					t.Errorf("Expected Location: s3://url, got: %s", *out.Location)
 				}
 				if !bytes.Equal(data, buf.Bytes()) {
 					t.Error("Uploaded data differs")
@@ -443,6 +449,7 @@ func newUploadMockAPI(buf *bytes.Buffer, num map[string]int, ch map[string]chan 
 		return &s
 	}
 	uploadID := "UPLOAD0"
+	location := "s3://url"
 
 	var mu sync.Mutex
 	cnt := make(map[string]int)
@@ -478,7 +485,8 @@ func newUploadMockAPI(buf *bytes.Buffer, num map[string]int, ch map[string]chan 
 				c <- input
 			}
 			return &s3iot.CompleteMultipartUploadOutput{
-				ETag: genETag(),
+				ETag:     genETag(),
+				Location: &location,
 			}, nil
 		},
 		CreateMultipartUploadFunc: func(ctx context.Context, input *s3iot.CreateMultipartUploadInput) (*s3iot.CreateMultipartUploadOutput, error) {
@@ -507,7 +515,8 @@ func newUploadMockAPI(buf *bytes.Buffer, num map[string]int, ch map[string]chan 
 			}
 			io.Copy(buf, input.Body)
 			return &s3iot.PutObjectOutput{
-				ETag: genETag(),
+				ETag:     genETag(),
+				Location: &location,
 			}, nil
 		},
 		UploadPartFunc: func(ctx context.Context, input *s3iot.UploadPartInput) (*s3iot.UploadPartOutput, error) {
