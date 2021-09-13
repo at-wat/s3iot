@@ -30,6 +30,11 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: ${{ matrix.go }}
+      - name: Tidy
+        if: startsWith(matrix.package, './awss3v')
+        run: |
+          cd ${{ matrix.package }}
+          go mod tidy
       - name: Run go test
         run: |
           cd ${{ matrix.package }}
@@ -40,6 +45,7 @@ jobs:
             -v \
             -race -coverprofile=cover.out -covermode=atomic
       - name: Tidy
+        if: startsWith(matrix.package, './awss3v') != true
         run: |
           cd ${{ matrix.package }}
           go mod tidy
