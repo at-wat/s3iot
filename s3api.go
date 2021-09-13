@@ -85,6 +85,7 @@ type CompleteMultipartUploadInput struct {
 type CompleteMultipartUploadOutput struct {
 	VersionID *string
 	ETag      *string
+	Location  *string
 }
 
 // PutObjectInput represents input of PutObject API.
@@ -100,6 +101,7 @@ type PutObjectInput struct {
 type PutObjectOutput struct {
 	VersionID *string
 	ETag      *string
+	Location  *string
 }
 
 // GetObjectInput represents input of GetObject API.

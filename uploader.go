@@ -155,8 +155,9 @@ func (uc *uploadContext) single(ctx context.Context, r io.ReadSeeker, cleanup fu
 			return err
 		}
 		uc.success(UploadOutput{
-			out.VersionID,
-			out.ETag,
+			VersionID: out.VersionID,
+			ETag:      out.ETag,
+			Location:  out.Location,
 		})
 		return nil
 	}); err != nil {
@@ -261,8 +262,9 @@ func (uc *uploadContext) multi(ctx context.Context, r io.ReadSeeker, cleanup fun
 			return err
 		}
 		uc.success(UploadOutput{
-			out.VersionID,
-			out.ETag,
+			VersionID: out.VersionID,
+			ETag:      out.ETag,
+			Location:  out.Location,
 		})
 		return nil
 	}); err != nil {

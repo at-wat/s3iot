@@ -19,6 +19,8 @@ import (
 	"context"
 	"errors"
 	"io"
+	"net/http"
+	"net/url"
 	"testing"
 	"time"
 
@@ -44,6 +46,23 @@ func TestWrapper(t *testing.T) {
 					if params.Body != r {
 						t.Error("Body reader differs")
 					}
+
+					opts := &s3.Options{
+						HTTPClient: &s3iface.MockHTTPClient{
+							DoFunc: func(request *http.Request) (*http.Response, error) {
+								return &http.Response{
+									Request: request,
+								}, nil
+							},
+						},
+					}
+					for _, o := range optFns {
+						o(opts)
+					}
+					opts.HTTPClient.Do(&http.Request{
+						URL: &url.URL{Scheme: "s3", Host: "url"},
+					})
+
 					return &s3.PutObjectOutput{
 						VersionId: aws.String("VersionID"),
 						ETag:      aws.String("ETag"),
@@ -68,6 +87,7 @@ func TestWrapper(t *testing.T) {
 			}
 			expectStringPtr(t, "VersionID", out.VersionID)
 			expectStringPtr(t, "ETag", out.ETag)
+			expectStringPtr(t, "s3://url", out.Location)
 		})
 		t.Run("GetObject", func(t *testing.T) {
 			r := io.NopCloser(bytes.NewReader([]byte{}))
@@ -161,6 +181,7 @@ func TestWrapper(t *testing.T) {
 					return &s3.CompleteMultipartUploadOutput{
 						VersionId: aws.String("VersionID"),
 						ETag:      aws.String("ETag"),
+						Location:  aws.String("s3://url"),
 					}, nil
 				},
 			}
@@ -190,6 +211,7 @@ func TestWrapper(t *testing.T) {
 			}
 			expectStringPtr(t, "VersionID", out.VersionID)
 			expectStringPtr(t, "ETag", out.ETag)
+			expectStringPtr(t, "s3://url", out.Location)
 		})
 		t.Run("AbortMultipartUpload", func(t *testing.T) {
 			api := &s3iface.MockS3API{

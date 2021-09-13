@@ -17,6 +17,7 @@ package awss3v2
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/at-wat/s3iot"
 
@@ -60,11 +61,30 @@ type wrapper struct {
 	api S3API
 }
 
+type locationStore struct {
+	s3.HTTPClient
+	location string
+}
+
+func (s *locationStore) Do(req *http.Request) (*http.Response, error) {
+	res, err := s.HTTPClient.Do(req)
+	if err != nil {
+		return res, err
+	}
+	if res.Request != nil && res.Request.URL != nil {
+		u := *res.Request.URL
+		u.RawQuery = ""
+		s.location = u.String()
+	}
+	return res, err
+}
+
 func (w *wrapper) PutObject(ctx context.Context, input *s3iot.PutObjectInput) (*s3iot.PutObjectOutput, error) {
 	var acl s3types.ObjectCannedACL
 	if input.ACL != nil {
 		acl = s3types.ObjectCannedACL(*input.ACL)
 	}
+	ls := &locationStore{}
 	out, err := w.api.PutObject(
 		ctx,
 		&s3.PutObjectInput{
@@ -73,13 +93,18 @@ func (w *wrapper) PutObject(ctx context.Context, input *s3iot.PutObjectInput) (*
 			ACL:         acl,
 			Body:        input.Body,
 			ContentType: input.ContentType,
-		})
+		},
+		func(o *s3.Options) {
+			ls.HTTPClient, o.HTTPClient = o.HTTPClient, ls
+		},
+	)
 	if err != nil {
 		return nil, err
 	}
 	return &s3iot.PutObjectOutput{
 		VersionID: out.VersionId,
 		ETag:      out.ETag,
+		Location:  &ls.location,
 	}, nil
 }
 
@@ -151,6 +176,7 @@ func (w *wrapper) CompleteMultipartUpload(ctx context.Context, input *s3iot.Comp
 	return &s3iot.CompleteMultipartUploadOutput{
 		VersionID: out.VersionId,
 		ETag:      out.ETag,
+		Location:  out.Location,
 	}, nil
 }
 
