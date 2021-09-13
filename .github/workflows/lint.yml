@@ -33,3 +33,11 @@ jobs:
           cd ${{ matrix.package }}
           golint $(go list ./... | grep -v '\/moq\/') \
             | sed 's/^\([^:]\+\):\([0-9]\+\):\([0-9]\+\): \(.*\)$/::warning file=\1,line=\2,col=\3::\4/'
+  go-mod:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    steps:
+      - name: Check paho wrapper go.mod
+        run: |
+          (! grep require awss3v*/go.mod)  # don't add require to awss3v*/go.mod
