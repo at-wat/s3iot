@@ -26,7 +26,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/aws/retry"
 	"github.com/aws/aws-sdk-go-v2/config"
-	_ "github.com/aws/aws-sdk-go-v2/service/s3" // lock subpackage version
+	_ "github.com/aws/aws-sdk-go-v2/service/s3" // lock version as direct dependency
 
 	"github.com/at-wat/s3iot"
 	"github.com/at-wat/s3iot/awss3v2"
