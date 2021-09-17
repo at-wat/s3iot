@@ -31,7 +31,7 @@ jobs:
       - name: Lint
         run: |
           cd ${{ matrix.package }}
-          golint $(go list ./... | grep -v '\/moq\/') \
+          golint ./... \
             | sed 's/^\([^:]\+\):\([0-9]\+\):\([0-9]\+\): \(.*\)$/::warning file=\1,line=\2,col=\3::\4/'
   go-mod:
     runs-on: ubuntu-latest
