@@ -125,24 +125,24 @@ type PauseOnFailRetryerFactory struct {
 }
 
 // New creates PauseOnFailRetryer.
-func (f PauseOnFailRetryerFactory) New(uc UploadContext) Retryer {
+func (f PauseOnFailRetryerFactory) New(p Pauser) Retryer {
 	if f.Base == nil {
 		f.Base = &NoRetryerFactory{}
 	}
 	return &pauseOnFailRetryer{
-		base: f.Base.New(uc),
-		uc:   uc,
+		base:   f.Base.New(p),
+		pauser: p,
 	}
 }
 
 type pauseOnFailRetryer struct {
-	base Retryer
-	uc   UploadContext
+	base   Retryer
+	pauser Pauser
 }
 
 func (r *pauseOnFailRetryer) OnFail(ctx context.Context, id int64, err error) bool {
 	if !r.base.OnFail(ctx, id, err) {
-		r.uc.Pause()
+		r.pauser.Pause()
 	}
 	return true
 }
