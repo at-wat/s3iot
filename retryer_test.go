@@ -21,6 +21,10 @@ import (
 	"time"
 )
 
+var _ RetryerFactory = &NoRetryerFactory{}
+var _ RetryerFactory = &ExponentialBackoffRetryerFactory{}
+var _ RetryerFactory = &PauseOnFailRetryerFactory{}
+
 var errDummy = errors.New("dummy")
 
 func TestNoRetryer(t *testing.T) {
