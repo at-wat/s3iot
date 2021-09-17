@@ -48,7 +48,7 @@ func (noRetryer) OnSuccess(int64) {}
 
 // ExponentialBackoffRetryerFactory creates ExponentialBackoffRetryer.
 // When raw s3 upload API call is failed, the API call will be retried
-// after WaitBase. Wait duration is multiplyed by 2 if it continuously
+// after WaitBase. Wait duration is multiplied by 2 if it continuously
 // failed up to WaitMax.
 type ExponentialBackoffRetryerFactory struct {
 	WaitBase time.Duration
