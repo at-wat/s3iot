@@ -33,3 +33,7 @@ func (NaiveErrorClassifier) IsRetryable(error) bool {
 func (NaiveErrorClassifier) IsThrottle(error) (time.Duration, bool) {
 	return 0, false
 }
+
+type retryableError struct {
+	error
+}

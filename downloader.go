@@ -156,15 +156,15 @@ func (dc *downloadContext) multi(ctx context.Context) {
 			rn2, err := contentrange.ParseContentRange(*out.ContentRange)
 			if err != nil {
 				dc.countRetry()
-				return err
+				return &retryableError{err}
 			}
 			if rn.Start != rn2.Start {
 				dc.countRetry()
-				return fmt.Errorf(
+				return &retryableError{fmt.Errorf(
 					"requested range=%s, returned range=%s: %w",
 					rn, rn2,
 					ErrUnexpectedServerResponse,
-				)
+				)}
 			}
 			rn = *rn2
 
