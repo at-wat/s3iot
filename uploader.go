@@ -152,6 +152,9 @@ func (uc *uploadContext) single(ctx context.Context, r io.ReadSeeker, cleanup fu
 
 	if err := withRetry(ctx, 0, uc.retryer, uc.errClassifier, func() error {
 		uc.pauseCheck(ctx)
+		if _, err := r.Seek(0, io.SeekStart); err != nil {
+			return &fatalError{err}
+		}
 		out, err := uc.api.PutObject(ctx, &PutObjectInput{
 			Bucket:      uc.input.Bucket,
 			Key:         uc.input.Key,
@@ -207,16 +210,14 @@ func (uc *uploadContext) multi(ctx context.Context, r io.ReadSeeker, cleanup fun
 			uc.fail(err)
 			return
 		}
-		if _, err := r.Seek(0, io.SeekStart); err != nil {
-			cleanup()
-			uc.fail(err)
-			return
-		}
 		if uc.readInterceptor != nil {
 			r = uc.readInterceptor.Reader(r)
 		}
 		if err := withRetry(ctx, i, uc.retryer, uc.errClassifier, func() error {
 			uc.pauseCheck(ctx)
+			if _, err := r.Seek(0, io.SeekStart); err != nil {
+				return &fatalError{err}
+			}
 			out, err := uc.api.UploadPart(ctx, &UploadPartInput{
 				Body:       r,
 				Bucket:     uc.input.Bucket,
