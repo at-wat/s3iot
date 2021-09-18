@@ -23,9 +23,8 @@ import (
 )
 
 func TestWaitReadInterceptor(t *testing.T) {
-	const waitPerByte = 2 * time.Millisecond
 	f := NewWaitReadInterceptorFactory(
-		waitPerByte,
+		2*time.Millisecond,
 		WaitReadInterceptorMaxChunkSize(8),
 	)
 
@@ -42,21 +41,45 @@ func TestWaitReadInterceptor(t *testing.T) {
 
 	const tolerance = 50 * time.Millisecond
 
-	for _, n := range []int{128, 256} {
-		n := n
-		t.Run(fmt.Sprintf("%dBytes", n), func(t *testing.T) {
-			r := bytes.NewReader(make([]byte, n))
-			r2 := ri.Reader(r)
-			ts := time.Now()
-			if _, err := io.ReadAll(r2); err != nil {
-				t.Fatal(err)
+	// Use slice to run in particular order
+	testCases := []struct {
+		name                string
+		setWaitPerByte      time.Duration
+		expectedWaitPerByte time.Duration
+	}{
+		{
+			name:                "Argument",
+			expectedWaitPerByte: 2 * time.Millisecond,
+		},
+		{
+			name:                "SetWaitPerByte",
+			setWaitPerByte:      4 * time.Millisecond,
+			expectedWaitPerByte: 4 * time.Millisecond,
+		},
+	}
+	for _, tt := range testCases {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			if tt.setWaitPerByte != 0 {
+				f.SetWaitPerByte(tt.setWaitPerByte)
 			}
-			te := time.Now()
+			for _, n := range []int{128, 256} {
+				n := n
+				t.Run(fmt.Sprintf("%dBytes", n), func(t *testing.T) {
+					r := bytes.NewReader(make([]byte, n))
+					r2 := ri.Reader(r)
+					ts := time.Now()
+					if _, err := io.ReadAll(r2); err != nil {
+						t.Fatal(err)
+					}
+					te := time.Now()
 
-			expected := time.Duration(n) * waitPerByte
-			diff := te.Sub(ts) - expected
-			if diff < -tolerance || tolerance < diff {
-				t.Errorf("Expected duration: %v, actual: %v", expected, te.Sub(ts))
+					expected := time.Duration(n) * tt.expectedWaitPerByte
+					diff := te.Sub(ts) - expected
+					if diff < -tolerance || tolerance < diff {
+						t.Errorf("Expected duration: %v, actual: %v", expected, te.Sub(ts))
+					}
+				})
 			}
 		})
 	}
