@@ -265,6 +265,7 @@ func TestUploader(t *testing.T) {
 			<-chUpload
 		}()
 
+		time.Sleep(50 * time.Millisecond)
 		status, err := uc.Status()
 		if err != nil {
 			t.Fatal(err)
