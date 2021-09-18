@@ -19,7 +19,7 @@ import (
 	"io"
 	"time"
 
-	"github.com/at-wat/s3iot/rng"
+	"github.com/at-wat/s3iot/contentrange"
 )
 
 // UploadSlicerFactory creates UploadSlicer for given io.Reader.
@@ -42,7 +42,7 @@ type DownloadSlicerFactory interface {
 
 // DownloadSlicer splits input data stream into multiple io.WriterAt.
 type DownloadSlicer interface {
-	NextWriter() (io.WriterAt, rng.Range, error)
+	NextWriter() (io.WriterAt, contentrange.Range, error)
 }
 
 // RetryerFactory creates Retryer.
