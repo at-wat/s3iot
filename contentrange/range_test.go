@@ -137,11 +137,11 @@ func TestRange(t *testing.T) {
 				},
 			},
 			"InvalidFormat": {
-				input: "bytes=1,10/100",
+				input: "bytes=1-10/100",
 				err:   ErrInvalidFormat,
 			},
 			"InvalidUnit": {
-				input: "meters 1,10/100",
+				input: "meters 1-10/100",
 				err:   ErrInvalidUnit,
 			},
 			"InvalidRange": {
@@ -151,6 +151,18 @@ func TestRange(t *testing.T) {
 			"InvalidRange2": {
 				input: "bytes 1.10/100",
 				err:   ErrInvalidRange,
+			},
+			"InvalidStart": {
+				input: "bytes $-5/100",
+				err:   strconv.ErrSyntax,
+			},
+			"InvalidEnd": {
+				input: "bytes 1-$/100",
+				err:   strconv.ErrSyntax,
+			},
+			"InvalidSize": {
+				input: "bytes 1-10/$",
+				err:   strconv.ErrSyntax,
 			},
 		}
 		for name, tt := range testCases {
