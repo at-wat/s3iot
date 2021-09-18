@@ -31,7 +31,8 @@ import (
 func NewUploader(c client.ConfigProvider, opts ...s3iot.UploaderOption) *s3iot.Uploader {
 	u := &s3iot.Uploader{
 		UpDownloaderBase: s3iot.UpDownloaderBase{
-			API: NewAPI(s3.New(c)),
+			API:             NewAPI(s3.New(c)),
+			ErrorClassifier: &ErrorClassifier{},
 		},
 	}
 	for _, opt := range opts {
