@@ -144,11 +144,12 @@ func TestWithRetry(t *testing.T) {
 		WaitBase: 1 * time.Millisecond,
 		RetryMax: 1,
 	}
+	errClassfier := &NaiveErrorClassifier{}
 
 	t.Run("Success", func(t *testing.T) {
 		r := f.New(nil)
 		var i int
-		err := withRetry(context.TODO(), 0, r, func() error {
+		err := withRetry(context.TODO(), 0, r, errClassfier, func() error {
 			defer func() {
 				i++
 			}()
@@ -170,7 +171,7 @@ func TestWithRetry(t *testing.T) {
 	t.Run("SuccessAfterRetry", func(t *testing.T) {
 		r := f.New(nil)
 		var i int
-		err := withRetry(context.TODO(), 0, r, func() error {
+		err := withRetry(context.TODO(), 0, r, errClassfier, func() error {
 			defer func() {
 				i++
 			}()
@@ -194,7 +195,7 @@ func TestWithRetry(t *testing.T) {
 	t.Run("Failure", func(t *testing.T) {
 		r := f.New(nil)
 		var i int
-		err := withRetry(context.TODO(), 0, r, func() error {
+		err := withRetry(context.TODO(), 0, r, errClassfier, func() error {
 			defer func() {
 				i++
 			}()

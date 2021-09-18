@@ -16,8 +16,9 @@ package s3iot
 
 // UpDownloaderBase stores downloader/uploader base objects.
 type UpDownloaderBase struct {
-	API            S3API
-	RetryerFactory RetryerFactory
+	API             S3API
+	RetryerFactory  RetryerFactory
+	ErrorClassifier ErrorClassifier
 }
 
 // Uploader implements S3 uploader with configurable retry and bandwidth limit.

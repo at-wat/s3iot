@@ -58,6 +58,12 @@ type Retryer interface {
 	OnSuccess(id int64)
 }
 
+// ErrorClassifier distinguishes given error is retryable.
+type ErrorClassifier interface {
+	IsRetryable(error) bool
+	IsThrottle(error) (time.Duration, bool)
+}
+
 // ReadInterceptorFactory creates ReadInterceptor.
 // ReadInterceptor will be created for each Upload() call.
 type ReadInterceptorFactory interface {
