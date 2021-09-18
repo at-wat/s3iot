@@ -27,7 +27,7 @@ import (
 	"github.com/at-wat/s3iot"
 	"github.com/at-wat/s3iot/internal/iotest"
 	mock_s3iot "github.com/at-wat/s3iot/internal/moq/s3iot"
-	"github.com/at-wat/s3iot/rng"
+	"github.com/at-wat/s3iot/contentrange"
 )
 
 func TestDownloader(t *testing.T) {
@@ -285,7 +285,7 @@ func newDownloadMockAPI(t *testing.T, data []byte, num int, ch chan interface{},
 			if ch != nil {
 				ch <- input
 			}
-			r, err := rng.Parse(*input.Range)
+			r, err := contentrange.Parse(*input.Range)
 			if err != nil {
 				t.Error(err)
 			}

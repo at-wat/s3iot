@@ -21,7 +21,7 @@ import (
 	"io"
 	"sync"
 
-	"github.com/at-wat/s3iot/rng"
+	"github.com/at-wat/s3iot/contentrange"
 )
 
 // Download errors.
@@ -148,7 +148,7 @@ func (dc *downloadContext) multi(ctx context.Context) {
 			}
 			defer out.Body.Close()
 
-			rn2, err := rng.ParseContentRange(*out.ContentRange)
+			rn2, err := contentrange.ParseContentRange(*out.ContentRange)
 			if err != nil {
 				dc.countRetry()
 				return err

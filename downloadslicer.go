@@ -17,7 +17,7 @@ package s3iot
 import (
 	"io"
 
-	"github.com/at-wat/s3iot/rng"
+	"github.com/at-wat/s3iot/contentrange"
 )
 
 // Default download slicing parametes.
@@ -47,9 +47,9 @@ type defaultDownloadSlicer struct {
 	offset  int64
 }
 
-func (s *defaultDownloadSlicer) NextWriter() (io.WriterAt, rng.Range, error) {
-	r := rng.Range{
-		Unit:  rng.RangeUnitBytes,
+func (s *defaultDownloadSlicer) NextWriter() (io.WriterAt, contentrange.Range, error) {
+	r := contentrange.Range{
+		Unit:  contentrange.RangeUnitBytes,
 		Start: s.offset,
 		End:   s.offset + s.factory.PartSize - 1,
 	}

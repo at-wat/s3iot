@@ -20,7 +20,7 @@ import (
 	"testing"
 
 	"github.com/at-wat/s3iot/internal/iotest"
-	"github.com/at-wat/s3iot/rng"
+	"github.com/at-wat/s3iot/contentrange"
 )
 
 func TestDefaultDownloadSlicer(t *testing.T) {
@@ -28,7 +28,7 @@ func TestDefaultDownloadSlicer(t *testing.T) {
 		partSize int64
 		bufSize  int
 		write    [][]byte
-		ranges   []rng.Range
+		ranges   []contentrange.Range
 		expected []byte
 	}{
 		"Dense": {
@@ -40,24 +40,24 @@ func TestDefaultDownloadSlicer(t *testing.T) {
 				[]byte("89ab"),
 				[]byte("cdef"),
 			},
-			ranges: []rng.Range{
+			ranges: []contentrange.Range{
 				{
-					Unit:  rng.RangeUnitBytes,
+					Unit:  contentrange.RangeUnitBytes,
 					Start: 0,
 					End:   3,
 				},
 				{
-					Unit:  rng.RangeUnitBytes,
+					Unit:  contentrange.RangeUnitBytes,
 					Start: 4,
 					End:   7,
 				},
 				{
-					Unit:  rng.RangeUnitBytes,
+					Unit:  contentrange.RangeUnitBytes,
 					Start: 8,
 					End:   11,
 				},
 				{
-					Unit:  rng.RangeUnitBytes,
+					Unit:  contentrange.RangeUnitBytes,
 					Start: 12,
 					End:   15,
 				},
@@ -72,19 +72,19 @@ func TestDefaultDownloadSlicer(t *testing.T) {
 				[]byte("4567"),
 				[]byte("89ab"),
 			},
-			ranges: []rng.Range{
+			ranges: []contentrange.Range{
 				{
-					Unit:  rng.RangeUnitBytes,
+					Unit:  contentrange.RangeUnitBytes,
 					Start: 0,
 					End:   4,
 				},
 				{
-					Unit:  rng.RangeUnitBytes,
+					Unit:  contentrange.RangeUnitBytes,
 					Start: 5,
 					End:   9,
 				},
 				{
-					Unit:  rng.RangeUnitBytes,
+					Unit:  contentrange.RangeUnitBytes,
 					Start: 10,
 					End:   14,
 				},
@@ -94,9 +94,9 @@ func TestDefaultDownloadSlicer(t *testing.T) {
 		"DefaultParam": {
 			bufSize: 5,
 			write:   [][]byte{[]byte("0123")},
-			ranges: []rng.Range{
+			ranges: []contentrange.Range{
 				{
-					Unit:  rng.RangeUnitBytes,
+					Unit:  contentrange.RangeUnitBytes,
 					Start: 0,
 					End:   5242879,
 				},
