@@ -41,3 +41,7 @@ type retryableError struct {
 func (e *retryableError) Unwrap() error {
 	return e.error
 }
+
+type fatalError struct {
+	error
+}

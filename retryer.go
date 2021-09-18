@@ -156,6 +156,9 @@ func withRetry(ctx context.Context, id int64, retryer Retryer, errClassifier Err
 	for {
 		err := fn()
 		if err != nil {
+			if fe, fatal := err.(*fatalError); fatal {
+				return fe.error
+			}
 			var re *retryableError
 			if !errClassifier.IsRetryable(err) && !errors.As(err, &re) {
 				return err

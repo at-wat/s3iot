@@ -561,6 +561,7 @@ func newUploadMockAPI(buf *bytes.Buffer, num map[string]int, ch map[string]chan 
 				return nil, ctx.Err()
 			}
 			if count("put") < num["put"] {
+				input.Body.Read(make([]byte, 10))
 				return nil, errTemp
 			}
 			if c := ch["put"]; c != nil {
@@ -577,6 +578,7 @@ func newUploadMockAPI(buf *bytes.Buffer, num map[string]int, ch map[string]chan 
 				return nil, ctx.Err()
 			}
 			if count("upload") < num["upload"] {
+				input.Body.Read(make([]byte, 10))
 				return nil, errTemp
 			}
 			if c := ch["upload"]; c != nil {
