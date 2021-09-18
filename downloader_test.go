@@ -25,9 +25,9 @@ import (
 	"time"
 
 	"github.com/at-wat/s3iot"
+	"github.com/at-wat/s3iot/contentrange"
 	"github.com/at-wat/s3iot/internal/iotest"
 	mock_s3iot "github.com/at-wat/s3iot/internal/moq/s3iot"
-	"github.com/at-wat/s3iot/contentrange"
 )
 
 func TestDownloader(t *testing.T) {
@@ -172,6 +172,48 @@ func TestDownloader(t *testing.T) {
 
 		if !bytes.Equal(data, []byte(buf)) {
 			t.Error("Downloaded data differs")
+		}
+	})
+	t.Run("CancelDuringPause", func(t *testing.T) {
+		buf := iotest.BufferAt(make([]byte, 128))
+		chDownload := make(chan interface{})
+		api := newDownloadMockAPI(t, data, 0, chDownload, nil)
+		d := &s3iot.Downloader{}
+		s3iot.WithAPI(api).ApplyToDownloader(d)
+		s3iot.WithDownloadSlicer(
+			&s3iot.DefaultDownloadSlicerFactory{PartSize: 50},
+		).ApplyToDownloader(d)
+		s3iot.WithRetryer(nil).ApplyToDownloader(d)
+
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+		uc, err := d.Download(ctx, buf, &s3iot.DownloadInput{
+			Bucket: &bucket,
+			Key:    &key,
+		})
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		time.Sleep(50 * time.Millisecond)
+		uc.Pause()
+
+		select {
+		case <-time.After(time.Second):
+			t.Fatal("Timeout")
+		case <-chDownload:
+		}
+
+		time.Sleep(50 * time.Millisecond)
+		cancel()
+
+		select {
+		case <-time.After(time.Second):
+			t.Fatal("Timeout")
+		case <-uc.Done():
+		}
+		if _, err = uc.Result(); err != context.Canceled {
+			t.Fatalf("Expected error: '%v', got: '%v'", context.Canceled, err)
 		}
 	})
 	t.Run("FileChangedDuringDownload", func(t *testing.T) {
