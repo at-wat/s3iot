@@ -85,7 +85,7 @@ func main() {
 		s3iot.WithRetryer(&s3iot.RetryerHookFactory{
 			Base: s3iot.DefaultRetryer,
 			OnError: func(bucket, key string, err error) {
-				log.Print(bucket, key, err)
+				log.Println(bucket, key, err)
 			},
 		}),
 	)
