@@ -75,7 +75,14 @@ func main() {
 		log.Fatal(err)
 	}
 
-	uploader := awss3v2.NewDownloader(cfg)
+	uploader := awss3v2.NewDownloader(cfg,
+		s3iot.WithRetryer(&s3iot.RetryerHookFactory{
+			Base: s3iot.DefaultRetryer,
+			OnError: func(bucket, key string, err error) {
+				log.Print(bucket, key, err)
+			},
+		}),
+	)
 	dc, err := uploader.Download(ctx, f, &s3iot.DownloadInput{
 		Bucket: aws.String(os.Args[2]),
 		Key:    aws.String(os.Args[3]),

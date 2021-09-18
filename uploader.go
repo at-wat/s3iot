@@ -93,6 +93,10 @@ func (uc *uploadContext) Done() <-chan struct{} {
 	return uc.done
 }
 
+func (uc *uploadContext) bucketKey() (bucket, key string) {
+	return *uc.input.Bucket, *uc.input.Key
+}
+
 func (uc *uploadContext) Pause() {
 	uc.mu.Lock()
 	uc.paused = make(chan struct{})

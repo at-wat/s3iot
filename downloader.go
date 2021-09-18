@@ -78,6 +78,10 @@ type downloadContext struct {
 	done chan struct{}
 }
 
+func (dc *downloadContext) bucketKey() (bucket, key string) {
+	return *dc.input.Bucket, *dc.input.Key
+}
+
 func (dc *downloadContext) Done() <-chan struct{} {
 	return dc.done
 }

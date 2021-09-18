@@ -74,6 +74,12 @@ func main() {
 				s3iot.WaitReadInterceptorMaxChunkSize(16*1024),
 			),
 		),
+		s3iot.WithRetryer(&s3iot.RetryerHookFactory{
+			Base: s3iot.DefaultRetryer,
+			OnError: func(bucket, key string, err error) {
+				log.Print(bucket, key, err)
+			},
+		}),
 	)
 	uc, err := uploader.Upload(ctx, &s3iot.UploadInput{
 		Bucket: aws.String(os.Args[2]),
