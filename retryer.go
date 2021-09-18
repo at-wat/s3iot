@@ -16,6 +16,7 @@ package s3iot
 
 import (
 	"context"
+	"errors"
 	"sync"
 	"time"
 )
@@ -155,7 +156,8 @@ func withRetry(ctx context.Context, id int64, retryer Retryer, errClassifier Err
 	for {
 		err := fn()
 		if err != nil {
-			if !errClassifier.IsRetryable(err) {
+			var re *retryableError
+			if !errClassifier.IsRetryable(err) && !errors.As(err, &re) {
 				return err
 			}
 			if wait, ok := errClassifier.IsThrottle(err); ok {
