@@ -70,6 +70,7 @@ func TestUploader(t *testing.T) {
 				u := &s3iot.Uploader{}
 				s3iot.WithAPI(api).ApplyToUploader(u)
 				s3iot.WithUploadSlicer(&s3iot.DefaultUploadSlicerFactory{PartSize: 128}).ApplyToUploader(u)
+				s3iot.WithErrorClassifier(&s3iot.NaiveErrorClassifier{}).ApplyToUploader(u)
 				s3iot.WithRetryer(&s3iot.ExponentialBackoffRetryerFactory{
 					WaitBase: time.Millisecond,
 					RetryMax: 1,
@@ -157,6 +158,7 @@ func TestUploader(t *testing.T) {
 				u := &s3iot.Uploader{}
 				s3iot.WithAPI(api).ApplyToUploader(u)
 				s3iot.WithUploadSlicer(&s3iot.DefaultUploadSlicerFactory{PartSize: 50}).ApplyToUploader(u)
+				s3iot.WithErrorClassifier(&s3iot.NaiveErrorClassifier{}).ApplyToUploader(u)
 				s3iot.WithRetryer(&s3iot.ExponentialBackoffRetryerFactory{
 					WaitBase: time.Millisecond,
 					RetryMax: 1,
@@ -238,6 +240,7 @@ func TestUploader(t *testing.T) {
 		s3iot.WithUploadSlicer(
 			&s3iot.DefaultUploadSlicerFactory{PartSize: 50},
 		).ApplyToUploader(u)
+		s3iot.WithErrorClassifier(&s3iot.NaiveErrorClassifier{}).ApplyToUploader(u)
 		s3iot.WithRetryer(nil).ApplyToUploader(u)
 		s3iot.WithReadInterceptor(nil).ApplyToUploader(u)
 
@@ -315,6 +318,7 @@ func TestUploader(t *testing.T) {
 				s3iot.WithUploadSlicer(
 					&s3iot.DefaultUploadSlicerFactory{PartSize: 50},
 				).ApplyToUploader(u)
+				s3iot.WithErrorClassifier(&s3iot.NaiveErrorClassifier{}).ApplyToUploader(u)
 
 				t.Run(fmt.Sprintf("SeekErrorAt%d", n), func(t *testing.T) {
 					_, err := u.Upload(context.TODO(), &s3iot.UploadInput{
@@ -342,6 +346,7 @@ func TestUploader(t *testing.T) {
 						errs: errs,
 					},
 				).ApplyToUploader(u)
+				s3iot.WithErrorClassifier(&s3iot.NaiveErrorClassifier{}).ApplyToUploader(u)
 
 				t.Run(fmt.Sprintf("SeekErrorAt%d", n), func(t *testing.T) {
 					uc, err := u.Upload(context.TODO(), &s3iot.UploadInput{
@@ -408,6 +413,7 @@ func TestUploader(t *testing.T) {
 					newUploadMockAPI(&bytes.Buffer{}, nil, nil),
 				).ApplyToUploader(u)
 				opt.ApplyToUploader(u)
+				s3iot.WithErrorClassifier(&s3iot.NaiveErrorClassifier{}).ApplyToUploader(u)
 
 				ctx, cancel := context.WithCancel(context.Background())
 				cancel()

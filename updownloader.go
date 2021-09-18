@@ -95,6 +95,13 @@ func WithRetryer(r RetryerFactory) UpDownloaderOption {
 	})
 }
 
+// WithErrorClassifier sets ErrorClassifierFactor.
+func WithErrorClassifier(ec ErrorClassifier) UpDownloaderOption {
+	return UpDownloaderOptionFn(func(u *UpDownloaderBase) {
+		u.ErrorClassifier = ec
+	})
+}
+
 // WithUploadSlicer sets UploadSlicerFactory to Uploader.
 func WithUploadSlicer(s UploadSlicerFactory) UploaderOption {
 	return UploaderOptionFn(func(u *Uploader) {
