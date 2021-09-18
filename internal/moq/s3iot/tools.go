@@ -1,7 +1,7 @@
 //go:build tools
 // +build tools
 
-package awss3v1
+package s3iface
 
 import (
 	_ "github.com/matryer/moq"
