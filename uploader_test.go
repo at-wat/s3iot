@@ -304,6 +304,53 @@ func TestUploader(t *testing.T) {
 			t.Error("Uploaded data differs")
 		}
 	})
+	t.Run("CancelDuringPause", func(t *testing.T) {
+		buf := &bytes.Buffer{}
+		chUpload := make(chan interface{})
+		api := newUploadMockAPI(buf, nil, map[string]chan interface{}{
+			"upload": chUpload,
+		})
+		u := &s3iot.Uploader{}
+		s3iot.WithAPI(api).ApplyToUploader(u)
+		s3iot.WithUploadSlicer(
+			&s3iot.DefaultUploadSlicerFactory{PartSize: 50},
+		).ApplyToUploader(u)
+		s3iot.WithErrorClassifier(&s3iot.NaiveErrorClassifier{}).ApplyToUploader(u)
+		s3iot.WithRetryer(nil).ApplyToUploader(u)
+		s3iot.WithReadInterceptor(nil).ApplyToUploader(u)
+
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
+		uc, err := u.Upload(ctx, &s3iot.UploadInput{
+			Bucket: &bucket,
+			Key:    &key,
+			Body:   bytes.NewReader(data),
+		})
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		time.Sleep(50 * time.Millisecond)
+		uc.Pause()
+
+		select {
+		case <-time.After(time.Second):
+			t.Fatal("Timeout")
+		case <-chUpload:
+		}
+
+		time.Sleep(50 * time.Millisecond)
+		cancel()
+
+		select {
+		case <-time.After(time.Second):
+			t.Fatal("Timeout")
+		case <-uc.Done():
+		}
+		if _, err = uc.Result(); err != context.Canceled {
+			t.Fatalf("Expected error: '%v', got: '%v'", context.Canceled, err)
+		}
+	})
 	t.Run("Unseekable", func(t *testing.T) {
 		errSeekFailure := errors.New("seek error")
 
