@@ -151,10 +151,20 @@ func (r *pauseOnFailRetryer) OnSuccess(id int64) {
 	r.base.OnSuccess(id)
 }
 
-func withRetry(ctx context.Context, id int64, retryer Retryer, fn func() error) error {
+func withRetry(ctx context.Context, id int64, retryer Retryer, errClassifier ErrorClassifier, fn func() error) error {
 	for {
 		err := fn()
 		if err != nil {
+			if !errClassifier.IsRetryable(err) {
+				return err
+			}
+			if wait, ok := errClassifier.IsThrottle(err); ok {
+				select {
+				case <-time.After(wait):
+				case <-ctx.Done():
+					return ctx.Err()
+				}
+			}
 			if ctx.Err() == nil && retryer.OnFail(ctx, id, err) {
 				continue
 			}

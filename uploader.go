@@ -31,6 +31,9 @@ func (u Uploader) Upload(ctx context.Context, input *UploadInput) (UploadContext
 	if u.RetryerFactory == nil {
 		u.RetryerFactory = DefaultRetryer
 	}
+	if u.ErrorClassifier == nil {
+		u.ErrorClassifier = DefaultErrorClassifier
+	}
 	slicer, err := u.UploadSlicerFactory.New(input.Body)
 	if err != nil {
 		return nil, err
@@ -42,6 +45,7 @@ func (u Uploader) Upload(ctx context.Context, input *UploadInput) (UploadContext
 	uc := &uploadContext{
 		api:             u.API,
 		slicer:          slicer,
+		errClassifier:   u.ErrorClassifier,
 		readInterceptor: readInterceptor,
 		input:           input,
 		done:            make(chan struct{}),
@@ -70,6 +74,7 @@ type uploadContext struct {
 	api             S3API
 	slicer          UploadSlicer
 	retryer         Retryer
+	errClassifier   ErrorClassifier
 	readInterceptor ReadInterceptor
 	input           *UploadInput
 
@@ -141,7 +146,7 @@ func (uc *uploadContext) single(ctx context.Context, r io.ReadSeeker, cleanup fu
 		r = uc.readInterceptor.Reader(r)
 	}
 
-	if err := withRetry(ctx, 0, uc.retryer, func() error {
+	if err := withRetry(ctx, 0, uc.retryer, uc.errClassifier, func() error {
 		uc.pauseCheck(ctx)
 		out, err := uc.api.PutObject(ctx, &PutObjectInput{
 			Bucket:      uc.input.Bucket,
@@ -166,7 +171,7 @@ func (uc *uploadContext) single(ctx context.Context, r io.ReadSeeker, cleanup fu
 }
 
 func (uc *uploadContext) multi(ctx context.Context, r io.ReadSeeker, cleanup func()) {
-	if err := withRetry(ctx, 0, uc.retryer, func() error {
+	if err := withRetry(ctx, 0, uc.retryer, uc.errClassifier, func() error {
 		uc.pauseCheck(ctx)
 		out, err := uc.api.CreateMultipartUpload(ctx, &CreateMultipartUploadInput{
 			Bucket:      uc.input.Bucket,
@@ -206,7 +211,7 @@ func (uc *uploadContext) multi(ctx context.Context, r io.ReadSeeker, cleanup fun
 		if uc.readInterceptor != nil {
 			r = uc.readInterceptor.Reader(r)
 		}
-		if err := withRetry(ctx, i, uc.retryer, func() error {
+		if err := withRetry(ctx, i, uc.retryer, uc.errClassifier, func() error {
 			uc.pauseCheck(ctx)
 			out, err := uc.api.UploadPart(ctx, &UploadPartInput{
 				Body:       r,
@@ -249,7 +254,7 @@ func (uc *uploadContext) multi(ctx context.Context, r io.ReadSeeker, cleanup fun
 	}
 	sort.Sort(parts)
 
-	if err := withRetry(ctx, -1, uc.retryer, func() error {
+	if err := withRetry(ctx, -1, uc.retryer, uc.errClassifier, func() error {
 		uc.pauseCheck(ctx)
 		out, err := uc.api.CompleteMultipartUpload(ctx, &CompleteMultipartUploadInput{
 			Bucket:         uc.input.Bucket,

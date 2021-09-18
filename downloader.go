@@ -38,16 +38,20 @@ func (u Downloader) Download(ctx context.Context, w io.WriterAt, input *Download
 	if u.RetryerFactory == nil {
 		u.RetryerFactory = DefaultRetryer
 	}
+	if u.ErrorClassifier == nil {
+		u.ErrorClassifier = DefaultErrorClassifier
+	}
 	slicer, err := u.DownloadSlicerFactory.New(w)
 	if err != nil {
 		return nil, err
 	}
 	dc := &downloadContext{
-		api:    u.API,
-		slicer: slicer,
-		input:  input,
-		done:   make(chan struct{}),
-		paused: make(chan struct{}),
+		api:           u.API,
+		slicer:        slicer,
+		errClassifier: u.ErrorClassifier,
+		input:         input,
+		done:          make(chan struct{}),
+		paused:        make(chan struct{}),
 	}
 	dc.retryer = u.RetryerFactory.New(dc)
 	close(dc.paused)
@@ -57,10 +61,11 @@ func (u Downloader) Download(ctx context.Context, w io.WriterAt, input *Download
 }
 
 type downloadContext struct {
-	api     S3API
-	slicer  DownloadSlicer
-	retryer Retryer
-	input   *DownloadInput
+	api           S3API
+	slicer        DownloadSlicer
+	retryer       Retryer
+	errClassifier ErrorClassifier
+	input         *DownloadInput
 
 	status DownloadStatus
 	output DownloadOutput
@@ -133,7 +138,7 @@ func (dc *downloadContext) multi(ctx context.Context) {
 		}
 		var n int64
 		var fatal bool
-		if err := withRetry(ctx, i, dc.retryer, func() error {
+		if err := withRetry(ctx, i, dc.retryer, dc.errClassifier, func() error {
 			dc.pauseCheck(ctx)
 			r := rn.String()
 			out, err := dc.api.GetObject(ctx, &GetObjectInput{
