@@ -125,7 +125,7 @@ type PauseOnFailRetryerFactory struct {
 	Base RetryerFactory
 }
 
-// New creates PauseOnFailRetryer.
+// New creates PauseOnFail.
 func (f PauseOnFailRetryerFactory) New(p Pauser) Retryer {
 	if f.Base == nil {
 		f.Base = &NoRetryerFactory{}
@@ -149,6 +149,44 @@ func (r *pauseOnFailRetryer) OnFail(ctx context.Context, id int64, err error) bo
 }
 
 func (r *pauseOnFailRetryer) OnSuccess(id int64) {
+	r.base.OnSuccess(id)
+}
+
+// RetryerHookFactory adds hook callback to the base retryer.
+// Base and OnError must be set, or cause panic.
+type RetryerHookFactory struct {
+	Base    RetryerFactory
+	OnError func(bucket, key string, err error)
+}
+
+// New creates RetryerHook.
+func (f RetryerHookFactory) New(p Pauser) Retryer {
+	return &retryerHook{
+		base: f.Base.New(p),
+		bucketKey: func() (_, _ string) {
+			bc, ok := p.(interface{ bucketKey() (_, _ string) })
+			if !ok {
+				return "", ""
+			}
+			return bc.bucketKey()
+		},
+		onError: f.OnError,
+	}
+}
+
+type retryerHook struct {
+	base      Retryer
+	bucketKey func() (_, _ string)
+	onError   func(bucket, key string, err error)
+}
+
+func (r *retryerHook) OnFail(ctx context.Context, id int64, err error) bool {
+	bucket, key := r.bucketKey()
+	r.onError(bucket, key, err)
+	return r.base.OnFail(ctx, id, err)
+}
+
+func (r *retryerHook) OnSuccess(id int64) {
 	r.base.OnSuccess(id)
 }
 

@@ -24,6 +24,7 @@ import (
 var _ RetryerFactory = &NoRetryerFactory{}
 var _ RetryerFactory = &ExponentialBackoffRetryerFactory{}
 var _ RetryerFactory = &PauseOnFailRetryerFactory{}
+var _ RetryerFactory = &RetryerHookFactory{}
 
 var errDummy = errors.New("dummy")
 
@@ -130,9 +131,72 @@ func TestPauseOnFailRetryer(t *testing.T) {
 	})
 }
 
+func TestRetryerHookFactory(t *testing.T) {
+	var bucketStored, keyStored string
+	var errStored error
+	f := &RetryerHookFactory{
+		Base: &dummyRetryerFactory{},
+		OnError: func(bucket, key string, err error) {
+			if errStored != nil {
+				t.Error("OnError is expected to be called once")
+			}
+			bucketStored, keyStored, errStored = bucket, key, err
+		},
+	}
+	r := f.New(&dummyUploadContext{})
+
+	if cont := r.OnFail(context.TODO(), 0, errDummy); cont {
+		t.Error("Expected no-continue")
+	}
+	r.OnSuccess(0)
+
+	if n := f.Base.(*dummyRetryerFactory).numFail; n != 1 {
+		t.Errorf("Base retryer OnFail must be called once, but called %d times", n)
+	}
+	if n := f.Base.(*dummyRetryerFactory).numSuccess; n != 1 {
+		t.Errorf("Base retryer OnSuccess must be called once, but called %d times", n)
+	}
+
+	if bucketStored != "dummyBucket" {
+		t.Errorf("Expected dummyBucket, got %s", bucketStored)
+	}
+	if keyStored != "dummyKey" {
+		t.Errorf("Expected dummyKey, got %s", keyStored)
+	}
+	if errStored != errDummy {
+		t.Errorf("Expected '%v', got '%v'", errDummy, errStored)
+	}
+}
+
+type dummyRetryerFactory struct {
+	numFail    int
+	numSuccess int
+}
+
+func (f *dummyRetryerFactory) New(Pauser) Retryer {
+	return &dummyRetryer{dummyRetryerFactory: f}
+}
+
+type dummyRetryer struct {
+	*dummyRetryerFactory
+}
+
+func (r *dummyRetryer) OnFail(context.Context, int64, error) bool {
+	r.numFail++
+	return false
+}
+
+func (r *dummyRetryer) OnSuccess(int64) {
+	r.numSuccess++
+}
+
 type dummyUploadContext struct {
 	UploadContext
 	chPause chan struct{}
+}
+
+func (dummyUploadContext) bucketKey() (bucket, key string) {
+	return "dummyBucket", "dummyKey"
 }
 
 func (uc *dummyUploadContext) Pause() {
