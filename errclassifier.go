@@ -37,3 +37,7 @@ func (NaiveErrorClassifier) IsThrottle(error) (time.Duration, bool) {
 type retryableError struct {
 	error
 }
+
+func (e *retryableError) Unwrap() error {
+	return e.error
+}
