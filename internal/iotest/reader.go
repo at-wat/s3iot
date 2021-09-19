@@ -18,22 +18,27 @@ import (
 	"io"
 )
 
+// ReadOnly removes Seek and ReadAt from Reader.
 type ReadOnly struct {
 	R io.Reader
 }
 
+// Read implements io.Reader.
 func (r *ReadOnly) Read(b []byte) (int, error) {
 	return r.R.Read(b)
 }
 
+// ReadSeekOnly removes ReadAt from Reader.
 type ReadSeekOnly struct {
 	R io.ReadSeeker
 }
 
+// Read implements io.Reader.
 func (r *ReadSeekOnly) Read(b []byte) (int, error) {
 	return r.R.Read(b)
 }
 
+// Seek implements io.Seeker.
 func (r *ReadSeekOnly) Seek(offset int64, whence int) (int64, error) {
 	return r.R.Seek(offset, whence)
 }
