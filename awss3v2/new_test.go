@@ -21,6 +21,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
+
+	"github.com/at-wat/s3iot"
 )
 
 func TestNew(t *testing.T) {
@@ -31,13 +33,21 @@ func TestNew(t *testing.T) {
 		t.Fatal(err)
 	}
 	t.Run("NewUploader", func(t *testing.T) {
-		u := NewUploader(cfg)
+		u := NewUploader(cfg, s3iot.UpDownloaderOptionFn(func(u *s3iot.UpDownloaderBase) {
+			if _, ok := u.API.(*wrapper).api.(*s3.Client); !ok {
+				t.Errorf("Base API is expected to be *s3.Client, actually %T", u.API.(*wrapper).api)
+			}
+		}))
 		if _, ok := u.API.(*wrapper).api.(*s3.Client); !ok {
 			t.Errorf("Base API is expected to be *s3.Client, actually %T", u.API.(*wrapper).api)
 		}
 	})
 	t.Run("NewDownloader", func(t *testing.T) {
-		d := NewDownloader(cfg)
+		d := NewDownloader(cfg, s3iot.UpDownloaderOptionFn(func(u *s3iot.UpDownloaderBase) {
+			if _, ok := u.API.(*wrapper).api.(*s3.Client); !ok {
+				t.Errorf("Base API is expected to be *s3.Client, actually %T", u.API.(*wrapper).api)
+			}
+		}))
 		if _, ok := d.API.(*wrapper).api.(*s3.Client); !ok {
 			t.Errorf("Base API is expected to be *s3.Client, actually %T", d.API.(*wrapper).api)
 		}
