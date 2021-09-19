@@ -16,7 +16,6 @@ package s3iot
 
 import (
 	"context"
-	"errors"
 	"sync"
 	"time"
 )
@@ -188,32 +187,4 @@ func (r *retryerHook) OnFail(ctx context.Context, id int64, err error) bool {
 
 func (r *retryerHook) OnSuccess(id int64) {
 	r.base.OnSuccess(id)
-}
-
-func withRetry(ctx context.Context, id int64, retryer Retryer, errClassifier ErrorClassifier, fn func() error) error {
-	for {
-		err := fn()
-		if err != nil {
-			if fe, fatal := err.(*fatalError); fatal {
-				return fe.error
-			}
-			var re *retryableError
-			if !errClassifier.IsRetryable(err) && !errors.As(err, &re) {
-				return err
-			}
-			if wait, ok := errClassifier.IsThrottle(err); ok {
-				select {
-				case <-time.After(wait):
-				case <-ctx.Done():
-					return ctx.Err()
-				}
-			}
-			if ctx.Err() == nil && retryer.OnFail(ctx, id, err) {
-				continue
-			}
-			return err
-		}
-		retryer.OnSuccess(id)
-		return nil
-	}
 }
