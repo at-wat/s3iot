@@ -398,7 +398,7 @@ func TestUploader(t *testing.T) {
 						s3iot.WithUploadSlicer(
 							&seekErrorUploadSlicerFactory{
 								DefaultUploadSlicerFactory: s3iot.DefaultUploadSlicerFactory{
-									PartSize: 50,
+									PartSize: tt.partSize,
 								},
 								errs: errs,
 							},
