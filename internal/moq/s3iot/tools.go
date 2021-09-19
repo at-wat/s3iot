@@ -1,7 +1,7 @@
 //go:build tools
 // +build tools
 
-package s3iface
+package mock_s3iot
 
 import (
 	_ "github.com/matryer/moq"
