@@ -146,11 +146,36 @@ func TestWithRetry(t *testing.T) {
 				t.Errorf("Expected retry count: 2, actual: %d", i)
 			}
 		})
+		t.Run("CancelDuringThrottle", func(t *testing.T) {
+			ec := &dummyErrorClassifier{
+				retryable:    errRetryable,
+				throttleWait: time.Second,
+			}
+			r := f.New(nil)
+			ctx, cancel := context.WithTimeout(context.Background(), 50*time.Millisecond)
+			defer cancel()
+
+			go func() {
+				select {
+				case <-ctx.Done():
+				case <-time.After(100 * time.Millisecond):
+					panic("timeout")
+				}
+			}()
+
+			err := withRetry(ctx, 0, r, ec, func() error {
+				return errRetryable
+			})
+			if err != context.DeadlineExceeded {
+				t.Errorf("Expected error: %v, got: %v", context.DeadlineExceeded, err)
+			}
+		})
 	})
 }
 
 type dummyErrorClassifier struct {
-	retryable error
+	retryable    error
+	throttleWait time.Duration
 }
 
 func (ec dummyErrorClassifier) IsRetryable(err error) bool {
@@ -159,7 +184,10 @@ func (ec dummyErrorClassifier) IsRetryable(err error) bool {
 
 func (ec dummyErrorClassifier) IsThrottle(err error) (time.Duration, bool) {
 	if err == ec.retryable {
-		return time.Millisecond, true
+		if ec.throttleWait == 0 {
+			return time.Millisecond, true
+		}
+		return ec.throttleWait, true
 	}
 	return 0, false
 }
