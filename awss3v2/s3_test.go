@@ -290,6 +290,20 @@ func TestWrapper(t *testing.T) {
 				t.Errorf("Expected calls: 1, actual: %d", n)
 			}
 		})
+		t.Run("GetObject", func(t *testing.T) {
+			api := &s3iface.MockS3API{
+				GetObjectFunc: func(ctx context.Context, params *s3.GetObjectInput, optFns ...func(*s3.Options)) (*s3.GetObjectOutput, error) {
+					return nil, errDummy
+				},
+			}
+			w := awss3v2.NewAPI(api)
+			if _, err := w.GetObject(context.TODO(), &s3iot.GetObjectInput{}); err != errDummy {
+				t.Fatal("Expected error")
+			}
+			if n := len(api.GetObjectCalls()); n != 1 {
+				t.Errorf("Expected calls: 1, actual: %d", n)
+			}
+		})
 		t.Run("CreateMultipartUpload", func(t *testing.T) {
 			api := &s3iface.MockS3API{
 				CreateMultipartUploadFunc: func(ctx context.Context, params *s3.CreateMultipartUploadInput, optFns ...func(*s3.Options)) (*s3.CreateMultipartUploadOutput, error) {
