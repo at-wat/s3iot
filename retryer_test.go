@@ -38,39 +38,64 @@ func TestNoRetryer(t *testing.T) {
 }
 
 func TestExponentialBackoffRetryer(t *testing.T) {
-	f := &ExponentialBackoffRetryerFactory{
-		WaitBase: 50 * time.Millisecond,
-		WaitMax:  250 * time.Millisecond,
-		RetryMax: 4,
-	}
-	r := f.New(nil)
-
-	ts := time.Now()
-	for i := 0; i < 4; i++ {
-		if cont := r.OnFail(context.TODO(), 0, errDummy); !cont {
-			t.Error("Unexpected failure before reaching RetryMax")
+	t.Run("Normal", func(t *testing.T) {
+		f := &ExponentialBackoffRetryerFactory{
+			WaitBase: 50 * time.Millisecond,
+			WaitMax:  250 * time.Millisecond,
+			RetryMax: 4,
 		}
-	}
-	te := time.Now()
-	// 50 + 100 + 200 + 250 = 600ms
-	expectedWait := 600 * time.Millisecond
-	tolerance := 50 * time.Millisecond
-	if diff := te.Sub(ts) - expectedWait; diff < -tolerance || tolerance < diff {
-		t.Errorf("Expected wait: %v, actual: %v", te.Sub(ts), expectedWait)
-	}
+		r := f.New(nil)
 
-	if cont := r.OnFail(context.TODO(), 1, errDummy); !cont {
-		t.Error("Unexpected failure on different id")
-	}
+		ts := time.Now()
+		for i := 0; i < 4; i++ {
+			if cont := r.OnFail(context.TODO(), 0, errDummy); !cont {
+				t.Error("Unexpected failure before reaching RetryMax")
+			}
+		}
+		te := time.Now()
+		// 50 + 100 + 200 + 250 = 600ms
+		expectedWait := 600 * time.Millisecond
+		tolerance := 50 * time.Millisecond
+		if diff := te.Sub(ts) - expectedWait; diff < -tolerance || tolerance < diff {
+			t.Errorf("Expected wait: %v, actual: %v", te.Sub(ts), expectedWait)
+		}
 
-	if cont := r.OnFail(context.TODO(), 0, errDummy); cont {
-		t.Error("Unexpected retry after reaching RetryMax")
-	}
-	r.OnSuccess(0)
+		if cont := r.OnFail(context.TODO(), 1, errDummy); !cont {
+			t.Error("Unexpected failure on different id")
+		}
 
-	if cont := r.OnFail(context.TODO(), 0, errDummy); !cont {
-		t.Error("Unexpected failure after resetting failure")
-	}
+		if cont := r.OnFail(context.TODO(), 0, errDummy); cont {
+			t.Error("Unexpected retry after reaching RetryMax")
+		}
+		r.OnSuccess(0)
+
+		if cont := r.OnFail(context.TODO(), 0, errDummy); !cont {
+			t.Error("Unexpected failure after resetting failure")
+		}
+	})
+	t.Run("CancelDuringWait", func(t *testing.T) {
+		f := &ExponentialBackoffRetryerFactory{
+			WaitBase: time.Second,
+			WaitMax:  time.Second,
+			RetryMax: 4,
+		}
+		r := f.New(nil)
+
+		ctx, cancel := context.WithTimeout(context.Background(), 50*time.Millisecond)
+		defer cancel()
+
+		go func() {
+			select {
+			case <-ctx.Done():
+			case <-time.After(100 * time.Millisecond):
+				panic("timeout")
+			}
+		}()
+
+		if cont := r.OnFail(ctx, 0, errDummy); cont {
+			t.Error("Unexpected retry")
+		}
+	})
 }
 
 func TestPauseOnFailRetryer(t *testing.T) {
