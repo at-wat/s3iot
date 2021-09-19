@@ -14,6 +14,11 @@
 
 package s3iot
 
+import (
+	"context"
+	"sync"
+)
+
 // UpDownloaderBase stores downloader/uploader base objects.
 type UpDownloaderBase struct {
 	API             S3API
@@ -121,4 +126,76 @@ func WithDownloadSlicer(s DownloadSlicerFactory) DownloaderOption {
 	return DownloaderOptionFn(func(u *Downloader) {
 		u.DownloadSlicerFactory = s
 	})
+}
+
+type upDownloadContext struct {
+	api           S3API
+	retryer       Retryer
+	errClassifier ErrorClassifier
+
+	err error
+
+	paused     chan struct{}
+	resumeOnce sync.Once
+
+	mu   sync.RWMutex
+	done chan struct{}
+
+	statusPaused     *bool
+	statusNumRetries *int
+}
+
+func newUpDownloadContext(api S3API, retryerFactory RetryerFactory, errClassifier ErrorClassifier) *upDownloadContext {
+	c := &upDownloadContext{
+		api:           api,
+		errClassifier: errClassifier,
+		done:          make(chan struct{}),
+		paused:        make(chan struct{}),
+	}
+	c.retryer = retryerFactory.New(c)
+	close(c.paused)
+	c.resumeOnce.Do(func() {})
+	return c
+}
+
+func (c *upDownloadContext) setStatePtr(paused *bool, numRetries *int) {
+	c.statusPaused = paused
+	c.statusNumRetries = numRetries
+}
+
+func (c *upDownloadContext) Done() <-chan struct{} {
+	return c.done
+}
+func (c *upDownloadContext) Pause() {
+	c.mu.Lock()
+	c.paused = make(chan struct{})
+	c.resumeOnce = sync.Once{}
+	*c.statusPaused = true
+	c.mu.Unlock()
+}
+
+func (c *upDownloadContext) Resume() {
+	c.mu.Lock()
+	c.resumeOnce.Do(func() {
+		close(c.paused)
+	})
+	*c.statusPaused = false
+	c.mu.Unlock()
+}
+
+func (c *upDownloadContext) pauseCheck(ctx context.Context) {
+	c.mu.RLock()
+	paused := c.paused
+	c.mu.RUnlock()
+
+	select {
+	case <-paused:
+	case <-ctx.Done():
+	}
+}
+
+func (c *upDownloadContext) countRetry() {
+	c.mu.Lock()
+	*c.statusNumRetries++
+	c.mu.Unlock()
 }
