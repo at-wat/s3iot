@@ -504,50 +504,71 @@ func TestUploader(t *testing.T) {
 		}
 	})
 	t.Run("WithReadInterceptor", func(t *testing.T) {
-		buf := &bytes.Buffer{}
-		api := newUploadMockAPI(buf, nil, nil)
-		u := &s3iot.Uploader{}
-		s3iot.WithAPI(api).ApplyToUploader(u)
-		s3iot.WithUploadSlicer(&s3iot.DefaultUploadSlicerFactory{PartSize: 50}).ApplyToUploader(u)
-
-		ri := &mock_s3iot.MockReadInterceptor{
-			ReaderFunc: func(readSeeker io.ReadSeeker) io.ReadSeeker {
-				return readSeeker
+		testCases := map[string]struct {
+			partSize    int64
+			readerCalls int
+		}{
+			"Single": {
+				partSize:    128,
+				readerCalls: 1,
+			},
+			"Multi": {
+				partSize:    50,
+				readerCalls: 3,
 			},
 		}
-		rif := &mock_s3iot.MockReadInterceptorFactory{
-			NewFunc: func() s3iot.ReadInterceptor {
-				return ri
-			},
-		}
-		s3iot.WithReadInterceptor(rif).ApplyToUploader(u)
+		for name, tt := range testCases {
+			tt := tt
+			t.Run(name, func(t *testing.T) {
+				buf := &bytes.Buffer{}
+				api := newUploadMockAPI(buf, nil, nil)
+				u := &s3iot.Uploader{}
+				s3iot.WithAPI(api).ApplyToUploader(u)
+				s3iot.WithUploadSlicer(
+					&s3iot.DefaultUploadSlicerFactory{
+						PartSize: tt.partSize,
+					}).ApplyToUploader(u)
 
-		uc, err := u.Upload(context.TODO(), &s3iot.UploadInput{
-			Bucket: &bucket,
-			Key:    &key,
-			Body:   bytes.NewReader(data),
-		})
-		if err != nil {
-			t.Fatal(err)
-		}
-		select {
-		case <-time.After(time.Second):
-			t.Fatal("Timeout")
-		case <-uc.Done():
-		}
-		if _, err := uc.Result(); err != nil {
-			t.Fatal(err)
-		}
+				ri := &mock_s3iot.MockReadInterceptor{
+					ReaderFunc: func(readSeeker io.ReadSeeker) io.ReadSeeker {
+						return readSeeker
+					},
+				}
+				rif := &mock_s3iot.MockReadInterceptorFactory{
+					NewFunc: func() s3iot.ReadInterceptor {
+						return ri
+					},
+				}
+				s3iot.WithReadInterceptor(rif).ApplyToUploader(u)
 
-		if n := len(rif.NewCalls()); n != 1 {
-			t.Fatalf("New must be called once, but called %d times", n)
-		}
-		if n := len(ri.ReaderCalls()); n != 3 {
-			t.Fatalf("Reader must be called 3 times, but called %d times", n)
-		}
+				uc, err := u.Upload(context.TODO(), &s3iot.UploadInput{
+					Bucket: &bucket,
+					Key:    &key,
+					Body:   bytes.NewReader(data),
+				})
+				if err != nil {
+					t.Fatal(err)
+				}
+				select {
+				case <-time.After(time.Second):
+					t.Fatal("Timeout")
+				case <-uc.Done():
+				}
+				if _, err := uc.Result(); err != nil {
+					t.Fatal(err)
+				}
 
-		if !bytes.Equal(data, buf.Bytes()) {
-			t.Error("Uploaded data differs")
+				if n := len(rif.NewCalls()); n != 1 {
+					t.Fatalf("New must be called once, but called %d times", n)
+				}
+				if n := len(ri.ReaderCalls()); n != tt.readerCalls {
+					t.Fatalf("Reader must be called %d times, but called %d times", tt.readerCalls, n)
+				}
+
+				if !bytes.Equal(data, buf.Bytes()) {
+					t.Error("Uploaded data differs")
+				}
+			})
 		}
 	})
 }
