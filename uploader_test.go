@@ -409,33 +409,40 @@ func TestUploader(t *testing.T) {
 		errSeekFailure := errors.New("seek error")
 
 		testCases := map[string]struct {
-			partSize             int64
-			innerSeekerFailAtMax int
+			partSize                   int64
+			innerSeekerFailAtSeekerMax int
+			innerSeekerFailAtMax       int
 		}{
 			"Single": {
-				partSize:             150,
-				innerSeekerFailAtMax: 1,
+				partSize:                   150,
+				innerSeekerFailAtSeekerMax: 1,
+				innerSeekerFailAtMax:       1,
 			},
 			"SingleBoundary": {
-				partSize:             128,
-				innerSeekerFailAtMax: 1,
+				partSize:                   128,
+				innerSeekerFailAtSeekerMax: 1,
+				innerSeekerFailAtMax:       1,
 			},
 			"Multi": {
-				partSize:             50,
-				innerSeekerFailAtMax: 3,
+				partSize:                   50,
+				innerSeekerFailAtSeekerMax: 3,
+				innerSeekerFailAtMax:       2,
 			},
 			"MultiBoundary": {
-				partSize:             64,
-				innerSeekerFailAtMax: 2,
+				partSize:                   64,
+				innerSeekerFailAtSeekerMax: 2,
+				innerSeekerFailAtMax:       2,
 			},
 		}
 		for name, tt := range testCases {
 			tt := tt
 			t.Run(name, func(t *testing.T) {
 				t.Run("OuterSeeker", func(t *testing.T) {
-					errsIn := []error{errSeekFailure}
-					for n := 1; n <= 2; n++ {
-						errs := errsIn
+					for n := 0; n < 2; n++ {
+						errs := []error{errSeekFailure}
+						for i := 0; i < n; i++ {
+							errs = append([]error{nil}, errs...)
+						}
 
 						u := &s3iot.Uploader{}
 						s3iot.WithRetryer(&s3iot.NoRetryerFactory{}).ApplyToUploader(u)
@@ -458,48 +465,53 @@ func TestUploader(t *testing.T) {
 								t.Fatalf("Expected error: '%v', got: '%v'", errSeekFailure, err)
 							}
 						})
-						errsIn = append([]error{nil}, errsIn...)
 					}
 				})
 				t.Run("InnerSeeker", func(t *testing.T) {
-					errsIn := [][]error{{errSeekFailure}}
-					for n := 1; n <= tt.innerSeekerFailAtMax; n++ {
-						errs := errsIn
+					for n := 0; n < tt.innerSeekerFailAtMax; n++ {
+						for m := 0; m < tt.innerSeekerFailAtSeekerMax; m++ {
+							errs := [][]error{{errSeekFailure}}
+							for i := 0; i < n; i++ {
+								errs[0] = append([]error{nil}, errs[0]...)
+							}
+							for i := 0; i < m; i++ {
+								errs = append([][]error{{nil}}, errs...)
+							}
 
-						u := &s3iot.Uploader{}
-						s3iot.WithRetryer(&s3iot.NoRetryerFactory{}).ApplyToUploader(u)
-						s3iot.WithAPI(newUploadMockAPI(&bytes.Buffer{}, nil, nil)).ApplyToUploader(u)
-						s3iot.WithUploadSlicer(
-							&seekErrorUploadSlicerFactory{
-								DefaultUploadSlicerFactory: s3iot.DefaultUploadSlicerFactory{
-									PartSize: tt.partSize,
+							u := &s3iot.Uploader{}
+							s3iot.WithRetryer(&s3iot.NoRetryerFactory{}).ApplyToUploader(u)
+							s3iot.WithAPI(newUploadMockAPI(&bytes.Buffer{}, nil, nil)).ApplyToUploader(u)
+							s3iot.WithUploadSlicer(
+								&seekErrorUploadSlicerFactory{
+									DefaultUploadSlicerFactory: s3iot.DefaultUploadSlicerFactory{
+										PartSize: tt.partSize,
+									},
+									errs: errs,
 								},
-								errs: errs,
-							},
-						).ApplyToUploader(u)
-						s3iot.WithErrorClassifier(&s3iot.NaiveErrorClassifier{}).ApplyToUploader(u)
+							).ApplyToUploader(u)
+							s3iot.WithErrorClassifier(&s3iot.NaiveErrorClassifier{}).ApplyToUploader(u)
 
-						t.Run(fmt.Sprintf("SeekErrorAt%d", n), func(t *testing.T) {
-							uc, err := u.Upload(context.TODO(), &s3iot.UploadInput{
-								Bucket: &bucket,
-								Key:    &key,
-								Body:   bytes.NewReader(data),
+							t.Run(fmt.Sprintf("SeekErrorAt%d_%d", m, n), func(t *testing.T) {
+								uc, err := u.Upload(context.TODO(), &s3iot.UploadInput{
+									Bucket: &bucket,
+									Key:    &key,
+									Body:   bytes.NewReader(data),
+								})
+								if err != nil {
+									t.Fatal(err)
+								}
+
+								select {
+								case <-time.After(time.Second):
+									t.Fatal("Timeout")
+								case <-uc.Done():
+								}
+
+								if _, err = uc.Result(); !errors.Is(err, errSeekFailure) {
+									t.Fatalf("Expected error: '%v', got: '%v'", errSeekFailure, err)
+								}
 							})
-							if err != nil {
-								t.Fatal(err)
-							}
-
-							select {
-							case <-time.After(time.Second):
-								t.Fatal("Timeout")
-							case <-uc.Done():
-							}
-
-							if _, err = uc.Result(); !errors.Is(err, errSeekFailure) {
-								t.Fatalf("Expected error: '%v', got: '%v'", errSeekFailure, err)
-							}
-						})
-						errsIn = append([][]error{{nil}}, errsIn...)
+						}
 					}
 				})
 			})
