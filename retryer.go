@@ -164,11 +164,11 @@ func (f RetryerHookFactory) New(p Pauser) Retryer {
 	return &retryerHook{
 		base: f.Base.New(p),
 		bucketKey: func() (_, _ string) {
-			bc, ok := p.(interface{ bucketKey() (_, _ string) })
+			bc, ok := p.(BucketKeyer)
 			if !ok {
 				return "", ""
 			}
-			return bc.bucketKey()
+			return bc.BucketKey()
 		},
 		onError: f.OnError,
 	}

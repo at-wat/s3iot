@@ -107,6 +107,15 @@ func TestDownloader(t *testing.T) {
 				if !bytes.Equal(data, []byte(buf)) {
 					t.Error("Downloaded data differs")
 				}
+
+				bkg, ok := dc.(s3iot.BucketKeyer)
+				if !ok {
+					t.Fatal("UploadContext should implement BucketKeyer")
+				}
+				dcBucket, dcKey := bkg.BucketKey()
+				if dcBucket != bucket || dcKey != key {
+					t.Errorf("Expected bucket/key: %s/%s, got: %s/%s", bucket, key, dcBucket, dcKey)
+				}
 			})
 		}
 	})

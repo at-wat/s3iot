@@ -120,6 +120,15 @@ func TestUploader(t *testing.T) {
 				if !bytes.Equal(data, buf.Bytes()) {
 					t.Error("Uploaded data differs")
 				}
+
+				bkg, ok := uc.(s3iot.BucketKeyer)
+				if !ok {
+					t.Fatal("UploadContext should implement BucketKeyer")
+				}
+				ucBucket, ucKey := bkg.BucketKey()
+				if ucBucket != bucket || ucKey != key {
+					t.Errorf("Expected bucket/key: %s/%s, got: %s/%s", bucket, key, ucBucket, ucKey)
+				}
 			})
 		}
 	})
@@ -280,6 +289,15 @@ func TestUploader(t *testing.T) {
 					if expected != *tag {
 						t.Errorf("Part %d must have ETag: %s, actual: %s", i, expected, *tag)
 					}
+				}
+
+				bkg, ok := uc.(s3iot.BucketKeyer)
+				if !ok {
+					t.Fatal("UploadContext should implement BucketKeyer")
+				}
+				ucBucket, ucKey := bkg.BucketKey()
+				if ucBucket != bucket || ucKey != key {
+					t.Errorf("Expected bucket/key: %s/%s, got: %s/%s", bucket, key, ucBucket, ucKey)
 				}
 			})
 		}

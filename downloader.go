@@ -78,7 +78,7 @@ type downloadContext struct {
 	done chan struct{}
 }
 
-func (dc *downloadContext) bucketKey() (bucket, key string) {
+func (dc *downloadContext) BucketKey() (bucket, key string) {
 	return *dc.input.Bucket, *dc.input.Key
 }
 

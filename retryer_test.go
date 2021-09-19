@@ -195,7 +195,7 @@ type dummyUploadContext struct {
 	chPause chan struct{}
 }
 
-func (dummyUploadContext) bucketKey() (bucket, key string) {
+func (dummyUploadContext) BucketKey() (bucket, key string) {
 	return "dummyBucket", "dummyKey"
 }
 

@@ -81,6 +81,11 @@ type Pauser interface {
 	Resume()
 }
 
+// BucketKeyer provides getter of target bucket and key.
+type BucketKeyer interface {
+	BucketKey() (_, _ string)
+}
+
 // DoneNotifier provices completion notifier.
 type DoneNotifier interface {
 	// Done returns a channel which will be closed after complete.
