@@ -367,6 +367,10 @@ func TestUploader(t *testing.T) {
 				partSize:             50,
 				innerSeekerFailAtMax: 3,
 			},
+			"MultiBoundary": {
+				partSize:             64,
+				innerSeekerFailAtMax: 2,
+			},
 		}
 		for name, tt := range testCases {
 			tt := tt
