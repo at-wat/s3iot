@@ -28,6 +28,7 @@ func TestErrorClassifier(t *testing.T) {
 		err       error
 		retryable bool
 		throttle  bool
+		waitParam time.Duration
 		wait      time.Duration
 	}{
 		"HTTP": {
@@ -49,7 +50,7 @@ func TestErrorClassifier(t *testing.T) {
 				Message: "dummy",
 			},
 		},
-		"AWSThrottle": {
+		"AWSThrottleDefault": {
 			err: &smithy.GenericAPIError{
 				Code:    "SlowDown",
 				Message: "dummy",
@@ -58,13 +59,24 @@ func TestErrorClassifier(t *testing.T) {
 			throttle:  true,
 			wait:      DefaultThrottleWait,
 		},
+		"AWSThrottle": {
+			err: &smithy.GenericAPIError{
+				Code:    "SlowDown",
+				Message: "dummy",
+			},
+			retryable: true,
+			throttle:  true,
+			waitParam: time.Minute,
+			wait:      time.Minute,
+		},
 	}
-
-	ec := &ErrorClassifier{}
 
 	for name, tt := range testCases {
 		tt := tt
 		t.Run(name, func(t *testing.T) {
+			ec := &ErrorClassifier{
+				ThrottleWait: tt.waitParam,
+			}
 			if out := ec.IsRetryable(tt.err); out != tt.retryable {
 				t.Errorf("IsRetryable('%v') is expected to be %v, got %v", tt.err, tt.retryable, out)
 			}
