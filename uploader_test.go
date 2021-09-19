@@ -121,6 +121,18 @@ func TestUploader(t *testing.T) {
 					t.Error("Uploaded data differs")
 				}
 
+				status, err := uc.Status()
+				if err != nil {
+					t.Fatal(err)
+				}
+				var expectedRetries int
+				for _, num := range tt.num {
+					expectedRetries += num
+				}
+				if status.NumRetries != expectedRetries {
+					t.Errorf("Expected NumRetries: %d, got: %d", expectedRetries, status.NumRetries)
+				}
+
 				bkg, ok := uc.(s3iot.BucketKeyer)
 				if !ok {
 					t.Fatal("UploadContext should implement BucketKeyer")
@@ -266,6 +278,18 @@ func TestUploader(t *testing.T) {
 					t.Fatal("PutObject must not be called")
 				}
 
+				status, err := uc.Status()
+				if err != nil {
+					t.Fatal(err)
+				}
+				var expectedRetries int
+				for _, num := range tt.num {
+					expectedRetries += num
+				}
+				if status.NumRetries != expectedRetries {
+					t.Errorf("Expected NumRetries: %d, got: %d", expectedRetries, status.NumRetries)
+				}
+
 				expectedETag := fmt.Sprintf("TAG%d", tt.parts+1)
 				if *out.ETag != expectedETag {
 					t.Errorf("Expected ETag: %s, got: %s", expectedETag, *out.ETag)
@@ -342,6 +366,9 @@ func TestUploader(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
+		if !status.Paused {
+			t.Error("Paused flag must be set")
+		}
 		if status.UploadID != "UPLOAD0" {
 			t.Errorf("Expected upload ID: UPLOAD0, got: %s", status.UploadID)
 		}
@@ -359,6 +386,15 @@ func TestUploader(t *testing.T) {
 			t.Fatal("Timeout")
 		case <-uc.Done():
 		}
+
+		status, err = uc.Status()
+		if err != nil {
+			t.Fatal(err)
+		}
+		if status.Paused {
+			t.Error("Paused flag must not be set")
+		}
+
 		if _, err = uc.Result(); err != nil {
 			t.Fatal(err)
 		}

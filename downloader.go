@@ -19,7 +19,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"sync"
 
 	"github.com/at-wat/s3iot/contentrange"
 )
@@ -42,61 +41,31 @@ func (u Downloader) Download(ctx context.Context, w io.WriterAt, input *Download
 		u.ErrorClassifier = DefaultErrorClassifier
 	}
 	dc := &downloadContext{
-		api:           u.API,
-		slicer:        u.DownloadSlicerFactory.New(w),
-		errClassifier: u.ErrorClassifier,
-		input:         input,
-		done:          make(chan struct{}),
-		paused:        make(chan struct{}),
+		upDownloadContext: newUpDownloadContext(
+			u.API,
+			u.RetryerFactory,
+			u.ErrorClassifier,
+		),
+		slicer: u.DownloadSlicerFactory.New(w),
+		input:  input,
 	}
-	dc.retryer = u.RetryerFactory.New(dc)
-	close(dc.paused)
-	dc.resumeOnce.Do(func() {})
+	dc.setStatePtr(&dc.status.Paused, &dc.status.NumRetries)
 	go dc.multi(ctx)
 	return dc, nil
 }
 
 type downloadContext struct {
-	api           S3API
-	slicer        DownloadSlicer
-	retryer       Retryer
-	errClassifier ErrorClassifier
-	input         *DownloadInput
+	*upDownloadContext
+
+	slicer DownloadSlicer
+	input  *DownloadInput
 
 	status DownloadStatus
 	output DownloadOutput
-	err    error
-
-	paused     chan struct{}
-	resumeOnce sync.Once
-
-	mu   sync.RWMutex
-	done chan struct{}
 }
 
 func (dc *downloadContext) BucketKey() (bucket, key string) {
 	return *dc.input.Bucket, *dc.input.Key
-}
-
-func (dc *downloadContext) Done() <-chan struct{} {
-	return dc.done
-}
-
-func (dc *downloadContext) Pause() {
-	dc.mu.Lock()
-	dc.paused = make(chan struct{})
-	dc.resumeOnce = sync.Once{}
-	dc.status.Paused = true
-	dc.mu.Unlock()
-}
-
-func (dc *downloadContext) Resume() {
-	dc.mu.Lock()
-	dc.resumeOnce.Do(func() {
-		close(dc.paused)
-	})
-	dc.status.Paused = false
-	dc.mu.Unlock()
 }
 
 func (dc *downloadContext) Status() (DownloadStatus, error) {
@@ -109,23 +78,6 @@ func (dc *downloadContext) Result() (DownloadOutput, error) {
 	dc.mu.RLock()
 	defer dc.mu.RUnlock()
 	return dc.output, dc.err
-}
-
-func (dc *downloadContext) countRetry() {
-	dc.mu.Lock()
-	dc.status.NumRetries++
-	dc.mu.Unlock()
-}
-
-func (dc *downloadContext) pauseCheck(ctx context.Context) {
-	dc.mu.RLock()
-	paused := dc.paused
-	dc.mu.RUnlock()
-
-	select {
-	case <-paused:
-	case <-ctx.Done():
-	}
 }
 
 func (dc *downloadContext) multi(ctx context.Context) {

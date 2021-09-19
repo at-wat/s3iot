@@ -20,7 +20,6 @@ import (
 	"context"
 	"io"
 	"sort"
-	"sync"
 )
 
 // Upload a file to S3.
@@ -43,22 +42,21 @@ func (u Uploader) Upload(ctx context.Context, input *UploadInput) (UploadContext
 		readInterceptor = u.ReadInterceptorFactory.New()
 	}
 	uc := &uploadContext{
-		api:             u.API,
+		upDownloadContext: newUpDownloadContext(
+			u.API,
+			u.RetryerFactory,
+			u.ErrorClassifier,
+		),
 		slicer:          slicer,
-		errClassifier:   u.ErrorClassifier,
 		readInterceptor: readInterceptor,
 		input:           input,
-		done:            make(chan struct{}),
-		paused:          make(chan struct{}),
 		status: UploadStatus{
 			Status: Status{
 				Size: slicer.Len(),
 			},
 		},
 	}
-	uc.retryer = u.RetryerFactory.New(uc)
-	close(uc.paused)
-	uc.resumeOnce.Do(func() {})
+	uc.setStatePtr(&uc.status.Paused, &uc.status.NumRetries)
 	r, cleanup, err := uc.slicer.NextReader()
 	if err == io.EOF {
 		go uc.single(ctx, r, cleanup)
@@ -71,47 +69,18 @@ func (u Uploader) Upload(ctx context.Context, input *UploadInput) (UploadContext
 }
 
 type uploadContext struct {
-	api             S3API
+	*upDownloadContext
+
 	slicer          UploadSlicer
-	retryer         Retryer
-	errClassifier   ErrorClassifier
 	readInterceptor ReadInterceptor
 	input           *UploadInput
 
 	status UploadStatus
 	output UploadOutput
-	err    error
-
-	paused     chan struct{}
-	resumeOnce sync.Once
-
-	mu   sync.RWMutex
-	done chan struct{}
-}
-
-func (uc *uploadContext) Done() <-chan struct{} {
-	return uc.done
 }
 
 func (uc *uploadContext) BucketKey() (bucket, key string) {
 	return *uc.input.Bucket, *uc.input.Key
-}
-
-func (uc *uploadContext) Pause() {
-	uc.mu.Lock()
-	uc.paused = make(chan struct{})
-	uc.resumeOnce = sync.Once{}
-	uc.status.Paused = true
-	uc.mu.Unlock()
-}
-
-func (uc *uploadContext) Resume() {
-	uc.mu.Lock()
-	uc.resumeOnce.Do(func() {
-		close(uc.paused)
-	})
-	uc.status.Paused = false
-	uc.mu.Unlock()
 }
 
 func (uc *uploadContext) Status() (UploadStatus, error) {
@@ -124,23 +93,6 @@ func (uc *uploadContext) Result() (UploadOutput, error) {
 	uc.mu.RLock()
 	defer uc.mu.RUnlock()
 	return uc.output, uc.err
-}
-
-func (uc *uploadContext) countRetry() {
-	uc.mu.Lock()
-	uc.status.NumRetries++
-	uc.mu.Unlock()
-}
-
-func (uc *uploadContext) pauseCheck(ctx context.Context) {
-	uc.mu.RLock()
-	paused := uc.paused
-	uc.mu.RUnlock()
-
-	select {
-	case <-paused:
-	case <-ctx.Done():
-	}
 }
 
 func (uc *uploadContext) single(ctx context.Context, r io.ReadSeeker, cleanup func()) {
