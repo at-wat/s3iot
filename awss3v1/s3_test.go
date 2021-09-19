@@ -25,37 +25,12 @@ import (
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/request"
-	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 
 	"github.com/at-wat/s3iot"
 	"github.com/at-wat/s3iot/awss3v1/internal/moq/s3iface"
 )
-
-func TestNew(t *testing.T) {
-	sess, err := session.NewSessionWithOptions(session.Options{
-		Config: aws.Config{
-			Credentials: credentials.NewStaticCredentials("id", "secret", ""),
-		},
-	})
-	if err != nil {
-		t.Fatal(err)
-	}
-	t.Run("NewUploader", func(t *testing.T) {
-		u := NewUploader(sess)
-		if _, ok := u.API.(*wrapper).api.(*s3.S3); !ok {
-			t.Errorf("Base API is expected to be *s3.S3, actually %T", u.API.(*wrapper).api)
-		}
-	})
-	t.Run("NewDownloader", func(t *testing.T) {
-		d := NewDownloader(sess)
-		if _, ok := d.API.(*wrapper).api.(*s3.S3); !ok {
-			t.Errorf("Base API is expected to be *s3.S3, actually %T", d.API.(*wrapper).api)
-		}
-	})
-}
 
 func TestWrapper(t *testing.T) {
 	t.Run("Success", func(t *testing.T) {
