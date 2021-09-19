@@ -101,6 +101,14 @@ func TestDownloader(t *testing.T) {
 					t.Fatalf("GetObject must be called %d times, but called %d times", tt.calls, n)
 				}
 
+				status, err := dc.Status()
+				if err != nil {
+					t.Fatal(err)
+				}
+				if status.NumRetries != tt.num {
+					t.Errorf("Expected NumRetries: %d, got: %d", tt.num, status.NumRetries)
+				}
+
 				if *out.ETag != "TAG0" {
 					t.Errorf("Expected ETag: TAG0, got: %s", *out.ETag)
 				}
@@ -212,6 +220,9 @@ func TestDownloader(t *testing.T) {
 		status, err := uc.Status()
 		if err != nil {
 			t.Fatal(err)
+		}
+		if !status.Paused {
+			t.Error("Paused flag must be set")
 		}
 		if *status.ETag != "TAG0" {
 			t.Errorf("Expected ETag: TAG0, got: %s", *status.ETag)
