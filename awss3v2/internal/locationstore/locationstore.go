@@ -21,11 +21,13 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
 
+// LocationStore is the s3.Client wrapper to store object location.
 type LocationStore struct {
 	s3.HTTPClient
 	Location string
 }
 
+// Do implements s3.HTTPClient.
 func (s *LocationStore) Do(req *http.Request) (*http.Response, error) {
 	res, err := s.HTTPClient.Do(req)
 	if err != nil {
