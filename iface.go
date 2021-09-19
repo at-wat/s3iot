@@ -37,12 +37,12 @@ type UploadSlicer interface {
 // DownloadSlicerFactory creates DownloadSlicer for given io.WriterAt.
 // DownloadSlicer will be created for each Download() call.
 type DownloadSlicerFactory interface {
-	New(io.WriterAt) (DownloadSlicer, error)
+	New(io.WriterAt) DownloadSlicer
 }
 
 // DownloadSlicer splits input data stream into multiple io.WriterAt.
 type DownloadSlicer interface {
-	NextWriter() (io.WriterAt, contentrange.Range, error)
+	NextWriter() (io.WriterAt, contentrange.Range)
 }
 
 // RetryerFactory creates Retryer.
