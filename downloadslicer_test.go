@@ -19,8 +19,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/at-wat/s3iot/internal/iotest"
 	"github.com/at-wat/s3iot/contentrange"
+	"github.com/at-wat/s3iot/internal/iotest"
 )
 
 func TestDefaultDownloadSlicer(t *testing.T) {
@@ -111,15 +111,9 @@ func TestDefaultDownloadSlicer(t *testing.T) {
 				PartSize: tt.partSize,
 			}
 			buf := iotest.BufferAt(make([]byte, tt.bufSize))
-			s, err := f.New(buf)
-			if err != nil {
-				t.Fatal(err)
-			}
+			s := f.New(buf)
 			for i, data := range tt.write {
-				w, r, err := s.NextWriter()
-				if err != nil {
-					t.Fatal(err)
-				}
+				w, r := s.NextWriter()
 
 				if !reflect.DeepEqual(tt.ranges[i], r) {
 					t.Errorf("Expected range: %v, got: %v", tt.ranges[i], r)

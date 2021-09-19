@@ -41,13 +41,9 @@ func (u Downloader) Download(ctx context.Context, w io.WriterAt, input *Download
 	if u.ErrorClassifier == nil {
 		u.ErrorClassifier = DefaultErrorClassifier
 	}
-	slicer, err := u.DownloadSlicerFactory.New(w)
-	if err != nil {
-		return nil, err
-	}
 	dc := &downloadContext{
 		api:           u.API,
-		slicer:        slicer,
+		slicer:        u.DownloadSlicerFactory.New(w),
 		errClassifier: u.ErrorClassifier,
 		input:         input,
 		done:          make(chan struct{}),
@@ -135,11 +131,7 @@ func (dc *downloadContext) pauseCheck(ctx context.Context) {
 func (dc *downloadContext) multi(ctx context.Context) {
 	for i := int64(1); ; i++ {
 		i := i
-		w, rn, err := dc.slicer.NextWriter()
-		if err != nil {
-			dc.fail(err)
-			return
-		}
+		w, rn := dc.slicer.NextWriter()
 		var n int64
 		var fatal bool
 		if err := withRetry(ctx, i, dc.retryer, dc.errClassifier, func() error {

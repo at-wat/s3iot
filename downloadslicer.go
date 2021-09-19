@@ -31,14 +31,14 @@ type DefaultDownloadSlicerFactory struct {
 }
 
 // New creates DownloadSlicer for the given io.WriterAt.
-func (f DefaultDownloadSlicerFactory) New(w io.WriterAt) (DownloadSlicer, error) {
+func (f DefaultDownloadSlicerFactory) New(w io.WriterAt) DownloadSlicer {
 	if f.PartSize == 0 {
 		f.PartSize = DefaultDownloadPartSize
 	}
 	return &defaultDownloadSlicer{
 		factory: f,
 		w:       w,
-	}, nil
+	}
 }
 
 type defaultDownloadSlicer struct {
@@ -47,12 +47,12 @@ type defaultDownloadSlicer struct {
 	offset  int64
 }
 
-func (s *defaultDownloadSlicer) NextWriter() (io.WriterAt, contentrange.Range, error) {
+func (s *defaultDownloadSlicer) NextWriter() (io.WriterAt, contentrange.Range) {
 	r := contentrange.Range{
 		Unit:  contentrange.RangeUnitBytes,
 		Start: s.offset,
 		End:   s.offset + s.factory.PartSize - 1,
 	}
 	s.offset += s.factory.PartSize
-	return &atWriter{w: s.w, offset: r.Start}, r, nil
+	return &atWriter{w: s.w, offset: r.Start}, r
 }
