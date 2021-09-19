@@ -352,23 +352,30 @@ func TestUploader(t *testing.T) {
 		errSeekFailure := errors.New("seek error")
 
 		testCases := map[string]struct {
-			partSize int64
+			partSize             int64
+			innerSeekerFailAtMax int
 		}{
 			"Single": {
-				partSize: 128,
+				partSize:             150,
+				innerSeekerFailAtMax: 1,
+			},
+			"SingleBoundary": {
+				partSize:             128,
+				innerSeekerFailAtMax: 1,
 			},
 			"Multi": {
-				partSize: 50,
+				partSize:             50,
+				innerSeekerFailAtMax: 3,
 			},
 		}
 		for name, tt := range testCases {
 			tt := tt
 			t.Run(name, func(t *testing.T) {
-				errsIn := []error{errSeekFailure}
-				for n := 1; n <= 2; n++ {
-					errs := errsIn
+				t.Run("OuterSeeker", func(t *testing.T) {
+					errsIn := []error{errSeekFailure}
+					for n := 1; n <= 2; n++ {
+						errs := errsIn
 
-					t.Run("OuterSeeker", func(t *testing.T) {
 						u := &s3iot.Uploader{}
 						s3iot.WithRetryer(&s3iot.NoRetryerFactory{}).ApplyToUploader(u)
 						s3iot.WithAPI(newUploadMockAPI(&bytes.Buffer{}, nil, nil)).ApplyToUploader(u)
@@ -390,8 +397,14 @@ func TestUploader(t *testing.T) {
 								t.Fatalf("Expected error: '%v', got: '%v'", errSeekFailure, err)
 							}
 						})
-					})
-					t.Run("InnerSeeker", func(t *testing.T) {
+						errsIn = append([]error{nil}, errsIn...)
+					}
+				})
+				t.Run("InnerSeeker", func(t *testing.T) {
+					errsIn := [][]error{{errSeekFailure}}
+					for n := 1; n <= tt.innerSeekerFailAtMax; n++ {
+						errs := errsIn
+
 						u := &s3iot.Uploader{}
 						s3iot.WithRetryer(&s3iot.NoRetryerFactory{}).ApplyToUploader(u)
 						s3iot.WithAPI(newUploadMockAPI(&bytes.Buffer{}, nil, nil)).ApplyToUploader(u)
@@ -425,9 +438,9 @@ func TestUploader(t *testing.T) {
 								t.Fatalf("Expected error: '%v', got: '%v'", errSeekFailure, err)
 							}
 						})
-					})
-					errsIn = append([]error{nil}, errsIn...)
-				}
+						errsIn = append([][]error{{nil}}, errsIn...)
+					}
+				})
 			})
 		}
 	})
@@ -674,7 +687,7 @@ func newUploadMockAPI(buf *bytes.Buffer, num map[string]int, ch map[string]chan 
 
 type seekErrorUploadSlicerFactory struct {
 	s3iot.DefaultUploadSlicerFactory
-	errs []error
+	errs [][]error
 }
 
 func (f seekErrorUploadSlicerFactory) New(r io.Reader) (s3iot.UploadSlicer, error) {
@@ -690,13 +703,17 @@ func (f seekErrorUploadSlicerFactory) New(r io.Reader) (s3iot.UploadSlicer, erro
 
 type seekErrorUploadSlicer struct {
 	s3iot.UploadSlicer
-	errs []error
+	errs [][]error
+	cnt  int
 }
 
 func (s *seekErrorUploadSlicer) NextReader() (io.ReadSeeker, func(), error) {
 	r, cleanup, err := s.UploadSlicer.NextReader()
-	if err != nil {
+	if err != nil && err != io.EOF {
 		return nil, nil, err
 	}
-	return &iotest.SeekErrorer{ReadSeeker: r, Errs: s.errs}, cleanup, err
+	defer func() {
+		s.cnt++
+	}()
+	return &iotest.SeekErrorer{ReadSeeker: r, Errs: s.errs[s.cnt]}, cleanup, err
 }

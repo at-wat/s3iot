@@ -136,6 +136,7 @@ func (s *defaultUploadSlicerMulti) NextReader() (io.ReadSeeker, func(), error) {
 	switch {
 	case err == io.ErrUnexpectedEOF:
 		err = io.EOF
+	case err == io.EOF:
 	case err != nil:
 		return nil, nil, err
 	}
