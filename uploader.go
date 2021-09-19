@@ -210,6 +210,9 @@ func (uc *uploadContext) multi(ctx context.Context, r io.ReadSeeker, cleanup fun
 			uc.fail(err)
 			return
 		}
+		if size == 0 {
+			break
+		}
 		if uc.readInterceptor != nil {
 			r = uc.readInterceptor.Reader(r)
 		}
