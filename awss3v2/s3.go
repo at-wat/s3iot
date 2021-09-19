@@ -17,9 +17,9 @@ package awss3v2
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/at-wat/s3iot"
+	"github.com/at-wat/s3iot/awss3v2/internal/locationstore"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
@@ -61,30 +61,12 @@ type wrapper struct {
 	api S3API
 }
 
-type locationStore struct {
-	s3.HTTPClient
-	location string
-}
-
-func (s *locationStore) Do(req *http.Request) (*http.Response, error) {
-	res, err := s.HTTPClient.Do(req)
-	if err != nil {
-		return res, err
-	}
-	if res.Request != nil && res.Request.URL != nil {
-		u := *res.Request.URL
-		u.RawQuery = ""
-		s.location = u.String()
-	}
-	return res, err
-}
-
 func (w *wrapper) PutObject(ctx context.Context, input *s3iot.PutObjectInput) (*s3iot.PutObjectOutput, error) {
 	var acl s3types.ObjectCannedACL
 	if input.ACL != nil {
 		acl = s3types.ObjectCannedACL(*input.ACL)
 	}
-	ls := &locationStore{}
+	ls := &locationstore.LocationStore{}
 	out, err := w.api.PutObject(
 		ctx,
 		&s3.PutObjectInput{
@@ -104,7 +86,7 @@ func (w *wrapper) PutObject(ctx context.Context, input *s3iot.PutObjectInput) (*
 	return &s3iot.PutObjectOutput{
 		VersionID: out.VersionId,
 		ETag:      out.ETag,
-		Location:  &ls.location,
+		Location:  &ls.Location,
 	}, nil
 }
 
