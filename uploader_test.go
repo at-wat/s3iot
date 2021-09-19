@@ -352,22 +352,30 @@ func TestUploader(t *testing.T) {
 		errSeekFailure := errors.New("seek error")
 
 		t.Run("Single", func(t *testing.T) {
-			u := &s3iot.Uploader{}
-			s3iot.WithRetryer(&s3iot.NoRetryerFactory{}).ApplyToUploader(u)
-			s3iot.WithAPI(newUploadMockAPI(&bytes.Buffer{}, nil, nil)).ApplyToUploader(u)
-			s3iot.WithErrorClassifier(&s3iot.NaiveErrorClassifier{}).ApplyToUploader(u)
+			errsIn := []error{errSeekFailure}
+			for n := 1; n <= 2; n++ {
+				errs := errsIn
 
-			_, err := u.Upload(context.TODO(), &s3iot.UploadInput{
-				Bucket: &bucket,
-				Key:    &key,
-				Body: &iotest.SeekErrorer{
-					ReadSeeker: bytes.NewReader(data),
-					Errs:       []error{errSeekFailure},
-				},
-			})
-			if !errors.Is(err, errSeekFailure) {
-				t.Fatalf("Expected error: '%v', got: '%v'", errSeekFailure, err)
+				t.Run("OuterSeeker", func(t *testing.T) {
+					u := &s3iot.Uploader{}
+					s3iot.WithRetryer(&s3iot.NoRetryerFactory{}).ApplyToUploader(u)
+					s3iot.WithAPI(newUploadMockAPI(&bytes.Buffer{}, nil, nil)).ApplyToUploader(u)
+					s3iot.WithErrorClassifier(&s3iot.NaiveErrorClassifier{}).ApplyToUploader(u)
+
+					_, err := u.Upload(context.TODO(), &s3iot.UploadInput{
+						Bucket: &bucket,
+						Key:    &key,
+						Body: &iotest.SeekErrorer{
+							ReadSeeker: bytes.NewReader(data),
+							Errs:       errs,
+						},
+					})
+					if !errors.Is(err, errSeekFailure) {
+						t.Fatalf("Expected error: '%v', got: '%v'", errSeekFailure, err)
+					}
+				})
 			}
+			errsIn = append([]error{nil}, errsIn...)
 		})
 
 		t.Run("Multi", func(t *testing.T) {
