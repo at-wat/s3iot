@@ -1,4 +1,4 @@
-package mock_s3iot
+package s3iot
 
 import (
 	"github.com/at-wat/s3iot"
