@@ -125,28 +125,75 @@ func TestUploader(t *testing.T) {
 	})
 	t.Run("MultiPart", func(t *testing.T) {
 		testCases := map[string]struct {
-			num   map[string]int
-			err   error
-			calls int
+			partSize      int64
+			num           map[string]int
+			err           error
+			calls         int
+			parts         int
+			readerWrapper func(io.Reader) io.Reader
 		}{
 			"NoAPIError": {
-				calls: 1,
+				partSize: 50,
+				calls:    1,
+				parts:    3,
+			},
+			"NoAPIError_SizeBoundary": {
+				partSize: 64,
+				calls:    1,
+				parts:    2,
+			},
+			"NoAPIError_ReadOnly": {
+				partSize: 50,
+				calls:    1,
+				parts:    3,
+				readerWrapper: func(r io.Reader) io.Reader {
+					return &iotest.ReadOnly{R: r}
+				},
+			},
+			"NoAPIError_SizeBoundary_ReadOnly": {
+				partSize: 64,
+				calls:    1,
+				parts:    2,
+				readerWrapper: func(r io.Reader) io.Reader {
+					return &iotest.ReadOnly{R: r}
+				},
+			},
+			"NoAPIError_ReadSeekOnly": {
+				partSize: 50,
+				calls:    1,
+				parts:    3,
+				readerWrapper: func(r io.Reader) io.Reader {
+					return &iotest.ReadSeekOnly{R: r.(io.ReadSeeker)}
+				},
+			},
+			"NoAPIError_SizeBoundary_ReadSeekOnly": {
+				partSize: 64,
+				calls:    1,
+				parts:    2,
+				readerWrapper: func(r io.Reader) io.Reader {
+					return &iotest.ReadSeekOnly{R: r.(io.ReadSeeker)}
+				},
 			},
 			"OneAPIError": {
-				num:   map[string]int{"complete": 1, "create": 1, "upload": 1},
-				calls: 2,
+				partSize: 50,
+				num:      map[string]int{"complete": 1, "create": 1, "upload": 1},
+				calls:    2,
+				parts:    3,
 			},
 			"TwoCompleteAPIError": {
-				num: map[string]int{"complete": 2},
-				err: errTemp,
+				partSize: 50,
+				num:      map[string]int{"complete": 2},
+				err:      errTemp,
 			},
 			"TwoCreateAPIError": {
-				num: map[string]int{"create": 2},
-				err: errTemp,
+				partSize: 50,
+				num:      map[string]int{"create": 2},
+				err:      errTemp,
 			},
 			"TwoUploadAPIError": {
-				num: map[string]int{"upload": 2},
-				err: errTemp,
+				partSize: 50,
+				num:      map[string]int{"upload": 2},
+				err:      errTemp,
 			},
 		}
 		for name, tt := range testCases {
@@ -156,17 +203,23 @@ func TestUploader(t *testing.T) {
 				api := newUploadMockAPI(buf, tt.num, nil)
 				u := &s3iot.Uploader{}
 				s3iot.WithAPI(api).ApplyToUploader(u)
-				s3iot.WithUploadSlicer(&s3iot.DefaultUploadSlicerFactory{PartSize: 50}).ApplyToUploader(u)
+				s3iot.WithUploadSlicer(&s3iot.DefaultUploadSlicerFactory{
+					PartSize: tt.partSize,
+				}).ApplyToUploader(u)
 				s3iot.WithErrorClassifier(&s3iot.NaiveErrorClassifier{}).ApplyToUploader(u)
 				s3iot.WithRetryer(&s3iot.ExponentialBackoffRetryerFactory{
 					WaitBase: time.Millisecond,
 					RetryMax: 1,
 				}).ApplyToUploader(u)
 
+				var r io.Reader = bytes.NewReader(data)
+				if tt.readerWrapper != nil {
+					r = tt.readerWrapper(r)
+				}
 				uc, err := u.Upload(context.TODO(), &s3iot.UploadInput{
 					Bucket: &bucket,
 					Key:    &key,
-					Body:   bytes.NewReader(data),
+					Body:   r,
 				})
 				if err != nil {
 					t.Fatal(err)
@@ -194,8 +247,8 @@ func TestUploader(t *testing.T) {
 				if n := len(api.CreateMultipartUploadCalls()); n != tt.calls {
 					t.Fatalf("CreateMultipartUpload must be called %d times, but called %d times", tt.calls, n)
 				}
-				if n := len(api.UploadPartCalls()); n != 3+tt.num["upload"] {
-					t.Fatalf("UploadPart must be called %d times, but called %d times", 3+tt.num["upload"], n)
+				if n := len(api.UploadPartCalls()); n != tt.parts+tt.num["upload"] {
+					t.Fatalf("UploadPart must be called %d times, but called %d times", tt.parts+tt.num["upload"], n)
 				}
 				if n := len(api.CompleteMultipartUploadCalls()); n != tt.calls {
 					t.Fatalf("CompleteMultipartUpload must be called %d times, but called %d times", tt.calls, n)
@@ -204,8 +257,9 @@ func TestUploader(t *testing.T) {
 					t.Fatal("PutObject must not be called")
 				}
 
-				if *out.ETag != "TAG4" {
-					t.Errorf("Expected ETag: TAG0, got: %s", *out.ETag)
+				expectedETag := fmt.Sprintf("TAG%d", tt.parts+1)
+				if *out.ETag != expectedETag {
+					t.Errorf("Expected ETag: %s, got: %s", expectedETag, *out.ETag)
 				}
 				if *out.Location != "s3://url" {
 					t.Errorf("Expected Location: s3://url, got: %s", *out.Location)
@@ -215,10 +269,13 @@ func TestUploader(t *testing.T) {
 				}
 
 				comp := api.CompleteMultipartUploadCalls()
-				if n := len(comp[0].Input.CompletedParts); n != 3 {
-					t.Fatalf("Expected 3 parts, actually %d parts", n)
+				if n := len(comp[0].Input.CompletedParts); n != tt.parts {
+					t.Fatalf("Expected %d parts, actually %d parts", tt.parts, n)
 				}
 				for i, expected := range []string{"TAG1", "TAG2", "TAG3"} {
+					if i >= tt.parts {
+						break
+					}
 					tag := comp[0].Input.CompletedParts[i].ETag
 					if expected != *tag {
 						t.Errorf("Part %d must have ETag: %s, actual: %s", i, expected, *tag)

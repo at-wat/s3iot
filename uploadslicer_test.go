@@ -18,6 +18,8 @@ import (
 	"bytes"
 	"io"
 	"testing"
+
+	"github.com/at-wat/s3iot/internal/iotest"
 )
 
 func TestDefaultUploadSlicer(t *testing.T) {
@@ -67,14 +69,14 @@ func TestDefaultUploadSlicer(t *testing.T) {
 				n int64
 			}{
 				"Reader": {
-					r: &readOnly{
-						r: bytes.NewReader(tt.input),
+					r: &iotest.ReadOnly{
+						R: bytes.NewReader(tt.input),
 					},
 					n: -1,
 				},
 				"ReadSeeker": {
-					r: &readSeekOnly{
-						r: bytes.NewReader(tt.input),
+					r: &iotest.ReadSeekOnly{
+						R: bytes.NewReader(tt.input),
 					},
 					n: int64(len(tt.input)),
 				},
@@ -110,24 +112,4 @@ func TestDefaultUploadSlicer(t *testing.T) {
 			}
 		})
 	}
-}
-
-type readOnly struct {
-	r io.Reader
-}
-
-func (r *readOnly) Read(b []byte) (int, error) {
-	return r.r.Read(b)
-}
-
-type readSeekOnly struct {
-	r io.ReadSeeker
-}
-
-func (r *readSeekOnly) Read(b []byte) (int, error) {
-	return r.r.Read(b)
-}
-
-func (r *readSeekOnly) Seek(offset int64, whence int) (int64, error) {
-	return r.r.Seek(offset, whence)
 }
