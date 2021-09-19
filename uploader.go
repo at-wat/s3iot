@@ -93,7 +93,7 @@ func (uc *uploadContext) Done() <-chan struct{} {
 	return uc.done
 }
 
-func (uc *uploadContext) bucketKey() (bucket, key string) {
+func (uc *uploadContext) BucketKey() (bucket, key string) {
 	return *uc.input.Bucket, *uc.input.Key
 }
 
