@@ -596,7 +596,6 @@ func TestUploader(t *testing.T) {
 				err1:     errSliceFailure,
 			},
 		}
-
 		for name, tt := range testCases {
 			tt := tt
 			t.Run(name, func(t *testing.T) {
@@ -637,7 +636,6 @@ func TestUploader(t *testing.T) {
 			})
 		}
 	})
-
 	t.Run("DefaultSlicer", func(t *testing.T) {
 		buf := &bytes.Buffer{}
 		u := &s3iot.Uploader{}
