@@ -58,10 +58,11 @@ func (u Uploader) Upload(ctx context.Context, input *UploadInput) (UploadContext
 	}
 	uc.setStatePtr(&uc.status.Paused, &uc.status.NumRetries)
 	r, cleanup, err := uc.slicer.NextReader()
-	if err == io.EOF {
+	switch {
+	case err == io.EOF:
 		go uc.single(ctx, r, cleanup)
 		return uc, nil
-	} else if err != nil {
+	case err != nil:
 		return nil, err
 	}
 	go uc.multi(ctx, r, cleanup)

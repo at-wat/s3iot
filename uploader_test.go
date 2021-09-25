@@ -571,6 +571,71 @@ func TestUploader(t *testing.T) {
 			})
 		}
 	})
+	t.Run("SlicerError", func(t *testing.T) {
+		errSliceFailure := errors.New("slice error")
+
+		testCases := map[string]struct {
+			partSize int64
+			errAt    int
+			err0     error
+			err1     error
+		}{
+			"Single": {
+				partSize: 150,
+				errAt:    0,
+				err0:     errSliceFailure,
+			},
+			"Multi": {
+				partSize: 50,
+				errAt:    0,
+				err0:     errSliceFailure,
+			},
+			"Multi2": {
+				partSize: 64,
+				errAt:    1,
+				err1:     errSliceFailure,
+			},
+		}
+		for name, tt := range testCases {
+			tt := tt
+			t.Run(name, func(t *testing.T) {
+				u := &s3iot.Uploader{}
+				s3iot.WithRetryer(&s3iot.NoRetryerFactory{}).ApplyToUploader(u)
+				s3iot.WithAPI(newUploadMockAPI(&bytes.Buffer{}, nil, nil)).ApplyToUploader(u)
+				s3iot.WithUploadSlicer(
+					&nextErrorUploadSlicerFactory{
+						DefaultUploadSlicerFactory: s3iot.DefaultUploadSlicerFactory{
+							PartSize: tt.partSize,
+						},
+						err:   errSliceFailure,
+						errAt: tt.errAt,
+					},
+				).ApplyToUploader(u)
+
+				uc, err := u.Upload(context.TODO(), &s3iot.UploadInput{
+					Bucket: &bucket,
+					Key:    &key,
+					Body:   bytes.NewReader(data),
+				})
+				if !errors.Is(err, tt.err0) {
+					t.Fatalf("Expected error: '%v', got: '%v'", tt.err0, err)
+				}
+				if err != nil {
+					return
+				}
+
+				select {
+				case <-time.After(time.Second):
+					t.Fatal("Timeout")
+				case <-uc.Done():
+				}
+
+				if _, err = uc.Result(); !errors.Is(err, tt.err1) {
+					t.Fatalf("Expected error: '%v', got: '%v'", tt.err1, err)
+				}
+			})
+		}
+	})
 	t.Run("DefaultSlicer", func(t *testing.T) {
 		buf := &bytes.Buffer{}
 		u := &s3iot.Uploader{}
@@ -843,4 +908,37 @@ func (s *seekErrorUploadSlicer) NextReader() (io.ReadSeeker, func(), error) {
 		s.cnt++
 	}()
 	return &iotest.SeekErrorer{ReadSeeker: r, Errs: s.errs[s.cnt]}, cleanup, err
+}
+
+type nextErrorUploadSlicerFactory struct {
+	s3iot.DefaultUploadSlicerFactory
+	err   error
+	errAt int
+}
+
+func (f nextErrorUploadSlicerFactory) New(r io.Reader) (s3iot.UploadSlicer, error) {
+	s, err := f.DefaultUploadSlicerFactory.New(r)
+	if err != nil {
+		return nil, err
+	}
+	return &nextErrorUploadSlicer{
+		UploadSlicer: s,
+		err:          f.err,
+		errAt:        f.errAt,
+	}, nil
+}
+
+type nextErrorUploadSlicer struct {
+	s3iot.UploadSlicer
+	err   error
+	errAt int
+	cnt   int
+}
+
+func (s *nextErrorUploadSlicer) NextReader() (io.ReadSeeker, func(), error) {
+	if s.cnt >= s.errAt {
+		return nil, nil, s.err
+	}
+	s.cnt++
+	return s.UploadSlicer.NextReader()
 }
