@@ -157,39 +157,58 @@ func TestPauseOnFailRetryer(t *testing.T) {
 }
 
 func TestRetryerHookFactory(t *testing.T) {
-	var bucketStored, keyStored string
-	var errStored error
-	f := &RetryerHookFactory{
-		Base: &dummyRetryerFactory{},
-		OnError: func(bucket, key string, err error) {
-			if errStored != nil {
-				t.Error("OnError is expected to be called once")
-			}
-			bucketStored, keyStored, errStored = bucket, key, err
+	testCases := map[string]struct {
+		uploadContext Pauser
+		bucket        string
+		key           string
+	}{
+		"BucketKeyer": {
+			uploadContext: &dummyUploadContext{},
+			bucket:        "dummyBucket",
+			key:           "dummyKey",
+		},
+		"NoBucketKeyer": {
+			uploadContext: &dummyPauser{},
 		},
 	}
-	r := f.New(&dummyUploadContext{})
+	for name, tt := range testCases {
+		tt := tt
+		t.Run(name, func(t *testing.T) {
+			var bucketStored, keyStored string
+			var errStored error
+			f := &RetryerHookFactory{
+				Base: &dummyRetryerFactory{},
+				OnError: func(bucket, key string, err error) {
+					if errStored != nil {
+						t.Error("OnError is expected to be called once")
+					}
+					bucketStored, keyStored, errStored = bucket, key, err
+				},
+			}
+			r := f.New(tt.uploadContext)
 
-	if cont := r.OnFail(context.TODO(), 0, errDummy); cont {
-		t.Error("Expected no-continue")
-	}
-	r.OnSuccess(0)
+			if cont := r.OnFail(context.TODO(), 0, errDummy); cont {
+				t.Error("Expected no-continue")
+			}
+			r.OnSuccess(0)
 
-	if n := f.Base.(*dummyRetryerFactory).numFail; n != 1 {
-		t.Errorf("Base retryer OnFail must be called once, but called %d times", n)
-	}
-	if n := f.Base.(*dummyRetryerFactory).numSuccess; n != 1 {
-		t.Errorf("Base retryer OnSuccess must be called once, but called %d times", n)
-	}
+			if n := f.Base.(*dummyRetryerFactory).numFail; n != 1 {
+				t.Errorf("Base retryer OnFail must be called once, but called %d times", n)
+			}
+			if n := f.Base.(*dummyRetryerFactory).numSuccess; n != 1 {
+				t.Errorf("Base retryer OnSuccess must be called once, but called %d times", n)
+			}
 
-	if bucketStored != "dummyBucket" {
-		t.Errorf("Expected dummyBucket, got %s", bucketStored)
-	}
-	if keyStored != "dummyKey" {
-		t.Errorf("Expected dummyKey, got %s", keyStored)
-	}
-	if errStored != errDummy {
-		t.Errorf("Expected '%v', got '%v'", errDummy, errStored)
+			if bucketStored != tt.bucket {
+				t.Errorf("Expected %s, got %s", tt.bucket, bucketStored)
+			}
+			if keyStored != tt.key {
+				t.Errorf("Expected %s, got %s", tt.key, keyStored)
+			}
+			if errStored != errDummy {
+				t.Errorf("Expected '%v', got '%v'", errDummy, errStored)
+			}
+		})
 	}
 }
 
@@ -225,5 +244,14 @@ func (dummyUploadContext) BucketKey() (bucket, key string) {
 }
 
 func (uc *dummyUploadContext) Pause() {
+	uc.chPause <- struct{}{}
+}
+
+type dummyPauser struct {
+	UploadContext
+	chPause chan struct{}
+}
+
+func (uc *dummyPauser) Pause() {
 	uc.chPause <- struct{}{}
 }
