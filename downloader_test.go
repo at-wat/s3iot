@@ -184,6 +184,31 @@ func TestDownloader(t *testing.T) {
 			})
 		}
 	})
+	t.Run("WriteError", func(t *testing.T) {
+		d := &s3iot.Downloader{}
+		s3iot.WithAPI(
+			newDownloadMockAPI(t, data, 0, nil, nil),
+		).ApplyToDownloader(d)
+
+		errWrite := errors.New("write error")
+		buf := iotest.WriteAtErrorer{Err: errWrite}
+
+		dc, err := d.Download(context.TODO(), buf, &s3iot.DownloadInput{
+			Bucket: &bucket,
+			Key:    &key,
+		})
+		if err != nil {
+			t.Fatal(err)
+		}
+		select {
+		case <-time.After(time.Second):
+			t.Fatal("Timeout")
+		case <-dc.Done():
+		}
+		if _, err := dc.Result(); !errors.Is(err, errWrite) {
+			t.Fatalf("Expected error: '%v', got: '%v'", errWrite, err)
+		}
+	})
 
 	t.Run("PauseResume", func(t *testing.T) {
 		buf := iotest.BufferAt(make([]byte, 128))
