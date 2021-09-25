@@ -16,6 +16,7 @@ package s3iot
 
 import (
 	"bytes"
+	"errors"
 	"io"
 	"testing"
 
@@ -64,15 +65,24 @@ func TestDefaultUploadSlicer(t *testing.T) {
 			f := &DefaultUploadSlicerFactory{
 				PartSize: tt.partSize,
 			}
+			errRead := errors.New("read error")
 			testCases := map[string]struct {
-				r io.Reader
-				n int64
+				r   io.Reader
+				n   int64
+				err error
 			}{
 				"Reader": {
 					r: &iotest.ReadOnly{
 						R: bytes.NewReader(tt.input),
 					},
 					n: -1,
+				},
+				"ReaderError": {
+					r: &iotest.ReadOnly{
+						R: &iotest.ReadErrorer{Err: errRead},
+					},
+					n:   -1,
+					err: errRead,
 				},
 				"ReadSeeker": {
 					r: &iotest.ReadSeekOnly{
@@ -98,6 +108,17 @@ func TestDefaultUploadSlicer(t *testing.T) {
 					}
 					for _, e := range tt.expected {
 						r, cleanup, err := s.NextReader()
+						if err != io.EOF {
+							if !errors.Is(err, tt2.err) {
+								if errRead != nil {
+									t.Fatalf("Expected error: '%v', got: '%v'", tt2.err, err)
+								}
+								t.Fatal(err)
+							}
+							if err != nil {
+								continue
+							}
+						}
 
 						b, err := io.ReadAll(r)
 						if err != nil {
