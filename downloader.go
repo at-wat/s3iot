@@ -138,8 +138,9 @@ func (dc *downloadContext) multi(ctx context.Context) {
 
 			n, err = io.Copy(&atWriter{w: w}, out.Body)
 			if err != nil {
-				dc.countRetry()
-				return err
+				dc.fail(err)
+				fatal = true
+				return nil
 			}
 			return nil
 		}); err != nil {
