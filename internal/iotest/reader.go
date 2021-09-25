@@ -42,3 +42,13 @@ func (r *ReadSeekOnly) Read(b []byte) (int, error) {
 func (r *ReadSeekOnly) Seek(offset int64, whence int) (int64, error) {
 	return r.R.Seek(offset, whence)
 }
+
+// ReadErrorer injects read error.
+type ReadErrorer struct {
+	Err error
+}
+
+// Read implements io.Reader.
+func (r ReadErrorer) Read([]byte) (int, error) {
+	return 0, r.Err
+}
