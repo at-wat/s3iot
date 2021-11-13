@@ -29,7 +29,9 @@ import (
 
 func TestErrorClassifier(t *testing.T) {
 	sess := session.Must(session.NewSession(
-		aws.NewConfig().WithCredentials(credentials.AnonymousCredentials),
+		aws.NewConfig().
+			WithCredentials(credentials.AnonymousCredentials).
+			WithRegion("dummy"),
 	))
 	_, errConnRefused := s3.New(
 		sess, aws.NewConfig().WithEndpoint("http://localhost:0").WithS3ForcePathStyle(true),
