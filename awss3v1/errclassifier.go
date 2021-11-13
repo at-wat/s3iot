@@ -15,6 +15,7 @@
 package awss3v1
 
 import (
+	"strings"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws/request"
@@ -30,7 +31,14 @@ var DefaultThrottleWait = 5 * time.Second
 
 // IsRetryable implements ErrorClassifier.
 func (ErrorClassifier) IsRetryable(err error) bool {
-	return request.IsErrorRetryable(err) || request.IsErrorThrottle(err)
+	if request.IsErrorRetryable(err) || request.IsErrorThrottle(err) {
+		return true
+	}
+	// Workaround https://github.com/aws/aws-sdk-go/issues/3971
+	if strings.Contains(err.Error(), "read: connection reset") {
+		return true
+	}
+	return false
 }
 
 // IsThrottle implements ErrorClassifier.

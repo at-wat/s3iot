@@ -16,13 +16,44 @@ package awss3v1
 
 import (
 	"errors"
+	"net"
 	"testing"
 	"time"
 
+	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
+	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/s3"
 )
 
 func TestErrorClassifier(t *testing.T) {
+	sess := session.Must(session.NewSession(
+		aws.NewConfig().WithCredentials(credentials.AnonymousCredentials),
+	))
+	_, errConnRefused := s3.New(
+		sess, aws.NewConfig().WithEndpoint("http://localhost:0").WithS3ForcePathStyle(true),
+	).PutObject(&s3.PutObjectInput{
+		Bucket: aws.String("bucket"),
+		Key:    aws.String("key"),
+	})
+	ln, err := net.Listen("tcp4", ":0")
+	if err != nil {
+		t.Fatal(err)
+	}
+	go func() {
+		conn, _ := ln.Accept()
+		conn.Read(make([]byte, 1))
+		conn.Close()
+		ln.Close()
+	}()
+	_, errConnReset := s3.New(
+		sess, aws.NewConfig().WithEndpoint("http://"+ln.Addr().String()).WithS3ForcePathStyle(true),
+	).PutObject(&s3.PutObjectInput{
+		Bucket: aws.String("bucket"),
+		Key:    aws.String("key"),
+	})
+
 	testCases := map[string]struct {
 		err       error
 		retryable bool
@@ -46,6 +77,14 @@ func TestErrorClassifier(t *testing.T) {
 			throttle:  true,
 			wait:      DefaultThrottleWait,
 		},
+		"AWSConnRefused": {
+			err:       errConnRefused,
+			retryable: true,
+		},
+		"AWSConnReset": {
+			err:       errConnReset,
+			retryable: true,
+		},
 	}
 
 	ec := &ErrorClassifier{}
@@ -53,6 +92,7 @@ func TestErrorClassifier(t *testing.T) {
 	for name, tt := range testCases {
 		tt := tt
 		t.Run(name, func(t *testing.T) {
+			t.Log(name, tt.err)
 			if out := ec.IsRetryable(tt.err); out != tt.retryable {
 				t.Errorf("IsRetryable('%v') is expected to be %v, got %v", tt.err, tt.retryable, out)
 			}
