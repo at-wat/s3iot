@@ -41,7 +41,10 @@ func withRetry(ctx context.Context, id int64, retryer Retryer, errClassifier Err
 			if ctx.Err() == nil && retryer.OnFail(ctx, id, err) {
 				continue
 			}
-			return err
+			if ctx.Err() == err {
+				return err
+			}
+			return &RetryError{error: err}
 		}
 		retryer.OnSuccess(id)
 		return nil
