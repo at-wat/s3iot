@@ -88,7 +88,7 @@ func TestWithRetry(t *testing.T) {
 				return nil
 			}
 		})
-		if err != errDummy {
+		if !errors.Is(err, errDummy) {
 			t.Errorf("Expected error: %v, got: %v", errDummy, err)
 		}
 		if i != 2 {
@@ -117,7 +117,7 @@ func TestWithRetry(t *testing.T) {
 					return nil
 				}
 			})
-			if err != errRetryable {
+			if !errors.Is(err, errRetryable) {
 				t.Errorf("Expected error: %v, got: %v", errRetryable, err)
 			}
 			if i != 2 {
