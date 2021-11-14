@@ -28,6 +28,7 @@ import (
 )
 
 func TestErrorClassifier(t *testing.T) {
+	// Generate actual network errors
 	sess := session.Must(session.NewSession(
 		aws.NewConfig().
 			WithCredentials(credentials.AnonymousCredentials).

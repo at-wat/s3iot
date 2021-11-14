@@ -30,6 +30,7 @@ import (
 )
 
 func TestErrorClassifier(t *testing.T) {
+	// Generate actual network errors
 	config := func(endpoint string) aws.Config {
 		cfg, err := config.LoadDefaultConfig(context.TODO(),
 			config.WithCredentialsProvider(
