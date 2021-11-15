@@ -45,7 +45,7 @@ jobs:
             -v \
             -race -coverprofile=cover.out -covermode=atomic
       - name: Tidy
-        if: matrix.package != './'
+        if: matrix.package == './'
         run: |
           cd ${{ matrix.package }}
           go mod tidy
