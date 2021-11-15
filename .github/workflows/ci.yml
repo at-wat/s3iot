@@ -31,7 +31,7 @@ jobs:
         with:
           go-version: ${{ matrix.go }}
       - name: Tidy
-        if: startsWith(matrix.package, './awss3v')
+        if: matrix.package != './'
         run: |
           cd ${{ matrix.package }}
           go mod tidy
@@ -45,7 +45,7 @@ jobs:
             -v \
             -race -coverprofile=cover.out -covermode=atomic
       - name: Tidy
-        if: startsWith(matrix.package, './awss3v') != true
+        if: matrix.package != './'
         run: |
           cd ${{ matrix.package }}
           go mod tidy
