@@ -94,6 +94,14 @@ func WithAPI(a S3API) UpDownloaderOption {
 	})
 }
 
+// WithForcePause enables to forcefully pause.
+// If ForcePause is enabled, ongoing API call will be canceled and retried on resume.
+func WithForcePause(f bool) UpDownloaderOption {
+	return UpDownloaderOptionFn(func(u *UpDownloaderBase) {
+		u.ForcePause = f
+	})
+}
+
 // WithRetryer sets RetryerFactor.
 func WithRetryer(r RetryerFactory) UpDownloaderOption {
 	return UpDownloaderOptionFn(func(u *UpDownloaderBase) {

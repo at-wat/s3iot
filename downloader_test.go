@@ -229,12 +229,11 @@ func TestDownloader(t *testing.T) {
 				buf := iotest.BufferAt(make([]byte, 128))
 				chDownload := make(chan interface{})
 				api := newDownloadMockAPI(t, data, 0, chDownload, nil)
-				d := &s3iot.Downloader{
-					UpDownloaderBase: s3iot.UpDownloaderBase{
-						ForcePause: tt.forcePause,
-					},
-				}
+				d := &s3iot.Downloader{}
 				s3iot.WithAPI(api).ApplyToDownloader(d)
+				if tt.forcePause {
+					s3iot.WithForcePause(true).ApplyToDownloader(d)
+				}
 				s3iot.WithDownloadSlicer(
 					&s3iot.DefaultDownloadSlicerFactory{PartSize: 50},
 				).ApplyToDownloader(d)
@@ -254,6 +253,7 @@ func TestDownloader(t *testing.T) {
 				case <-chDownload:
 				}
 
+				time.Sleep(50 * time.Millisecond)
 				uc.Pause()
 				go func() {
 					<-chDownload

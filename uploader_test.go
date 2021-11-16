@@ -347,12 +347,11 @@ func TestUploader(t *testing.T) {
 				api := newUploadMockAPI(buf, nil, map[string]chan interface{}{
 					"upload": chUpload,
 				})
-				u := &s3iot.Uploader{
-					UpDownloaderBase: s3iot.UpDownloaderBase{
-						ForcePause: tt.forcePause,
-					},
-				}
+				u := &s3iot.Uploader{}
 				s3iot.WithAPI(api).ApplyToUploader(u)
+				if tt.forcePause {
+					s3iot.WithForcePause(true).ApplyToUploader(u)
+				}
 				s3iot.WithUploadSlicer(
 					&s3iot.DefaultUploadSlicerFactory{PartSize: 50},
 				).ApplyToUploader(u)
@@ -374,6 +373,7 @@ func TestUploader(t *testing.T) {
 				case <-chUpload:
 				}
 
+				time.Sleep(50 * time.Millisecond)
 				uc.Pause()
 				go func() {
 					<-chUpload
