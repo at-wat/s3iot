@@ -154,6 +154,7 @@ type upDownloadContext struct {
 	statusPaused      *bool
 	statusNumRetries  *int
 	cancelCurrentCall func()
+	forcePaused       bool
 }
 
 func newUpDownloadContext(api S3API, retryerFactory RetryerFactory, errClassifier ErrorClassifier, forcePause bool) *upDownloadContext {
@@ -185,6 +186,7 @@ func (c *upDownloadContext) Pause() {
 	*c.statusPaused = true
 	if c.cancelCurrentCall != nil && c.forcePause {
 		c.cancelCurrentCall()
+		c.forcePaused = true
 	}
 	c.mu.Unlock()
 }
@@ -209,12 +211,18 @@ func (c *upDownloadContext) pauseCheck(ctx context.Context) {
 	}
 }
 
-func (c *upDownloadContext) currentCallContext(ctx context.Context) (context.Context, func()) {
+func (c *upDownloadContext) currentCallContext(ctx context.Context) (context.Context, func() bool) {
 	ctx2, cancel := context.WithCancel(ctx)
-	c.mu.RLock()
+	c.mu.Lock()
 	c.cancelCurrentCall = cancel
-	c.mu.RUnlock()
-	return ctx2, cancel
+	c.forcePaused = false
+	c.mu.Unlock()
+	return ctx2, func() bool {
+		cancel()
+		c.mu.RLock()
+		defer c.mu.RUnlock()
+		return c.forcePaused
+	}
 }
 
 func (c *upDownloadContext) countRetry() {

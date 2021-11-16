@@ -90,18 +90,17 @@ func (dc *downloadContext) multi(ctx context.Context) {
 		if err := withRetry(ctx, i, dc.retryer, dc.errClassifier, func() error {
 			dc.pauseCheck(ctx)
 			r := rn.String()
-			ctx2, cancel := dc.currentCallContext(ctx)
+			ctx2, isForcePaused := dc.currentCallContext(ctx)
 			out, err := dc.api.GetObject(ctx2, &GetObjectInput{
 				Bucket:    dc.input.Bucket,
 				Key:       dc.input.Key,
 				Range:     &r,
 				VersionID: dc.input.VersionID,
 			})
-			cancel()
+			if isForcePaused() {
+				return ErrForcePaused
+			}
 			if err != nil {
-				if err == ctx2.Err() {
-					err = &retryableError{err}
-				}
 				dc.countRetry()
 				return err
 			}
