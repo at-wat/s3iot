@@ -99,6 +99,9 @@ func (dc *downloadContext) multi(ctx context.Context) {
 			})
 			cancel()
 			if err != nil {
+				if err == ctx2.Err() {
+					err = &retryableError{err}
+				}
 				dc.countRetry()
 				return err
 			}

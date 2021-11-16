@@ -119,6 +119,9 @@ func (uc *uploadContext) single(ctx context.Context, r io.ReadSeeker, cleanup fu
 		})
 		cancel()
 		if err != nil {
+			if err == ctx2.Err() {
+				err = &retryableError{err}
+			}
 			uc.countRetry()
 			return err
 		}
@@ -187,6 +190,9 @@ func (uc *uploadContext) multi(ctx context.Context, r io.ReadSeeker, cleanup fun
 			})
 			cancel()
 			if err != nil {
+				if err == ctx2.Err() {
+					err = &retryableError{err}
+				}
 				uc.countRetry()
 				return err
 			}
