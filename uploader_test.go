@@ -327,91 +327,184 @@ func TestUploader(t *testing.T) {
 		}
 	})
 	t.Run("PauseResume", func(t *testing.T) {
-		buf := &bytes.Buffer{}
-		chUpload := make(chan interface{})
-		api := newUploadMockAPI(buf, nil, map[string]chan interface{}{
-			"upload": chUpload,
+		t.Run("Multi", func(t *testing.T) {
+			for name, tt := range map[string]struct {
+				forcePause    bool
+				expectedCalls int
+			}{
+				"NoForcePause": {
+					forcePause:    false,
+					expectedCalls: 3,
+				},
+				"ForcePause": {
+					forcePause:    true,
+					expectedCalls: 4,
+				},
+			} {
+				tt := tt
+				t.Run(name, func(t *testing.T) {
+					buf := &bytes.Buffer{}
+					chUpload := make(chan interface{})
+					api := newUploadMockAPI(buf, nil, map[string]chan interface{}{
+						"upload": chUpload,
+					})
+					u := &s3iot.Uploader{}
+					s3iot.WithAPI(api).ApplyToUploader(u)
+					if tt.forcePause {
+						s3iot.WithForcePause(true).ApplyToUploader(u)
+					}
+					s3iot.WithUploadSlicer(
+						&s3iot.DefaultUploadSlicerFactory{PartSize: 50},
+					).ApplyToUploader(u)
+					s3iot.WithErrorClassifier(&s3iot.NaiveErrorClassifier{}).ApplyToUploader(u)
+					s3iot.WithRetryer(nil).ApplyToUploader(u)
+
+					uc, err := u.Upload(context.TODO(), &s3iot.UploadInput{
+						Bucket: &bucket,
+						Key:    &key,
+						Body:   bytes.NewReader(data),
+					})
+					if err != nil {
+						t.Fatal(err)
+					}
+
+					select {
+					case <-time.After(time.Second):
+						t.Fatal("Timeout")
+					case <-chUpload:
+					}
+
+					time.Sleep(50 * time.Millisecond)
+					uc.Pause()
+					go func() {
+						<-chUpload
+						<-chUpload
+					}()
+
+					time.Sleep(50 * time.Millisecond)
+					status, err := uc.Status()
+					if err != nil {
+						t.Fatal(err)
+					}
+					if !status.Paused {
+						t.Error("Paused flag must be set")
+					}
+					if status.UploadID != "UPLOAD0" {
+						t.Errorf("Expected upload ID: UPLOAD0, got: %s", status.UploadID)
+					}
+
+					select {
+					case <-time.After(500 * time.Millisecond):
+					case <-uc.Done():
+						t.Fatal("Upload should be paused")
+					}
+
+					uc.Resume()
+
+					select {
+					case <-time.After(time.Second):
+						t.Fatal("Timeout")
+					case <-uc.Done():
+					}
+
+					status, err = uc.Status()
+					if err != nil {
+						t.Fatal(err)
+					}
+					if status.Paused {
+						t.Error("Paused flag must not be set")
+					}
+
+					if _, err = uc.Result(); err != nil {
+						t.Fatal(err)
+					}
+
+					if n := len(api.CreateMultipartUploadCalls()); n != 1 {
+						t.Fatalf("CreateMultipartUpload must be called once, but called %d times", n)
+					}
+					if n := len(api.UploadPartCalls()); n != tt.expectedCalls {
+						t.Fatalf("UploadPart must be called %d times, but called %d times", tt.expectedCalls, n)
+					}
+					if n := len(api.CompleteMultipartUploadCalls()); n != 1 {
+						t.Fatalf("CompleteMultipartUpload must be called once, but called %d times", n)
+					}
+
+					if !bytes.Equal(data, buf.Bytes()) {
+						t.Error("Uploaded data differs")
+					}
+				})
+			}
 		})
-		u := &s3iot.Uploader{}
-		s3iot.WithAPI(api).ApplyToUploader(u)
-		s3iot.WithUploadSlicer(
-			&s3iot.DefaultUploadSlicerFactory{PartSize: 50},
-		).ApplyToUploader(u)
-		s3iot.WithErrorClassifier(&s3iot.NaiveErrorClassifier{}).ApplyToUploader(u)
-		s3iot.WithRetryer(nil).ApplyToUploader(u)
+		t.Run("Single", func(t *testing.T) {
+			buf := &bytes.Buffer{}
+			chUpload := make(chan interface{})
+			api := newUploadMockAPI(buf, nil, map[string]chan interface{}{
+				"put": chUpload,
+			})
+			u := &s3iot.Uploader{}
+			s3iot.WithAPI(api).ApplyToUploader(u)
+			s3iot.WithForcePause(true).ApplyToUploader(u)
+			s3iot.WithErrorClassifier(&s3iot.NaiveErrorClassifier{}).ApplyToUploader(u)
+			s3iot.WithRetryer(nil).ApplyToUploader(u)
 
-		uc, err := u.Upload(context.TODO(), &s3iot.UploadInput{
-			Bucket: &bucket,
-			Key:    &key,
-			Body:   bytes.NewReader(data),
+			uc, err := u.Upload(context.TODO(), &s3iot.UploadInput{
+				Bucket: &bucket,
+				Key:    &key,
+				Body:   bytes.NewReader(data),
+			})
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			time.Sleep(50 * time.Millisecond)
+			uc.Pause()
+			go func() {
+				<-chUpload
+			}()
+
+			time.Sleep(50 * time.Millisecond)
+			status, err := uc.Status()
+			if err != nil {
+				t.Fatal(err)
+			}
+			if !status.Paused {
+				t.Error("Paused flag must be set")
+			}
+
+			select {
+			case <-time.After(500 * time.Millisecond):
+			case <-uc.Done():
+				t.Fatal("Upload should be paused")
+			}
+
+			uc.Resume()
+
+			select {
+			case <-time.After(time.Second):
+				t.Fatal("Timeout")
+			case <-uc.Done():
+			}
+
+			status, err = uc.Status()
+			if err != nil {
+				t.Fatal(err)
+			}
+			if status.Paused {
+				t.Error("Paused flag must not be set")
+			}
+
+			if _, err = uc.Result(); err != nil {
+				t.Fatal(err)
+			}
+
+			if n := len(api.PutObjectCalls()); n != 2 {
+				t.Fatalf("PutObject must be called twice, but called %d times", n)
+			}
+
+			if !bytes.Equal(data, buf.Bytes()) {
+				t.Error("Uploaded data differs")
+			}
 		})
-		if err != nil {
-			t.Fatal(err)
-		}
-
-		select {
-		case <-time.After(time.Second):
-			t.Fatal("Timeout")
-		case <-chUpload:
-		}
-
-		uc.Pause()
-		go func() {
-			<-chUpload
-			<-chUpload
-		}()
-
-		time.Sleep(50 * time.Millisecond)
-		status, err := uc.Status()
-		if err != nil {
-			t.Fatal(err)
-		}
-		if !status.Paused {
-			t.Error("Paused flag must be set")
-		}
-		if status.UploadID != "UPLOAD0" {
-			t.Errorf("Expected upload ID: UPLOAD0, got: %s", status.UploadID)
-		}
-
-		select {
-		case <-time.After(500 * time.Millisecond):
-		case <-uc.Done():
-			t.Fatal("Upload should be paused")
-		}
-
-		uc.Resume()
-
-		select {
-		case <-time.After(time.Second):
-			t.Fatal("Timeout")
-		case <-uc.Done():
-		}
-
-		status, err = uc.Status()
-		if err != nil {
-			t.Fatal(err)
-		}
-		if status.Paused {
-			t.Error("Paused flag must not be set")
-		}
-
-		if _, err = uc.Result(); err != nil {
-			t.Fatal(err)
-		}
-
-		if n := len(api.CreateMultipartUploadCalls()); n != 1 {
-			t.Fatalf("CreateMultipartUpload must be called once, but called %d times", n)
-		}
-		if n := len(api.UploadPartCalls()); n != 3 {
-			t.Fatalf("UploadPart must be called 3 times, but called %d times", n)
-		}
-		if n := len(api.CompleteMultipartUploadCalls()); n != 1 {
-			t.Fatalf("CompleteMultipartUpload must be called once, but called %d times", n)
-		}
-
-		if !bytes.Equal(data, buf.Bytes()) {
-			t.Error("Uploaded data differs")
-		}
 	})
 	t.Run("CancelDuringPause", func(t *testing.T) {
 		buf := &bytes.Buffer{}
@@ -850,7 +943,11 @@ func newUploadMockAPI(buf *bytes.Buffer, num map[string]int, ch map[string]chan 
 				return nil, errTemp
 			}
 			if c := ch["put"]; c != nil {
-				c <- input
+				select {
+				case c <- input:
+				case <-ctx.Done():
+					return nil, ctx.Err()
+				}
 			}
 			io.Copy(buf, input.Body)
 			return &s3iot.PutObjectOutput{
@@ -867,7 +964,11 @@ func newUploadMockAPI(buf *bytes.Buffer, num map[string]int, ch map[string]chan 
 				return nil, errTemp
 			}
 			if c := ch["upload"]; c != nil {
-				c <- input
+				select {
+				case c <- input:
+				case <-ctx.Done():
+					return nil, ctx.Err()
+				}
 			}
 			io.Copy(buf, input.Body)
 			return &s3iot.UploadPartOutput{

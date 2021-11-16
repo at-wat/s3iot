@@ -46,6 +46,7 @@ func (u Uploader) Upload(ctx context.Context, input *UploadInput) (UploadContext
 			u.API,
 			u.RetryerFactory,
 			u.ErrorClassifier,
+			u.ForcePause,
 		),
 		slicer:          slicer,
 		readInterceptor: readInterceptor,
@@ -108,13 +109,17 @@ func (uc *uploadContext) single(ctx context.Context, r io.ReadSeeker, cleanup fu
 		if _, err := r.Seek(0, io.SeekStart); err != nil {
 			return &fatalError{err}
 		}
-		out, err := uc.api.PutObject(ctx, &PutObjectInput{
+		ctx2, isForcePaused := uc.currentCallContext(ctx)
+		out, err := uc.api.PutObject(ctx2, &PutObjectInput{
 			Bucket:      uc.input.Bucket,
 			Key:         uc.input.Key,
 			ACL:         uc.input.ACL,
 			Body:        r,
 			ContentType: uc.input.ContentType,
 		})
+		if isForcePaused() {
+			return ErrForcePaused
+		}
 		if err != nil {
 			uc.countRetry()
 			return err
@@ -174,13 +179,17 @@ func (uc *uploadContext) multi(ctx context.Context, r io.ReadSeeker, cleanup fun
 			if _, err := r.Seek(0, io.SeekStart); err != nil {
 				return &fatalError{err}
 			}
-			out, err := uc.api.UploadPart(ctx, &UploadPartInput{
+			ctx2, isForcePaused := uc.currentCallContext(ctx)
+			out, err := uc.api.UploadPart(ctx2, &UploadPartInput{
 				Body:       r,
 				Bucket:     uc.input.Bucket,
 				Key:        uc.input.Key,
 				PartNumber: &i,
 				UploadID:   &uc.status.UploadID,
 			})
+			if isForcePaused() {
+				return ErrForcePaused
+			}
 			if err != nil {
 				uc.countRetry()
 				return err

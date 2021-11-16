@@ -45,6 +45,7 @@ func (u Downloader) Download(ctx context.Context, w io.WriterAt, input *Download
 			u.API,
 			u.RetryerFactory,
 			u.ErrorClassifier,
+			u.ForcePause,
 		),
 		slicer: u.DownloadSlicerFactory.New(w),
 		input:  input,
@@ -89,12 +90,16 @@ func (dc *downloadContext) multi(ctx context.Context) {
 		if err := withRetry(ctx, i, dc.retryer, dc.errClassifier, func() error {
 			dc.pauseCheck(ctx)
 			r := rn.String()
-			out, err := dc.api.GetObject(ctx, &GetObjectInput{
+			ctx2, isForcePaused := dc.currentCallContext(ctx)
+			out, err := dc.api.GetObject(ctx2, &GetObjectInput{
 				Bucket:    dc.input.Bucket,
 				Key:       dc.input.Key,
 				Range:     &r,
 				VersionID: dc.input.VersionID,
 			})
+			if isForcePaused() {
+				return ErrForcePaused
+			}
 			if err != nil {
 				dc.countRetry()
 				return err

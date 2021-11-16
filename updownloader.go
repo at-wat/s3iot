@@ -24,6 +24,7 @@ type UpDownloaderBase struct {
 	API             S3API
 	RetryerFactory  RetryerFactory
 	ErrorClassifier ErrorClassifier
+	ForcePause      bool
 }
 
 // Uploader implements S3 uploader with configurable retry and bandwidth limit.
@@ -93,6 +94,14 @@ func WithAPI(a S3API) UpDownloaderOption {
 	})
 }
 
+// WithForcePause enables to forcefully pause.
+// If ForcePause is enabled, ongoing API call will be canceled and retried on resume.
+func WithForcePause(f bool) UpDownloaderOption {
+	return UpDownloaderOptionFn(func(u *UpDownloaderBase) {
+		u.ForcePause = f
+	})
+}
+
 // WithRetryer sets RetryerFactor.
 func WithRetryer(r RetryerFactory) UpDownloaderOption {
 	return UpDownloaderOptionFn(func(u *UpDownloaderBase) {
@@ -132,6 +141,7 @@ type upDownloadContext struct {
 	api           S3API
 	retryer       Retryer
 	errClassifier ErrorClassifier
+	forcePause    bool
 
 	err error
 
@@ -141,16 +151,19 @@ type upDownloadContext struct {
 	mu   sync.RWMutex
 	done chan struct{}
 
-	statusPaused     *bool
-	statusNumRetries *int
+	statusPaused      *bool
+	statusNumRetries  *int
+	cancelCurrentCall func()
+	forcePaused       bool
 }
 
-func newUpDownloadContext(api S3API, retryerFactory RetryerFactory, errClassifier ErrorClassifier) *upDownloadContext {
+func newUpDownloadContext(api S3API, retryerFactory RetryerFactory, errClassifier ErrorClassifier, forcePause bool) *upDownloadContext {
 	c := &upDownloadContext{
 		api:           api,
 		errClassifier: errClassifier,
 		done:          make(chan struct{}),
 		paused:        make(chan struct{}),
+		forcePause:    forcePause,
 	}
 	c.retryer = retryerFactory.New(c)
 	close(c.paused)
@@ -171,6 +184,10 @@ func (c *upDownloadContext) Pause() {
 	c.paused = make(chan struct{})
 	c.resumeOnce = sync.Once{}
 	*c.statusPaused = true
+	if c.cancelCurrentCall != nil && c.forcePause {
+		c.cancelCurrentCall()
+		c.forcePaused = true
+	}
 	c.mu.Unlock()
 }
 
@@ -191,6 +208,20 @@ func (c *upDownloadContext) pauseCheck(ctx context.Context) {
 	select {
 	case <-paused:
 	case <-ctx.Done():
+	}
+}
+
+func (c *upDownloadContext) currentCallContext(ctx context.Context) (context.Context, func() bool) {
+	ctx2, cancel := context.WithCancel(ctx)
+	c.mu.Lock()
+	c.cancelCurrentCall = cancel
+	c.forcePaused = false
+	c.mu.Unlock()
+	return ctx2, func() bool {
+		cancel()
+		c.mu.RLock()
+		defer c.mu.RUnlock()
+		return c.forcePaused
 	}
 }
 

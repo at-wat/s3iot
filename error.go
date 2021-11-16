@@ -14,6 +14,13 @@
 
 package s3iot
 
+import (
+	"errors"
+)
+
+// ErrForcePaused indicates part up/download is canceled due to force pause.
+var ErrForcePaused = &retryableError{errors.New("force paused")}
+
 // RetryError is returned when retry is exceeded limit.
 type RetryError struct {
 	error
