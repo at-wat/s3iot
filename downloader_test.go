@@ -211,71 +211,92 @@ func TestDownloader(t *testing.T) {
 	})
 
 	t.Run("PauseResume", func(t *testing.T) {
-		buf := iotest.BufferAt(make([]byte, 128))
-		chDownload := make(chan interface{})
-		api := newDownloadMockAPI(t, data, 0, chDownload, nil)
-		d := &s3iot.Downloader{}
-		s3iot.WithAPI(api).ApplyToDownloader(d)
-		s3iot.WithDownloadSlicer(
-			&s3iot.DefaultDownloadSlicerFactory{PartSize: 50},
-		).ApplyToDownloader(d)
-		s3iot.WithRetryer(nil).ApplyToDownloader(d)
+		for name, tt := range map[string]struct {
+			forcePause    bool
+			expectedCalls int
+		}{
+			"NoForcePause": {
+				forcePause:    false,
+				expectedCalls: 3,
+			},
+			"ForcePause": {
+				forcePause:    true,
+				expectedCalls: 4,
+			},
+		} {
+			tt := tt
+			t.Run(name, func(t *testing.T) {
+				buf := iotest.BufferAt(make([]byte, 128))
+				chDownload := make(chan interface{})
+				api := newDownloadMockAPI(t, data, 0, chDownload, nil)
+				d := &s3iot.Downloader{
+					UpDownloaderBase: s3iot.UpDownloaderBase{
+						ForcePause: tt.forcePause,
+					},
+				}
+				s3iot.WithAPI(api).ApplyToDownloader(d)
+				s3iot.WithDownloadSlicer(
+					&s3iot.DefaultDownloadSlicerFactory{PartSize: 50},
+				).ApplyToDownloader(d)
+				s3iot.WithRetryer(nil).ApplyToDownloader(d)
 
-		uc, err := d.Download(context.TODO(), buf, &s3iot.DownloadInput{
-			Bucket: &bucket,
-			Key:    &key,
-		})
-		if err != nil {
-			t.Fatal(err)
-		}
+				uc, err := d.Download(context.TODO(), buf, &s3iot.DownloadInput{
+					Bucket: &bucket,
+					Key:    &key,
+				})
+				if err != nil {
+					t.Fatal(err)
+				}
 
-		select {
-		case <-time.After(time.Second):
-			t.Fatal("Timeout")
-		case <-chDownload:
-		}
+				select {
+				case <-time.After(time.Second):
+					t.Fatal("Timeout")
+				case <-chDownload:
+				}
 
-		uc.Pause()
-		go func() {
-			<-chDownload
-			<-chDownload
-		}()
+				uc.Pause()
+				go func() {
+					<-chDownload
+					<-chDownload
+				}()
 
-		time.Sleep(50 * time.Millisecond)
-		status, err := uc.Status()
-		if err != nil {
-			t.Fatal(err)
-		}
-		if !status.Paused {
-			t.Error("Paused flag must be set")
-		}
-		if *status.ETag != "TAG0" {
-			t.Errorf("Expected ETag: TAG0, got: %s", *status.ETag)
-		}
+				time.Sleep(50 * time.Millisecond)
+				status, err := uc.Status()
+				if err != nil {
+					t.Fatal(err)
+				}
+				if !status.Paused {
+					t.Error("Paused flag must be set")
+				}
+				if *status.ETag != "TAG0" {
+					t.Errorf("Expected ETag: TAG0, got: %s", *status.ETag)
+				}
 
-		select {
-		case <-time.After(500 * time.Millisecond):
-		case <-uc.Done():
-			t.Fatal("Download should be paused")
-		}
+				select {
+				case <-time.After(500 * time.Millisecond):
+				case <-uc.Done():
+					t.Fatal("Download should be paused")
+				}
 
-		uc.Resume()
+				uc.Resume()
 
-		select {
-		case <-time.After(time.Second):
-			t.Fatal("Timeout")
-		case <-uc.Done():
-		}
-		if _, err = uc.Result(); err != nil {
-			t.Fatal(err)
-		}
+				select {
+				case <-time.After(time.Second):
+					t.Fatal("Timeout")
+				case <-uc.Done():
+				}
+				if _, err = uc.Result(); err != nil {
+					t.Fatal(err)
+				}
 
-		if n := len(api.GetObjectCalls()); n != 3 {
-			t.Fatalf("GetObject must be called 3 times, but called %d times", n)
-		}
+				if n := len(api.GetObjectCalls()); n != tt.expectedCalls {
+					t.Fatalf("GetObject must be called %d times, but called %d times", tt.expectedCalls, n)
+				}
 
-		if !bytes.Equal(data, []byte(buf)) {
-			t.Error("Downloaded data differs")
+				if !bytes.Equal(data, []byte(buf)) {
+					t.Error("Downloaded data differs")
+				}
+			})
 		}
 	})
 	t.Run("CancelDuringPause", func(t *testing.T) {
@@ -429,7 +450,11 @@ func newDownloadMockAPI(t *testing.T, data []byte, num int, ch chan interface{},
 				etag = etags[i]
 			}
 			if ch != nil {
-				ch <- input
+				select {
+				case ch <- input:
+				case <-ctx.Done():
+					return nil, ctx.Err()
+				}
 			}
 			r, err := contentrange.Parse(*input.Range)
 			if err != nil {
