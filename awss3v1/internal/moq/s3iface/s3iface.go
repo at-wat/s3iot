@@ -428,6 +428,15 @@ var _ S3API = &MockS3API{}
 // 			GetObjectAclWithContextFunc: func(contextMoqParam context.Context, getObjectAclInput *s3.GetObjectAclInput, options ...request.Option) (*s3.GetObjectAclOutput, error) {
 // 				panic("mock out the GetObjectAclWithContext method")
 // 			},
+// 			GetObjectAttributesFunc: func(getObjectAttributesInput *s3.GetObjectAttributesInput) (*s3.GetObjectAttributesOutput, error) {
+// 				panic("mock out the GetObjectAttributes method")
+// 			},
+// 			GetObjectAttributesRequestFunc: func(getObjectAttributesInput *s3.GetObjectAttributesInput) (*request.Request, *s3.GetObjectAttributesOutput) {
+// 				panic("mock out the GetObjectAttributesRequest method")
+// 			},
+// 			GetObjectAttributesWithContextFunc: func(contextMoqParam context.Context, getObjectAttributesInput *s3.GetObjectAttributesInput, options ...request.Option) (*s3.GetObjectAttributesOutput, error) {
+// 				panic("mock out the GetObjectAttributesWithContext method")
+// 			},
 // 			GetObjectLegalHoldFunc: func(getObjectLegalHoldInput *s3.GetObjectLegalHoldInput) (*s3.GetObjectLegalHoldOutput, error) {
 // 				panic("mock out the GetObjectLegalHold method")
 // 			},
@@ -1352,6 +1361,15 @@ type MockS3API struct {
 
 	// GetObjectAclWithContextFunc mocks the GetObjectAclWithContext method.
 	GetObjectAclWithContextFunc func(contextMoqParam context.Context, getObjectAclInput *s3.GetObjectAclInput, options ...request.Option) (*s3.GetObjectAclOutput, error)
+
+	// GetObjectAttributesFunc mocks the GetObjectAttributes method.
+	GetObjectAttributesFunc func(getObjectAttributesInput *s3.GetObjectAttributesInput) (*s3.GetObjectAttributesOutput, error)
+
+	// GetObjectAttributesRequestFunc mocks the GetObjectAttributesRequest method.
+	GetObjectAttributesRequestFunc func(getObjectAttributesInput *s3.GetObjectAttributesInput) (*request.Request, *s3.GetObjectAttributesOutput)
+
+	// GetObjectAttributesWithContextFunc mocks the GetObjectAttributesWithContext method.
+	GetObjectAttributesWithContextFunc func(contextMoqParam context.Context, getObjectAttributesInput *s3.GetObjectAttributesInput, options ...request.Option) (*s3.GetObjectAttributesOutput, error)
 
 	// GetObjectLegalHoldFunc mocks the GetObjectLegalHold method.
 	GetObjectLegalHoldFunc func(getObjectLegalHoldInput *s3.GetObjectLegalHoldInput) (*s3.GetObjectLegalHoldOutput, error)
@@ -2725,6 +2743,25 @@ type MockS3API struct {
 			// Options is the options argument value.
 			Options []request.Option
 		}
+		// GetObjectAttributes holds details about calls to the GetObjectAttributes method.
+		GetObjectAttributes []struct {
+			// GetObjectAttributesInput is the getObjectAttributesInput argument value.
+			GetObjectAttributesInput *s3.GetObjectAttributesInput
+		}
+		// GetObjectAttributesRequest holds details about calls to the GetObjectAttributesRequest method.
+		GetObjectAttributesRequest []struct {
+			// GetObjectAttributesInput is the getObjectAttributesInput argument value.
+			GetObjectAttributesInput *s3.GetObjectAttributesInput
+		}
+		// GetObjectAttributesWithContext holds details about calls to the GetObjectAttributesWithContext method.
+		GetObjectAttributesWithContext []struct {
+			// ContextMoqParam is the contextMoqParam argument value.
+			ContextMoqParam context.Context
+			// GetObjectAttributesInput is the getObjectAttributesInput argument value.
+			GetObjectAttributesInput *s3.GetObjectAttributesInput
+			// Options is the options argument value.
+			Options []request.Option
+		}
 		// GetObjectLegalHold holds details about calls to the GetObjectLegalHold method.
 		GetObjectLegalHold []struct {
 			// GetObjectLegalHoldInput is the getObjectLegalHoldInput argument value.
@@ -3972,6 +4009,9 @@ type MockS3API struct {
 	lockGetObjectAcl                                           sync.RWMutex
 	lockGetObjectAclRequest                                    sync.RWMutex
 	lockGetObjectAclWithContext                                sync.RWMutex
+	lockGetObjectAttributes                                    sync.RWMutex
+	lockGetObjectAttributesRequest                             sync.RWMutex
+	lockGetObjectAttributesWithContext                         sync.RWMutex
 	lockGetObjectLegalHold                                     sync.RWMutex
 	lockGetObjectLegalHoldRequest                              sync.RWMutex
 	lockGetObjectLegalHoldWithContext                          sync.RWMutex
@@ -8717,6 +8757,107 @@ func (mock *MockS3API) GetObjectAclWithContextCalls() []struct {
 	mock.lockGetObjectAclWithContext.RLock()
 	calls = mock.calls.GetObjectAclWithContext
 	mock.lockGetObjectAclWithContext.RUnlock()
+	return calls
+}
+
+// GetObjectAttributes calls GetObjectAttributesFunc.
+func (mock *MockS3API) GetObjectAttributes(getObjectAttributesInput *s3.GetObjectAttributesInput) (*s3.GetObjectAttributesOutput, error) {
+	if mock.GetObjectAttributesFunc == nil {
+		panic("MockS3API.GetObjectAttributesFunc: method is nil but S3API.GetObjectAttributes was just called")
+	}
+	callInfo := struct {
+		GetObjectAttributesInput *s3.GetObjectAttributesInput
+	}{
+		GetObjectAttributesInput: getObjectAttributesInput,
+	}
+	mock.lockGetObjectAttributes.Lock()
+	mock.calls.GetObjectAttributes = append(mock.calls.GetObjectAttributes, callInfo)
+	mock.lockGetObjectAttributes.Unlock()
+	return mock.GetObjectAttributesFunc(getObjectAttributesInput)
+}
+
+// GetObjectAttributesCalls gets all the calls that were made to GetObjectAttributes.
+// Check the length with:
+//     len(mockedS3API.GetObjectAttributesCalls())
+func (mock *MockS3API) GetObjectAttributesCalls() []struct {
+	GetObjectAttributesInput *s3.GetObjectAttributesInput
+} {
+	var calls []struct {
+		GetObjectAttributesInput *s3.GetObjectAttributesInput
+	}
+	mock.lockGetObjectAttributes.RLock()
+	calls = mock.calls.GetObjectAttributes
+	mock.lockGetObjectAttributes.RUnlock()
+	return calls
+}
+
+// GetObjectAttributesRequest calls GetObjectAttributesRequestFunc.
+func (mock *MockS3API) GetObjectAttributesRequest(getObjectAttributesInput *s3.GetObjectAttributesInput) (*request.Request, *s3.GetObjectAttributesOutput) {
+	if mock.GetObjectAttributesRequestFunc == nil {
+		panic("MockS3API.GetObjectAttributesRequestFunc: method is nil but S3API.GetObjectAttributesRequest was just called")
+	}
+	callInfo := struct {
+		GetObjectAttributesInput *s3.GetObjectAttributesInput
+	}{
+		GetObjectAttributesInput: getObjectAttributesInput,
+	}
+	mock.lockGetObjectAttributesRequest.Lock()
+	mock.calls.GetObjectAttributesRequest = append(mock.calls.GetObjectAttributesRequest, callInfo)
+	mock.lockGetObjectAttributesRequest.Unlock()
+	return mock.GetObjectAttributesRequestFunc(getObjectAttributesInput)
+}
+
+// GetObjectAttributesRequestCalls gets all the calls that were made to GetObjectAttributesRequest.
+// Check the length with:
+//     len(mockedS3API.GetObjectAttributesRequestCalls())
+func (mock *MockS3API) GetObjectAttributesRequestCalls() []struct {
+	GetObjectAttributesInput *s3.GetObjectAttributesInput
+} {
+	var calls []struct {
+		GetObjectAttributesInput *s3.GetObjectAttributesInput
+	}
+	mock.lockGetObjectAttributesRequest.RLock()
+	calls = mock.calls.GetObjectAttributesRequest
+	mock.lockGetObjectAttributesRequest.RUnlock()
+	return calls
+}
+
+// GetObjectAttributesWithContext calls GetObjectAttributesWithContextFunc.
+func (mock *MockS3API) GetObjectAttributesWithContext(contextMoqParam context.Context, getObjectAttributesInput *s3.GetObjectAttributesInput, options ...request.Option) (*s3.GetObjectAttributesOutput, error) {
+	if mock.GetObjectAttributesWithContextFunc == nil {
+		panic("MockS3API.GetObjectAttributesWithContextFunc: method is nil but S3API.GetObjectAttributesWithContext was just called")
+	}
+	callInfo := struct {
+		ContextMoqParam          context.Context
+		GetObjectAttributesInput *s3.GetObjectAttributesInput
+		Options                  []request.Option
+	}{
+		ContextMoqParam:          contextMoqParam,
+		GetObjectAttributesInput: getObjectAttributesInput,
+		Options:                  options,
+	}
+	mock.lockGetObjectAttributesWithContext.Lock()
+	mock.calls.GetObjectAttributesWithContext = append(mock.calls.GetObjectAttributesWithContext, callInfo)
+	mock.lockGetObjectAttributesWithContext.Unlock()
+	return mock.GetObjectAttributesWithContextFunc(contextMoqParam, getObjectAttributesInput, options...)
+}
+
+// GetObjectAttributesWithContextCalls gets all the calls that were made to GetObjectAttributesWithContext.
+// Check the length with:
+//     len(mockedS3API.GetObjectAttributesWithContextCalls())
+func (mock *MockS3API) GetObjectAttributesWithContextCalls() []struct {
+	ContextMoqParam          context.Context
+	GetObjectAttributesInput *s3.GetObjectAttributesInput
+	Options                  []request.Option
+} {
+	var calls []struct {
+		ContextMoqParam          context.Context
+		GetObjectAttributesInput *s3.GetObjectAttributesInput
+		Options                  []request.Option
+	}
+	mock.lockGetObjectAttributesWithContext.RLock()
+	calls = mock.calls.GetObjectAttributesWithContext
+	mock.lockGetObjectAttributesWithContext.RUnlock()
 	return calls
 }
 
