@@ -33,7 +33,7 @@ jobs:
       - name: Push generated files
         if: startsWith(github.event.pull_request.head.ref, 'renovate/')
         run: |
-          if ! git diff --exit-code
+          if git diff --exit-code
           then
             echo "Skipping"
             exit 0
