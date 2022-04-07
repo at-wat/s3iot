@@ -33,6 +33,11 @@ jobs:
       - name: Push generated files
         if: startsWith(github.event.pull_request.head.ref, 'renovate/')
         run: |
+          if ! git diff --exit-code
+          then
+            echo "Skipping"
+            exit 0
+          fi
           git add .
           git config user.name "Atsushi Watanabe"
           git config user.email "atsushi.w@ieee.org"
