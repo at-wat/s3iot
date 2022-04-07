@@ -1,0 +1,53 @@
+name: fix
+on:
+  push:
+    branches:
+      - renovate/*
+
+jobs:
+  go-sum-fix:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+      - name: fix
+        uses: at-wat/go-sum-fix-action@v0
+        with:
+          go_mod_paths: ./
+          git_user: Atsushi Watanabe
+          git_email: atsushi.w@ieee.org
+          github_token: ${{ secrets.GO_SUM_FIX_GITHUB_TOKEN }}
+          commit_style: squash
+          push: force
+
+  mock:
+    needs: [go-sum-fix]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: '1.17'
+      - name: Update mock
+        run: .github/update-mocks.sh
+      - name: Push generated files
+        run: |
+          if ! git diff --exit-code
+          then
+            git add .
+            git config user.name "Atsushi Watanabe"
+            git config user.email "atsushi.w@ieee.org"
+            git config --unset http."https://github.com/".extraheader || true
+            git config --global --add http."https://github.com/".extraheader "Authorization: Basic $(echo -n "x-access-token:${{ secrets.GO_SUM_FIX_GITHUB_TOKEN }}" | base64 | tr -d '\n')"
+            git commit --amend --no-edit
+            git push origin ${{ github.event.pull_request.head.ref }}
+          else
+            echo "Skipped"
+          fi
