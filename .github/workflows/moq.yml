@@ -26,10 +26,10 @@ jobs:
               cd ${mod}
               go mod tidy
               go generate ./...
-              rm go.sum
             )
           done
           git restore $(find . -name 'go.mod') go.sum
+          rm ./awss3v1/go.sum ./awss3v2/go.sum
       - name: Push generated files
         if: startsWith(github.event.pull_request.head.ref, 'renovate/')
         run: |
@@ -40,6 +40,8 @@ jobs:
             git config user.email "atsushi.w@ieee.org"
             git commit --amend --no-edit
             git push origin ${{ github.event.pull_request.head.ref }}
+          else
+            echo "Skipped"
           fi
       - name: Check updated
         if: startsWith(github.event.pull_request.head.ref, 'renovate/') != true
