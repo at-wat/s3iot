@@ -10,14 +10,6 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        package:
-          - ./
-          - ./awss3v1/
-          - ./awss3v2/
-          - ./examples/
     steps:
       - name: Checkout
         uses: actions/checkout@v3
