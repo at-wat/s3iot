@@ -5,20 +5,21 @@ package s3iface
 
 import (
 	"context"
+	"github.com/at-wat/s3iot/awss3v1/internal/moq/s3iface/iface"
 	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"sync"
 )
 
-// Ensure, that MockS3API does implement S3API.
+// Ensure, that MockS3API does implement iface.S3API.
 // If this is not the case, regenerate this file with moq.
-var _ S3API = &MockS3API{}
+var _ iface.S3API = &MockS3API{}
 
-// MockS3API is a mock implementation of S3API.
+// MockS3API is a mock implementation of iface.S3API.
 //
 // 	func TestSomethingThatUsesS3API(t *testing.T) {
 //
-// 		// make and configure a mocked S3API
+// 		// make and configure a mocked iface.S3API
 // 		mockedS3API := &MockS3API{
 // 			AbortMultipartUploadFunc: func(abortMultipartUploadInput *s3.AbortMultipartUploadInput) (*s3.AbortMultipartUploadOutput, error) {
 // 				panic("mock out the AbortMultipartUpload method")
@@ -949,7 +950,7 @@ var _ S3API = &MockS3API{}
 // 			},
 // 		}
 //
-// 		// use mockedS3API in code that requires S3API
+// 		// use mockedS3API in code that requires iface.S3API
 // 		// and then make assertions.
 //
 // 	}

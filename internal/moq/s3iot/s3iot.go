@@ -5,7 +5,6 @@ package s3iot
 
 import (
 	"context"
-	"github.com/at-wat/s3iot"
 	"io"
 	"sync"
 )
@@ -20,22 +19,22 @@ var _ S3API = &MockS3API{}
 //
 // 		// make and configure a mocked S3API
 // 		mockedS3API := &MockS3API{
-// 			AbortMultipartUploadFunc: func(ctx context.Context, input *s3iot.AbortMultipartUploadInput) (*s3iot.AbortMultipartUploadOutput, error) {
+// 			AbortMultipartUploadFunc: func(ctx context.Context, input *AbortMultipartUploadInput) (*AbortMultipartUploadOutput, error) {
 // 				panic("mock out the AbortMultipartUpload method")
 // 			},
-// 			CompleteMultipartUploadFunc: func(ctx context.Context, input *s3iot.CompleteMultipartUploadInput) (*s3iot.CompleteMultipartUploadOutput, error) {
+// 			CompleteMultipartUploadFunc: func(ctx context.Context, input *CompleteMultipartUploadInput) (*CompleteMultipartUploadOutput, error) {
 // 				panic("mock out the CompleteMultipartUpload method")
 // 			},
-// 			CreateMultipartUploadFunc: func(ctx context.Context, input *s3iot.CreateMultipartUploadInput) (*s3iot.CreateMultipartUploadOutput, error) {
+// 			CreateMultipartUploadFunc: func(ctx context.Context, input *CreateMultipartUploadInput) (*CreateMultipartUploadOutput, error) {
 // 				panic("mock out the CreateMultipartUpload method")
 // 			},
-// 			GetObjectFunc: func(ctx context.Context, input *s3iot.GetObjectInput) (*s3iot.GetObjectOutput, error) {
+// 			GetObjectFunc: func(ctx context.Context, input *GetObjectInput) (*GetObjectOutput, error) {
 // 				panic("mock out the GetObject method")
 // 			},
-// 			PutObjectFunc: func(ctx context.Context, input *s3iot.PutObjectInput) (*s3iot.PutObjectOutput, error) {
+// 			PutObjectFunc: func(ctx context.Context, input *PutObjectInput) (*PutObjectOutput, error) {
 // 				panic("mock out the PutObject method")
 // 			},
-// 			UploadPartFunc: func(ctx context.Context, input *s3iot.UploadPartInput) (*s3iot.UploadPartOutput, error) {
+// 			UploadPartFunc: func(ctx context.Context, input *UploadPartInput) (*UploadPartOutput, error) {
 // 				panic("mock out the UploadPart method")
 // 			},
 // 		}
@@ -46,22 +45,22 @@ var _ S3API = &MockS3API{}
 // 	}
 type MockS3API struct {
 	// AbortMultipartUploadFunc mocks the AbortMultipartUpload method.
-	AbortMultipartUploadFunc func(ctx context.Context, input *s3iot.AbortMultipartUploadInput) (*s3iot.AbortMultipartUploadOutput, error)
+	AbortMultipartUploadFunc func(ctx context.Context, input *AbortMultipartUploadInput) (*AbortMultipartUploadOutput, error)
 
 	// CompleteMultipartUploadFunc mocks the CompleteMultipartUpload method.
-	CompleteMultipartUploadFunc func(ctx context.Context, input *s3iot.CompleteMultipartUploadInput) (*s3iot.CompleteMultipartUploadOutput, error)
+	CompleteMultipartUploadFunc func(ctx context.Context, input *CompleteMultipartUploadInput) (*CompleteMultipartUploadOutput, error)
 
 	// CreateMultipartUploadFunc mocks the CreateMultipartUpload method.
-	CreateMultipartUploadFunc func(ctx context.Context, input *s3iot.CreateMultipartUploadInput) (*s3iot.CreateMultipartUploadOutput, error)
+	CreateMultipartUploadFunc func(ctx context.Context, input *CreateMultipartUploadInput) (*CreateMultipartUploadOutput, error)
 
 	// GetObjectFunc mocks the GetObject method.
-	GetObjectFunc func(ctx context.Context, input *s3iot.GetObjectInput) (*s3iot.GetObjectOutput, error)
+	GetObjectFunc func(ctx context.Context, input *GetObjectInput) (*GetObjectOutput, error)
 
 	// PutObjectFunc mocks the PutObject method.
-	PutObjectFunc func(ctx context.Context, input *s3iot.PutObjectInput) (*s3iot.PutObjectOutput, error)
+	PutObjectFunc func(ctx context.Context, input *PutObjectInput) (*PutObjectOutput, error)
 
 	// UploadPartFunc mocks the UploadPart method.
-	UploadPartFunc func(ctx context.Context, input *s3iot.UploadPartInput) (*s3iot.UploadPartOutput, error)
+	UploadPartFunc func(ctx context.Context, input *UploadPartInput) (*UploadPartOutput, error)
 
 	// calls tracks calls to the methods.
 	calls struct {
@@ -70,42 +69,42 @@ type MockS3API struct {
 			// Ctx is the ctx argument value.
 			Ctx context.Context
 			// Input is the input argument value.
-			Input *s3iot.AbortMultipartUploadInput
+			Input *AbortMultipartUploadInput
 		}
 		// CompleteMultipartUpload holds details about calls to the CompleteMultipartUpload method.
 		CompleteMultipartUpload []struct {
 			// Ctx is the ctx argument value.
 			Ctx context.Context
 			// Input is the input argument value.
-			Input *s3iot.CompleteMultipartUploadInput
+			Input *CompleteMultipartUploadInput
 		}
 		// CreateMultipartUpload holds details about calls to the CreateMultipartUpload method.
 		CreateMultipartUpload []struct {
 			// Ctx is the ctx argument value.
 			Ctx context.Context
 			// Input is the input argument value.
-			Input *s3iot.CreateMultipartUploadInput
+			Input *CreateMultipartUploadInput
 		}
 		// GetObject holds details about calls to the GetObject method.
 		GetObject []struct {
 			// Ctx is the ctx argument value.
 			Ctx context.Context
 			// Input is the input argument value.
-			Input *s3iot.GetObjectInput
+			Input *GetObjectInput
 		}
 		// PutObject holds details about calls to the PutObject method.
 		PutObject []struct {
 			// Ctx is the ctx argument value.
 			Ctx context.Context
 			// Input is the input argument value.
-			Input *s3iot.PutObjectInput
+			Input *PutObjectInput
 		}
 		// UploadPart holds details about calls to the UploadPart method.
 		UploadPart []struct {
 			// Ctx is the ctx argument value.
 			Ctx context.Context
 			// Input is the input argument value.
-			Input *s3iot.UploadPartInput
+			Input *UploadPartInput
 		}
 	}
 	lockAbortMultipartUpload    sync.RWMutex
@@ -117,13 +116,13 @@ type MockS3API struct {
 }
 
 // AbortMultipartUpload calls AbortMultipartUploadFunc.
-func (mock *MockS3API) AbortMultipartUpload(ctx context.Context, input *s3iot.AbortMultipartUploadInput) (*s3iot.AbortMultipartUploadOutput, error) {
+func (mock *MockS3API) AbortMultipartUpload(ctx context.Context, input *AbortMultipartUploadInput) (*AbortMultipartUploadOutput, error) {
 	if mock.AbortMultipartUploadFunc == nil {
 		panic("MockS3API.AbortMultipartUploadFunc: method is nil but S3API.AbortMultipartUpload was just called")
 	}
 	callInfo := struct {
 		Ctx   context.Context
-		Input *s3iot.AbortMultipartUploadInput
+		Input *AbortMultipartUploadInput
 	}{
 		Ctx:   ctx,
 		Input: input,
@@ -139,11 +138,11 @@ func (mock *MockS3API) AbortMultipartUpload(ctx context.Context, input *s3iot.Ab
 //     len(mockedS3API.AbortMultipartUploadCalls())
 func (mock *MockS3API) AbortMultipartUploadCalls() []struct {
 	Ctx   context.Context
-	Input *s3iot.AbortMultipartUploadInput
+	Input *AbortMultipartUploadInput
 } {
 	var calls []struct {
 		Ctx   context.Context
-		Input *s3iot.AbortMultipartUploadInput
+		Input *AbortMultipartUploadInput
 	}
 	mock.lockAbortMultipartUpload.RLock()
 	calls = mock.calls.AbortMultipartUpload
@@ -152,13 +151,13 @@ func (mock *MockS3API) AbortMultipartUploadCalls() []struct {
 }
 
 // CompleteMultipartUpload calls CompleteMultipartUploadFunc.
-func (mock *MockS3API) CompleteMultipartUpload(ctx context.Context, input *s3iot.CompleteMultipartUploadInput) (*s3iot.CompleteMultipartUploadOutput, error) {
+func (mock *MockS3API) CompleteMultipartUpload(ctx context.Context, input *CompleteMultipartUploadInput) (*CompleteMultipartUploadOutput, error) {
 	if mock.CompleteMultipartUploadFunc == nil {
 		panic("MockS3API.CompleteMultipartUploadFunc: method is nil but S3API.CompleteMultipartUpload was just called")
 	}
 	callInfo := struct {
 		Ctx   context.Context
-		Input *s3iot.CompleteMultipartUploadInput
+		Input *CompleteMultipartUploadInput
 	}{
 		Ctx:   ctx,
 		Input: input,
@@ -174,11 +173,11 @@ func (mock *MockS3API) CompleteMultipartUpload(ctx context.Context, input *s3iot
 //     len(mockedS3API.CompleteMultipartUploadCalls())
 func (mock *MockS3API) CompleteMultipartUploadCalls() []struct {
 	Ctx   context.Context
-	Input *s3iot.CompleteMultipartUploadInput
+	Input *CompleteMultipartUploadInput
 } {
 	var calls []struct {
 		Ctx   context.Context
-		Input *s3iot.CompleteMultipartUploadInput
+		Input *CompleteMultipartUploadInput
 	}
 	mock.lockCompleteMultipartUpload.RLock()
 	calls = mock.calls.CompleteMultipartUpload
@@ -187,13 +186,13 @@ func (mock *MockS3API) CompleteMultipartUploadCalls() []struct {
 }
 
 // CreateMultipartUpload calls CreateMultipartUploadFunc.
-func (mock *MockS3API) CreateMultipartUpload(ctx context.Context, input *s3iot.CreateMultipartUploadInput) (*s3iot.CreateMultipartUploadOutput, error) {
+func (mock *MockS3API) CreateMultipartUpload(ctx context.Context, input *CreateMultipartUploadInput) (*CreateMultipartUploadOutput, error) {
 	if mock.CreateMultipartUploadFunc == nil {
 		panic("MockS3API.CreateMultipartUploadFunc: method is nil but S3API.CreateMultipartUpload was just called")
 	}
 	callInfo := struct {
 		Ctx   context.Context
-		Input *s3iot.CreateMultipartUploadInput
+		Input *CreateMultipartUploadInput
 	}{
 		Ctx:   ctx,
 		Input: input,
@@ -209,11 +208,11 @@ func (mock *MockS3API) CreateMultipartUpload(ctx context.Context, input *s3iot.C
 //     len(mockedS3API.CreateMultipartUploadCalls())
 func (mock *MockS3API) CreateMultipartUploadCalls() []struct {
 	Ctx   context.Context
-	Input *s3iot.CreateMultipartUploadInput
+	Input *CreateMultipartUploadInput
 } {
 	var calls []struct {
 		Ctx   context.Context
-		Input *s3iot.CreateMultipartUploadInput
+		Input *CreateMultipartUploadInput
 	}
 	mock.lockCreateMultipartUpload.RLock()
 	calls = mock.calls.CreateMultipartUpload
@@ -222,13 +221,13 @@ func (mock *MockS3API) CreateMultipartUploadCalls() []struct {
 }
 
 // GetObject calls GetObjectFunc.
-func (mock *MockS3API) GetObject(ctx context.Context, input *s3iot.GetObjectInput) (*s3iot.GetObjectOutput, error) {
+func (mock *MockS3API) GetObject(ctx context.Context, input *GetObjectInput) (*GetObjectOutput, error) {
 	if mock.GetObjectFunc == nil {
 		panic("MockS3API.GetObjectFunc: method is nil but S3API.GetObject was just called")
 	}
 	callInfo := struct {
 		Ctx   context.Context
-		Input *s3iot.GetObjectInput
+		Input *GetObjectInput
 	}{
 		Ctx:   ctx,
 		Input: input,
@@ -244,11 +243,11 @@ func (mock *MockS3API) GetObject(ctx context.Context, input *s3iot.GetObjectInpu
 //     len(mockedS3API.GetObjectCalls())
 func (mock *MockS3API) GetObjectCalls() []struct {
 	Ctx   context.Context
-	Input *s3iot.GetObjectInput
+	Input *GetObjectInput
 } {
 	var calls []struct {
 		Ctx   context.Context
-		Input *s3iot.GetObjectInput
+		Input *GetObjectInput
 	}
 	mock.lockGetObject.RLock()
 	calls = mock.calls.GetObject
@@ -257,13 +256,13 @@ func (mock *MockS3API) GetObjectCalls() []struct {
 }
 
 // PutObject calls PutObjectFunc.
-func (mock *MockS3API) PutObject(ctx context.Context, input *s3iot.PutObjectInput) (*s3iot.PutObjectOutput, error) {
+func (mock *MockS3API) PutObject(ctx context.Context, input *PutObjectInput) (*PutObjectOutput, error) {
 	if mock.PutObjectFunc == nil {
 		panic("MockS3API.PutObjectFunc: method is nil but S3API.PutObject was just called")
 	}
 	callInfo := struct {
 		Ctx   context.Context
-		Input *s3iot.PutObjectInput
+		Input *PutObjectInput
 	}{
 		Ctx:   ctx,
 		Input: input,
@@ -279,11 +278,11 @@ func (mock *MockS3API) PutObject(ctx context.Context, input *s3iot.PutObjectInpu
 //     len(mockedS3API.PutObjectCalls())
 func (mock *MockS3API) PutObjectCalls() []struct {
 	Ctx   context.Context
-	Input *s3iot.PutObjectInput
+	Input *PutObjectInput
 } {
 	var calls []struct {
 		Ctx   context.Context
-		Input *s3iot.PutObjectInput
+		Input *PutObjectInput
 	}
 	mock.lockPutObject.RLock()
 	calls = mock.calls.PutObject
@@ -292,13 +291,13 @@ func (mock *MockS3API) PutObjectCalls() []struct {
 }
 
 // UploadPart calls UploadPartFunc.
-func (mock *MockS3API) UploadPart(ctx context.Context, input *s3iot.UploadPartInput) (*s3iot.UploadPartOutput, error) {
+func (mock *MockS3API) UploadPart(ctx context.Context, input *UploadPartInput) (*UploadPartOutput, error) {
 	if mock.UploadPartFunc == nil {
 		panic("MockS3API.UploadPartFunc: method is nil but S3API.UploadPart was just called")
 	}
 	callInfo := struct {
 		Ctx   context.Context
-		Input *s3iot.UploadPartInput
+		Input *UploadPartInput
 	}{
 		Ctx:   ctx,
 		Input: input,
@@ -314,11 +313,11 @@ func (mock *MockS3API) UploadPart(ctx context.Context, input *s3iot.UploadPartIn
 //     len(mockedS3API.UploadPartCalls())
 func (mock *MockS3API) UploadPartCalls() []struct {
 	Ctx   context.Context
-	Input *s3iot.UploadPartInput
+	Input *UploadPartInput
 } {
 	var calls []struct {
 		Ctx   context.Context
-		Input *s3iot.UploadPartInput
+		Input *UploadPartInput
 	}
 	mock.lockUploadPart.RLock()
 	calls = mock.calls.UploadPart
@@ -336,7 +335,7 @@ var _ ReadInterceptorFactory = &MockReadInterceptorFactory{}
 //
 // 		// make and configure a mocked ReadInterceptorFactory
 // 		mockedReadInterceptorFactory := &MockReadInterceptorFactory{
-// 			NewFunc: func() s3iot.ReadInterceptor {
+// 			NewFunc: func() ReadInterceptor {
 // 				panic("mock out the New method")
 // 			},
 // 		}
@@ -347,7 +346,7 @@ var _ ReadInterceptorFactory = &MockReadInterceptorFactory{}
 // 	}
 type MockReadInterceptorFactory struct {
 	// NewFunc mocks the New method.
-	NewFunc func() s3iot.ReadInterceptor
+	NewFunc func() ReadInterceptor
 
 	// calls tracks calls to the methods.
 	calls struct {
@@ -359,7 +358,7 @@ type MockReadInterceptorFactory struct {
 }
 
 // New calls NewFunc.
-func (mock *MockReadInterceptorFactory) New() s3iot.ReadInterceptor {
+func (mock *MockReadInterceptorFactory) New() ReadInterceptor {
 	if mock.NewFunc == nil {
 		panic("MockReadInterceptorFactory.NewFunc: method is nil but ReadInterceptorFactory.New was just called")
 	}
