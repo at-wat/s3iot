@@ -13,10 +13,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Setup Go
-        uses: actions/setup-go@v3
-        with:
-          go-version: '1.17'
       - name: Lint
         uses: morphy2k/revive-action@v2
   go-mod:
@@ -24,6 +20,8 @@ jobs:
     strategy:
       fail-fast: false
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Check submodule go.mod
         run: |
           (! grep require awss3v*/go.mod)  # don't add require to awss3v*/go.mod
