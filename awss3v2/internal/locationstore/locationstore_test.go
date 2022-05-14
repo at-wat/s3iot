@@ -21,7 +21,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/at-wat/s3iot/awss3v2/internal/moq/s3iface"
+	mock_s3iface "github.com/at-wat/s3iot/awss3v2/internal/moq/s3iface"
 )
 
 func TestLocationStore(t *testing.T) {
@@ -61,7 +61,7 @@ func TestLocationStore(t *testing.T) {
 		tt := tt
 		t.Run(name, func(t *testing.T) {
 			s := LocationStore{
-				HTTPClient: &s3iface.MockHTTPClient{
+				HTTPClient: &mock_s3iface.MockHTTPClient{
 					DoFunc: func(request *http.Request) (*http.Response, error) {
 						return &http.Response{
 							Status:     tt.status,
