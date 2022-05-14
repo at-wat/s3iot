@@ -17,8 +17,6 @@ jobs:
         uses: morphy2k/revive-action@v2
   go-mod:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
     steps:
       - name: Checkout
         uses: actions/checkout@v3
