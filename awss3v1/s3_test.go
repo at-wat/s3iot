@@ -29,7 +29,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 
 	"github.com/at-wat/s3iot"
-	"github.com/at-wat/s3iot/awss3v1/internal/moq/s3iface"
+	mock_s3iface "github.com/at-wat/s3iot/awss3v1/internal/moq/s3iface"
 )
 
 func TestWrapper(t *testing.T) {
@@ -37,7 +37,7 @@ func TestWrapper(t *testing.T) {
 		t.Run("PutObject", func(t *testing.T) {
 			r := bytes.NewReader([]byte{})
 
-			api := &s3iface.MockS3API{
+			api := &mock_s3iface.MockS3API{
 				PutObjectWithContextFunc: func(ctx context.Context, input *s3.PutObjectInput, options ...request.Option) (*s3.PutObjectOutput, error) {
 					expectStringPtr(t, "Bucket", input.Bucket)
 					expectStringPtr(t, "Key", input.Key)
@@ -84,7 +84,7 @@ func TestWrapper(t *testing.T) {
 		t.Run("GetObject", func(t *testing.T) {
 			r := io.NopCloser(bytes.NewReader([]byte{}))
 
-			api := &s3iface.MockS3API{
+			api := &mock_s3iface.MockS3API{
 				GetObjectWithContextFunc: func(ctx context.Context, input *s3.GetObjectInput, options ...request.Option) (*s3.GetObjectOutput, error) {
 					expectStringPtr(t, "Bucket", input.Bucket)
 					expectStringPtr(t, "Key", input.Key)
@@ -129,7 +129,7 @@ func TestWrapper(t *testing.T) {
 			expectStringPtr(t, "VersionID", out.VersionID)
 		})
 		t.Run("CreateMultipartUpload", func(t *testing.T) {
-			api := &s3iface.MockS3API{
+			api := &mock_s3iface.MockS3API{
 				CreateMultipartUploadWithContextFunc: func(ctx context.Context, input *s3.CreateMultipartUploadInput, options ...request.Option) (*s3.CreateMultipartUploadOutput, error) {
 					expectStringPtr(t, "Bucket", input.Bucket)
 					expectStringPtr(t, "Key", input.Key)
@@ -158,7 +158,7 @@ func TestWrapper(t *testing.T) {
 			expectStringPtr(t, "UploadID", out.UploadID)
 		})
 		t.Run("CompleteMultipartUpload", func(t *testing.T) {
-			api := &s3iface.MockS3API{
+			api := &mock_s3iface.MockS3API{
 				CompleteMultipartUploadWithContextFunc: func(ctx context.Context, input *s3.CompleteMultipartUploadInput, options ...request.Option) (*s3.CompleteMultipartUploadOutput, error) {
 					expectStringPtr(t, "Bucket", input.Bucket)
 					expectStringPtr(t, "Key", input.Key)
@@ -203,7 +203,7 @@ func TestWrapper(t *testing.T) {
 			expectStringPtr(t, "s3://url", out.Location)
 		})
 		t.Run("AbortMultipartUpload", func(t *testing.T) {
-			api := &s3iface.MockS3API{
+			api := &mock_s3iface.MockS3API{
 				AbortMultipartUploadWithContextFunc: func(ctx context.Context, input *s3.AbortMultipartUploadInput, options ...request.Option) (*s3.AbortMultipartUploadOutput, error) {
 					expectStringPtr(t, "Bucket", input.Bucket)
 					expectStringPtr(t, "Key", input.Key)
@@ -229,7 +229,7 @@ func TestWrapper(t *testing.T) {
 		t.Run("UploadPart", func(t *testing.T) {
 			r := bytes.NewReader([]byte{})
 
-			api := &s3iface.MockS3API{
+			api := &mock_s3iface.MockS3API{
 				UploadPartWithContextFunc: func(ctx context.Context, input *s3.UploadPartInput, options ...request.Option) (*s3.UploadPartOutput, error) {
 					if input.Body != r {
 						t.Error("Body reader differs")
@@ -266,7 +266,7 @@ func TestWrapper(t *testing.T) {
 		errDummy := errors.New("error")
 
 		t.Run("PutObject", func(t *testing.T) {
-			api := &s3iface.MockS3API{
+			api := &mock_s3iface.MockS3API{
 				PutObjectWithContextFunc: func(ctx context.Context, input *s3.PutObjectInput, options ...request.Option) (*s3.PutObjectOutput, error) {
 					return nil, errDummy
 				},
@@ -280,7 +280,7 @@ func TestWrapper(t *testing.T) {
 			}
 		})
 		t.Run("GetObject", func(t *testing.T) {
-			api := &s3iface.MockS3API{
+			api := &mock_s3iface.MockS3API{
 				GetObjectWithContextFunc: func(ctx context.Context, input *s3.GetObjectInput, options ...request.Option) (*s3.GetObjectOutput, error) {
 					return nil, errDummy
 				},
@@ -294,7 +294,7 @@ func TestWrapper(t *testing.T) {
 			}
 		})
 		t.Run("CreateMultipartUpload", func(t *testing.T) {
-			api := &s3iface.MockS3API{
+			api := &mock_s3iface.MockS3API{
 				CreateMultipartUploadWithContextFunc: func(ctx context.Context, input *s3.CreateMultipartUploadInput, options ...request.Option) (*s3.CreateMultipartUploadOutput, error) {
 					return nil, errDummy
 				},
@@ -308,7 +308,7 @@ func TestWrapper(t *testing.T) {
 			}
 		})
 		t.Run("CompleteMultipartUpload", func(t *testing.T) {
-			api := &s3iface.MockS3API{
+			api := &mock_s3iface.MockS3API{
 				CompleteMultipartUploadWithContextFunc: func(ctx context.Context, input *s3.CompleteMultipartUploadInput, options ...request.Option) (*s3.CompleteMultipartUploadOutput, error) {
 					return nil, errDummy
 				},
@@ -322,7 +322,7 @@ func TestWrapper(t *testing.T) {
 			}
 		})
 		t.Run("AbortMultipartUpload", func(t *testing.T) {
-			api := &s3iface.MockS3API{
+			api := &mock_s3iface.MockS3API{
 				AbortMultipartUploadWithContextFunc: func(ctx context.Context, input *s3.AbortMultipartUploadInput, options ...request.Option) (*s3.AbortMultipartUploadOutput, error) {
 					return nil, errDummy
 				},
@@ -336,7 +336,7 @@ func TestWrapper(t *testing.T) {
 			}
 		})
 		t.Run("UploadPart", func(t *testing.T) {
-			api := &s3iface.MockS3API{
+			api := &mock_s3iface.MockS3API{
 				UploadPartWithContextFunc: func(ctx context.Context, input *s3.UploadPartInput, options ...request.Option) (*s3.UploadPartOutput, error) {
 					return nil, errDummy
 				},
