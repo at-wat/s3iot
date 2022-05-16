@@ -17,3 +17,6 @@ type Uploader interface {
 type Downloader interface {
 	Download(ctx context.Context, w io.WriterAt, input *s3.GetObjectInput, options ...func(*manager.Downloader)) (n int64, err error)
 }
+
+var _ Uploader = &manager.Uploader{}
+var _ Downloader = &manager.Downloader{}
