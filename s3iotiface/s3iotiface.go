@@ -16,3 +16,9 @@ type Uploader interface {
 type Downloader interface {
 	Download(ctx context.Context, w io.WriterAt, input *s3iot.DownloadInput) (s3iot.DownloadContext, error)
 }
+
+// UpDownloader is the interface that groups Uploader and Downloader interfaces.
+type UpDownloader interface {
+	Uploader
+	Downloader
+}
