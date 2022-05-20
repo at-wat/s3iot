@@ -29,8 +29,14 @@ var _ awss3v2.S3API = &MockS3API{}
 // 			CreateMultipartUploadFunc: func(ctx context.Context, params *s3.CreateMultipartUploadInput, optFns ...func(*s3.Options)) (*s3.CreateMultipartUploadOutput, error) {
 // 				panic("mock out the CreateMultipartUpload method")
 // 			},
+// 			DeleteObjectFunc: func(ctx context.Context, params *s3.DeleteObjectInput, optFns ...func(*s3.Options)) (*s3.DeleteObjectOutput, error) {
+// 				panic("mock out the DeleteObject method")
+// 			},
 // 			GetObjectFunc: func(ctx context.Context, params *s3.GetObjectInput, optFns ...func(*s3.Options)) (*s3.GetObjectOutput, error) {
 // 				panic("mock out the GetObject method")
+// 			},
+// 			ListObjectsV2Func: func(ctx context.Context, params *s3.ListObjectsV2Input, optFns ...func(*s3.Options)) (*s3.ListObjectsV2Output, error) {
+// 				panic("mock out the ListObjectsV2 method")
 // 			},
 // 			PutObjectFunc: func(ctx context.Context, params *s3.PutObjectInput, optFns ...func(*s3.Options)) (*s3.PutObjectOutput, error) {
 // 				panic("mock out the PutObject method")
@@ -54,8 +60,14 @@ type MockS3API struct {
 	// CreateMultipartUploadFunc mocks the CreateMultipartUpload method.
 	CreateMultipartUploadFunc func(ctx context.Context, params *s3.CreateMultipartUploadInput, optFns ...func(*s3.Options)) (*s3.CreateMultipartUploadOutput, error)
 
+	// DeleteObjectFunc mocks the DeleteObject method.
+	DeleteObjectFunc func(ctx context.Context, params *s3.DeleteObjectInput, optFns ...func(*s3.Options)) (*s3.DeleteObjectOutput, error)
+
 	// GetObjectFunc mocks the GetObject method.
 	GetObjectFunc func(ctx context.Context, params *s3.GetObjectInput, optFns ...func(*s3.Options)) (*s3.GetObjectOutput, error)
+
+	// ListObjectsV2Func mocks the ListObjectsV2 method.
+	ListObjectsV2Func func(ctx context.Context, params *s3.ListObjectsV2Input, optFns ...func(*s3.Options)) (*s3.ListObjectsV2Output, error)
 
 	// PutObjectFunc mocks the PutObject method.
 	PutObjectFunc func(ctx context.Context, params *s3.PutObjectInput, optFns ...func(*s3.Options)) (*s3.PutObjectOutput, error)
@@ -92,12 +104,30 @@ type MockS3API struct {
 			// OptFns is the optFns argument value.
 			OptFns []func(*s3.Options)
 		}
+		// DeleteObject holds details about calls to the DeleteObject method.
+		DeleteObject []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Params is the params argument value.
+			Params *s3.DeleteObjectInput
+			// OptFns is the optFns argument value.
+			OptFns []func(*s3.Options)
+		}
 		// GetObject holds details about calls to the GetObject method.
 		GetObject []struct {
 			// Ctx is the ctx argument value.
 			Ctx context.Context
 			// Params is the params argument value.
 			Params *s3.GetObjectInput
+			// OptFns is the optFns argument value.
+			OptFns []func(*s3.Options)
+		}
+		// ListObjectsV2 holds details about calls to the ListObjectsV2 method.
+		ListObjectsV2 []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Params is the params argument value.
+			Params *s3.ListObjectsV2Input
 			// OptFns is the optFns argument value.
 			OptFns []func(*s3.Options)
 		}
@@ -123,7 +153,9 @@ type MockS3API struct {
 	lockAbortMultipartUpload    sync.RWMutex
 	lockCompleteMultipartUpload sync.RWMutex
 	lockCreateMultipartUpload   sync.RWMutex
+	lockDeleteObject            sync.RWMutex
 	lockGetObject               sync.RWMutex
+	lockListObjectsV2           sync.RWMutex
 	lockPutObject               sync.RWMutex
 	lockUploadPart              sync.RWMutex
 }
@@ -245,6 +277,45 @@ func (mock *MockS3API) CreateMultipartUploadCalls() []struct {
 	return calls
 }
 
+// DeleteObject calls DeleteObjectFunc.
+func (mock *MockS3API) DeleteObject(ctx context.Context, params *s3.DeleteObjectInput, optFns ...func(*s3.Options)) (*s3.DeleteObjectOutput, error) {
+	if mock.DeleteObjectFunc == nil {
+		panic("MockS3API.DeleteObjectFunc: method is nil but S3API.DeleteObject was just called")
+	}
+	callInfo := struct {
+		Ctx    context.Context
+		Params *s3.DeleteObjectInput
+		OptFns []func(*s3.Options)
+	}{
+		Ctx:    ctx,
+		Params: params,
+		OptFns: optFns,
+	}
+	mock.lockDeleteObject.Lock()
+	mock.calls.DeleteObject = append(mock.calls.DeleteObject, callInfo)
+	mock.lockDeleteObject.Unlock()
+	return mock.DeleteObjectFunc(ctx, params, optFns...)
+}
+
+// DeleteObjectCalls gets all the calls that were made to DeleteObject.
+// Check the length with:
+//     len(mockedS3API.DeleteObjectCalls())
+func (mock *MockS3API) DeleteObjectCalls() []struct {
+	Ctx    context.Context
+	Params *s3.DeleteObjectInput
+	OptFns []func(*s3.Options)
+} {
+	var calls []struct {
+		Ctx    context.Context
+		Params *s3.DeleteObjectInput
+		OptFns []func(*s3.Options)
+	}
+	mock.lockDeleteObject.RLock()
+	calls = mock.calls.DeleteObject
+	mock.lockDeleteObject.RUnlock()
+	return calls
+}
+
 // GetObject calls GetObjectFunc.
 func (mock *MockS3API) GetObject(ctx context.Context, params *s3.GetObjectInput, optFns ...func(*s3.Options)) (*s3.GetObjectOutput, error) {
 	if mock.GetObjectFunc == nil {
@@ -281,6 +352,45 @@ func (mock *MockS3API) GetObjectCalls() []struct {
 	mock.lockGetObject.RLock()
 	calls = mock.calls.GetObject
 	mock.lockGetObject.RUnlock()
+	return calls
+}
+
+// ListObjectsV2 calls ListObjectsV2Func.
+func (mock *MockS3API) ListObjectsV2(ctx context.Context, params *s3.ListObjectsV2Input, optFns ...func(*s3.Options)) (*s3.ListObjectsV2Output, error) {
+	if mock.ListObjectsV2Func == nil {
+		panic("MockS3API.ListObjectsV2Func: method is nil but S3API.ListObjectsV2 was just called")
+	}
+	callInfo := struct {
+		Ctx    context.Context
+		Params *s3.ListObjectsV2Input
+		OptFns []func(*s3.Options)
+	}{
+		Ctx:    ctx,
+		Params: params,
+		OptFns: optFns,
+	}
+	mock.lockListObjectsV2.Lock()
+	mock.calls.ListObjectsV2 = append(mock.calls.ListObjectsV2, callInfo)
+	mock.lockListObjectsV2.Unlock()
+	return mock.ListObjectsV2Func(ctx, params, optFns...)
+}
+
+// ListObjectsV2Calls gets all the calls that were made to ListObjectsV2.
+// Check the length with:
+//     len(mockedS3API.ListObjectsV2Calls())
+func (mock *MockS3API) ListObjectsV2Calls() []struct {
+	Ctx    context.Context
+	Params *s3.ListObjectsV2Input
+	OptFns []func(*s3.Options)
+} {
+	var calls []struct {
+		Ctx    context.Context
+		Params *s3.ListObjectsV2Input
+		OptFns []func(*s3.Options)
+	}
+	mock.lockListObjectsV2.RLock()
+	calls = mock.calls.ListObjectsV2
+	mock.lockListObjectsV2.RUnlock()
 	return calls
 }
 

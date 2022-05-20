@@ -53,8 +53,8 @@ func NewDownloader(c aws.Config, opts ...s3iot.DownloaderOption) *s3iot.Download
 	return u
 }
 
-// NewAPI wraps s3.Client to s3api.UpDownloadAPI.
-func NewAPI(api S3API) s3api.UpDownloadAPI {
+// NewAPI wraps s3.Client to s3api.S3API.
+func NewAPI(api S3API) s3api.S3API {
 	return &wrapper{api: api}
 }
 
@@ -197,5 +197,48 @@ func (w *wrapper) UploadPart(ctx context.Context, input *s3api.UploadPartInput) 
 	return &s3api.UploadPartOutput{
 		ETag: out.ETag,
 	}, nil
+}
 
+func (w *wrapper) DeleteObject(ctx context.Context, input *s3api.DeleteObjectInput) (*s3api.DeleteObjectOutput, error) {
+	out, err := w.api.DeleteObject(
+		ctx,
+		&s3.DeleteObjectInput{
+			Bucket:    input.Bucket,
+			Key:       input.Key,
+			VersionId: input.VersionID,
+		})
+	if err != nil {
+		return nil, err
+	}
+	return &s3api.DeleteObjectOutput{
+		VersionID: out.VersionId,
+	}, nil
+}
+
+func (w *wrapper) ListObjects(ctx context.Context, input *s3api.ListObjectsInput) (*s3api.ListObjectsOutput, error) {
+	out, err := w.api.ListObjectsV2(
+		ctx,
+		&s3.ListObjectsV2Input{
+			Bucket:            input.Bucket,
+			ContinuationToken: input.ContinuationToken,
+			MaxKeys:           int32(input.MaxKeys),
+			Prefix:            input.Prefix,
+		})
+	if err != nil {
+		return nil, err
+	}
+	contents := make([]s3api.Object, len(out.Contents))
+	for i, c := range out.Contents {
+		contents[i] = s3api.Object{
+			ETag:         c.ETag,
+			Key:          c.Key,
+			LastModified: c.LastModified,
+			Size:         c.Size,
+		}
+	}
+	return &s3api.ListObjectsOutput{
+		Contents:              contents,
+		KeyCount:              int(out.KeyCount),
+		NextContinuationToken: out.NextContinuationToken,
+	}, nil
 }

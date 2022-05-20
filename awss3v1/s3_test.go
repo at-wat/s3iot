@@ -21,6 +21,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"reflect"
 	"testing"
 	"time"
 
@@ -261,6 +262,93 @@ func TestWrapper(t *testing.T) {
 			}
 			expectStringPtr(t, "ETag", out.ETag)
 		})
+		t.Run("DeleteObject", func(t *testing.T) {
+			api := &mock_s3iface.MockS3API{
+				DeleteObjectWithContextFunc: func(ctx context.Context, input *s3.DeleteObjectInput, options ...request.Option) (*s3.DeleteObjectOutput, error) {
+					expectStringPtr(t, "Bucket", input.Bucket)
+					expectStringPtr(t, "Key", input.Key)
+					expectStringPtr(t, "VersionID", input.VersionId)
+					return &s3.DeleteObjectOutput{
+						VersionId: aws.String("VersionID2"),
+					}, nil
+				},
+			}
+			w := NewAPI(api)
+			out, err := w.DeleteObject(context.TODO(),
+				&s3api.DeleteObjectInput{
+					Bucket:    aws.String("Bucket"),
+					Key:       aws.String("Key"),
+					VersionID: aws.String("VersionID"),
+				},
+			)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if n := len(api.DeleteObjectWithContextCalls()); n != 1 {
+				t.Errorf("Expected calls: 1, actual: %d", n)
+			}
+			expectStringPtr(t, "VersionID2", out.VersionID)
+		})
+		t.Run("ListObjects", func(t *testing.T) {
+			api := &mock_s3iface.MockS3API{
+				ListObjectsV2WithContextFunc: func(ctx context.Context, input *s3.ListObjectsV2Input, options ...request.Option) (*s3.ListObjectsV2Output, error) {
+					expectStringPtr(t, "Bucket", input.Bucket)
+					expectStringPtr(t, "ContinuationToken", input.ContinuationToken)
+					expectInt64Ptr(t, 2, input.MaxKeys)
+					expectStringPtr(t, "Prefix", input.Prefix)
+					return &s3.ListObjectsV2Output{
+						Contents: []*s3.Object{
+							{
+								ETag:         aws.String("Etag1"),
+								Key:          aws.String("Key1"),
+								LastModified: aws.Time(time.Unix(100, 0)),
+								Size:         aws.Int64(1000),
+							},
+							{
+								ETag: aws.String("Etag2"),
+								Key:  aws.String("Key2"),
+							},
+						},
+						KeyCount:              aws.Int64(2),
+						NextContinuationToken: aws.String("NextToken"),
+					}, nil
+				},
+			}
+			w := NewAPI(api)
+			out, err := w.ListObjects(context.TODO(),
+				&s3api.ListObjectsInput{
+					Bucket:            aws.String("Bucket"),
+					ContinuationToken: aws.String("ContinuationToken"),
+					MaxKeys:           2,
+					Prefix:            aws.String("Prefix"),
+				},
+			)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if n := len(api.ListObjectsV2WithContextCalls()); n != 1 {
+				t.Errorf("Expected calls: 1, actual: %d", n)
+			}
+			expectedContents := []s3api.Object{
+				{
+					ETag:         aws.String("Etag1"),
+					Key:          aws.String("Key1"),
+					LastModified: aws.Time(time.Unix(100, 0)),
+					Size:         1000,
+				},
+				{
+					ETag: aws.String("Etag2"),
+					Key:  aws.String("Key2"),
+				},
+			}
+			if !reflect.DeepEqual(expectedContents, out.Contents) {
+				t.Errorf("Expected Contents: %v, got: %v", expectedContents, out.Contents)
+			}
+			if out.KeyCount != 2 {
+				t.Errorf("Expected KeyCount: 2, got: %d", out.KeyCount)
+			}
+			expectStringPtr(t, "NextToken", out.NextContinuationToken)
+		})
 	})
 	t.Run("Error", func(t *testing.T) {
 		errDummy := errors.New("error")
@@ -346,6 +434,34 @@ func TestWrapper(t *testing.T) {
 				t.Fatal("Expected error")
 			}
 			if n := len(api.UploadPartWithContextCalls()); n != 1 {
+				t.Errorf("Expected calls: 1, actual: %d", n)
+			}
+		})
+		t.Run("DeleteObject", func(t *testing.T) {
+			api := &mock_s3iface.MockS3API{
+				DeleteObjectWithContextFunc: func(ctx context.Context, input *s3.DeleteObjectInput, options ...request.Option) (*s3.DeleteObjectOutput, error) {
+					return nil, errDummy
+				},
+			}
+			w := NewAPI(api)
+			if _, err := w.DeleteObject(context.TODO(), &s3api.DeleteObjectInput{}); err != errDummy {
+				t.Fatal("Expected error")
+			}
+			if n := len(api.DeleteObjectWithContextCalls()); n != 1 {
+				t.Errorf("Expected calls: 1, actual: %d", n)
+			}
+		})
+		t.Run("ListObjects", func(t *testing.T) {
+			api := &mock_s3iface.MockS3API{
+				ListObjectsV2WithContextFunc: func(ctx context.Context, input *s3.ListObjectsV2Input, options ...request.Option) (*s3.ListObjectsV2Output, error) {
+					return nil, errDummy
+				},
+			}
+			w := NewAPI(api)
+			if _, err := w.ListObjects(context.TODO(), &s3api.ListObjectsInput{}); err != errDummy {
+				t.Fatal("Expected error")
+			}
+			if n := len(api.ListObjectsV2WithContextCalls()); n != 1 {
 				t.Errorf("Expected calls: 1, actual: %d", n)
 			}
 		})
