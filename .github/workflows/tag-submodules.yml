@@ -15,8 +15,8 @@ jobs:
         uses: actions/checkout@v3
       - name: push tags
         run: |
-          git tag awss3v1/$(basename ${TAG})
-          git tag awss3v2/$(basename ${TAG})
-          git push origin awss3v1/$(basename ${TAG}) awss3v2/$(basename ${TAG})
+          git tag awssdkv1/$(basename ${TAG})
+          git tag awssdkv2/$(basename ${TAG})
+          git push origin awssdkv1/$(basename ${TAG}) awssdkv2/$(basename ${TAG})
         env:
           TAG: ${{ github.ref }}
