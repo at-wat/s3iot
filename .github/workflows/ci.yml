@@ -19,8 +19,8 @@ jobs:
           - '1.18'
         package:
           - ./
-          - ./awssdkv1/
-          - ./awssdkv2/
+          - ./awss3v1/
+          - ./awss3v2/
           - ./examples/
     env:
       GO111MODULE: on

@@ -29,7 +29,7 @@ import (
 	_ "github.com/aws/aws-sdk-go-v2/service/s3" // lock version as direct dependency
 
 	"github.com/at-wat/s3iot"
-	"github.com/at-wat/s3iot/awssdkv2"
+	"github.com/at-wat/s3iot/awss3v2"
 )
 
 func main() {
@@ -75,7 +75,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	uploader := awssdkv2.NewUploader(cfg,
+	uploader := awss3v2.NewUploader(cfg,
 		s3iot.WithReadInterceptor(
 			s3iot.NewWaitReadInterceptorFactory(
 				500*time.Nanosecond, // Add 500ns delay per byte = 500ms/MB

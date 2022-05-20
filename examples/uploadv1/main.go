@@ -27,7 +27,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 
 	"github.com/at-wat/s3iot"
-	"github.com/at-wat/s3iot/awssdkv1"
+	"github.com/at-wat/s3iot/awss3v1"
 )
 
 func main() {
@@ -67,7 +67,7 @@ func main() {
 		cancel()
 	}()
 
-	uploader := awssdkv1.NewUploader(sess,
+	uploader := awss3v1.NewUploader(sess,
 		s3iot.WithReadInterceptor(
 			s3iot.NewWaitReadInterceptorFactory(
 				500*time.Nanosecond, // Add 500ns delay per byte = 500ms/MB

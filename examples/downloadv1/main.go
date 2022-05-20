@@ -27,7 +27,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 
 	"github.com/at-wat/s3iot"
-	"github.com/at-wat/s3iot/awssdkv1"
+	"github.com/at-wat/s3iot/awss3v1"
 )
 
 func main() {
@@ -67,7 +67,7 @@ func main() {
 		cancel()
 	}()
 
-	uploader := awssdkv1.NewDownloader(sess,
+	uploader := awss3v1.NewDownloader(sess,
 		s3iot.WithRetryer(&s3iot.RetryerHookFactory{
 			Base: s3iot.DefaultRetryer,
 			OnError: func(bucket, key string, err error) {
