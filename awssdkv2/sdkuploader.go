@@ -50,9 +50,11 @@ func (u *sdkUploader) Upload(ctx context.Context, input *s3iot.UploadInput) (s3i
 		out, err := u.u.Upload(ctx, in)
 		uc.mu.Lock()
 		uc.err = err
-		uc.output.ETag = out.ETag
-		uc.output.VersionID = out.VersionID
-		uc.output.Location = &out.Location
+		if out != nil {
+			uc.output.ETag = out.ETag
+			uc.output.VersionID = out.VersionID
+			uc.output.Location = &out.Location
+		}
 		uc.mu.Unlock()
 		cancel()
 	}()
