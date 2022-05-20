@@ -41,12 +41,13 @@ func (u *sdkDownloader) Download(ctx context.Context, w io.WriterAt, input *s3io
 			VersionID: input.VersionID,
 		},
 	}
+	in := &s3.GetObjectInput{
+		Bucket:    input.Bucket,
+		Key:       input.Key,
+		VersionId: input.VersionID,
+	}
 	go func() {
-		n, err := u.u.DownloadWithContext(ctx, w, &s3.GetObjectInput{
-			Bucket:    input.Bucket,
-			Key:       input.Key,
-			VersionId: input.VersionID,
-		})
+		n, err := u.u.DownloadWithContext(ctx, w, in)
 		dc.mu.Lock()
 		dc.err = err
 		dc.status.CompletedSize = n
