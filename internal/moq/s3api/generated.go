@@ -34,8 +34,8 @@ var _ s3api.S3API = &MockS3API{}
 // 			GetObjectFunc: func(ctx context.Context, input *s3api.GetObjectInput) (*s3api.GetObjectOutput, error) {
 // 				panic("mock out the GetObject method")
 // 			},
-// 			ListObjectFunc: func(ctx context.Context, input *s3api.ListObjectInput) (*s3api.ListObjectOutput, error) {
-// 				panic("mock out the ListObject method")
+// 			ListObjectsFunc: func(ctx context.Context, input *s3api.ListObjectsInput) (*s3api.ListObjectsOutput, error) {
+// 				panic("mock out the ListObjects method")
 // 			},
 // 			PutObjectFunc: func(ctx context.Context, input *s3api.PutObjectInput) (*s3api.PutObjectOutput, error) {
 // 				panic("mock out the PutObject method")
@@ -65,8 +65,8 @@ type MockS3API struct {
 	// GetObjectFunc mocks the GetObject method.
 	GetObjectFunc func(ctx context.Context, input *s3api.GetObjectInput) (*s3api.GetObjectOutput, error)
 
-	// ListObjectFunc mocks the ListObject method.
-	ListObjectFunc func(ctx context.Context, input *s3api.ListObjectInput) (*s3api.ListObjectOutput, error)
+	// ListObjectsFunc mocks the ListObjects method.
+	ListObjectsFunc func(ctx context.Context, input *s3api.ListObjectsInput) (*s3api.ListObjectsOutput, error)
 
 	// PutObjectFunc mocks the PutObject method.
 	PutObjectFunc func(ctx context.Context, input *s3api.PutObjectInput) (*s3api.PutObjectOutput, error)
@@ -111,12 +111,12 @@ type MockS3API struct {
 			// Input is the input argument value.
 			Input *s3api.GetObjectInput
 		}
-		// ListObject holds details about calls to the ListObject method.
-		ListObject []struct {
+		// ListObjects holds details about calls to the ListObjects method.
+		ListObjects []struct {
 			// Ctx is the ctx argument value.
 			Ctx context.Context
 			// Input is the input argument value.
-			Input *s3api.ListObjectInput
+			Input *s3api.ListObjectsInput
 		}
 		// PutObject holds details about calls to the PutObject method.
 		PutObject []struct {
@@ -138,7 +138,7 @@ type MockS3API struct {
 	lockCreateMultipartUpload   sync.RWMutex
 	lockDeleteObject            sync.RWMutex
 	lockGetObject               sync.RWMutex
-	lockListObject              sync.RWMutex
+	lockListObjects             sync.RWMutex
 	lockPutObject               sync.RWMutex
 	lockUploadPart              sync.RWMutex
 }
@@ -318,38 +318,38 @@ func (mock *MockS3API) GetObjectCalls() []struct {
 	return calls
 }
 
-// ListObject calls ListObjectFunc.
-func (mock *MockS3API) ListObject(ctx context.Context, input *s3api.ListObjectInput) (*s3api.ListObjectOutput, error) {
-	if mock.ListObjectFunc == nil {
-		panic("MockS3API.ListObjectFunc: method is nil but S3API.ListObject was just called")
+// ListObjects calls ListObjectsFunc.
+func (mock *MockS3API) ListObjects(ctx context.Context, input *s3api.ListObjectsInput) (*s3api.ListObjectsOutput, error) {
+	if mock.ListObjectsFunc == nil {
+		panic("MockS3API.ListObjectsFunc: method is nil but S3API.ListObjects was just called")
 	}
 	callInfo := struct {
 		Ctx   context.Context
-		Input *s3api.ListObjectInput
+		Input *s3api.ListObjectsInput
 	}{
 		Ctx:   ctx,
 		Input: input,
 	}
-	mock.lockListObject.Lock()
-	mock.calls.ListObject = append(mock.calls.ListObject, callInfo)
-	mock.lockListObject.Unlock()
-	return mock.ListObjectFunc(ctx, input)
+	mock.lockListObjects.Lock()
+	mock.calls.ListObjects = append(mock.calls.ListObjects, callInfo)
+	mock.lockListObjects.Unlock()
+	return mock.ListObjectsFunc(ctx, input)
 }
 
-// ListObjectCalls gets all the calls that were made to ListObject.
+// ListObjectsCalls gets all the calls that were made to ListObjects.
 // Check the length with:
-//     len(mockedS3API.ListObjectCalls())
-func (mock *MockS3API) ListObjectCalls() []struct {
+//     len(mockedS3API.ListObjectsCalls())
+func (mock *MockS3API) ListObjectsCalls() []struct {
 	Ctx   context.Context
-	Input *s3api.ListObjectInput
+	Input *s3api.ListObjectsInput
 } {
 	var calls []struct {
 		Ctx   context.Context
-		Input *s3api.ListObjectInput
+		Input *s3api.ListObjectsInput
 	}
-	mock.lockListObject.RLock()
-	calls = mock.calls.ListObject
-	mock.lockListObject.RUnlock()
+	mock.lockListObjects.RLock()
+	calls = mock.calls.ListObjects
+	mock.lockListObjects.RUnlock()
 	return calls
 }
 
