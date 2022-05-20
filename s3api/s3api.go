@@ -12,7 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package s3iot
+// Package s3api provides abstracted S3 API interface to support multiple major version of aws-sdk-go.
+package s3api
 
 import (
 	"context"
@@ -20,14 +21,13 @@ import (
 	"time"
 )
 
-// S3API is abstracted S3 API interface to support multiple major version of aws-sdk-go.
-type S3API interface {
+// UploadAPI interface.
+type UploadAPI interface {
 	CreateMultipartUpload(ctx context.Context, input *CreateMultipartUploadInput) (*CreateMultipartUploadOutput, error)
 	UploadPart(ctx context.Context, input *UploadPartInput) (*UploadPartOutput, error)
 	AbortMultipartUpload(ctx context.Context, input *AbortMultipartUploadInput) (*AbortMultipartUploadOutput, error)
 	CompleteMultipartUpload(ctx context.Context, input *CompleteMultipartUploadInput) (*CompleteMultipartUploadOutput, error)
 	PutObject(ctx context.Context, input *PutObjectInput) (*PutObjectOutput, error)
-	GetObject(ctx context.Context, input *GetObjectInput) (*GetObjectOutput, error)
 }
 
 // CreateMultipartUploadInput represents input of CreateMultipartUpload API.
@@ -104,6 +104,11 @@ type PutObjectOutput struct {
 	Location  *string
 }
 
+// DownloadAPI interface.
+type DownloadAPI interface {
+	GetObject(ctx context.Context, input *GetObjectInput) (*GetObjectOutput, error)
+}
+
 // GetObjectInput represents input of GetObject API.
 type GetObjectInput struct {
 	Bucket    *string
@@ -121,4 +126,62 @@ type GetObjectOutput struct {
 	ETag          *string
 	LastModified  *time.Time
 	VersionID     *string
+}
+
+// DeleteAPI interface.
+type DeleteAPI interface {
+	DeleteObject(ctx context.Context, input *DeleteObjectInput) (*DeleteObjectOutput, error)
+}
+
+// DeleteObjectInput represents input of Delete API.
+type DeleteObjectInput struct {
+	Bucket    *string
+	Key       *string
+	VersionID *string
+}
+
+// DeleteObjectOutput represents output of Delete API.
+type DeleteObjectOutput struct {
+	VersionID *string
+}
+
+// ListAPI interface.
+type ListAPI interface {
+	ListObjects(ctx context.Context, input *ListObjectsInput) (*ListObjectsOutput, error)
+}
+
+// ListObjectsInput represents input of List API.
+type ListObjectsInput struct {
+	Bucket            *string
+	ContinuationToken *string
+	MaxKeys           int
+	Prefix            *string
+}
+
+// ListObjectsOutput represents output of List API.
+type ListObjectsOutput struct {
+	Contents              []Object
+	KeyCount              int
+	NextContinuationToken *string
+}
+
+// Object represents S3 object.
+type Object struct {
+	ETag         *string
+	Key          *string
+	LastModified *time.Time
+	Size         int64
+}
+
+// UpDownloadAPI is the interface that groups Upload and Download APIs.
+type UpDownloadAPI interface {
+	UploadAPI
+	DownloadAPI
+}
+
+// S3API is the interface that groups all S3 APIs.
+type S3API interface {
+	UpDownloadAPI
+	DeleteAPI
+	ListAPI
 }

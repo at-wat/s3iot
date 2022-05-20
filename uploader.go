@@ -20,6 +20,8 @@ import (
 	"context"
 	"io"
 	"sort"
+
+	"github.com/at-wat/s3iot/s3api"
 )
 
 // Upload a file to S3.
@@ -110,7 +112,7 @@ func (uc *uploadContext) single(ctx context.Context, r io.ReadSeeker, cleanup fu
 			return &fatalError{err}
 		}
 		ctx2, isForcePaused := uc.currentCallContext(ctx)
-		out, err := uc.api.PutObject(ctx2, &PutObjectInput{
+		out, err := uc.api.PutObject(ctx2, &s3api.PutObjectInput{
 			Bucket:      uc.input.Bucket,
 			Key:         uc.input.Key,
 			ACL:         uc.input.ACL,
@@ -138,7 +140,7 @@ func (uc *uploadContext) single(ctx context.Context, r io.ReadSeeker, cleanup fu
 func (uc *uploadContext) multi(ctx context.Context, r io.ReadSeeker, cleanup func()) {
 	if err := withRetry(ctx, 0, uc.retryer, uc.errClassifier, func() error {
 		uc.pauseCheck(ctx)
-		out, err := uc.api.CreateMultipartUpload(ctx, &CreateMultipartUploadInput{
+		out, err := uc.api.CreateMultipartUpload(ctx, &s3api.CreateMultipartUploadInput{
 			Bucket:      uc.input.Bucket,
 			Key:         uc.input.Key,
 			ACL:         uc.input.ACL,
@@ -180,7 +182,7 @@ func (uc *uploadContext) multi(ctx context.Context, r io.ReadSeeker, cleanup fun
 				return &fatalError{err}
 			}
 			ctx2, isForcePaused := uc.currentCallContext(ctx)
-			out, err := uc.api.UploadPart(ctx2, &UploadPartInput{
+			out, err := uc.api.UploadPart(ctx2, &s3api.UploadPartInput{
 				Body:       r,
 				Bucket:     uc.input.Bucket,
 				Key:        uc.input.Key,
@@ -194,7 +196,7 @@ func (uc *uploadContext) multi(ctx context.Context, r io.ReadSeeker, cleanup fun
 				uc.countRetry()
 				return err
 			}
-			parts = append(parts, &CompletedPart{
+			parts = append(parts, &s3api.CompletedPart{
 				PartNumber: &i,
 				ETag:       out.ETag,
 			})
@@ -226,7 +228,7 @@ func (uc *uploadContext) multi(ctx context.Context, r io.ReadSeeker, cleanup fun
 
 	if err := withRetry(ctx, -1, uc.retryer, uc.errClassifier, func() error {
 		uc.pauseCheck(ctx)
-		out, err := uc.api.CompleteMultipartUpload(ctx, &CompleteMultipartUploadInput{
+		out, err := uc.api.CompleteMultipartUpload(ctx, &s3api.CompleteMultipartUploadInput{
 			Bucket:         uc.input.Bucket,
 			Key:            uc.input.Key,
 			CompletedParts: parts,
@@ -253,7 +255,7 @@ func (uc *uploadContext) fail(err error) {
 	uc.mu.Unlock()
 	close(uc.done)
 
-	_, _ = uc.api.AbortMultipartUpload(context.Background(), &AbortMultipartUploadInput{
+	_, _ = uc.api.AbortMultipartUpload(context.Background(), &s3api.AbortMultipartUploadInput{
 		Bucket:   uc.input.Bucket,
 		Key:      uc.input.Key,
 		UploadID: &uc.status.UploadID,

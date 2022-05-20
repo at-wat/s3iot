@@ -25,6 +25,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3/s3iface"
 
 	"github.com/at-wat/s3iot"
+	"github.com/at-wat/s3iot/s3api"
 )
 
 // NewUploader creates s3iot.Uploader from aws-sdk-go ConfigProvider (like Session).
@@ -54,8 +55,8 @@ func NewDownloader(c client.ConfigProvider, opts ...s3iot.DownloaderOption) *s3i
 	return d
 }
 
-// NewAPI wraps s3iface.S3API to s3iot.S3API.
-func NewAPI(api s3iface.S3API) s3iot.S3API {
+// NewAPI wraps s3iface.S3API to s3api.UpDownloadAPI.
+func NewAPI(api s3iface.S3API) s3api.UpDownloadAPI {
 	return &wrapper{api: api}
 }
 
@@ -63,7 +64,7 @@ type wrapper struct {
 	api s3iface.S3API
 }
 
-func (w *wrapper) PutObject(ctx context.Context, input *s3iot.PutObjectInput) (*s3iot.PutObjectOutput, error) {
+func (w *wrapper) PutObject(ctx context.Context, input *s3api.PutObjectInput) (*s3api.PutObjectOutput, error) {
 	var req *request.Request
 	out, err := w.api.PutObjectWithContext(
 		aws.Context(ctx),
@@ -83,14 +84,14 @@ func (w *wrapper) PutObject(ctx context.Context, input *s3iot.PutObjectInput) (*
 	u := *req.HTTPResponse.Request.URL
 	u.RawQuery = ""
 	location := u.String()
-	return &s3iot.PutObjectOutput{
+	return &s3api.PutObjectOutput{
 		VersionID: out.VersionId,
 		ETag:      out.ETag,
 		Location:  &location,
 	}, nil
 }
 
-func (w *wrapper) GetObject(ctx context.Context, input *s3iot.GetObjectInput) (*s3iot.GetObjectOutput, error) {
+func (w *wrapper) GetObject(ctx context.Context, input *s3api.GetObjectInput) (*s3api.GetObjectOutput, error) {
 	out, err := w.api.GetObjectWithContext(
 		aws.Context(ctx),
 		&s3.GetObjectInput{
@@ -102,7 +103,7 @@ func (w *wrapper) GetObject(ctx context.Context, input *s3iot.GetObjectInput) (*
 	if err != nil {
 		return nil, err
 	}
-	return &s3iot.GetObjectOutput{
+	return &s3api.GetObjectOutput{
 		Body:          out.Body,
 		ContentType:   out.ContentType,
 		ContentLength: out.ContentLength,
@@ -113,7 +114,7 @@ func (w *wrapper) GetObject(ctx context.Context, input *s3iot.GetObjectInput) (*
 	}, nil
 }
 
-func (w *wrapper) CreateMultipartUpload(ctx context.Context, input *s3iot.CreateMultipartUploadInput) (*s3iot.CreateMultipartUploadOutput, error) {
+func (w *wrapper) CreateMultipartUpload(ctx context.Context, input *s3api.CreateMultipartUploadInput) (*s3api.CreateMultipartUploadOutput, error) {
 	out, err := w.api.CreateMultipartUploadWithContext(
 		aws.Context(ctx),
 		&s3.CreateMultipartUploadInput{
@@ -125,12 +126,12 @@ func (w *wrapper) CreateMultipartUpload(ctx context.Context, input *s3iot.Create
 	if err != nil {
 		return nil, err
 	}
-	return &s3iot.CreateMultipartUploadOutput{
+	return &s3api.CreateMultipartUploadOutput{
 		UploadID: out.UploadId,
 	}, nil
 }
 
-func (w *wrapper) CompleteMultipartUpload(ctx context.Context, input *s3iot.CompleteMultipartUploadInput) (*s3iot.CompleteMultipartUploadOutput, error) {
+func (w *wrapper) CompleteMultipartUpload(ctx context.Context, input *s3api.CompleteMultipartUploadInput) (*s3api.CompleteMultipartUploadOutput, error) {
 	var parts []*s3.CompletedPart
 	for _, part := range input.CompletedParts {
 		parts = append(parts, &s3.CompletedPart{
@@ -151,14 +152,14 @@ func (w *wrapper) CompleteMultipartUpload(ctx context.Context, input *s3iot.Comp
 	if err != nil {
 		return nil, err
 	}
-	return &s3iot.CompleteMultipartUploadOutput{
+	return &s3api.CompleteMultipartUploadOutput{
 		VersionID: out.VersionId,
 		ETag:      out.ETag,
 		Location:  out.Location,
 	}, nil
 }
 
-func (w *wrapper) AbortMultipartUpload(ctx context.Context, input *s3iot.AbortMultipartUploadInput) (*s3iot.AbortMultipartUploadOutput, error) {
+func (w *wrapper) AbortMultipartUpload(ctx context.Context, input *s3api.AbortMultipartUploadInput) (*s3api.AbortMultipartUploadOutput, error) {
 	_, err := w.api.AbortMultipartUploadWithContext(
 		aws.Context(ctx),
 		&s3.AbortMultipartUploadInput{
@@ -169,10 +170,10 @@ func (w *wrapper) AbortMultipartUpload(ctx context.Context, input *s3iot.AbortMu
 	if err != nil {
 		return nil, err
 	}
-	return &s3iot.AbortMultipartUploadOutput{}, nil
+	return &s3api.AbortMultipartUploadOutput{}, nil
 }
 
-func (w *wrapper) UploadPart(ctx context.Context, input *s3iot.UploadPartInput) (*s3iot.UploadPartOutput, error) {
+func (w *wrapper) UploadPart(ctx context.Context, input *s3api.UploadPartInput) (*s3api.UploadPartOutput, error) {
 	out, err := w.api.UploadPartWithContext(
 		aws.Context(ctx),
 		&s3.UploadPartInput{
@@ -185,7 +186,7 @@ func (w *wrapper) UploadPart(ctx context.Context, input *s3iot.UploadPartInput) 
 	if err != nil {
 		return nil, err
 	}
-	return &s3iot.UploadPartOutput{
+	return &s3api.UploadPartOutput{
 		ETag: out.ETag,
 	}, nil
 

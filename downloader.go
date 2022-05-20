@@ -21,6 +21,7 @@ import (
 	"io"
 
 	"github.com/at-wat/s3iot/contentrange"
+	"github.com/at-wat/s3iot/s3api"
 )
 
 // Download errors.
@@ -91,7 +92,7 @@ func (dc *downloadContext) multi(ctx context.Context) {
 			dc.pauseCheck(ctx)
 			r := rn.String()
 			ctx2, isForcePaused := dc.currentCallContext(ctx)
-			out, err := dc.api.GetObject(ctx2, &GetObjectInput{
+			out, err := dc.api.GetObject(ctx2, &s3api.GetObjectInput{
 				Bucket:    dc.input.Bucket,
 				Key:       dc.input.Key,
 				Range:     &r,

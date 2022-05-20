@@ -28,8 +28,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/service/s3"
 
-	"github.com/at-wat/s3iot"
 	mock_s3iface "github.com/at-wat/s3iot/awss3v1/internal/moq/s3iface"
+	"github.com/at-wat/s3iot/s3api"
 )
 
 func TestWrapper(t *testing.T) {
@@ -63,7 +63,7 @@ func TestWrapper(t *testing.T) {
 			}
 			w := NewAPI(api)
 			out, err := w.PutObject(context.TODO(),
-				&s3iot.PutObjectInput{
+				&s3api.PutObjectInput{
 					Bucket:      aws.String("Bucket"),
 					Key:         aws.String("Key"),
 					ACL:         aws.String("ACL"),
@@ -103,7 +103,7 @@ func TestWrapper(t *testing.T) {
 			}
 			w := NewAPI(api)
 			out, err := w.GetObject(context.TODO(),
-				&s3iot.GetObjectInput{
+				&s3api.GetObjectInput{
 					Bucket:    aws.String("Bucket"),
 					Key:       aws.String("Key"),
 					Range:     aws.String("Range"),
@@ -142,7 +142,7 @@ func TestWrapper(t *testing.T) {
 			}
 			w := NewAPI(api)
 			out, err := w.CreateMultipartUpload(context.TODO(),
-				&s3iot.CreateMultipartUploadInput{
+				&s3api.CreateMultipartUploadInput{
 					Bucket:      aws.String("Bucket"),
 					Key:         aws.String("Key"),
 					ACL:         aws.String("ACL"),
@@ -176,10 +176,10 @@ func TestWrapper(t *testing.T) {
 			}
 			w := NewAPI(api)
 			out, err := w.CompleteMultipartUpload(context.TODO(),
-				&s3iot.CompleteMultipartUploadInput{
+				&s3api.CompleteMultipartUploadInput{
 					Bucket: aws.String("Bucket"),
 					Key:    aws.String("Key"),
-					CompletedParts: []*s3iot.CompletedPart{
+					CompletedParts: []*s3api.CompletedPart{
 						{
 							ETag:       aws.String("ETag1"),
 							PartNumber: aws.Int64(1),
@@ -213,7 +213,7 @@ func TestWrapper(t *testing.T) {
 			}
 			w := NewAPI(api)
 			_, err := w.AbortMultipartUpload(context.TODO(),
-				&s3iot.AbortMultipartUploadInput{
+				&s3api.AbortMultipartUploadInput{
 					Bucket:   aws.String("Bucket"),
 					Key:      aws.String("Key"),
 					UploadID: aws.String("UploadID"),
@@ -245,7 +245,7 @@ func TestWrapper(t *testing.T) {
 			}
 			w := NewAPI(api)
 			out, err := w.UploadPart(context.TODO(),
-				&s3iot.UploadPartInput{
+				&s3api.UploadPartInput{
 					Body:       r,
 					Bucket:     aws.String("Bucket"),
 					Key:        aws.String("Key"),
@@ -272,7 +272,7 @@ func TestWrapper(t *testing.T) {
 				},
 			}
 			w := NewAPI(api)
-			if _, err := w.PutObject(context.TODO(), &s3iot.PutObjectInput{}); err != errDummy {
+			if _, err := w.PutObject(context.TODO(), &s3api.PutObjectInput{}); err != errDummy {
 				t.Fatal("Expected error")
 			}
 			if n := len(api.PutObjectWithContextCalls()); n != 1 {
@@ -286,7 +286,7 @@ func TestWrapper(t *testing.T) {
 				},
 			}
 			w := NewAPI(api)
-			if _, err := w.GetObject(context.TODO(), &s3iot.GetObjectInput{}); err != errDummy {
+			if _, err := w.GetObject(context.TODO(), &s3api.GetObjectInput{}); err != errDummy {
 				t.Fatal("Expected error")
 			}
 			if n := len(api.GetObjectWithContextCalls()); n != 1 {
@@ -300,7 +300,7 @@ func TestWrapper(t *testing.T) {
 				},
 			}
 			w := NewAPI(api)
-			if _, err := w.CreateMultipartUpload(context.TODO(), &s3iot.CreateMultipartUploadInput{}); err != errDummy {
+			if _, err := w.CreateMultipartUpload(context.TODO(), &s3api.CreateMultipartUploadInput{}); err != errDummy {
 				t.Fatal("Expected error")
 			}
 			if n := len(api.CreateMultipartUploadWithContextCalls()); n != 1 {
@@ -314,7 +314,7 @@ func TestWrapper(t *testing.T) {
 				},
 			}
 			w := NewAPI(api)
-			if _, err := w.CompleteMultipartUpload(context.TODO(), &s3iot.CompleteMultipartUploadInput{}); err != errDummy {
+			if _, err := w.CompleteMultipartUpload(context.TODO(), &s3api.CompleteMultipartUploadInput{}); err != errDummy {
 				t.Fatal("Expected error")
 			}
 			if n := len(api.CompleteMultipartUploadWithContextCalls()); n != 1 {
@@ -328,7 +328,7 @@ func TestWrapper(t *testing.T) {
 				},
 			}
 			w := NewAPI(api)
-			if _, err := w.AbortMultipartUpload(context.TODO(), &s3iot.AbortMultipartUploadInput{}); err != errDummy {
+			if _, err := w.AbortMultipartUpload(context.TODO(), &s3api.AbortMultipartUploadInput{}); err != errDummy {
 				t.Fatal("Expected error")
 			}
 			if n := len(api.AbortMultipartUploadWithContextCalls()); n != 1 {
@@ -342,7 +342,7 @@ func TestWrapper(t *testing.T) {
 				},
 			}
 			w := NewAPI(api)
-			if _, err := w.UploadPart(context.TODO(), &s3iot.UploadPartInput{}); err != errDummy {
+			if _, err := w.UploadPart(context.TODO(), &s3api.UploadPartInput{}); err != errDummy {
 				t.Fatal("Expected error")
 			}
 			if n := len(api.UploadPartWithContextCalls()); n != 1 {

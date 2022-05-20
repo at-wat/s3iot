@@ -27,7 +27,8 @@ import (
 	"github.com/at-wat/s3iot"
 	"github.com/at-wat/s3iot/contentrange"
 	"github.com/at-wat/s3iot/internal/iotest"
-	mock_s3iot "github.com/at-wat/s3iot/internal/moq/s3iot"
+	mock_s3api "github.com/at-wat/s3iot/internal/moq/s3api"
+	"github.com/at-wat/s3iot/s3api"
 )
 
 func TestDownloader(t *testing.T) {
@@ -147,7 +148,7 @@ func TestDownloader(t *testing.T) {
 				buf := iotest.BufferAt(make([]byte, 128))
 				api := newDownloadMockAPI(t, data, 0, nil, nil)
 				getObj := api.GetObjectFunc
-				api.GetObjectFunc = func(ctx context.Context, input *s3iot.GetObjectInput) (*s3iot.GetObjectOutput, error) {
+				api.GetObjectFunc = func(ctx context.Context, input *s3api.GetObjectInput) (*s3api.GetObjectOutput, error) {
 					out, err := getObj(ctx, input)
 					out.ContentRange = &tt.contentRange
 					return out, err
@@ -425,7 +426,7 @@ func TestDownloader(t *testing.T) {
 
 }
 
-func newDownloadMockAPI(t *testing.T, data []byte, num int, ch chan interface{}, etags []string) *mock_s3iot.MockS3API {
+func newDownloadMockAPI(t *testing.T, data []byte, num int, ch chan interface{}, etags []string) *mock_s3api.MockS3API {
 	var mu sync.Mutex
 	var cnt int
 	count := func() int {
@@ -436,8 +437,8 @@ func newDownloadMockAPI(t *testing.T, data []byte, num int, ch chan interface{},
 		return count
 	}
 
-	return &mock_s3iot.MockS3API{
-		GetObjectFunc: func(ctx context.Context, input *s3iot.GetObjectInput) (*s3iot.GetObjectOutput, error) {
+	return &mock_s3api.MockS3API{
+		GetObjectFunc: func(ctx context.Context, input *s3api.GetObjectInput) (*s3api.GetObjectOutput, error) {
 			if ctx.Err() != nil {
 				return nil, ctx.Err()
 			}
@@ -465,7 +466,7 @@ func newDownloadMockAPI(t *testing.T, data []byte, num int, ch chan interface{},
 				r.End = int64(len(data)) - 1
 			}
 			cr := r.ContentRange()
-			return &s3iot.GetObjectOutput{
+			return &s3api.GetObjectOutput{
 				Body:         io.NopCloser(bytes.NewReader(data[r.Start : r.End+1])),
 				ContentRange: &cr,
 				ETag:         &etag,

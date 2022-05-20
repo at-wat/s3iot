@@ -17,11 +17,13 @@ package s3iot
 import (
 	"context"
 	"sync"
+
+	"github.com/at-wat/s3iot/s3api"
 )
 
 // UpDownloaderBase stores downloader/uploader base objects.
 type UpDownloaderBase struct {
-	API             S3API
+	API             s3api.UpDownloadAPI
 	RetryerFactory  RetryerFactory
 	ErrorClassifier ErrorClassifier
 	ForcePause      bool
@@ -88,7 +90,7 @@ func (f UpDownloaderOptionFn) ApplyToDownloader(d *Downloader) {
 }
 
 // WithAPI sets S3 API.
-func WithAPI(a S3API) UpDownloaderOption {
+func WithAPI(a s3api.UpDownloadAPI) UpDownloaderOption {
 	return UpDownloaderOptionFn(func(u *UpDownloaderBase) {
 		u.API = a
 	})
@@ -138,7 +140,7 @@ func WithDownloadSlicer(s DownloadSlicerFactory) DownloaderOption {
 }
 
 type upDownloadContext struct {
-	api           S3API
+	api           s3api.UpDownloadAPI
 	retryer       Retryer
 	errClassifier ErrorClassifier
 	forcePause    bool
@@ -157,7 +159,7 @@ type upDownloadContext struct {
 	forcePaused       bool
 }
 
-func newUpDownloadContext(api S3API, retryerFactory RetryerFactory, errClassifier ErrorClassifier, forcePause bool) *upDownloadContext {
+func newUpDownloadContext(api s3api.UpDownloadAPI, retryerFactory RetryerFactory, errClassifier ErrorClassifier, forcePause bool) *upDownloadContext {
 	c := &upDownloadContext{
 		api:           api,
 		errClassifier: errClassifier,
