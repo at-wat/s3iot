@@ -22,3 +22,16 @@ type UpDownloader interface {
 	Uploader
 	Downloader
 }
+
+// CombineUpDownloader combines Uploader and Downloader as UpDwonloader interface.
+func CombineUpDownloader(u Uploader, d Downloader) UpDownloader {
+	return &upDownloader{
+		Uploader:   u,
+		Downloader: d,
+	}
+}
+
+type upDownloader struct {
+	Uploader
+	Downloader
+}
