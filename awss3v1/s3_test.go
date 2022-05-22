@@ -315,8 +315,8 @@ func TestWrapper(t *testing.T) {
 				},
 			}
 			w := NewAPI(api)
-			out, err := w.ListObjects(context.TODO(),
-				&s3api.ListObjectsInput{
+			out, err := w.ListObjectsV2(context.TODO(),
+				&s3api.ListObjectsV2Input{
 					Bucket:            aws.String("Bucket"),
 					ContinuationToken: aws.String("ContinuationToken"),
 					MaxKeys:           2,
@@ -458,7 +458,7 @@ func TestWrapper(t *testing.T) {
 				},
 			}
 			w := NewAPI(api)
-			if _, err := w.ListObjects(context.TODO(), &s3api.ListObjectsInput{}); err != errDummy {
+			if _, err := w.ListObjectsV2(context.TODO(), &s3api.ListObjectsV2Input{}); err != errDummy {
 				t.Fatal("Expected error")
 			}
 			if n := len(api.ListObjectsV2WithContextCalls()); n != 1 {

@@ -147,19 +147,19 @@ type DeleteObjectOutput struct {
 
 // ListAPI interface.
 type ListAPI interface {
-	ListObjects(ctx context.Context, input *ListObjectsInput) (*ListObjectsOutput, error)
+	ListObjectsV2(ctx context.Context, input *ListObjectsV2Input) (*ListObjectsV2Output, error)
 }
 
-// ListObjectsInput represents input of List API.
-type ListObjectsInput struct {
+// ListObjectsV2Input represents input of List API.
+type ListObjectsV2Input struct {
 	Bucket            *string
 	ContinuationToken *string
 	MaxKeys           int
 	Prefix            *string
 }
 
-// ListObjectsOutput represents output of List API.
-type ListObjectsOutput struct {
+// ListObjectsV2Output represents output of List API.
+type ListObjectsV2Output struct {
 	Contents              []Object
 	KeyCount              int
 	NextContinuationToken *string

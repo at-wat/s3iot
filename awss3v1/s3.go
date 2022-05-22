@@ -207,7 +207,7 @@ func (w *wrapper) DeleteObject(ctx context.Context, input *s3api.DeleteObjectInp
 	}, nil
 }
 
-func (w *wrapper) ListObjects(ctx context.Context, input *s3api.ListObjectsInput) (*s3api.ListObjectsOutput, error) {
+func (w *wrapper) ListObjectsV2(ctx context.Context, input *s3api.ListObjectsV2Input) (*s3api.ListObjectsV2Output, error) {
 	out, err := w.api.ListObjectsV2WithContext(
 		aws.Context(ctx),
 		&s3.ListObjectsV2Input{
@@ -236,7 +236,7 @@ func (w *wrapper) ListObjects(ctx context.Context, input *s3api.ListObjectsInput
 	if out.KeyCount != nil {
 		kc = int(*out.KeyCount)
 	}
-	return &s3api.ListObjectsOutput{
+	return &s3api.ListObjectsV2Output{
 		Contents:              contents,
 		KeyCount:              kc,
 		NextContinuationToken: out.NextContinuationToken,
