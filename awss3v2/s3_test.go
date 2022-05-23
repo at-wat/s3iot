@@ -21,16 +21,18 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"reflect"
 	"testing"
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"github.com/aws/aws-sdk-go-v2/service/s3/types"
 
-	"github.com/at-wat/s3iot"
 	"github.com/at-wat/s3iot/awss3v2"
 	mock_awss3v2 "github.com/at-wat/s3iot/awss3v2/internal/moq/awss3v2"
 	mock_s3iface "github.com/at-wat/s3iot/awss3v2/internal/moq/s3iface"
+	"github.com/at-wat/s3iot/s3api"
 )
 
 func TestWrapper(t *testing.T) {
@@ -72,7 +74,7 @@ func TestWrapper(t *testing.T) {
 			}
 			w := awss3v2.NewAPI(api)
 			out, err := w.PutObject(context.TODO(),
-				&s3iot.PutObjectInput{
+				&s3api.PutObjectInput{
 					Bucket:      aws.String("Bucket"),
 					Key:         aws.String("Key"),
 					ACL:         aws.String("ACL"),
@@ -112,7 +114,7 @@ func TestWrapper(t *testing.T) {
 			}
 			w := awss3v2.NewAPI(api)
 			out, err := w.GetObject(context.TODO(),
-				&s3iot.GetObjectInput{
+				&s3api.GetObjectInput{
 					Bucket:    aws.String("Bucket"),
 					Key:       aws.String("Key"),
 					Range:     aws.String("Range"),
@@ -154,7 +156,7 @@ func TestWrapper(t *testing.T) {
 			}
 			w := awss3v2.NewAPI(api)
 			out, err := w.CreateMultipartUpload(context.TODO(),
-				&s3iot.CreateMultipartUploadInput{
+				&s3api.CreateMultipartUploadInput{
 					Bucket:      aws.String("Bucket"),
 					Key:         aws.String("Key"),
 					ACL:         aws.String("ACL"),
@@ -188,10 +190,10 @@ func TestWrapper(t *testing.T) {
 			}
 			w := awss3v2.NewAPI(api)
 			out, err := w.CompleteMultipartUpload(context.TODO(),
-				&s3iot.CompleteMultipartUploadInput{
+				&s3api.CompleteMultipartUploadInput{
 					Bucket: aws.String("Bucket"),
 					Key:    aws.String("Key"),
-					CompletedParts: []*s3iot.CompletedPart{
+					CompletedParts: []*s3api.CompletedPart{
 						{
 							ETag:       aws.String("ETag1"),
 							PartNumber: aws.Int64(1),
@@ -225,7 +227,7 @@ func TestWrapper(t *testing.T) {
 			}
 			w := awss3v2.NewAPI(api)
 			_, err := w.AbortMultipartUpload(context.TODO(),
-				&s3iot.AbortMultipartUploadInput{
+				&s3api.AbortMultipartUploadInput{
 					Bucket:   aws.String("Bucket"),
 					Key:      aws.String("Key"),
 					UploadID: aws.String("UploadID"),
@@ -257,7 +259,7 @@ func TestWrapper(t *testing.T) {
 			}
 			w := awss3v2.NewAPI(api)
 			out, err := w.UploadPart(context.TODO(),
-				&s3iot.UploadPartInput{
+				&s3api.UploadPartInput{
 					Body:       r,
 					Bucket:     aws.String("Bucket"),
 					Key:        aws.String("Key"),
@@ -273,6 +275,95 @@ func TestWrapper(t *testing.T) {
 			}
 			expectStringPtr(t, "ETag", out.ETag)
 		})
+		t.Run("DeleteObject", func(t *testing.T) {
+			api := &mock_awss3v2.MockS3API{
+				DeleteObjectFunc: func(ctx context.Context, input *s3.DeleteObjectInput, optFns ...func(*s3.Options)) (*s3.DeleteObjectOutput, error) {
+					expectStringPtr(t, "Bucket", input.Bucket)
+					expectStringPtr(t, "Key", input.Key)
+					expectStringPtr(t, "VersionID", input.VersionId)
+					return &s3.DeleteObjectOutput{
+						VersionId: aws.String("VersionID2"),
+					}, nil
+				},
+			}
+			w := awss3v2.NewAPI(api)
+			out, err := w.DeleteObject(context.TODO(),
+				&s3api.DeleteObjectInput{
+					Bucket:    aws.String("Bucket"),
+					Key:       aws.String("Key"),
+					VersionID: aws.String("VersionID"),
+				},
+			)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if n := len(api.DeleteObjectCalls()); n != 1 {
+				t.Errorf("Expected calls: 1, actual: %d", n)
+			}
+			expectStringPtr(t, "VersionID2", out.VersionID)
+		})
+		t.Run("ListObjects", func(t *testing.T) {
+			api := &mock_awss3v2.MockS3API{
+				ListObjectsV2Func: func(ctx context.Context, input *s3.ListObjectsV2Input, optFns ...func(*s3.Options)) (*s3.ListObjectsV2Output, error) {
+					expectStringPtr(t, "Bucket", input.Bucket)
+					expectStringPtr(t, "ContinuationToken", input.ContinuationToken)
+					if input.MaxKeys != 2 {
+						t.Errorf("Expected MaxKeys: 2, got: %d", input.MaxKeys)
+					}
+					expectStringPtr(t, "Prefix", input.Prefix)
+					return &s3.ListObjectsV2Output{
+						Contents: []types.Object{
+							{
+								ETag:         aws.String("Etag1"),
+								Key:          aws.String("Key1"),
+								LastModified: aws.Time(time.Unix(100, 0)),
+								Size:         1000,
+							},
+							{
+								ETag: aws.String("Etag2"),
+								Key:  aws.String("Key2"),
+							},
+						},
+						KeyCount:              2,
+						NextContinuationToken: aws.String("NextToken"),
+					}, nil
+				},
+			}
+			w := awss3v2.NewAPI(api)
+			out, err := w.ListObjectsV2(context.TODO(),
+				&s3api.ListObjectsV2Input{
+					Bucket:            aws.String("Bucket"),
+					ContinuationToken: aws.String("ContinuationToken"),
+					MaxKeys:           2,
+					Prefix:            aws.String("Prefix"),
+				},
+			)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if n := len(api.ListObjectsV2Calls()); n != 1 {
+				t.Errorf("Expected calls: 1, actual: %d", n)
+			}
+			expectedContents := []s3api.Object{
+				{
+					ETag:         aws.String("Etag1"),
+					Key:          aws.String("Key1"),
+					LastModified: aws.Time(time.Unix(100, 0)),
+					Size:         1000,
+				},
+				{
+					ETag: aws.String("Etag2"),
+					Key:  aws.String("Key2"),
+				},
+			}
+			if !reflect.DeepEqual(expectedContents, out.Contents) {
+				t.Errorf("Expected Contents: %v, got: %v", expectedContents, out.Contents)
+			}
+			if out.KeyCount != 2 {
+				t.Errorf("Expected KeyCount: 2, got: %d", out.KeyCount)
+			}
+			expectStringPtr(t, "NextToken", out.NextContinuationToken)
+		})
 	})
 	t.Run("Error", func(t *testing.T) {
 		errDummy := errors.New("error")
@@ -284,7 +375,7 @@ func TestWrapper(t *testing.T) {
 				},
 			}
 			w := awss3v2.NewAPI(api)
-			if _, err := w.PutObject(context.TODO(), &s3iot.PutObjectInput{}); err != errDummy {
+			if _, err := w.PutObject(context.TODO(), &s3api.PutObjectInput{}); err != errDummy {
 				t.Fatal("Expected error")
 			}
 			if n := len(api.PutObjectCalls()); n != 1 {
@@ -298,7 +389,7 @@ func TestWrapper(t *testing.T) {
 				},
 			}
 			w := awss3v2.NewAPI(api)
-			if _, err := w.GetObject(context.TODO(), &s3iot.GetObjectInput{}); err != errDummy {
+			if _, err := w.GetObject(context.TODO(), &s3api.GetObjectInput{}); err != errDummy {
 				t.Fatal("Expected error")
 			}
 			if n := len(api.GetObjectCalls()); n != 1 {
@@ -312,7 +403,7 @@ func TestWrapper(t *testing.T) {
 				},
 			}
 			w := awss3v2.NewAPI(api)
-			if _, err := w.CreateMultipartUpload(context.TODO(), &s3iot.CreateMultipartUploadInput{}); err != errDummy {
+			if _, err := w.CreateMultipartUpload(context.TODO(), &s3api.CreateMultipartUploadInput{}); err != errDummy {
 				t.Fatal("Expected error")
 			}
 			if n := len(api.CreateMultipartUploadCalls()); n != 1 {
@@ -326,7 +417,7 @@ func TestWrapper(t *testing.T) {
 				},
 			}
 			w := awss3v2.NewAPI(api)
-			if _, err := w.CompleteMultipartUpload(context.TODO(), &s3iot.CompleteMultipartUploadInput{}); err != errDummy {
+			if _, err := w.CompleteMultipartUpload(context.TODO(), &s3api.CompleteMultipartUploadInput{}); err != errDummy {
 				t.Fatal("Expected error")
 			}
 			if n := len(api.CompleteMultipartUploadCalls()); n != 1 {
@@ -340,7 +431,7 @@ func TestWrapper(t *testing.T) {
 				},
 			}
 			w := awss3v2.NewAPI(api)
-			if _, err := w.AbortMultipartUpload(context.TODO(), &s3iot.AbortMultipartUploadInput{}); err != errDummy {
+			if _, err := w.AbortMultipartUpload(context.TODO(), &s3api.AbortMultipartUploadInput{}); err != errDummy {
 				t.Fatal("Expected error")
 			}
 			if n := len(api.AbortMultipartUploadCalls()); n != 1 {
@@ -354,10 +445,38 @@ func TestWrapper(t *testing.T) {
 				},
 			}
 			w := awss3v2.NewAPI(api)
-			if _, err := w.UploadPart(context.TODO(), &s3iot.UploadPartInput{}); err != errDummy {
+			if _, err := w.UploadPart(context.TODO(), &s3api.UploadPartInput{}); err != errDummy {
 				t.Fatal("Expected error")
 			}
 			if n := len(api.UploadPartCalls()); n != 1 {
+				t.Errorf("Expected calls: 1, actual: %d", n)
+			}
+		})
+		t.Run("DeleteObject", func(t *testing.T) {
+			api := &mock_awss3v2.MockS3API{
+				DeleteObjectFunc: func(ctx context.Context, input *s3.DeleteObjectInput, optFns ...func(*s3.Options)) (*s3.DeleteObjectOutput, error) {
+					return nil, errDummy
+				},
+			}
+			w := awss3v2.NewAPI(api)
+			if _, err := w.DeleteObject(context.TODO(), &s3api.DeleteObjectInput{}); err != errDummy {
+				t.Fatal("Expected error")
+			}
+			if n := len(api.DeleteObjectCalls()); n != 1 {
+				t.Errorf("Expected calls: 1, actual: %d", n)
+			}
+		})
+		t.Run("ListObjects", func(t *testing.T) {
+			api := &mock_awss3v2.MockS3API{
+				ListObjectsV2Func: func(ctx context.Context, input *s3.ListObjectsV2Input, optFns ...func(*s3.Options)) (*s3.ListObjectsV2Output, error) {
+					return nil, errDummy
+				},
+			}
+			w := awss3v2.NewAPI(api)
+			if _, err := w.ListObjectsV2(context.TODO(), &s3api.ListObjectsV2Input{}); err != errDummy {
+				t.Fatal("Expected error")
+			}
+			if n := len(api.ListObjectsV2Calls()); n != 1 {
 				t.Errorf("Expected calls: 1, actual: %d", n)
 			}
 		})

@@ -20,6 +20,7 @@ import (
 
 	"github.com/at-wat/s3iot"
 	"github.com/at-wat/s3iot/awss3v2/internal/locationstore"
+	"github.com/at-wat/s3iot/s3api"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
@@ -52,8 +53,8 @@ func NewDownloader(c aws.Config, opts ...s3iot.DownloaderOption) *s3iot.Download
 	return u
 }
 
-// NewAPI wraps s3.Client to s3iot.S3API.
-func NewAPI(api S3API) s3iot.S3API {
+// NewAPI wraps s3.Client to s3api.S3API.
+func NewAPI(api S3API) s3api.S3API {
 	return &wrapper{api: api}
 }
 
@@ -61,7 +62,7 @@ type wrapper struct {
 	api S3API
 }
 
-func (w *wrapper) PutObject(ctx context.Context, input *s3iot.PutObjectInput) (*s3iot.PutObjectOutput, error) {
+func (w *wrapper) PutObject(ctx context.Context, input *s3api.PutObjectInput) (*s3api.PutObjectOutput, error) {
 	var acl s3types.ObjectCannedACL
 	if input.ACL != nil {
 		acl = s3types.ObjectCannedACL(*input.ACL)
@@ -83,14 +84,14 @@ func (w *wrapper) PutObject(ctx context.Context, input *s3iot.PutObjectInput) (*
 	if err != nil {
 		return nil, err
 	}
-	return &s3iot.PutObjectOutput{
+	return &s3api.PutObjectOutput{
 		VersionID: out.VersionId,
 		ETag:      out.ETag,
 		Location:  &ls.Location,
 	}, nil
 }
 
-func (w *wrapper) GetObject(ctx context.Context, input *s3iot.GetObjectInput) (*s3iot.GetObjectOutput, error) {
+func (w *wrapper) GetObject(ctx context.Context, input *s3api.GetObjectInput) (*s3api.GetObjectOutput, error) {
 	out, err := w.api.GetObject(
 		ctx,
 		&s3.GetObjectInput{
@@ -102,7 +103,7 @@ func (w *wrapper) GetObject(ctx context.Context, input *s3iot.GetObjectInput) (*
 	if err != nil {
 		return nil, err
 	}
-	return &s3iot.GetObjectOutput{
+	return &s3api.GetObjectOutput{
 		Body:          out.Body,
 		ContentType:   out.ContentType,
 		ContentLength: &out.ContentLength,
@@ -113,7 +114,7 @@ func (w *wrapper) GetObject(ctx context.Context, input *s3iot.GetObjectInput) (*
 	}, nil
 }
 
-func (w *wrapper) CreateMultipartUpload(ctx context.Context, input *s3iot.CreateMultipartUploadInput) (*s3iot.CreateMultipartUploadOutput, error) {
+func (w *wrapper) CreateMultipartUpload(ctx context.Context, input *s3api.CreateMultipartUploadInput) (*s3api.CreateMultipartUploadOutput, error) {
 	var acl s3types.ObjectCannedACL
 	if input.ACL != nil {
 		acl = s3types.ObjectCannedACL(*input.ACL)
@@ -129,12 +130,12 @@ func (w *wrapper) CreateMultipartUpload(ctx context.Context, input *s3iot.Create
 	if err != nil {
 		return nil, err
 	}
-	return &s3iot.CreateMultipartUploadOutput{
+	return &s3api.CreateMultipartUploadOutput{
 		UploadID: out.UploadId,
 	}, nil
 }
 
-func (w *wrapper) CompleteMultipartUpload(ctx context.Context, input *s3iot.CompleteMultipartUploadInput) (*s3iot.CompleteMultipartUploadOutput, error) {
+func (w *wrapper) CompleteMultipartUpload(ctx context.Context, input *s3api.CompleteMultipartUploadInput) (*s3api.CompleteMultipartUploadOutput, error) {
 	var parts []s3types.CompletedPart
 	for _, part := range input.CompletedParts {
 		parts = append(parts, s3types.CompletedPart{
@@ -155,14 +156,14 @@ func (w *wrapper) CompleteMultipartUpload(ctx context.Context, input *s3iot.Comp
 	if err != nil {
 		return nil, err
 	}
-	return &s3iot.CompleteMultipartUploadOutput{
+	return &s3api.CompleteMultipartUploadOutput{
 		VersionID: out.VersionId,
 		ETag:      out.ETag,
 		Location:  out.Location,
 	}, nil
 }
 
-func (w *wrapper) AbortMultipartUpload(ctx context.Context, input *s3iot.AbortMultipartUploadInput) (*s3iot.AbortMultipartUploadOutput, error) {
+func (w *wrapper) AbortMultipartUpload(ctx context.Context, input *s3api.AbortMultipartUploadInput) (*s3api.AbortMultipartUploadOutput, error) {
 	_, err := w.api.AbortMultipartUpload(
 		ctx,
 		&s3.AbortMultipartUploadInput{
@@ -173,10 +174,10 @@ func (w *wrapper) AbortMultipartUpload(ctx context.Context, input *s3iot.AbortMu
 	if err != nil {
 		return nil, err
 	}
-	return &s3iot.AbortMultipartUploadOutput{}, nil
+	return &s3api.AbortMultipartUploadOutput{}, nil
 }
 
-func (w *wrapper) UploadPart(ctx context.Context, input *s3iot.UploadPartInput) (*s3iot.UploadPartOutput, error) {
+func (w *wrapper) UploadPart(ctx context.Context, input *s3api.UploadPartInput) (*s3api.UploadPartOutput, error) {
 	var pn int32
 	if input.PartNumber != nil {
 		pn = int32(*input.PartNumber)
@@ -193,8 +194,51 @@ func (w *wrapper) UploadPart(ctx context.Context, input *s3iot.UploadPartInput) 
 	if err != nil {
 		return nil, err
 	}
-	return &s3iot.UploadPartOutput{
+	return &s3api.UploadPartOutput{
 		ETag: out.ETag,
 	}, nil
+}
 
+func (w *wrapper) DeleteObject(ctx context.Context, input *s3api.DeleteObjectInput) (*s3api.DeleteObjectOutput, error) {
+	out, err := w.api.DeleteObject(
+		ctx,
+		&s3.DeleteObjectInput{
+			Bucket:    input.Bucket,
+			Key:       input.Key,
+			VersionId: input.VersionID,
+		})
+	if err != nil {
+		return nil, err
+	}
+	return &s3api.DeleteObjectOutput{
+		VersionID: out.VersionId,
+	}, nil
+}
+
+func (w *wrapper) ListObjectsV2(ctx context.Context, input *s3api.ListObjectsV2Input) (*s3api.ListObjectsV2Output, error) {
+	out, err := w.api.ListObjectsV2(
+		ctx,
+		&s3.ListObjectsV2Input{
+			Bucket:            input.Bucket,
+			ContinuationToken: input.ContinuationToken,
+			MaxKeys:           int32(input.MaxKeys),
+			Prefix:            input.Prefix,
+		})
+	if err != nil {
+		return nil, err
+	}
+	contents := make([]s3api.Object, len(out.Contents))
+	for i, c := range out.Contents {
+		contents[i] = s3api.Object{
+			ETag:         c.ETag,
+			Key:          c.Key,
+			LastModified: c.LastModified,
+			Size:         c.Size,
+		}
+	}
+	return &s3api.ListObjectsV2Output{
+		Contents:              contents,
+		KeyCount:              int(out.KeyCount),
+		NextContinuationToken: out.NextContinuationToken,
+	}, nil
 }

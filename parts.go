@@ -16,7 +16,11 @@
 // Object can be uploaded with retry, pause/resume, and bandwidth limit.
 package s3iot
 
-type completedParts []*CompletedPart
+import (
+	"github.com/at-wat/s3iot/s3api"
+)
+
+type completedParts []*s3api.CompletedPart
 
 func (a completedParts) Len() int {
 	return len(a)

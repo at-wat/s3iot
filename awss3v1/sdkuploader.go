@@ -34,19 +34,22 @@ type sdkUploaderContext struct {
 func (u *sdkUploader) Upload(ctx context.Context, input *s3iot.UploadInput) (s3iot.UploadContext, error) {
 	doneCtx, cancel := context.WithCancel(context.Background())
 	uc := &sdkUploaderContext{DoneNotifier: doneCtx}
+	in := &s3manager.UploadInput{
+		ACL:         input.ACL,
+		Body:        input.Body,
+		Bucket:      input.Bucket,
+		ContentType: input.ContentType,
+		Key:         input.Key,
+	}
 	go func() {
-		out, err := u.u.UploadWithContext(ctx, &s3manager.UploadInput{
-			ACL:         input.ACL,
-			Body:        input.Body,
-			Bucket:      input.Bucket,
-			ContentType: input.ContentType,
-			Key:         input.Key,
-		})
+		out, err := u.u.UploadWithContext(ctx, in)
 		uc.mu.Lock()
 		uc.err = err
-		uc.output.ETag = out.ETag
-		uc.output.VersionID = out.VersionID
-		uc.output.Location = &out.Location
+		if out != nil {
+			uc.output.ETag = out.ETag
+			uc.output.VersionID = out.VersionID
+			uc.output.Location = &out.Location
+		}
 		uc.mu.Unlock()
 		cancel()
 	}()

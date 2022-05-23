@@ -28,7 +28,9 @@ import (
 
 	"github.com/at-wat/s3iot"
 	"github.com/at-wat/s3iot/internal/iotest"
+	mock_s3api "github.com/at-wat/s3iot/internal/moq/s3api"
 	mock_s3iot "github.com/at-wat/s3iot/internal/moq/s3iot"
+	"github.com/at-wat/s3iot/s3api"
 )
 
 var errTemp = errors.New("dummy")
@@ -865,7 +867,7 @@ func TestUploader(t *testing.T) {
 	})
 }
 
-func newUploadMockAPI(buf *bytes.Buffer, num map[string]int, ch map[string]chan interface{}) *mock_s3iot.MockS3API {
+func newUploadMockAPI(buf *bytes.Buffer, num map[string]int, ch map[string]chan interface{}) *mock_s3api.MockS3API {
 	if num == nil {
 		num = make(map[string]int)
 	}
@@ -892,8 +894,8 @@ func newUploadMockAPI(buf *bytes.Buffer, num map[string]int, ch map[string]chan 
 		return count
 	}
 
-	return &mock_s3iot.MockS3API{
-		AbortMultipartUploadFunc: func(ctx context.Context, input *s3iot.AbortMultipartUploadInput) (*s3iot.AbortMultipartUploadOutput, error) {
+	return &mock_s3api.MockS3API{
+		AbortMultipartUploadFunc: func(ctx context.Context, input *s3api.AbortMultipartUploadInput) (*s3api.AbortMultipartUploadOutput, error) {
 			if ctx.Err() != nil {
 				return nil, ctx.Err()
 			}
@@ -903,9 +905,9 @@ func newUploadMockAPI(buf *bytes.Buffer, num map[string]int, ch map[string]chan 
 			if c := ch["abort"]; c != nil {
 				c <- input
 			}
-			return &s3iot.AbortMultipartUploadOutput{}, nil
+			return &s3api.AbortMultipartUploadOutput{}, nil
 		},
-		CompleteMultipartUploadFunc: func(ctx context.Context, input *s3iot.CompleteMultipartUploadInput) (*s3iot.CompleteMultipartUploadOutput, error) {
+		CompleteMultipartUploadFunc: func(ctx context.Context, input *s3api.CompleteMultipartUploadInput) (*s3api.CompleteMultipartUploadOutput, error) {
 			if ctx.Err() != nil {
 				return nil, ctx.Err()
 			}
@@ -915,12 +917,12 @@ func newUploadMockAPI(buf *bytes.Buffer, num map[string]int, ch map[string]chan 
 			if c := ch["complete"]; c != nil {
 				c <- input
 			}
-			return &s3iot.CompleteMultipartUploadOutput{
+			return &s3api.CompleteMultipartUploadOutput{
 				ETag:     genETag(),
 				Location: &location,
 			}, nil
 		},
-		CreateMultipartUploadFunc: func(ctx context.Context, input *s3iot.CreateMultipartUploadInput) (*s3iot.CreateMultipartUploadOutput, error) {
+		CreateMultipartUploadFunc: func(ctx context.Context, input *s3api.CreateMultipartUploadInput) (*s3api.CreateMultipartUploadOutput, error) {
 			if ctx.Err() != nil {
 				return nil, ctx.Err()
 			}
@@ -930,11 +932,11 @@ func newUploadMockAPI(buf *bytes.Buffer, num map[string]int, ch map[string]chan 
 			if c := ch["create"]; c != nil {
 				c <- input
 			}
-			return &s3iot.CreateMultipartUploadOutput{
+			return &s3api.CreateMultipartUploadOutput{
 				UploadID: &uploadID,
 			}, nil
 		},
-		PutObjectFunc: func(ctx context.Context, input *s3iot.PutObjectInput) (*s3iot.PutObjectOutput, error) {
+		PutObjectFunc: func(ctx context.Context, input *s3api.PutObjectInput) (*s3api.PutObjectOutput, error) {
 			if ctx.Err() != nil {
 				return nil, ctx.Err()
 			}
@@ -950,12 +952,12 @@ func newUploadMockAPI(buf *bytes.Buffer, num map[string]int, ch map[string]chan 
 				}
 			}
 			io.Copy(buf, input.Body)
-			return &s3iot.PutObjectOutput{
+			return &s3api.PutObjectOutput{
 				ETag:     genETag(),
 				Location: &location,
 			}, nil
 		},
-		UploadPartFunc: func(ctx context.Context, input *s3iot.UploadPartInput) (*s3iot.UploadPartOutput, error) {
+		UploadPartFunc: func(ctx context.Context, input *s3api.UploadPartInput) (*s3api.UploadPartOutput, error) {
 			if ctx.Err() != nil {
 				return nil, ctx.Err()
 			}
@@ -971,7 +973,7 @@ func newUploadMockAPI(buf *bytes.Buffer, num map[string]int, ch map[string]chan 
 				}
 			}
 			io.Copy(buf, input.Body)
-			return &s3iot.UploadPartOutput{
+			return &s3api.UploadPartOutput{
 				ETag: genETag(),
 			}, nil
 		},

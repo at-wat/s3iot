@@ -18,11 +18,13 @@ import (
 	"reflect"
 	"sort"
 	"testing"
+
+	"github.com/at-wat/s3iot/s3api"
 )
 
 func TestCompletedParts(t *testing.T) {
-	part := func(e string, i int64) *CompletedPart {
-		return &CompletedPart{ETag: &e, PartNumber: &i}
+	part := func(e string, i int64) *s3api.CompletedPart {
+		return &s3api.CompletedPart{ETag: &e, PartNumber: &i}
 	}
 	ps := completedParts{
 		part("a", 1),
