@@ -8,6 +8,11 @@
     "gomodNoMassage"
   ],
   "ignorePaths": [],
+  "ignoreDeps": [
+    "github.com/at-wat/s3iot",
+    "github.com/at-wat/s3iot/awss3v1",
+    "github.com/at-wat/s3iot/awss3v2"
+  ],
   "packageRules": [
     {
       "matchPackagePatterns": [
