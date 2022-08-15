@@ -37,6 +37,10 @@ jobs:
         run: |
           cd ${{ matrix.package }}
           go mod tidy
+      - name: Generate mock
+        run: |
+          cd ${{ matrix.package }}
+          go generate ./...
       - name: Run go test
         run: |
           cd ${{ matrix.package }}
