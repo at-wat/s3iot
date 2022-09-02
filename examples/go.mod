@@ -12,7 +12,7 @@ require (
 	github.com/at-wat/s3iot v0.0.0-00010101000000-000000000000
 	github.com/at-wat/s3iot/awss3v1 v0.0.0-00010101000000-000000000000
 	github.com/at-wat/s3iot/awss3v2 v0.0.0-00010101000000-000000000000
-	github.com/aws/aws-sdk-go v1.44.86
+	github.com/aws/aws-sdk-go v1.44.91
 	github.com/aws/aws-sdk-go-v2 v1.16.11
 	github.com/aws/aws-sdk-go-v2/config v1.17.1
 	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.11.26 // indirect
