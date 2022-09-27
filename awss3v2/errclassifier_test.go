@@ -34,7 +34,7 @@ func TestErrorClassifier(t *testing.T) {
 	config := func(endpoint string) aws.Config {
 		cfg, err := config.LoadDefaultConfig(context.TODO(),
 			config.WithCredentialsProvider(
-				credentials.NewStaticCredentialsProvider("", "", ""),
+				credentials.NewStaticCredentialsProvider("dummy", "dummy", ""),
 			),
 			config.WithEndpointResolver(aws.EndpointResolverFunc(
 				func(service, region string) (aws.Endpoint, error) {
