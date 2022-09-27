@@ -32,11 +32,6 @@ jobs:
         uses: actions/setup-go@v3
         with:
           go-version: ${{ matrix.go }}
-      - name: Tidy
-        if: matrix.package != './'
-        run: |
-          cd ${{ matrix.package }}
-          go mod tidy
       - name: Generate mock
         run: |
           cd ${{ matrix.package }}
@@ -50,8 +45,7 @@ jobs:
           go test ./... \
             -v \
             -race -coverprofile=cover.out -covermode=atomic
-      - name: Tidy
-        if: matrix.package == './'
+      - name: Tidy check
         run: |
           cd ${{ matrix.package }}
           go mod tidy
