@@ -54,3 +54,25 @@ jobs:
         if: matrix.package != './examples/'
         with:
           file: ${{ matrix.package }}cover.out
+
+  release:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && startsWith(github.event.head_commit.message, 'Prepare v')
+    needs: test
+    steps:
+      - name: Get version
+        env:
+          COMMIT_MSG: ${{ github.event.head_commit.message }}
+        run: echo "VERSION=${COMMIT_MSG#Prepare }" > ${GITHUB_ENV}
+      - name: create release
+        run: |
+          git tag ${VERSION}
+          git tag awss3v1/${VERSION}
+          git tag awss3v2/${VERSION}
+          git push origin ${VERSION} awss3v1/${VERSION} awss3v2/${VERSION}
+          sleep 1
+
+          gh release create \
+            ${VERSION} \
+            --draft \
+            --title ${VERSION}
