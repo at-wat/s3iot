@@ -1,0 +1,41 @@
+name: release-pr
+on:
+  issues:
+    types: [opened, reopened, edited]
+
+jobs:
+  release-candidate:
+    runs-on: ubuntu-latest
+    if: startsWith(github.event.issue.title, 'Release v')
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+      - name: Get version
+        env:
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+        run: echo "VERSION=${ISSUE_TITLE#Release }" > ${GITHUB_ENV}
+      - name: Update go.mod
+        run: .github/workflows/bin/update-version.sh ${VERSION}
+      - name: Create PR
+        run: |
+          if git diff --exit-code
+          then
+            echo "Already updated"
+            exit 0
+          fi
+
+          git config user.name "at-wat"
+          git config user.email "8390204+at-wat@users.noreply.github.com"
+
+          git checkout release-${VERSION}
+          git add .
+          git commit -m "Prepare ${VERSION}"
+          git push release-${VERSION}
+
+          gh pr create \
+            --base main \
+            --head release-${VERSION} \
+            --body "Closes #${{ github.event.issue.number }}" \
+            --title "Prepare ${VERSION}"
