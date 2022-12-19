@@ -5,7 +5,7 @@ go 1.16
 replace github.com/at-wat/s3iot => ../
 
 require (
-	github.com/at-wat/s3iot v0.0.5
+	github.com/at-wat/s3iot v0.0.6
 	github.com/aws/aws-sdk-go-v2 v1.17.3
 	github.com/aws/aws-sdk-go-v2/config v1.18.5
 	github.com/aws/aws-sdk-go-v2/credentials v1.13.5
