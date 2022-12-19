@@ -12,5 +12,5 @@ require (
 	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.11.44
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.29.6
 	github.com/aws/smithy-go v1.13.5
-	github.com/matryer/moq v0.2.7
+	github.com/matryer/moq v0.3.0
 )
