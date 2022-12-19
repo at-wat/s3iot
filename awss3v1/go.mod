@@ -5,7 +5,7 @@ go 1.16
 replace github.com/at-wat/s3iot => ../
 
 require (
-	github.com/at-wat/s3iot v0.0.0-00010101000000-000000000000
+	github.com/at-wat/s3iot v0.0.5
 	github.com/aws/aws-sdk-go v1.44.162
 	github.com/matryer/moq v0.3.0
 )
