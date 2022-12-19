@@ -4,7 +4,7 @@ on:
     types: [opened, reopened, edited]
 
 jobs:
-  release-candidate:
+  prepare:
     runs-on: ubuntu-latest
     if: startsWith(github.event.issue.title, 'Release v')
     steps:
@@ -29,7 +29,7 @@ jobs:
           git config user.name "at-wat"
           git config user.email "8390204+at-wat@users.noreply.github.com"
 
-          git checkout release-${VERSION}
+          git checkout -b release-${VERSION}
           git add .
           git commit -m "Prepare ${VERSION}"
           git push release-${VERSION}
