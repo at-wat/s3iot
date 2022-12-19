@@ -9,7 +9,7 @@ replace github.com/at-wat/s3iot/awss3v1 => ../awss3v1
 replace github.com/at-wat/s3iot/awss3v2 => ../awss3v2
 
 require (
-	github.com/at-wat/s3iot v0.0.0-00010101000000-000000000000
+	github.com/at-wat/s3iot v0.0.5
 	github.com/at-wat/s3iot/awss3v1 v0.0.0-00010101000000-000000000000
 	github.com/at-wat/s3iot/awss3v2 v0.0.0-00010101000000-000000000000
 	github.com/aws/aws-sdk-go v1.44.162
