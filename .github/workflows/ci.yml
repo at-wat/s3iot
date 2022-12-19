@@ -65,7 +65,9 @@ jobs:
           do
             (
               cd $(dirname ${gomod})
+              pwd
               go generate ./...
+              echo
             )
           done
       - name: Check diff
