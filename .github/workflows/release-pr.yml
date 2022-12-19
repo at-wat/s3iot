@@ -22,6 +22,8 @@ jobs:
       - name: Update go.mod
         run: .github/workflows/bin/update-version.sh ${VERSION}
       - name: Create PR
+        env:
+          GH_TOKEN: ${{ secrets.GO_SUM_FIX_GITHUB_TOKEN }}
         run: |
           if git diff --exit-code
           then
