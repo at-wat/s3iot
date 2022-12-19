@@ -90,6 +90,8 @@ jobs:
           COMMIT_MSG: ${{ github.event.head_commit.message }}
         run: echo "${COMMIT_MSG}" | sed -n 's/^Prepare \(v[0-9.]\+\) .*/VERSION=\1/p' | head -n1 > ${GITHUB_ENV}
       - name: create release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git tag ${VERSION}
           git tag awss3v1/${VERSION}
