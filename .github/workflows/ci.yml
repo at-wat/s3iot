@@ -78,6 +78,8 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && startsWith(github.event.head_commit.message, 'Prepare v')
     needs: [test, mock]
+    permissions:
+      contents: write
     steps:
       - name: Get version
         env:
