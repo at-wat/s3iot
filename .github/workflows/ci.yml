@@ -84,7 +84,7 @@ jobs:
       - name: Get version
         env:
           COMMIT_MSG: ${{ github.event.head_commit.message }}
-        run: echo "VERSION=${COMMIT_MSG#Prepare }" > ${GITHUB_ENV}
+        run: echo "VERSION=${COMMIT_MSG#Prepare }" | head -n1 > ${GITHUB_ENV}
       - name: create release
         run: |
           git tag ${VERSION}
