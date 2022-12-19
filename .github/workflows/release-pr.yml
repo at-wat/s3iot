@@ -32,7 +32,8 @@ jobs:
           git checkout -b release-${VERSION}
           git add .
           git commit -m "Prepare ${VERSION}"
-          git push release-${VERSION}
+          git push origin release-${VERSION}
+          sleep 1
 
           gh pr create \
             --base main \
