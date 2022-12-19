@@ -7,6 +7,9 @@ jobs:
   prepare:
     runs-on: ubuntu-latest
     if: startsWith(github.event.issue.title, 'Release v')
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - name: checkout
         uses: actions/checkout@v3
