@@ -14,6 +14,6 @@ require (
 	github.com/at-wat/s3iot/awss3v2 v0.0.0-00010101000000-000000000000
 	github.com/aws/aws-sdk-go v1.44.258
 	github.com/aws/aws-sdk-go-v2 v1.18.0
-	github.com/aws/aws-sdk-go-v2/config v1.18.22
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.33.0
+	github.com/aws/aws-sdk-go-v2/config v1.18.23
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.33.1
 )
