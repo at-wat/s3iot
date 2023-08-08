@@ -7,5 +7,5 @@ replace github.com/at-wat/s3iot => ../
 require (
 	github.com/at-wat/s3iot v0.0.10
 	github.com/aws/aws-sdk-go v1.44.318
-	github.com/matryer/moq v0.3.1
+	github.com/matryer/moq v0.3.2
 )

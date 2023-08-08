@@ -1,5 +1,5 @@
-github.com/matryer/moq v0.3.1 h1:kLDiBJoGcusWS2BixGyTkF224aSCD8nLY24tj/NcTCs=
-github.com/matryer/moq v0.3.1/go.mod h1:RJ75ZZZD71hejp39j4crZLsEDszGk6iH4v4YsWFKH4s=
+github.com/matryer/moq v0.3.2 h1:z7oltmpTxiQ9nKNg0Jc7z45TM+eO7OhCVohxRxwaudM=
+github.com/matryer/moq v0.3.2/go.mod h1:RJ75ZZZD71hejp39j4crZLsEDszGk6iH4v4YsWFKH4s=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/yuin/goldmark v1.4.13/go.mod h1:6yULJ656Px+3vBD8DxQVa3kxgyrAnzto9xy5taEt/CY=
