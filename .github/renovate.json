@@ -20,6 +20,15 @@
         "^github.com/aws/aws-sdk-go-v2"
       ],
       "groupName": "github.com/aws/aws-sdk-go-v2"
+    },
+    {
+      "matchPackagePatterns": [
+        "^github.com/aws/aws-sdk-go-v2"
+      ],
+      "matchFileNames": [
+        "awss3v2-1.22.2/**"
+      ],
+      "enabled": false
     }
   ]
 }
