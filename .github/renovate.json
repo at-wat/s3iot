@@ -11,7 +11,8 @@
   "ignoreDeps": [
     "github.com/at-wat/s3iot",
     "github.com/at-wat/s3iot/awss3v1",
-    "github.com/at-wat/s3iot/awss3v2"
+    "github.com/at-wat/s3iot/awss3v2",
+    "github.com/at-wat/s3iot/awss3v2-1.22.2"
   ],
   "packageRules": [
     {
