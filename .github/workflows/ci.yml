@@ -24,6 +24,7 @@ jobs:
           - ./
           - ./awss3v1/
           - ./awss3v2/
+          - ./awss3v2-1.22.2/
           - ./examples/
     env:
       GO111MODULE: on
@@ -98,7 +99,8 @@ jobs:
           git tag ${VERSION}
           git tag awss3v1/${VERSION}
           git tag awss3v2/${VERSION}
-          git push origin ${VERSION} awss3v1/${VERSION} awss3v2/${VERSION}
+          git tag awss3v2-1.22.2/${VERSION}
+          git push origin ${VERSION} awss3v1/${VERSION} awss3v2/${VERSION} awss3v2-1.22.2/${VERSION}
           sleep 1
 
           gh release create \
