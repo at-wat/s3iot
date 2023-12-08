@@ -106,7 +106,7 @@ func (w *wrapper) GetObject(ctx context.Context, input *s3api.GetObjectInput) (*
 	return &s3api.GetObjectOutput{
 		Body:          out.Body,
 		ContentType:   out.ContentType,
-		ContentLength: &out.ContentLength,
+		ContentLength: out.ContentLength,
 		ContentRange:  out.ContentRange,
 		ETag:          out.ETag,
 		LastModified:  out.LastModified,
@@ -140,7 +140,7 @@ func (w *wrapper) CompleteMultipartUpload(ctx context.Context, input *s3api.Comp
 	for _, part := range input.CompletedParts {
 		parts = append(parts, s3types.CompletedPart{
 			ETag:       part.ETag,
-			PartNumber: int32(*part.PartNumber),
+			PartNumber: aws.Int32(int32(*part.PartNumber)),
 		})
 	}
 	out, err := w.api.CompleteMultipartUpload(
@@ -188,7 +188,7 @@ func (w *wrapper) UploadPart(ctx context.Context, input *s3api.UploadPartInput) 
 			Body:       input.Body,
 			Bucket:     input.Bucket,
 			Key:        input.Key,
-			PartNumber: pn,
+			PartNumber: &pn,
 			UploadId:   input.UploadID,
 		})
 	if err != nil {
@@ -221,7 +221,7 @@ func (w *wrapper) ListObjectsV2(ctx context.Context, input *s3api.ListObjectsV2I
 		&s3.ListObjectsV2Input{
 			Bucket:            input.Bucket,
 			ContinuationToken: input.ContinuationToken,
-			MaxKeys:           int32(input.MaxKeys),
+			MaxKeys:           aws.Int32(int32(input.MaxKeys)),
 			Prefix:            input.Prefix,
 		})
 	if err != nil {
@@ -233,12 +233,12 @@ func (w *wrapper) ListObjectsV2(ctx context.Context, input *s3api.ListObjectsV2I
 			ETag:         c.ETag,
 			Key:          c.Key,
 			LastModified: c.LastModified,
-			Size:         c.Size,
+			Size:         *c.Size,
 		}
 	}
 	return &s3api.ListObjectsV2Output{
 		Contents:              contents,
-		KeyCount:              int(out.KeyCount),
+		KeyCount:              int(*out.KeyCount),
 		NextContinuationToken: out.NextContinuationToken,
 	}, nil
 }

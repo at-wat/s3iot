@@ -104,7 +104,7 @@ func TestWrapper(t *testing.T) {
 					return &s3.GetObjectOutput{
 						Body:          r,
 						ContentType:   aws.String("ContentType"),
-						ContentLength: 100,
+						ContentLength: aws.Int64(100),
 						ContentRange:  aws.String("ContentRange"),
 						ETag:          aws.String("ETag"),
 						LastModified:  aws.Time(time.Unix(1, 2)),
@@ -178,9 +178,9 @@ func TestWrapper(t *testing.T) {
 					expectStringPtr(t, "Key", params.Key)
 					expectStringPtr(t, "UploadID", params.UploadId)
 					expectStringPtr(t, "ETag1", params.MultipartUpload.Parts[0].ETag)
-					expectInt32(t, 1, params.MultipartUpload.Parts[0].PartNumber)
+					expectInt32(t, 1, *params.MultipartUpload.Parts[0].PartNumber)
 					expectStringPtr(t, "ETag2", params.MultipartUpload.Parts[1].ETag)
-					expectInt32(t, 2, params.MultipartUpload.Parts[1].PartNumber)
+					expectInt32(t, 2, *params.MultipartUpload.Parts[1].PartNumber)
 					return &s3.CompleteMultipartUploadOutput{
 						VersionId: aws.String("VersionID"),
 						ETag:      aws.String("ETag"),
@@ -250,7 +250,7 @@ func TestWrapper(t *testing.T) {
 					}
 					expectStringPtr(t, "Bucket", params.Bucket)
 					expectStringPtr(t, "Key", params.Key)
-					expectInt32(t, 1, params.PartNumber)
+					expectInt32(t, 1, *params.PartNumber)
 					expectStringPtr(t, "UploadID", params.UploadId)
 					return &s3.UploadPartOutput{
 						ETag: aws.String("ETag"),
@@ -307,8 +307,8 @@ func TestWrapper(t *testing.T) {
 				ListObjectsV2Func: func(ctx context.Context, input *s3.ListObjectsV2Input, optFns ...func(*s3.Options)) (*s3.ListObjectsV2Output, error) {
 					expectStringPtr(t, "Bucket", input.Bucket)
 					expectStringPtr(t, "ContinuationToken", input.ContinuationToken)
-					if input.MaxKeys != 2 {
-						t.Errorf("Expected MaxKeys: 2, got: %d", input.MaxKeys)
+					if *input.MaxKeys != 2 {
+						t.Errorf("Expected MaxKeys: 2, got: %d", *input.MaxKeys)
 					}
 					expectStringPtr(t, "Prefix", input.Prefix)
 					return &s3.ListObjectsV2Output{
@@ -317,14 +317,14 @@ func TestWrapper(t *testing.T) {
 								ETag:         aws.String("Etag1"),
 								Key:          aws.String("Key1"),
 								LastModified: aws.Time(time.Unix(100, 0)),
-								Size:         1000,
+								Size:         aws.Int64(1000),
 							},
 							{
 								ETag: aws.String("Etag2"),
 								Key:  aws.String("Key2"),
 							},
 						},
-						KeyCount:              2,
+						KeyCount:              aws.Int32(2),
 						NextContinuationToken: aws.String("NextToken"),
 					}, nil
 				},
