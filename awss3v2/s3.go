@@ -229,11 +229,15 @@ func (w *wrapper) ListObjectsV2(ctx context.Context, input *s3api.ListObjectsV2I
 	}
 	contents := make([]s3api.Object, len(out.Contents))
 	for i, c := range out.Contents {
+		var size int64
+		if c.Size != nil {
+			size = *c.Size
+		}
 		contents[i] = s3api.Object{
 			ETag:         c.ETag,
 			Key:          c.Key,
 			LastModified: c.LastModified,
-			Size:         *c.Size,
+			Size:         size,
 		}
 	}
 	return &s3api.ListObjectsV2Output{
