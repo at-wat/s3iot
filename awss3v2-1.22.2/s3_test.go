@@ -29,9 +29,9 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go-v2/service/s3/types"
 
-	"github.com/at-wat/s3iot/awss3v2"
-	mock_awss3v2 "github.com/at-wat/s3iot/awss3v2/internal/moq/awss3v2"
-	mock_s3iface "github.com/at-wat/s3iot/awss3v2/internal/moq/s3iface"
+	"github.com/at-wat/s3iot/awss3v2-1.22.2"
+	mock_awss3v2 "github.com/at-wat/s3iot/awss3v2-1.22.2/internal/moq/awss3v2"
+	mock_s3iface "github.com/at-wat/s3iot/awss3v2-1.22.2/internal/moq/s3iface"
 	"github.com/at-wat/s3iot/s3api"
 )
 
@@ -104,7 +104,7 @@ func TestWrapper(t *testing.T) {
 					return &s3.GetObjectOutput{
 						Body:          r,
 						ContentType:   aws.String("ContentType"),
-						ContentLength: aws.Int64(100),
+						ContentLength: 100,
 						ContentRange:  aws.String("ContentRange"),
 						ETag:          aws.String("ETag"),
 						LastModified:  aws.Time(time.Unix(1, 2)),
@@ -178,9 +178,9 @@ func TestWrapper(t *testing.T) {
 					expectStringPtr(t, "Key", params.Key)
 					expectStringPtr(t, "UploadID", params.UploadId)
 					expectStringPtr(t, "ETag1", params.MultipartUpload.Parts[0].ETag)
-					expectInt32(t, 1, *params.MultipartUpload.Parts[0].PartNumber)
+					expectInt32(t, 1, params.MultipartUpload.Parts[0].PartNumber)
 					expectStringPtr(t, "ETag2", params.MultipartUpload.Parts[1].ETag)
-					expectInt32(t, 2, *params.MultipartUpload.Parts[1].PartNumber)
+					expectInt32(t, 2, params.MultipartUpload.Parts[1].PartNumber)
 					return &s3.CompleteMultipartUploadOutput{
 						VersionId: aws.String("VersionID"),
 						ETag:      aws.String("ETag"),
@@ -250,7 +250,7 @@ func TestWrapper(t *testing.T) {
 					}
 					expectStringPtr(t, "Bucket", params.Bucket)
 					expectStringPtr(t, "Key", params.Key)
-					expectInt32(t, 1, *params.PartNumber)
+					expectInt32(t, 1, params.PartNumber)
 					expectStringPtr(t, "UploadID", params.UploadId)
 					return &s3.UploadPartOutput{
 						ETag: aws.String("ETag"),
@@ -307,8 +307,8 @@ func TestWrapper(t *testing.T) {
 				ListObjectsV2Func: func(ctx context.Context, input *s3.ListObjectsV2Input, optFns ...func(*s3.Options)) (*s3.ListObjectsV2Output, error) {
 					expectStringPtr(t, "Bucket", input.Bucket)
 					expectStringPtr(t, "ContinuationToken", input.ContinuationToken)
-					if *input.MaxKeys != 2 {
-						t.Errorf("Expected MaxKeys: 2, got: %d", *input.MaxKeys)
+					if input.MaxKeys != 2 {
+						t.Errorf("Expected MaxKeys: 2, got: %d", input.MaxKeys)
 					}
 					expectStringPtr(t, "Prefix", input.Prefix)
 					return &s3.ListObjectsV2Output{
@@ -317,14 +317,14 @@ func TestWrapper(t *testing.T) {
 								ETag:         aws.String("Etag1"),
 								Key:          aws.String("Key1"),
 								LastModified: aws.Time(time.Unix(100, 0)),
-								Size:         aws.Int64(1000),
+								Size:         1000,
 							},
 							{
 								ETag: aws.String("Etag2"),
 								Key:  aws.String("Key2"),
 							},
 						},
-						KeyCount:              aws.Int32(2),
+						KeyCount:              2,
 						NextContinuationToken: aws.String("NextToken"),
 					}, nil
 				},

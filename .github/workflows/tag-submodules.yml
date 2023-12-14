@@ -17,6 +17,7 @@ jobs:
         run: |
           git tag awss3v1/$(basename ${TAG})
           git tag awss3v2/$(basename ${TAG})
-          git push origin awss3v1/$(basename ${TAG}) awss3v2/$(basename ${TAG})
+          git tag awss3v2-1.22.2/$(basename ${TAG})
+          git push origin awss3v1/$(basename ${TAG}) awss3v2/$(basename ${TAG}) awss3v2-1.22.2/$(basename ${TAG})
         env:
           TAG: ${{ github.ref }}
