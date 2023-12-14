@@ -26,6 +26,20 @@ jobs:
           - ./awss3v2/
           - ./awss3v2-1.22.2/
           - ./examples/
+        exclude:
+          # aws-sdk-go-v2 uses strings.Cut which is added in 1.18
+          - go: '1.16'
+            package: './awss3v2/'
+          - go: '1.16'
+            package: './awss3v2-1.22.2/'
+          - go: '1.16'
+            package: './examples/'
+          - go: '1.17'
+            package: './awss3v2/'
+          - go: '1.17'
+            package: './awss3v2-1.22.2/'
+          - go: '1.17'
+            package: './examples/'
     env:
       GO111MODULE: on
     steps:
