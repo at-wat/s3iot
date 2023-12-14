@@ -66,6 +66,15 @@ var _ iface.S3API = &MockS3API{}
 //			CreateMultipartUploadWithContextFunc: func(contextMoqParam context.Context, createMultipartUploadInput *s3.CreateMultipartUploadInput, options ...request.Option) (*s3.CreateMultipartUploadOutput, error) {
 //				panic("mock out the CreateMultipartUploadWithContext method")
 //			},
+//			CreateSessionFunc: func(createSessionInput *s3.CreateSessionInput) (*s3.CreateSessionOutput, error) {
+//				panic("mock out the CreateSession method")
+//			},
+//			CreateSessionRequestFunc: func(createSessionInput *s3.CreateSessionInput) (*request.Request, *s3.CreateSessionOutput) {
+//				panic("mock out the CreateSessionRequest method")
+//			},
+//			CreateSessionWithContextFunc: func(contextMoqParam context.Context, createSessionInput *s3.CreateSessionInput, options ...request.Option) (*s3.CreateSessionOutput, error) {
+//				panic("mock out the CreateSessionWithContext method")
+//			},
 //			DeleteBucketFunc: func(deleteBucketInput *s3.DeleteBucketInput) (*s3.DeleteBucketOutput, error) {
 //				panic("mock out the DeleteBucket method")
 //			},
@@ -561,6 +570,21 @@ var _ iface.S3API = &MockS3API{}
 //			ListBucketsWithContextFunc: func(contextMoqParam context.Context, listBucketsInput *s3.ListBucketsInput, options ...request.Option) (*s3.ListBucketsOutput, error) {
 //				panic("mock out the ListBucketsWithContext method")
 //			},
+//			ListDirectoryBucketsFunc: func(listDirectoryBucketsInput *s3.ListDirectoryBucketsInput) (*s3.ListDirectoryBucketsOutput, error) {
+//				panic("mock out the ListDirectoryBuckets method")
+//			},
+//			ListDirectoryBucketsPagesFunc: func(listDirectoryBucketsInput *s3.ListDirectoryBucketsInput, fn func(*s3.ListDirectoryBucketsOutput, bool) bool) error {
+//				panic("mock out the ListDirectoryBucketsPages method")
+//			},
+//			ListDirectoryBucketsPagesWithContextFunc: func(contextMoqParam context.Context, listDirectoryBucketsInput *s3.ListDirectoryBucketsInput, fn func(*s3.ListDirectoryBucketsOutput, bool) bool, options ...request.Option) error {
+//				panic("mock out the ListDirectoryBucketsPagesWithContext method")
+//			},
+//			ListDirectoryBucketsRequestFunc: func(listDirectoryBucketsInput *s3.ListDirectoryBucketsInput) (*request.Request, *s3.ListDirectoryBucketsOutput) {
+//				panic("mock out the ListDirectoryBucketsRequest method")
+//			},
+//			ListDirectoryBucketsWithContextFunc: func(contextMoqParam context.Context, listDirectoryBucketsInput *s3.ListDirectoryBucketsInput, options ...request.Option) (*s3.ListDirectoryBucketsOutput, error) {
+//				panic("mock out the ListDirectoryBucketsWithContext method")
+//			},
 //			ListMultipartUploadsFunc: func(listMultipartUploadsInput *s3.ListMultipartUploadsInput) (*s3.ListMultipartUploadsOutput, error) {
 //				panic("mock out the ListMultipartUploads method")
 //			},
@@ -999,6 +1023,15 @@ type MockS3API struct {
 
 	// CreateMultipartUploadWithContextFunc mocks the CreateMultipartUploadWithContext method.
 	CreateMultipartUploadWithContextFunc func(contextMoqParam context.Context, createMultipartUploadInput *s3.CreateMultipartUploadInput, options ...request.Option) (*s3.CreateMultipartUploadOutput, error)
+
+	// CreateSessionFunc mocks the CreateSession method.
+	CreateSessionFunc func(createSessionInput *s3.CreateSessionInput) (*s3.CreateSessionOutput, error)
+
+	// CreateSessionRequestFunc mocks the CreateSessionRequest method.
+	CreateSessionRequestFunc func(createSessionInput *s3.CreateSessionInput) (*request.Request, *s3.CreateSessionOutput)
+
+	// CreateSessionWithContextFunc mocks the CreateSessionWithContext method.
+	CreateSessionWithContextFunc func(contextMoqParam context.Context, createSessionInput *s3.CreateSessionInput, options ...request.Option) (*s3.CreateSessionOutput, error)
 
 	// DeleteBucketFunc mocks the DeleteBucket method.
 	DeleteBucketFunc func(deleteBucketInput *s3.DeleteBucketInput) (*s3.DeleteBucketOutput, error)
@@ -1495,6 +1528,21 @@ type MockS3API struct {
 	// ListBucketsWithContextFunc mocks the ListBucketsWithContext method.
 	ListBucketsWithContextFunc func(contextMoqParam context.Context, listBucketsInput *s3.ListBucketsInput, options ...request.Option) (*s3.ListBucketsOutput, error)
 
+	// ListDirectoryBucketsFunc mocks the ListDirectoryBuckets method.
+	ListDirectoryBucketsFunc func(listDirectoryBucketsInput *s3.ListDirectoryBucketsInput) (*s3.ListDirectoryBucketsOutput, error)
+
+	// ListDirectoryBucketsPagesFunc mocks the ListDirectoryBucketsPages method.
+	ListDirectoryBucketsPagesFunc func(listDirectoryBucketsInput *s3.ListDirectoryBucketsInput, fn func(*s3.ListDirectoryBucketsOutput, bool) bool) error
+
+	// ListDirectoryBucketsPagesWithContextFunc mocks the ListDirectoryBucketsPagesWithContext method.
+	ListDirectoryBucketsPagesWithContextFunc func(contextMoqParam context.Context, listDirectoryBucketsInput *s3.ListDirectoryBucketsInput, fn func(*s3.ListDirectoryBucketsOutput, bool) bool, options ...request.Option) error
+
+	// ListDirectoryBucketsRequestFunc mocks the ListDirectoryBucketsRequest method.
+	ListDirectoryBucketsRequestFunc func(listDirectoryBucketsInput *s3.ListDirectoryBucketsInput) (*request.Request, *s3.ListDirectoryBucketsOutput)
+
+	// ListDirectoryBucketsWithContextFunc mocks the ListDirectoryBucketsWithContext method.
+	ListDirectoryBucketsWithContextFunc func(contextMoqParam context.Context, listDirectoryBucketsInput *s3.ListDirectoryBucketsInput, options ...request.Option) (*s3.ListDirectoryBucketsOutput, error)
+
 	// ListMultipartUploadsFunc mocks the ListMultipartUploads method.
 	ListMultipartUploadsFunc func(listMultipartUploadsInput *s3.ListMultipartUploadsInput) (*s3.ListMultipartUploadsOutput, error)
 
@@ -1976,6 +2024,25 @@ type MockS3API struct {
 			ContextMoqParam context.Context
 			// CreateMultipartUploadInput is the createMultipartUploadInput argument value.
 			CreateMultipartUploadInput *s3.CreateMultipartUploadInput
+			// Options is the options argument value.
+			Options []request.Option
+		}
+		// CreateSession holds details about calls to the CreateSession method.
+		CreateSession []struct {
+			// CreateSessionInput is the createSessionInput argument value.
+			CreateSessionInput *s3.CreateSessionInput
+		}
+		// CreateSessionRequest holds details about calls to the CreateSessionRequest method.
+		CreateSessionRequest []struct {
+			// CreateSessionInput is the createSessionInput argument value.
+			CreateSessionInput *s3.CreateSessionInput
+		}
+		// CreateSessionWithContext holds details about calls to the CreateSessionWithContext method.
+		CreateSessionWithContext []struct {
+			// ContextMoqParam is the contextMoqParam argument value.
+			ContextMoqParam context.Context
+			// CreateSessionInput is the createSessionInput argument value.
+			CreateSessionInput *s3.CreateSessionInput
 			// Options is the options argument value.
 			Options []request.Option
 		}
@@ -3024,6 +3091,43 @@ type MockS3API struct {
 			// Options is the options argument value.
 			Options []request.Option
 		}
+		// ListDirectoryBuckets holds details about calls to the ListDirectoryBuckets method.
+		ListDirectoryBuckets []struct {
+			// ListDirectoryBucketsInput is the listDirectoryBucketsInput argument value.
+			ListDirectoryBucketsInput *s3.ListDirectoryBucketsInput
+		}
+		// ListDirectoryBucketsPages holds details about calls to the ListDirectoryBucketsPages method.
+		ListDirectoryBucketsPages []struct {
+			// ListDirectoryBucketsInput is the listDirectoryBucketsInput argument value.
+			ListDirectoryBucketsInput *s3.ListDirectoryBucketsInput
+			// Fn is the fn argument value.
+			Fn func(*s3.ListDirectoryBucketsOutput, bool) bool
+		}
+		// ListDirectoryBucketsPagesWithContext holds details about calls to the ListDirectoryBucketsPagesWithContext method.
+		ListDirectoryBucketsPagesWithContext []struct {
+			// ContextMoqParam is the contextMoqParam argument value.
+			ContextMoqParam context.Context
+			// ListDirectoryBucketsInput is the listDirectoryBucketsInput argument value.
+			ListDirectoryBucketsInput *s3.ListDirectoryBucketsInput
+			// Fn is the fn argument value.
+			Fn func(*s3.ListDirectoryBucketsOutput, bool) bool
+			// Options is the options argument value.
+			Options []request.Option
+		}
+		// ListDirectoryBucketsRequest holds details about calls to the ListDirectoryBucketsRequest method.
+		ListDirectoryBucketsRequest []struct {
+			// ListDirectoryBucketsInput is the listDirectoryBucketsInput argument value.
+			ListDirectoryBucketsInput *s3.ListDirectoryBucketsInput
+		}
+		// ListDirectoryBucketsWithContext holds details about calls to the ListDirectoryBucketsWithContext method.
+		ListDirectoryBucketsWithContext []struct {
+			// ContextMoqParam is the contextMoqParam argument value.
+			ContextMoqParam context.Context
+			// ListDirectoryBucketsInput is the listDirectoryBucketsInput argument value.
+			ListDirectoryBucketsInput *s3.ListDirectoryBucketsInput
+			// Options is the options argument value.
+			Options []request.Option
+		}
 		// ListMultipartUploads holds details about calls to the ListMultipartUploads method.
 		ListMultipartUploads []struct {
 			// ListMultipartUploadsInput is the listMultipartUploadsInput argument value.
@@ -3889,6 +3993,9 @@ type MockS3API struct {
 	lockCreateMultipartUpload                                  sync.RWMutex
 	lockCreateMultipartUploadRequest                           sync.RWMutex
 	lockCreateMultipartUploadWithContext                       sync.RWMutex
+	lockCreateSession                                          sync.RWMutex
+	lockCreateSessionRequest                                   sync.RWMutex
+	lockCreateSessionWithContext                               sync.RWMutex
 	lockDeleteBucket                                           sync.RWMutex
 	lockDeleteBucketAnalyticsConfiguration                     sync.RWMutex
 	lockDeleteBucketAnalyticsConfigurationRequest              sync.RWMutex
@@ -4054,6 +4161,11 @@ type MockS3API struct {
 	lockListBuckets                                            sync.RWMutex
 	lockListBucketsRequest                                     sync.RWMutex
 	lockListBucketsWithContext                                 sync.RWMutex
+	lockListDirectoryBuckets                                   sync.RWMutex
+	lockListDirectoryBucketsPages                              sync.RWMutex
+	lockListDirectoryBucketsPagesWithContext                   sync.RWMutex
+	lockListDirectoryBucketsRequest                            sync.RWMutex
+	lockListDirectoryBucketsWithContext                        sync.RWMutex
 	lockListMultipartUploads                                   sync.RWMutex
 	lockListMultipartUploadsPages                              sync.RWMutex
 	lockListMultipartUploadsPagesWithContext                   sync.RWMutex
@@ -4702,6 +4814,110 @@ func (mock *MockS3API) CreateMultipartUploadWithContextCalls() []struct {
 	mock.lockCreateMultipartUploadWithContext.RLock()
 	calls = mock.calls.CreateMultipartUploadWithContext
 	mock.lockCreateMultipartUploadWithContext.RUnlock()
+	return calls
+}
+
+// CreateSession calls CreateSessionFunc.
+func (mock *MockS3API) CreateSession(createSessionInput *s3.CreateSessionInput) (*s3.CreateSessionOutput, error) {
+	if mock.CreateSessionFunc == nil {
+		panic("MockS3API.CreateSessionFunc: method is nil but S3API.CreateSession was just called")
+	}
+	callInfo := struct {
+		CreateSessionInput *s3.CreateSessionInput
+	}{
+		CreateSessionInput: createSessionInput,
+	}
+	mock.lockCreateSession.Lock()
+	mock.calls.CreateSession = append(mock.calls.CreateSession, callInfo)
+	mock.lockCreateSession.Unlock()
+	return mock.CreateSessionFunc(createSessionInput)
+}
+
+// CreateSessionCalls gets all the calls that were made to CreateSession.
+// Check the length with:
+//
+//	len(mockedS3API.CreateSessionCalls())
+func (mock *MockS3API) CreateSessionCalls() []struct {
+	CreateSessionInput *s3.CreateSessionInput
+} {
+	var calls []struct {
+		CreateSessionInput *s3.CreateSessionInput
+	}
+	mock.lockCreateSession.RLock()
+	calls = mock.calls.CreateSession
+	mock.lockCreateSession.RUnlock()
+	return calls
+}
+
+// CreateSessionRequest calls CreateSessionRequestFunc.
+func (mock *MockS3API) CreateSessionRequest(createSessionInput *s3.CreateSessionInput) (*request.Request, *s3.CreateSessionOutput) {
+	if mock.CreateSessionRequestFunc == nil {
+		panic("MockS3API.CreateSessionRequestFunc: method is nil but S3API.CreateSessionRequest was just called")
+	}
+	callInfo := struct {
+		CreateSessionInput *s3.CreateSessionInput
+	}{
+		CreateSessionInput: createSessionInput,
+	}
+	mock.lockCreateSessionRequest.Lock()
+	mock.calls.CreateSessionRequest = append(mock.calls.CreateSessionRequest, callInfo)
+	mock.lockCreateSessionRequest.Unlock()
+	return mock.CreateSessionRequestFunc(createSessionInput)
+}
+
+// CreateSessionRequestCalls gets all the calls that were made to CreateSessionRequest.
+// Check the length with:
+//
+//	len(mockedS3API.CreateSessionRequestCalls())
+func (mock *MockS3API) CreateSessionRequestCalls() []struct {
+	CreateSessionInput *s3.CreateSessionInput
+} {
+	var calls []struct {
+		CreateSessionInput *s3.CreateSessionInput
+	}
+	mock.lockCreateSessionRequest.RLock()
+	calls = mock.calls.CreateSessionRequest
+	mock.lockCreateSessionRequest.RUnlock()
+	return calls
+}
+
+// CreateSessionWithContext calls CreateSessionWithContextFunc.
+func (mock *MockS3API) CreateSessionWithContext(contextMoqParam context.Context, createSessionInput *s3.CreateSessionInput, options ...request.Option) (*s3.CreateSessionOutput, error) {
+	if mock.CreateSessionWithContextFunc == nil {
+		panic("MockS3API.CreateSessionWithContextFunc: method is nil but S3API.CreateSessionWithContext was just called")
+	}
+	callInfo := struct {
+		ContextMoqParam    context.Context
+		CreateSessionInput *s3.CreateSessionInput
+		Options            []request.Option
+	}{
+		ContextMoqParam:    contextMoqParam,
+		CreateSessionInput: createSessionInput,
+		Options:            options,
+	}
+	mock.lockCreateSessionWithContext.Lock()
+	mock.calls.CreateSessionWithContext = append(mock.calls.CreateSessionWithContext, callInfo)
+	mock.lockCreateSessionWithContext.Unlock()
+	return mock.CreateSessionWithContextFunc(contextMoqParam, createSessionInput, options...)
+}
+
+// CreateSessionWithContextCalls gets all the calls that were made to CreateSessionWithContext.
+// Check the length with:
+//
+//	len(mockedS3API.CreateSessionWithContextCalls())
+func (mock *MockS3API) CreateSessionWithContextCalls() []struct {
+	ContextMoqParam    context.Context
+	CreateSessionInput *s3.CreateSessionInput
+	Options            []request.Option
+} {
+	var calls []struct {
+		ContextMoqParam    context.Context
+		CreateSessionInput *s3.CreateSessionInput
+		Options            []request.Option
+	}
+	mock.lockCreateSessionWithContext.RLock()
+	calls = mock.calls.CreateSessionWithContext
+	mock.lockCreateSessionWithContext.RUnlock()
 	return calls
 }
 
@@ -10422,6 +10638,190 @@ func (mock *MockS3API) ListBucketsWithContextCalls() []struct {
 	mock.lockListBucketsWithContext.RLock()
 	calls = mock.calls.ListBucketsWithContext
 	mock.lockListBucketsWithContext.RUnlock()
+	return calls
+}
+
+// ListDirectoryBuckets calls ListDirectoryBucketsFunc.
+func (mock *MockS3API) ListDirectoryBuckets(listDirectoryBucketsInput *s3.ListDirectoryBucketsInput) (*s3.ListDirectoryBucketsOutput, error) {
+	if mock.ListDirectoryBucketsFunc == nil {
+		panic("MockS3API.ListDirectoryBucketsFunc: method is nil but S3API.ListDirectoryBuckets was just called")
+	}
+	callInfo := struct {
+		ListDirectoryBucketsInput *s3.ListDirectoryBucketsInput
+	}{
+		ListDirectoryBucketsInput: listDirectoryBucketsInput,
+	}
+	mock.lockListDirectoryBuckets.Lock()
+	mock.calls.ListDirectoryBuckets = append(mock.calls.ListDirectoryBuckets, callInfo)
+	mock.lockListDirectoryBuckets.Unlock()
+	return mock.ListDirectoryBucketsFunc(listDirectoryBucketsInput)
+}
+
+// ListDirectoryBucketsCalls gets all the calls that were made to ListDirectoryBuckets.
+// Check the length with:
+//
+//	len(mockedS3API.ListDirectoryBucketsCalls())
+func (mock *MockS3API) ListDirectoryBucketsCalls() []struct {
+	ListDirectoryBucketsInput *s3.ListDirectoryBucketsInput
+} {
+	var calls []struct {
+		ListDirectoryBucketsInput *s3.ListDirectoryBucketsInput
+	}
+	mock.lockListDirectoryBuckets.RLock()
+	calls = mock.calls.ListDirectoryBuckets
+	mock.lockListDirectoryBuckets.RUnlock()
+	return calls
+}
+
+// ListDirectoryBucketsPages calls ListDirectoryBucketsPagesFunc.
+func (mock *MockS3API) ListDirectoryBucketsPages(listDirectoryBucketsInput *s3.ListDirectoryBucketsInput, fn func(*s3.ListDirectoryBucketsOutput, bool) bool) error {
+	if mock.ListDirectoryBucketsPagesFunc == nil {
+		panic("MockS3API.ListDirectoryBucketsPagesFunc: method is nil but S3API.ListDirectoryBucketsPages was just called")
+	}
+	callInfo := struct {
+		ListDirectoryBucketsInput *s3.ListDirectoryBucketsInput
+		Fn                        func(*s3.ListDirectoryBucketsOutput, bool) bool
+	}{
+		ListDirectoryBucketsInput: listDirectoryBucketsInput,
+		Fn:                        fn,
+	}
+	mock.lockListDirectoryBucketsPages.Lock()
+	mock.calls.ListDirectoryBucketsPages = append(mock.calls.ListDirectoryBucketsPages, callInfo)
+	mock.lockListDirectoryBucketsPages.Unlock()
+	return mock.ListDirectoryBucketsPagesFunc(listDirectoryBucketsInput, fn)
+}
+
+// ListDirectoryBucketsPagesCalls gets all the calls that were made to ListDirectoryBucketsPages.
+// Check the length with:
+//
+//	len(mockedS3API.ListDirectoryBucketsPagesCalls())
+func (mock *MockS3API) ListDirectoryBucketsPagesCalls() []struct {
+	ListDirectoryBucketsInput *s3.ListDirectoryBucketsInput
+	Fn                        func(*s3.ListDirectoryBucketsOutput, bool) bool
+} {
+	var calls []struct {
+		ListDirectoryBucketsInput *s3.ListDirectoryBucketsInput
+		Fn                        func(*s3.ListDirectoryBucketsOutput, bool) bool
+	}
+	mock.lockListDirectoryBucketsPages.RLock()
+	calls = mock.calls.ListDirectoryBucketsPages
+	mock.lockListDirectoryBucketsPages.RUnlock()
+	return calls
+}
+
+// ListDirectoryBucketsPagesWithContext calls ListDirectoryBucketsPagesWithContextFunc.
+func (mock *MockS3API) ListDirectoryBucketsPagesWithContext(contextMoqParam context.Context, listDirectoryBucketsInput *s3.ListDirectoryBucketsInput, fn func(*s3.ListDirectoryBucketsOutput, bool) bool, options ...request.Option) error {
+	if mock.ListDirectoryBucketsPagesWithContextFunc == nil {
+		panic("MockS3API.ListDirectoryBucketsPagesWithContextFunc: method is nil but S3API.ListDirectoryBucketsPagesWithContext was just called")
+	}
+	callInfo := struct {
+		ContextMoqParam           context.Context
+		ListDirectoryBucketsInput *s3.ListDirectoryBucketsInput
+		Fn                        func(*s3.ListDirectoryBucketsOutput, bool) bool
+		Options                   []request.Option
+	}{
+		ContextMoqParam:           contextMoqParam,
+		ListDirectoryBucketsInput: listDirectoryBucketsInput,
+		Fn:                        fn,
+		Options:                   options,
+	}
+	mock.lockListDirectoryBucketsPagesWithContext.Lock()
+	mock.calls.ListDirectoryBucketsPagesWithContext = append(mock.calls.ListDirectoryBucketsPagesWithContext, callInfo)
+	mock.lockListDirectoryBucketsPagesWithContext.Unlock()
+	return mock.ListDirectoryBucketsPagesWithContextFunc(contextMoqParam, listDirectoryBucketsInput, fn, options...)
+}
+
+// ListDirectoryBucketsPagesWithContextCalls gets all the calls that were made to ListDirectoryBucketsPagesWithContext.
+// Check the length with:
+//
+//	len(mockedS3API.ListDirectoryBucketsPagesWithContextCalls())
+func (mock *MockS3API) ListDirectoryBucketsPagesWithContextCalls() []struct {
+	ContextMoqParam           context.Context
+	ListDirectoryBucketsInput *s3.ListDirectoryBucketsInput
+	Fn                        func(*s3.ListDirectoryBucketsOutput, bool) bool
+	Options                   []request.Option
+} {
+	var calls []struct {
+		ContextMoqParam           context.Context
+		ListDirectoryBucketsInput *s3.ListDirectoryBucketsInput
+		Fn                        func(*s3.ListDirectoryBucketsOutput, bool) bool
+		Options                   []request.Option
+	}
+	mock.lockListDirectoryBucketsPagesWithContext.RLock()
+	calls = mock.calls.ListDirectoryBucketsPagesWithContext
+	mock.lockListDirectoryBucketsPagesWithContext.RUnlock()
+	return calls
+}
+
+// ListDirectoryBucketsRequest calls ListDirectoryBucketsRequestFunc.
+func (mock *MockS3API) ListDirectoryBucketsRequest(listDirectoryBucketsInput *s3.ListDirectoryBucketsInput) (*request.Request, *s3.ListDirectoryBucketsOutput) {
+	if mock.ListDirectoryBucketsRequestFunc == nil {
+		panic("MockS3API.ListDirectoryBucketsRequestFunc: method is nil but S3API.ListDirectoryBucketsRequest was just called")
+	}
+	callInfo := struct {
+		ListDirectoryBucketsInput *s3.ListDirectoryBucketsInput
+	}{
+		ListDirectoryBucketsInput: listDirectoryBucketsInput,
+	}
+	mock.lockListDirectoryBucketsRequest.Lock()
+	mock.calls.ListDirectoryBucketsRequest = append(mock.calls.ListDirectoryBucketsRequest, callInfo)
+	mock.lockListDirectoryBucketsRequest.Unlock()
+	return mock.ListDirectoryBucketsRequestFunc(listDirectoryBucketsInput)
+}
+
+// ListDirectoryBucketsRequestCalls gets all the calls that were made to ListDirectoryBucketsRequest.
+// Check the length with:
+//
+//	len(mockedS3API.ListDirectoryBucketsRequestCalls())
+func (mock *MockS3API) ListDirectoryBucketsRequestCalls() []struct {
+	ListDirectoryBucketsInput *s3.ListDirectoryBucketsInput
+} {
+	var calls []struct {
+		ListDirectoryBucketsInput *s3.ListDirectoryBucketsInput
+	}
+	mock.lockListDirectoryBucketsRequest.RLock()
+	calls = mock.calls.ListDirectoryBucketsRequest
+	mock.lockListDirectoryBucketsRequest.RUnlock()
+	return calls
+}
+
+// ListDirectoryBucketsWithContext calls ListDirectoryBucketsWithContextFunc.
+func (mock *MockS3API) ListDirectoryBucketsWithContext(contextMoqParam context.Context, listDirectoryBucketsInput *s3.ListDirectoryBucketsInput, options ...request.Option) (*s3.ListDirectoryBucketsOutput, error) {
+	if mock.ListDirectoryBucketsWithContextFunc == nil {
+		panic("MockS3API.ListDirectoryBucketsWithContextFunc: method is nil but S3API.ListDirectoryBucketsWithContext was just called")
+	}
+	callInfo := struct {
+		ContextMoqParam           context.Context
+		ListDirectoryBucketsInput *s3.ListDirectoryBucketsInput
+		Options                   []request.Option
+	}{
+		ContextMoqParam:           contextMoqParam,
+		ListDirectoryBucketsInput: listDirectoryBucketsInput,
+		Options:                   options,
+	}
+	mock.lockListDirectoryBucketsWithContext.Lock()
+	mock.calls.ListDirectoryBucketsWithContext = append(mock.calls.ListDirectoryBucketsWithContext, callInfo)
+	mock.lockListDirectoryBucketsWithContext.Unlock()
+	return mock.ListDirectoryBucketsWithContextFunc(contextMoqParam, listDirectoryBucketsInput, options...)
+}
+
+// ListDirectoryBucketsWithContextCalls gets all the calls that were made to ListDirectoryBucketsWithContext.
+// Check the length with:
+//
+//	len(mockedS3API.ListDirectoryBucketsWithContextCalls())
+func (mock *MockS3API) ListDirectoryBucketsWithContextCalls() []struct {
+	ContextMoqParam           context.Context
+	ListDirectoryBucketsInput *s3.ListDirectoryBucketsInput
+	Options                   []request.Option
+} {
+	var calls []struct {
+		ContextMoqParam           context.Context
+		ListDirectoryBucketsInput *s3.ListDirectoryBucketsInput
+		Options                   []request.Option
+	}
+	mock.lockListDirectoryBucketsWithContext.RLock()
+	calls = mock.calls.ListDirectoryBucketsWithContext
+	mock.lockListDirectoryBucketsWithContext.RUnlock()
 	return calls
 }
 
