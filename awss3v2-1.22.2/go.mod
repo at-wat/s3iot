@@ -11,6 +11,6 @@ require (
 	github.com/aws/aws-sdk-go-v2/credentials v1.16.0
 	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.13.4
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.42.1
-	github.com/aws/smithy-go v1.19.0
+	github.com/aws/smithy-go v1.20.2
 	github.com/matryer/moq v0.3.3
 )
