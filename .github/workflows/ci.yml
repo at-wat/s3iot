@@ -63,10 +63,11 @@ jobs:
           cd ${{ matrix.package }}
           go mod tidy
           git diff --exit-code go.mod  # must be up-to-date and tidied
-      - uses: codecov/codecov-action@v3
+      - uses: codecov/codecov-action@v4
         if: matrix.package != './examples/'
         with:
           file: ${{ matrix.package }}cover.out
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   mock:
     runs-on: ubuntu-latest
