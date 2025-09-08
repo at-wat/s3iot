@@ -1,11 +1,10 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base"
+    "config:recommended"
   ],
   "postUpdateOptions": [
-    "gomodTidy",
-    "gomodNoMassage"
+    "gomodTidy"
   ],
   "ignorePaths": [],
   "ignoreDeps": [
@@ -16,19 +15,19 @@
   ],
   "packageRules": [
     {
-      "matchPackagePatterns": [
-        "^github.com/aws/aws-sdk-go-v2"
-      ],
-      "groupName": "github.com/aws/aws-sdk-go-v2"
+      "groupName": "github.com/aws/aws-sdk-go-v2",
+      "matchPackageNames": [
+        "/^github.com/aws/aws-sdk-go-v2/"
+      ]
     },
     {
-      "matchPackagePatterns": [
-        "^github.com/aws/aws-sdk-go-v2"
-      ],
       "matchFileNames": [
         "awss3v2-1.22.2/**"
       ],
-      "enabled": false
+      "enabled": false,
+      "matchPackageNames": [
+        "/^github.com/aws/aws-sdk-go-v2/"
+      ]
     }
   ]
 }
