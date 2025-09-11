@@ -4,8 +4,8 @@
 package s3manageriface
 
 import (
-	"context"
 	"github.com/at-wat/s3iot/awss3v1/internal/moq/s3manageriface/iface"
+	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"io"
@@ -25,7 +25,7 @@ var _ iface.DownloaderAPI = &MockDownloader{}
 //			DownloadFunc: func(writerAt io.WriterAt, getObjectInput *s3.GetObjectInput, fns ...func(*s3manager.Downloader)) (int64, error) {
 //				panic("mock out the Download method")
 //			},
-//			DownloadWithContextFunc: func(contextMoqParam context.Context, writerAt io.WriterAt, getObjectInput *s3.GetObjectInput, fns ...func(*s3manager.Downloader)) (int64, error) {
+//			DownloadWithContextFunc: func(v aws.Context, writerAt io.WriterAt, getObjectInput *s3.GetObjectInput, fns ...func(*s3manager.Downloader)) (int64, error) {
 //				panic("mock out the DownloadWithContext method")
 //			},
 //		}
@@ -39,7 +39,7 @@ type MockDownloader struct {
 	DownloadFunc func(writerAt io.WriterAt, getObjectInput *s3.GetObjectInput, fns ...func(*s3manager.Downloader)) (int64, error)
 
 	// DownloadWithContextFunc mocks the DownloadWithContext method.
-	DownloadWithContextFunc func(contextMoqParam context.Context, writerAt io.WriterAt, getObjectInput *s3.GetObjectInput, fns ...func(*s3manager.Downloader)) (int64, error)
+	DownloadWithContextFunc func(v aws.Context, writerAt io.WriterAt, getObjectInput *s3.GetObjectInput, fns ...func(*s3manager.Downloader)) (int64, error)
 
 	// calls tracks calls to the methods.
 	calls struct {
@@ -54,8 +54,8 @@ type MockDownloader struct {
 		}
 		// DownloadWithContext holds details about calls to the DownloadWithContext method.
 		DownloadWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// WriterAt is the writerAt argument value.
 			WriterAt io.WriterAt
 			// GetObjectInput is the getObjectInput argument value.
@@ -109,25 +109,25 @@ func (mock *MockDownloader) DownloadCalls() []struct {
 }
 
 // DownloadWithContext calls DownloadWithContextFunc.
-func (mock *MockDownloader) DownloadWithContext(contextMoqParam context.Context, writerAt io.WriterAt, getObjectInput *s3.GetObjectInput, fns ...func(*s3manager.Downloader)) (int64, error) {
+func (mock *MockDownloader) DownloadWithContext(v aws.Context, writerAt io.WriterAt, getObjectInput *s3.GetObjectInput, fns ...func(*s3manager.Downloader)) (int64, error) {
 	if mock.DownloadWithContextFunc == nil {
 		panic("MockDownloader.DownloadWithContextFunc: method is nil but DownloaderAPI.DownloadWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam context.Context
-		WriterAt        io.WriterAt
-		GetObjectInput  *s3.GetObjectInput
-		Fns             []func(*s3manager.Downloader)
+		V              aws.Context
+		WriterAt       io.WriterAt
+		GetObjectInput *s3.GetObjectInput
+		Fns            []func(*s3manager.Downloader)
 	}{
-		ContextMoqParam: contextMoqParam,
-		WriterAt:        writerAt,
-		GetObjectInput:  getObjectInput,
-		Fns:             fns,
+		V:              v,
+		WriterAt:       writerAt,
+		GetObjectInput: getObjectInput,
+		Fns:            fns,
 	}
 	mock.lockDownloadWithContext.Lock()
 	mock.calls.DownloadWithContext = append(mock.calls.DownloadWithContext, callInfo)
 	mock.lockDownloadWithContext.Unlock()
-	return mock.DownloadWithContextFunc(contextMoqParam, writerAt, getObjectInput, fns...)
+	return mock.DownloadWithContextFunc(v, writerAt, getObjectInput, fns...)
 }
 
 // DownloadWithContextCalls gets all the calls that were made to DownloadWithContext.
@@ -135,16 +135,16 @@ func (mock *MockDownloader) DownloadWithContext(contextMoqParam context.Context,
 //
 //	len(mockedDownloaderAPI.DownloadWithContextCalls())
 func (mock *MockDownloader) DownloadWithContextCalls() []struct {
-	ContextMoqParam context.Context
-	WriterAt        io.WriterAt
-	GetObjectInput  *s3.GetObjectInput
-	Fns             []func(*s3manager.Downloader)
+	V              aws.Context
+	WriterAt       io.WriterAt
+	GetObjectInput *s3.GetObjectInput
+	Fns            []func(*s3manager.Downloader)
 } {
 	var calls []struct {
-		ContextMoqParam context.Context
-		WriterAt        io.WriterAt
-		GetObjectInput  *s3.GetObjectInput
-		Fns             []func(*s3manager.Downloader)
+		V              aws.Context
+		WriterAt       io.WriterAt
+		GetObjectInput *s3.GetObjectInput
+		Fns            []func(*s3manager.Downloader)
 	}
 	mock.lockDownloadWithContext.RLock()
 	calls = mock.calls.DownloadWithContext
@@ -165,7 +165,7 @@ var _ iface.UploaderAPI = &MockUploader{}
 //			UploadFunc: func(uploadInput *s3manager.UploadInput, fns ...func(*s3manager.Uploader)) (*s3manager.UploadOutput, error) {
 //				panic("mock out the Upload method")
 //			},
-//			UploadWithContextFunc: func(contextMoqParam context.Context, uploadInput *s3manager.UploadInput, fns ...func(*s3manager.Uploader)) (*s3manager.UploadOutput, error) {
+//			UploadWithContextFunc: func(v aws.Context, uploadInput *s3manager.UploadInput, fns ...func(*s3manager.Uploader)) (*s3manager.UploadOutput, error) {
 //				panic("mock out the UploadWithContext method")
 //			},
 //		}
@@ -179,7 +179,7 @@ type MockUploader struct {
 	UploadFunc func(uploadInput *s3manager.UploadInput, fns ...func(*s3manager.Uploader)) (*s3manager.UploadOutput, error)
 
 	// UploadWithContextFunc mocks the UploadWithContext method.
-	UploadWithContextFunc func(contextMoqParam context.Context, uploadInput *s3manager.UploadInput, fns ...func(*s3manager.Uploader)) (*s3manager.UploadOutput, error)
+	UploadWithContextFunc func(v aws.Context, uploadInput *s3manager.UploadInput, fns ...func(*s3manager.Uploader)) (*s3manager.UploadOutput, error)
 
 	// calls tracks calls to the methods.
 	calls struct {
@@ -192,8 +192,8 @@ type MockUploader struct {
 		}
 		// UploadWithContext holds details about calls to the UploadWithContext method.
 		UploadWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// UploadInput is the uploadInput argument value.
 			UploadInput *s3manager.UploadInput
 			// Fns is the fns argument value.
@@ -241,23 +241,23 @@ func (mock *MockUploader) UploadCalls() []struct {
 }
 
 // UploadWithContext calls UploadWithContextFunc.
-func (mock *MockUploader) UploadWithContext(contextMoqParam context.Context, uploadInput *s3manager.UploadInput, fns ...func(*s3manager.Uploader)) (*s3manager.UploadOutput, error) {
+func (mock *MockUploader) UploadWithContext(v aws.Context, uploadInput *s3manager.UploadInput, fns ...func(*s3manager.Uploader)) (*s3manager.UploadOutput, error) {
 	if mock.UploadWithContextFunc == nil {
 		panic("MockUploader.UploadWithContextFunc: method is nil but UploaderAPI.UploadWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam context.Context
-		UploadInput     *s3manager.UploadInput
-		Fns             []func(*s3manager.Uploader)
+		V           aws.Context
+		UploadInput *s3manager.UploadInput
+		Fns         []func(*s3manager.Uploader)
 	}{
-		ContextMoqParam: contextMoqParam,
-		UploadInput:     uploadInput,
-		Fns:             fns,
+		V:           v,
+		UploadInput: uploadInput,
+		Fns:         fns,
 	}
 	mock.lockUploadWithContext.Lock()
 	mock.calls.UploadWithContext = append(mock.calls.UploadWithContext, callInfo)
 	mock.lockUploadWithContext.Unlock()
-	return mock.UploadWithContextFunc(contextMoqParam, uploadInput, fns...)
+	return mock.UploadWithContextFunc(v, uploadInput, fns...)
 }
 
 // UploadWithContextCalls gets all the calls that were made to UploadWithContext.
@@ -265,14 +265,14 @@ func (mock *MockUploader) UploadWithContext(contextMoqParam context.Context, upl
 //
 //	len(mockedUploaderAPI.UploadWithContextCalls())
 func (mock *MockUploader) UploadWithContextCalls() []struct {
-	ContextMoqParam context.Context
-	UploadInput     *s3manager.UploadInput
-	Fns             []func(*s3manager.Uploader)
+	V           aws.Context
+	UploadInput *s3manager.UploadInput
+	Fns         []func(*s3manager.Uploader)
 } {
 	var calls []struct {
-		ContextMoqParam context.Context
-		UploadInput     *s3manager.UploadInput
-		Fns             []func(*s3manager.Uploader)
+		V           aws.Context
+		UploadInput *s3manager.UploadInput
+		Fns         []func(*s3manager.Uploader)
 	}
 	mock.lockUploadWithContext.RLock()
 	calls = mock.calls.UploadWithContext

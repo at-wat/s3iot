@@ -4,8 +4,8 @@
 package mock_s3iface
 
 import (
-	"context"
 	"github.com/at-wat/s3iot/awss3v1/internal/moq/s3iface/iface"
+	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"sync"
@@ -27,7 +27,7 @@ var _ iface.S3API = &MockS3API{}
 //			AbortMultipartUploadRequestFunc: func(abortMultipartUploadInput *s3.AbortMultipartUploadInput) (*request.Request, *s3.AbortMultipartUploadOutput) {
 //				panic("mock out the AbortMultipartUploadRequest method")
 //			},
-//			AbortMultipartUploadWithContextFunc: func(contextMoqParam context.Context, abortMultipartUploadInput *s3.AbortMultipartUploadInput, options ...request.Option) (*s3.AbortMultipartUploadOutput, error) {
+//			AbortMultipartUploadWithContextFunc: func(v aws.Context, abortMultipartUploadInput *s3.AbortMultipartUploadInput, options ...request.Option) (*s3.AbortMultipartUploadOutput, error) {
 //				panic("mock out the AbortMultipartUploadWithContext method")
 //			},
 //			CompleteMultipartUploadFunc: func(completeMultipartUploadInput *s3.CompleteMultipartUploadInput) (*s3.CompleteMultipartUploadOutput, error) {
@@ -36,7 +36,7 @@ var _ iface.S3API = &MockS3API{}
 //			CompleteMultipartUploadRequestFunc: func(completeMultipartUploadInput *s3.CompleteMultipartUploadInput) (*request.Request, *s3.CompleteMultipartUploadOutput) {
 //				panic("mock out the CompleteMultipartUploadRequest method")
 //			},
-//			CompleteMultipartUploadWithContextFunc: func(contextMoqParam context.Context, completeMultipartUploadInput *s3.CompleteMultipartUploadInput, options ...request.Option) (*s3.CompleteMultipartUploadOutput, error) {
+//			CompleteMultipartUploadWithContextFunc: func(v aws.Context, completeMultipartUploadInput *s3.CompleteMultipartUploadInput, options ...request.Option) (*s3.CompleteMultipartUploadOutput, error) {
 //				panic("mock out the CompleteMultipartUploadWithContext method")
 //			},
 //			CopyObjectFunc: func(copyObjectInput *s3.CopyObjectInput) (*s3.CopyObjectOutput, error) {
@@ -45,7 +45,7 @@ var _ iface.S3API = &MockS3API{}
 //			CopyObjectRequestFunc: func(copyObjectInput *s3.CopyObjectInput) (*request.Request, *s3.CopyObjectOutput) {
 //				panic("mock out the CopyObjectRequest method")
 //			},
-//			CopyObjectWithContextFunc: func(contextMoqParam context.Context, copyObjectInput *s3.CopyObjectInput, options ...request.Option) (*s3.CopyObjectOutput, error) {
+//			CopyObjectWithContextFunc: func(v aws.Context, copyObjectInput *s3.CopyObjectInput, options ...request.Option) (*s3.CopyObjectOutput, error) {
 //				panic("mock out the CopyObjectWithContext method")
 //			},
 //			CreateBucketFunc: func(createBucketInput *s3.CreateBucketInput) (*s3.CreateBucketOutput, error) {
@@ -54,7 +54,7 @@ var _ iface.S3API = &MockS3API{}
 //			CreateBucketRequestFunc: func(createBucketInput *s3.CreateBucketInput) (*request.Request, *s3.CreateBucketOutput) {
 //				panic("mock out the CreateBucketRequest method")
 //			},
-//			CreateBucketWithContextFunc: func(contextMoqParam context.Context, createBucketInput *s3.CreateBucketInput, options ...request.Option) (*s3.CreateBucketOutput, error) {
+//			CreateBucketWithContextFunc: func(v aws.Context, createBucketInput *s3.CreateBucketInput, options ...request.Option) (*s3.CreateBucketOutput, error) {
 //				panic("mock out the CreateBucketWithContext method")
 //			},
 //			CreateMultipartUploadFunc: func(createMultipartUploadInput *s3.CreateMultipartUploadInput) (*s3.CreateMultipartUploadOutput, error) {
@@ -63,7 +63,7 @@ var _ iface.S3API = &MockS3API{}
 //			CreateMultipartUploadRequestFunc: func(createMultipartUploadInput *s3.CreateMultipartUploadInput) (*request.Request, *s3.CreateMultipartUploadOutput) {
 //				panic("mock out the CreateMultipartUploadRequest method")
 //			},
-//			CreateMultipartUploadWithContextFunc: func(contextMoqParam context.Context, createMultipartUploadInput *s3.CreateMultipartUploadInput, options ...request.Option) (*s3.CreateMultipartUploadOutput, error) {
+//			CreateMultipartUploadWithContextFunc: func(v aws.Context, createMultipartUploadInput *s3.CreateMultipartUploadInput, options ...request.Option) (*s3.CreateMultipartUploadOutput, error) {
 //				panic("mock out the CreateMultipartUploadWithContext method")
 //			},
 //			CreateSessionFunc: func(createSessionInput *s3.CreateSessionInput) (*s3.CreateSessionOutput, error) {
@@ -72,7 +72,7 @@ var _ iface.S3API = &MockS3API{}
 //			CreateSessionRequestFunc: func(createSessionInput *s3.CreateSessionInput) (*request.Request, *s3.CreateSessionOutput) {
 //				panic("mock out the CreateSessionRequest method")
 //			},
-//			CreateSessionWithContextFunc: func(contextMoqParam context.Context, createSessionInput *s3.CreateSessionInput, options ...request.Option) (*s3.CreateSessionOutput, error) {
+//			CreateSessionWithContextFunc: func(v aws.Context, createSessionInput *s3.CreateSessionInput, options ...request.Option) (*s3.CreateSessionOutput, error) {
 //				panic("mock out the CreateSessionWithContext method")
 //			},
 //			DeleteBucketFunc: func(deleteBucketInput *s3.DeleteBucketInput) (*s3.DeleteBucketOutput, error) {
@@ -84,7 +84,7 @@ var _ iface.S3API = &MockS3API{}
 //			DeleteBucketAnalyticsConfigurationRequestFunc: func(deleteBucketAnalyticsConfigurationInput *s3.DeleteBucketAnalyticsConfigurationInput) (*request.Request, *s3.DeleteBucketAnalyticsConfigurationOutput) {
 //				panic("mock out the DeleteBucketAnalyticsConfigurationRequest method")
 //			},
-//			DeleteBucketAnalyticsConfigurationWithContextFunc: func(contextMoqParam context.Context, deleteBucketAnalyticsConfigurationInput *s3.DeleteBucketAnalyticsConfigurationInput, options ...request.Option) (*s3.DeleteBucketAnalyticsConfigurationOutput, error) {
+//			DeleteBucketAnalyticsConfigurationWithContextFunc: func(v aws.Context, deleteBucketAnalyticsConfigurationInput *s3.DeleteBucketAnalyticsConfigurationInput, options ...request.Option) (*s3.DeleteBucketAnalyticsConfigurationOutput, error) {
 //				panic("mock out the DeleteBucketAnalyticsConfigurationWithContext method")
 //			},
 //			DeleteBucketCorsFunc: func(deleteBucketCorsInput *s3.DeleteBucketCorsInput) (*s3.DeleteBucketCorsOutput, error) {
@@ -93,7 +93,7 @@ var _ iface.S3API = &MockS3API{}
 //			DeleteBucketCorsRequestFunc: func(deleteBucketCorsInput *s3.DeleteBucketCorsInput) (*request.Request, *s3.DeleteBucketCorsOutput) {
 //				panic("mock out the DeleteBucketCorsRequest method")
 //			},
-//			DeleteBucketCorsWithContextFunc: func(contextMoqParam context.Context, deleteBucketCorsInput *s3.DeleteBucketCorsInput, options ...request.Option) (*s3.DeleteBucketCorsOutput, error) {
+//			DeleteBucketCorsWithContextFunc: func(v aws.Context, deleteBucketCorsInput *s3.DeleteBucketCorsInput, options ...request.Option) (*s3.DeleteBucketCorsOutput, error) {
 //				panic("mock out the DeleteBucketCorsWithContext method")
 //			},
 //			DeleteBucketEncryptionFunc: func(deleteBucketEncryptionInput *s3.DeleteBucketEncryptionInput) (*s3.DeleteBucketEncryptionOutput, error) {
@@ -102,7 +102,7 @@ var _ iface.S3API = &MockS3API{}
 //			DeleteBucketEncryptionRequestFunc: func(deleteBucketEncryptionInput *s3.DeleteBucketEncryptionInput) (*request.Request, *s3.DeleteBucketEncryptionOutput) {
 //				panic("mock out the DeleteBucketEncryptionRequest method")
 //			},
-//			DeleteBucketEncryptionWithContextFunc: func(contextMoqParam context.Context, deleteBucketEncryptionInput *s3.DeleteBucketEncryptionInput, options ...request.Option) (*s3.DeleteBucketEncryptionOutput, error) {
+//			DeleteBucketEncryptionWithContextFunc: func(v aws.Context, deleteBucketEncryptionInput *s3.DeleteBucketEncryptionInput, options ...request.Option) (*s3.DeleteBucketEncryptionOutput, error) {
 //				panic("mock out the DeleteBucketEncryptionWithContext method")
 //			},
 //			DeleteBucketIntelligentTieringConfigurationFunc: func(deleteBucketIntelligentTieringConfigurationInput *s3.DeleteBucketIntelligentTieringConfigurationInput) (*s3.DeleteBucketIntelligentTieringConfigurationOutput, error) {
@@ -111,7 +111,7 @@ var _ iface.S3API = &MockS3API{}
 //			DeleteBucketIntelligentTieringConfigurationRequestFunc: func(deleteBucketIntelligentTieringConfigurationInput *s3.DeleteBucketIntelligentTieringConfigurationInput) (*request.Request, *s3.DeleteBucketIntelligentTieringConfigurationOutput) {
 //				panic("mock out the DeleteBucketIntelligentTieringConfigurationRequest method")
 //			},
-//			DeleteBucketIntelligentTieringConfigurationWithContextFunc: func(contextMoqParam context.Context, deleteBucketIntelligentTieringConfigurationInput *s3.DeleteBucketIntelligentTieringConfigurationInput, options ...request.Option) (*s3.DeleteBucketIntelligentTieringConfigurationOutput, error) {
+//			DeleteBucketIntelligentTieringConfigurationWithContextFunc: func(v aws.Context, deleteBucketIntelligentTieringConfigurationInput *s3.DeleteBucketIntelligentTieringConfigurationInput, options ...request.Option) (*s3.DeleteBucketIntelligentTieringConfigurationOutput, error) {
 //				panic("mock out the DeleteBucketIntelligentTieringConfigurationWithContext method")
 //			},
 //			DeleteBucketInventoryConfigurationFunc: func(deleteBucketInventoryConfigurationInput *s3.DeleteBucketInventoryConfigurationInput) (*s3.DeleteBucketInventoryConfigurationOutput, error) {
@@ -120,7 +120,7 @@ var _ iface.S3API = &MockS3API{}
 //			DeleteBucketInventoryConfigurationRequestFunc: func(deleteBucketInventoryConfigurationInput *s3.DeleteBucketInventoryConfigurationInput) (*request.Request, *s3.DeleteBucketInventoryConfigurationOutput) {
 //				panic("mock out the DeleteBucketInventoryConfigurationRequest method")
 //			},
-//			DeleteBucketInventoryConfigurationWithContextFunc: func(contextMoqParam context.Context, deleteBucketInventoryConfigurationInput *s3.DeleteBucketInventoryConfigurationInput, options ...request.Option) (*s3.DeleteBucketInventoryConfigurationOutput, error) {
+//			DeleteBucketInventoryConfigurationWithContextFunc: func(v aws.Context, deleteBucketInventoryConfigurationInput *s3.DeleteBucketInventoryConfigurationInput, options ...request.Option) (*s3.DeleteBucketInventoryConfigurationOutput, error) {
 //				panic("mock out the DeleteBucketInventoryConfigurationWithContext method")
 //			},
 //			DeleteBucketLifecycleFunc: func(deleteBucketLifecycleInput *s3.DeleteBucketLifecycleInput) (*s3.DeleteBucketLifecycleOutput, error) {
@@ -129,7 +129,7 @@ var _ iface.S3API = &MockS3API{}
 //			DeleteBucketLifecycleRequestFunc: func(deleteBucketLifecycleInput *s3.DeleteBucketLifecycleInput) (*request.Request, *s3.DeleteBucketLifecycleOutput) {
 //				panic("mock out the DeleteBucketLifecycleRequest method")
 //			},
-//			DeleteBucketLifecycleWithContextFunc: func(contextMoqParam context.Context, deleteBucketLifecycleInput *s3.DeleteBucketLifecycleInput, options ...request.Option) (*s3.DeleteBucketLifecycleOutput, error) {
+//			DeleteBucketLifecycleWithContextFunc: func(v aws.Context, deleteBucketLifecycleInput *s3.DeleteBucketLifecycleInput, options ...request.Option) (*s3.DeleteBucketLifecycleOutput, error) {
 //				panic("mock out the DeleteBucketLifecycleWithContext method")
 //			},
 //			DeleteBucketMetricsConfigurationFunc: func(deleteBucketMetricsConfigurationInput *s3.DeleteBucketMetricsConfigurationInput) (*s3.DeleteBucketMetricsConfigurationOutput, error) {
@@ -138,7 +138,7 @@ var _ iface.S3API = &MockS3API{}
 //			DeleteBucketMetricsConfigurationRequestFunc: func(deleteBucketMetricsConfigurationInput *s3.DeleteBucketMetricsConfigurationInput) (*request.Request, *s3.DeleteBucketMetricsConfigurationOutput) {
 //				panic("mock out the DeleteBucketMetricsConfigurationRequest method")
 //			},
-//			DeleteBucketMetricsConfigurationWithContextFunc: func(contextMoqParam context.Context, deleteBucketMetricsConfigurationInput *s3.DeleteBucketMetricsConfigurationInput, options ...request.Option) (*s3.DeleteBucketMetricsConfigurationOutput, error) {
+//			DeleteBucketMetricsConfigurationWithContextFunc: func(v aws.Context, deleteBucketMetricsConfigurationInput *s3.DeleteBucketMetricsConfigurationInput, options ...request.Option) (*s3.DeleteBucketMetricsConfigurationOutput, error) {
 //				panic("mock out the DeleteBucketMetricsConfigurationWithContext method")
 //			},
 //			DeleteBucketOwnershipControlsFunc: func(deleteBucketOwnershipControlsInput *s3.DeleteBucketOwnershipControlsInput) (*s3.DeleteBucketOwnershipControlsOutput, error) {
@@ -147,7 +147,7 @@ var _ iface.S3API = &MockS3API{}
 //			DeleteBucketOwnershipControlsRequestFunc: func(deleteBucketOwnershipControlsInput *s3.DeleteBucketOwnershipControlsInput) (*request.Request, *s3.DeleteBucketOwnershipControlsOutput) {
 //				panic("mock out the DeleteBucketOwnershipControlsRequest method")
 //			},
-//			DeleteBucketOwnershipControlsWithContextFunc: func(contextMoqParam context.Context, deleteBucketOwnershipControlsInput *s3.DeleteBucketOwnershipControlsInput, options ...request.Option) (*s3.DeleteBucketOwnershipControlsOutput, error) {
+//			DeleteBucketOwnershipControlsWithContextFunc: func(v aws.Context, deleteBucketOwnershipControlsInput *s3.DeleteBucketOwnershipControlsInput, options ...request.Option) (*s3.DeleteBucketOwnershipControlsOutput, error) {
 //				panic("mock out the DeleteBucketOwnershipControlsWithContext method")
 //			},
 //			DeleteBucketPolicyFunc: func(deleteBucketPolicyInput *s3.DeleteBucketPolicyInput) (*s3.DeleteBucketPolicyOutput, error) {
@@ -156,7 +156,7 @@ var _ iface.S3API = &MockS3API{}
 //			DeleteBucketPolicyRequestFunc: func(deleteBucketPolicyInput *s3.DeleteBucketPolicyInput) (*request.Request, *s3.DeleteBucketPolicyOutput) {
 //				panic("mock out the DeleteBucketPolicyRequest method")
 //			},
-//			DeleteBucketPolicyWithContextFunc: func(contextMoqParam context.Context, deleteBucketPolicyInput *s3.DeleteBucketPolicyInput, options ...request.Option) (*s3.DeleteBucketPolicyOutput, error) {
+//			DeleteBucketPolicyWithContextFunc: func(v aws.Context, deleteBucketPolicyInput *s3.DeleteBucketPolicyInput, options ...request.Option) (*s3.DeleteBucketPolicyOutput, error) {
 //				panic("mock out the DeleteBucketPolicyWithContext method")
 //			},
 //			DeleteBucketReplicationFunc: func(deleteBucketReplicationInput *s3.DeleteBucketReplicationInput) (*s3.DeleteBucketReplicationOutput, error) {
@@ -165,7 +165,7 @@ var _ iface.S3API = &MockS3API{}
 //			DeleteBucketReplicationRequestFunc: func(deleteBucketReplicationInput *s3.DeleteBucketReplicationInput) (*request.Request, *s3.DeleteBucketReplicationOutput) {
 //				panic("mock out the DeleteBucketReplicationRequest method")
 //			},
-//			DeleteBucketReplicationWithContextFunc: func(contextMoqParam context.Context, deleteBucketReplicationInput *s3.DeleteBucketReplicationInput, options ...request.Option) (*s3.DeleteBucketReplicationOutput, error) {
+//			DeleteBucketReplicationWithContextFunc: func(v aws.Context, deleteBucketReplicationInput *s3.DeleteBucketReplicationInput, options ...request.Option) (*s3.DeleteBucketReplicationOutput, error) {
 //				panic("mock out the DeleteBucketReplicationWithContext method")
 //			},
 //			DeleteBucketRequestFunc: func(deleteBucketInput *s3.DeleteBucketInput) (*request.Request, *s3.DeleteBucketOutput) {
@@ -177,7 +177,7 @@ var _ iface.S3API = &MockS3API{}
 //			DeleteBucketTaggingRequestFunc: func(deleteBucketTaggingInput *s3.DeleteBucketTaggingInput) (*request.Request, *s3.DeleteBucketTaggingOutput) {
 //				panic("mock out the DeleteBucketTaggingRequest method")
 //			},
-//			DeleteBucketTaggingWithContextFunc: func(contextMoqParam context.Context, deleteBucketTaggingInput *s3.DeleteBucketTaggingInput, options ...request.Option) (*s3.DeleteBucketTaggingOutput, error) {
+//			DeleteBucketTaggingWithContextFunc: func(v aws.Context, deleteBucketTaggingInput *s3.DeleteBucketTaggingInput, options ...request.Option) (*s3.DeleteBucketTaggingOutput, error) {
 //				panic("mock out the DeleteBucketTaggingWithContext method")
 //			},
 //			DeleteBucketWebsiteFunc: func(deleteBucketWebsiteInput *s3.DeleteBucketWebsiteInput) (*s3.DeleteBucketWebsiteOutput, error) {
@@ -186,10 +186,10 @@ var _ iface.S3API = &MockS3API{}
 //			DeleteBucketWebsiteRequestFunc: func(deleteBucketWebsiteInput *s3.DeleteBucketWebsiteInput) (*request.Request, *s3.DeleteBucketWebsiteOutput) {
 //				panic("mock out the DeleteBucketWebsiteRequest method")
 //			},
-//			DeleteBucketWebsiteWithContextFunc: func(contextMoqParam context.Context, deleteBucketWebsiteInput *s3.DeleteBucketWebsiteInput, options ...request.Option) (*s3.DeleteBucketWebsiteOutput, error) {
+//			DeleteBucketWebsiteWithContextFunc: func(v aws.Context, deleteBucketWebsiteInput *s3.DeleteBucketWebsiteInput, options ...request.Option) (*s3.DeleteBucketWebsiteOutput, error) {
 //				panic("mock out the DeleteBucketWebsiteWithContext method")
 //			},
-//			DeleteBucketWithContextFunc: func(contextMoqParam context.Context, deleteBucketInput *s3.DeleteBucketInput, options ...request.Option) (*s3.DeleteBucketOutput, error) {
+//			DeleteBucketWithContextFunc: func(v aws.Context, deleteBucketInput *s3.DeleteBucketInput, options ...request.Option) (*s3.DeleteBucketOutput, error) {
 //				panic("mock out the DeleteBucketWithContext method")
 //			},
 //			DeleteObjectFunc: func(deleteObjectInput *s3.DeleteObjectInput) (*s3.DeleteObjectOutput, error) {
@@ -204,10 +204,10 @@ var _ iface.S3API = &MockS3API{}
 //			DeleteObjectTaggingRequestFunc: func(deleteObjectTaggingInput *s3.DeleteObjectTaggingInput) (*request.Request, *s3.DeleteObjectTaggingOutput) {
 //				panic("mock out the DeleteObjectTaggingRequest method")
 //			},
-//			DeleteObjectTaggingWithContextFunc: func(contextMoqParam context.Context, deleteObjectTaggingInput *s3.DeleteObjectTaggingInput, options ...request.Option) (*s3.DeleteObjectTaggingOutput, error) {
+//			DeleteObjectTaggingWithContextFunc: func(v aws.Context, deleteObjectTaggingInput *s3.DeleteObjectTaggingInput, options ...request.Option) (*s3.DeleteObjectTaggingOutput, error) {
 //				panic("mock out the DeleteObjectTaggingWithContext method")
 //			},
-//			DeleteObjectWithContextFunc: func(contextMoqParam context.Context, deleteObjectInput *s3.DeleteObjectInput, options ...request.Option) (*s3.DeleteObjectOutput, error) {
+//			DeleteObjectWithContextFunc: func(v aws.Context, deleteObjectInput *s3.DeleteObjectInput, options ...request.Option) (*s3.DeleteObjectOutput, error) {
 //				panic("mock out the DeleteObjectWithContext method")
 //			},
 //			DeleteObjectsFunc: func(deleteObjectsInput *s3.DeleteObjectsInput) (*s3.DeleteObjectsOutput, error) {
@@ -216,7 +216,7 @@ var _ iface.S3API = &MockS3API{}
 //			DeleteObjectsRequestFunc: func(deleteObjectsInput *s3.DeleteObjectsInput) (*request.Request, *s3.DeleteObjectsOutput) {
 //				panic("mock out the DeleteObjectsRequest method")
 //			},
-//			DeleteObjectsWithContextFunc: func(contextMoqParam context.Context, deleteObjectsInput *s3.DeleteObjectsInput, options ...request.Option) (*s3.DeleteObjectsOutput, error) {
+//			DeleteObjectsWithContextFunc: func(v aws.Context, deleteObjectsInput *s3.DeleteObjectsInput, options ...request.Option) (*s3.DeleteObjectsOutput, error) {
 //				panic("mock out the DeleteObjectsWithContext method")
 //			},
 //			DeletePublicAccessBlockFunc: func(deletePublicAccessBlockInput *s3.DeletePublicAccessBlockInput) (*s3.DeletePublicAccessBlockOutput, error) {
@@ -225,7 +225,7 @@ var _ iface.S3API = &MockS3API{}
 //			DeletePublicAccessBlockRequestFunc: func(deletePublicAccessBlockInput *s3.DeletePublicAccessBlockInput) (*request.Request, *s3.DeletePublicAccessBlockOutput) {
 //				panic("mock out the DeletePublicAccessBlockRequest method")
 //			},
-//			DeletePublicAccessBlockWithContextFunc: func(contextMoqParam context.Context, deletePublicAccessBlockInput *s3.DeletePublicAccessBlockInput, options ...request.Option) (*s3.DeletePublicAccessBlockOutput, error) {
+//			DeletePublicAccessBlockWithContextFunc: func(v aws.Context, deletePublicAccessBlockInput *s3.DeletePublicAccessBlockInput, options ...request.Option) (*s3.DeletePublicAccessBlockOutput, error) {
 //				panic("mock out the DeletePublicAccessBlockWithContext method")
 //			},
 //			GetBucketAccelerateConfigurationFunc: func(getBucketAccelerateConfigurationInput *s3.GetBucketAccelerateConfigurationInput) (*s3.GetBucketAccelerateConfigurationOutput, error) {
@@ -234,7 +234,7 @@ var _ iface.S3API = &MockS3API{}
 //			GetBucketAccelerateConfigurationRequestFunc: func(getBucketAccelerateConfigurationInput *s3.GetBucketAccelerateConfigurationInput) (*request.Request, *s3.GetBucketAccelerateConfigurationOutput) {
 //				panic("mock out the GetBucketAccelerateConfigurationRequest method")
 //			},
-//			GetBucketAccelerateConfigurationWithContextFunc: func(contextMoqParam context.Context, getBucketAccelerateConfigurationInput *s3.GetBucketAccelerateConfigurationInput, options ...request.Option) (*s3.GetBucketAccelerateConfigurationOutput, error) {
+//			GetBucketAccelerateConfigurationWithContextFunc: func(v aws.Context, getBucketAccelerateConfigurationInput *s3.GetBucketAccelerateConfigurationInput, options ...request.Option) (*s3.GetBucketAccelerateConfigurationOutput, error) {
 //				panic("mock out the GetBucketAccelerateConfigurationWithContext method")
 //			},
 //			GetBucketAclFunc: func(getBucketAclInput *s3.GetBucketAclInput) (*s3.GetBucketAclOutput, error) {
@@ -243,7 +243,7 @@ var _ iface.S3API = &MockS3API{}
 //			GetBucketAclRequestFunc: func(getBucketAclInput *s3.GetBucketAclInput) (*request.Request, *s3.GetBucketAclOutput) {
 //				panic("mock out the GetBucketAclRequest method")
 //			},
-//			GetBucketAclWithContextFunc: func(contextMoqParam context.Context, getBucketAclInput *s3.GetBucketAclInput, options ...request.Option) (*s3.GetBucketAclOutput, error) {
+//			GetBucketAclWithContextFunc: func(v aws.Context, getBucketAclInput *s3.GetBucketAclInput, options ...request.Option) (*s3.GetBucketAclOutput, error) {
 //				panic("mock out the GetBucketAclWithContext method")
 //			},
 //			GetBucketAnalyticsConfigurationFunc: func(getBucketAnalyticsConfigurationInput *s3.GetBucketAnalyticsConfigurationInput) (*s3.GetBucketAnalyticsConfigurationOutput, error) {
@@ -252,7 +252,7 @@ var _ iface.S3API = &MockS3API{}
 //			GetBucketAnalyticsConfigurationRequestFunc: func(getBucketAnalyticsConfigurationInput *s3.GetBucketAnalyticsConfigurationInput) (*request.Request, *s3.GetBucketAnalyticsConfigurationOutput) {
 //				panic("mock out the GetBucketAnalyticsConfigurationRequest method")
 //			},
-//			GetBucketAnalyticsConfigurationWithContextFunc: func(contextMoqParam context.Context, getBucketAnalyticsConfigurationInput *s3.GetBucketAnalyticsConfigurationInput, options ...request.Option) (*s3.GetBucketAnalyticsConfigurationOutput, error) {
+//			GetBucketAnalyticsConfigurationWithContextFunc: func(v aws.Context, getBucketAnalyticsConfigurationInput *s3.GetBucketAnalyticsConfigurationInput, options ...request.Option) (*s3.GetBucketAnalyticsConfigurationOutput, error) {
 //				panic("mock out the GetBucketAnalyticsConfigurationWithContext method")
 //			},
 //			GetBucketCorsFunc: func(getBucketCorsInput *s3.GetBucketCorsInput) (*s3.GetBucketCorsOutput, error) {
@@ -261,7 +261,7 @@ var _ iface.S3API = &MockS3API{}
 //			GetBucketCorsRequestFunc: func(getBucketCorsInput *s3.GetBucketCorsInput) (*request.Request, *s3.GetBucketCorsOutput) {
 //				panic("mock out the GetBucketCorsRequest method")
 //			},
-//			GetBucketCorsWithContextFunc: func(contextMoqParam context.Context, getBucketCorsInput *s3.GetBucketCorsInput, options ...request.Option) (*s3.GetBucketCorsOutput, error) {
+//			GetBucketCorsWithContextFunc: func(v aws.Context, getBucketCorsInput *s3.GetBucketCorsInput, options ...request.Option) (*s3.GetBucketCorsOutput, error) {
 //				panic("mock out the GetBucketCorsWithContext method")
 //			},
 //			GetBucketEncryptionFunc: func(getBucketEncryptionInput *s3.GetBucketEncryptionInput) (*s3.GetBucketEncryptionOutput, error) {
@@ -270,7 +270,7 @@ var _ iface.S3API = &MockS3API{}
 //			GetBucketEncryptionRequestFunc: func(getBucketEncryptionInput *s3.GetBucketEncryptionInput) (*request.Request, *s3.GetBucketEncryptionOutput) {
 //				panic("mock out the GetBucketEncryptionRequest method")
 //			},
-//			GetBucketEncryptionWithContextFunc: func(contextMoqParam context.Context, getBucketEncryptionInput *s3.GetBucketEncryptionInput, options ...request.Option) (*s3.GetBucketEncryptionOutput, error) {
+//			GetBucketEncryptionWithContextFunc: func(v aws.Context, getBucketEncryptionInput *s3.GetBucketEncryptionInput, options ...request.Option) (*s3.GetBucketEncryptionOutput, error) {
 //				panic("mock out the GetBucketEncryptionWithContext method")
 //			},
 //			GetBucketIntelligentTieringConfigurationFunc: func(getBucketIntelligentTieringConfigurationInput *s3.GetBucketIntelligentTieringConfigurationInput) (*s3.GetBucketIntelligentTieringConfigurationOutput, error) {
@@ -279,7 +279,7 @@ var _ iface.S3API = &MockS3API{}
 //			GetBucketIntelligentTieringConfigurationRequestFunc: func(getBucketIntelligentTieringConfigurationInput *s3.GetBucketIntelligentTieringConfigurationInput) (*request.Request, *s3.GetBucketIntelligentTieringConfigurationOutput) {
 //				panic("mock out the GetBucketIntelligentTieringConfigurationRequest method")
 //			},
-//			GetBucketIntelligentTieringConfigurationWithContextFunc: func(contextMoqParam context.Context, getBucketIntelligentTieringConfigurationInput *s3.GetBucketIntelligentTieringConfigurationInput, options ...request.Option) (*s3.GetBucketIntelligentTieringConfigurationOutput, error) {
+//			GetBucketIntelligentTieringConfigurationWithContextFunc: func(v aws.Context, getBucketIntelligentTieringConfigurationInput *s3.GetBucketIntelligentTieringConfigurationInput, options ...request.Option) (*s3.GetBucketIntelligentTieringConfigurationOutput, error) {
 //				panic("mock out the GetBucketIntelligentTieringConfigurationWithContext method")
 //			},
 //			GetBucketInventoryConfigurationFunc: func(getBucketInventoryConfigurationInput *s3.GetBucketInventoryConfigurationInput) (*s3.GetBucketInventoryConfigurationOutput, error) {
@@ -288,7 +288,7 @@ var _ iface.S3API = &MockS3API{}
 //			GetBucketInventoryConfigurationRequestFunc: func(getBucketInventoryConfigurationInput *s3.GetBucketInventoryConfigurationInput) (*request.Request, *s3.GetBucketInventoryConfigurationOutput) {
 //				panic("mock out the GetBucketInventoryConfigurationRequest method")
 //			},
-//			GetBucketInventoryConfigurationWithContextFunc: func(contextMoqParam context.Context, getBucketInventoryConfigurationInput *s3.GetBucketInventoryConfigurationInput, options ...request.Option) (*s3.GetBucketInventoryConfigurationOutput, error) {
+//			GetBucketInventoryConfigurationWithContextFunc: func(v aws.Context, getBucketInventoryConfigurationInput *s3.GetBucketInventoryConfigurationInput, options ...request.Option) (*s3.GetBucketInventoryConfigurationOutput, error) {
 //				panic("mock out the GetBucketInventoryConfigurationWithContext method")
 //			},
 //			GetBucketLifecycleFunc: func(getBucketLifecycleInput *s3.GetBucketLifecycleInput) (*s3.GetBucketLifecycleOutput, error) {
@@ -300,13 +300,13 @@ var _ iface.S3API = &MockS3API{}
 //			GetBucketLifecycleConfigurationRequestFunc: func(getBucketLifecycleConfigurationInput *s3.GetBucketLifecycleConfigurationInput) (*request.Request, *s3.GetBucketLifecycleConfigurationOutput) {
 //				panic("mock out the GetBucketLifecycleConfigurationRequest method")
 //			},
-//			GetBucketLifecycleConfigurationWithContextFunc: func(contextMoqParam context.Context, getBucketLifecycleConfigurationInput *s3.GetBucketLifecycleConfigurationInput, options ...request.Option) (*s3.GetBucketLifecycleConfigurationOutput, error) {
+//			GetBucketLifecycleConfigurationWithContextFunc: func(v aws.Context, getBucketLifecycleConfigurationInput *s3.GetBucketLifecycleConfigurationInput, options ...request.Option) (*s3.GetBucketLifecycleConfigurationOutput, error) {
 //				panic("mock out the GetBucketLifecycleConfigurationWithContext method")
 //			},
 //			GetBucketLifecycleRequestFunc: func(getBucketLifecycleInput *s3.GetBucketLifecycleInput) (*request.Request, *s3.GetBucketLifecycleOutput) {
 //				panic("mock out the GetBucketLifecycleRequest method")
 //			},
-//			GetBucketLifecycleWithContextFunc: func(contextMoqParam context.Context, getBucketLifecycleInput *s3.GetBucketLifecycleInput, options ...request.Option) (*s3.GetBucketLifecycleOutput, error) {
+//			GetBucketLifecycleWithContextFunc: func(v aws.Context, getBucketLifecycleInput *s3.GetBucketLifecycleInput, options ...request.Option) (*s3.GetBucketLifecycleOutput, error) {
 //				panic("mock out the GetBucketLifecycleWithContext method")
 //			},
 //			GetBucketLocationFunc: func(getBucketLocationInput *s3.GetBucketLocationInput) (*s3.GetBucketLocationOutput, error) {
@@ -315,7 +315,7 @@ var _ iface.S3API = &MockS3API{}
 //			GetBucketLocationRequestFunc: func(getBucketLocationInput *s3.GetBucketLocationInput) (*request.Request, *s3.GetBucketLocationOutput) {
 //				panic("mock out the GetBucketLocationRequest method")
 //			},
-//			GetBucketLocationWithContextFunc: func(contextMoqParam context.Context, getBucketLocationInput *s3.GetBucketLocationInput, options ...request.Option) (*s3.GetBucketLocationOutput, error) {
+//			GetBucketLocationWithContextFunc: func(v aws.Context, getBucketLocationInput *s3.GetBucketLocationInput, options ...request.Option) (*s3.GetBucketLocationOutput, error) {
 //				panic("mock out the GetBucketLocationWithContext method")
 //			},
 //			GetBucketLoggingFunc: func(getBucketLoggingInput *s3.GetBucketLoggingInput) (*s3.GetBucketLoggingOutput, error) {
@@ -324,7 +324,7 @@ var _ iface.S3API = &MockS3API{}
 //			GetBucketLoggingRequestFunc: func(getBucketLoggingInput *s3.GetBucketLoggingInput) (*request.Request, *s3.GetBucketLoggingOutput) {
 //				panic("mock out the GetBucketLoggingRequest method")
 //			},
-//			GetBucketLoggingWithContextFunc: func(contextMoqParam context.Context, getBucketLoggingInput *s3.GetBucketLoggingInput, options ...request.Option) (*s3.GetBucketLoggingOutput, error) {
+//			GetBucketLoggingWithContextFunc: func(v aws.Context, getBucketLoggingInput *s3.GetBucketLoggingInput, options ...request.Option) (*s3.GetBucketLoggingOutput, error) {
 //				panic("mock out the GetBucketLoggingWithContext method")
 //			},
 //			GetBucketMetricsConfigurationFunc: func(getBucketMetricsConfigurationInput *s3.GetBucketMetricsConfigurationInput) (*s3.GetBucketMetricsConfigurationOutput, error) {
@@ -333,7 +333,7 @@ var _ iface.S3API = &MockS3API{}
 //			GetBucketMetricsConfigurationRequestFunc: func(getBucketMetricsConfigurationInput *s3.GetBucketMetricsConfigurationInput) (*request.Request, *s3.GetBucketMetricsConfigurationOutput) {
 //				panic("mock out the GetBucketMetricsConfigurationRequest method")
 //			},
-//			GetBucketMetricsConfigurationWithContextFunc: func(contextMoqParam context.Context, getBucketMetricsConfigurationInput *s3.GetBucketMetricsConfigurationInput, options ...request.Option) (*s3.GetBucketMetricsConfigurationOutput, error) {
+//			GetBucketMetricsConfigurationWithContextFunc: func(v aws.Context, getBucketMetricsConfigurationInput *s3.GetBucketMetricsConfigurationInput, options ...request.Option) (*s3.GetBucketMetricsConfigurationOutput, error) {
 //				panic("mock out the GetBucketMetricsConfigurationWithContext method")
 //			},
 //			GetBucketNotificationFunc: func(getBucketNotificationConfigurationRequest *s3.GetBucketNotificationConfigurationRequest) (*s3.NotificationConfigurationDeprecated, error) {
@@ -345,13 +345,13 @@ var _ iface.S3API = &MockS3API{}
 //			GetBucketNotificationConfigurationRequestFunc: func(getBucketNotificationConfigurationRequest *s3.GetBucketNotificationConfigurationRequest) (*request.Request, *s3.NotificationConfiguration) {
 //				panic("mock out the GetBucketNotificationConfigurationRequest method")
 //			},
-//			GetBucketNotificationConfigurationWithContextFunc: func(contextMoqParam context.Context, getBucketNotificationConfigurationRequest *s3.GetBucketNotificationConfigurationRequest, options ...request.Option) (*s3.NotificationConfiguration, error) {
+//			GetBucketNotificationConfigurationWithContextFunc: func(v aws.Context, getBucketNotificationConfigurationRequest *s3.GetBucketNotificationConfigurationRequest, options ...request.Option) (*s3.NotificationConfiguration, error) {
 //				panic("mock out the GetBucketNotificationConfigurationWithContext method")
 //			},
 //			GetBucketNotificationRequestFunc: func(getBucketNotificationConfigurationRequest *s3.GetBucketNotificationConfigurationRequest) (*request.Request, *s3.NotificationConfigurationDeprecated) {
 //				panic("mock out the GetBucketNotificationRequest method")
 //			},
-//			GetBucketNotificationWithContextFunc: func(contextMoqParam context.Context, getBucketNotificationConfigurationRequest *s3.GetBucketNotificationConfigurationRequest, options ...request.Option) (*s3.NotificationConfigurationDeprecated, error) {
+//			GetBucketNotificationWithContextFunc: func(v aws.Context, getBucketNotificationConfigurationRequest *s3.GetBucketNotificationConfigurationRequest, options ...request.Option) (*s3.NotificationConfigurationDeprecated, error) {
 //				panic("mock out the GetBucketNotificationWithContext method")
 //			},
 //			GetBucketOwnershipControlsFunc: func(getBucketOwnershipControlsInput *s3.GetBucketOwnershipControlsInput) (*s3.GetBucketOwnershipControlsOutput, error) {
@@ -360,7 +360,7 @@ var _ iface.S3API = &MockS3API{}
 //			GetBucketOwnershipControlsRequestFunc: func(getBucketOwnershipControlsInput *s3.GetBucketOwnershipControlsInput) (*request.Request, *s3.GetBucketOwnershipControlsOutput) {
 //				panic("mock out the GetBucketOwnershipControlsRequest method")
 //			},
-//			GetBucketOwnershipControlsWithContextFunc: func(contextMoqParam context.Context, getBucketOwnershipControlsInput *s3.GetBucketOwnershipControlsInput, options ...request.Option) (*s3.GetBucketOwnershipControlsOutput, error) {
+//			GetBucketOwnershipControlsWithContextFunc: func(v aws.Context, getBucketOwnershipControlsInput *s3.GetBucketOwnershipControlsInput, options ...request.Option) (*s3.GetBucketOwnershipControlsOutput, error) {
 //				panic("mock out the GetBucketOwnershipControlsWithContext method")
 //			},
 //			GetBucketPolicyFunc: func(getBucketPolicyInput *s3.GetBucketPolicyInput) (*s3.GetBucketPolicyOutput, error) {
@@ -375,10 +375,10 @@ var _ iface.S3API = &MockS3API{}
 //			GetBucketPolicyStatusRequestFunc: func(getBucketPolicyStatusInput *s3.GetBucketPolicyStatusInput) (*request.Request, *s3.GetBucketPolicyStatusOutput) {
 //				panic("mock out the GetBucketPolicyStatusRequest method")
 //			},
-//			GetBucketPolicyStatusWithContextFunc: func(contextMoqParam context.Context, getBucketPolicyStatusInput *s3.GetBucketPolicyStatusInput, options ...request.Option) (*s3.GetBucketPolicyStatusOutput, error) {
+//			GetBucketPolicyStatusWithContextFunc: func(v aws.Context, getBucketPolicyStatusInput *s3.GetBucketPolicyStatusInput, options ...request.Option) (*s3.GetBucketPolicyStatusOutput, error) {
 //				panic("mock out the GetBucketPolicyStatusWithContext method")
 //			},
-//			GetBucketPolicyWithContextFunc: func(contextMoqParam context.Context, getBucketPolicyInput *s3.GetBucketPolicyInput, options ...request.Option) (*s3.GetBucketPolicyOutput, error) {
+//			GetBucketPolicyWithContextFunc: func(v aws.Context, getBucketPolicyInput *s3.GetBucketPolicyInput, options ...request.Option) (*s3.GetBucketPolicyOutput, error) {
 //				panic("mock out the GetBucketPolicyWithContext method")
 //			},
 //			GetBucketReplicationFunc: func(getBucketReplicationInput *s3.GetBucketReplicationInput) (*s3.GetBucketReplicationOutput, error) {
@@ -387,7 +387,7 @@ var _ iface.S3API = &MockS3API{}
 //			GetBucketReplicationRequestFunc: func(getBucketReplicationInput *s3.GetBucketReplicationInput) (*request.Request, *s3.GetBucketReplicationOutput) {
 //				panic("mock out the GetBucketReplicationRequest method")
 //			},
-//			GetBucketReplicationWithContextFunc: func(contextMoqParam context.Context, getBucketReplicationInput *s3.GetBucketReplicationInput, options ...request.Option) (*s3.GetBucketReplicationOutput, error) {
+//			GetBucketReplicationWithContextFunc: func(v aws.Context, getBucketReplicationInput *s3.GetBucketReplicationInput, options ...request.Option) (*s3.GetBucketReplicationOutput, error) {
 //				panic("mock out the GetBucketReplicationWithContext method")
 //			},
 //			GetBucketRequestPaymentFunc: func(getBucketRequestPaymentInput *s3.GetBucketRequestPaymentInput) (*s3.GetBucketRequestPaymentOutput, error) {
@@ -396,7 +396,7 @@ var _ iface.S3API = &MockS3API{}
 //			GetBucketRequestPaymentRequestFunc: func(getBucketRequestPaymentInput *s3.GetBucketRequestPaymentInput) (*request.Request, *s3.GetBucketRequestPaymentOutput) {
 //				panic("mock out the GetBucketRequestPaymentRequest method")
 //			},
-//			GetBucketRequestPaymentWithContextFunc: func(contextMoqParam context.Context, getBucketRequestPaymentInput *s3.GetBucketRequestPaymentInput, options ...request.Option) (*s3.GetBucketRequestPaymentOutput, error) {
+//			GetBucketRequestPaymentWithContextFunc: func(v aws.Context, getBucketRequestPaymentInput *s3.GetBucketRequestPaymentInput, options ...request.Option) (*s3.GetBucketRequestPaymentOutput, error) {
 //				panic("mock out the GetBucketRequestPaymentWithContext method")
 //			},
 //			GetBucketTaggingFunc: func(getBucketTaggingInput *s3.GetBucketTaggingInput) (*s3.GetBucketTaggingOutput, error) {
@@ -405,7 +405,7 @@ var _ iface.S3API = &MockS3API{}
 //			GetBucketTaggingRequestFunc: func(getBucketTaggingInput *s3.GetBucketTaggingInput) (*request.Request, *s3.GetBucketTaggingOutput) {
 //				panic("mock out the GetBucketTaggingRequest method")
 //			},
-//			GetBucketTaggingWithContextFunc: func(contextMoqParam context.Context, getBucketTaggingInput *s3.GetBucketTaggingInput, options ...request.Option) (*s3.GetBucketTaggingOutput, error) {
+//			GetBucketTaggingWithContextFunc: func(v aws.Context, getBucketTaggingInput *s3.GetBucketTaggingInput, options ...request.Option) (*s3.GetBucketTaggingOutput, error) {
 //				panic("mock out the GetBucketTaggingWithContext method")
 //			},
 //			GetBucketVersioningFunc: func(getBucketVersioningInput *s3.GetBucketVersioningInput) (*s3.GetBucketVersioningOutput, error) {
@@ -414,7 +414,7 @@ var _ iface.S3API = &MockS3API{}
 //			GetBucketVersioningRequestFunc: func(getBucketVersioningInput *s3.GetBucketVersioningInput) (*request.Request, *s3.GetBucketVersioningOutput) {
 //				panic("mock out the GetBucketVersioningRequest method")
 //			},
-//			GetBucketVersioningWithContextFunc: func(contextMoqParam context.Context, getBucketVersioningInput *s3.GetBucketVersioningInput, options ...request.Option) (*s3.GetBucketVersioningOutput, error) {
+//			GetBucketVersioningWithContextFunc: func(v aws.Context, getBucketVersioningInput *s3.GetBucketVersioningInput, options ...request.Option) (*s3.GetBucketVersioningOutput, error) {
 //				panic("mock out the GetBucketVersioningWithContext method")
 //			},
 //			GetBucketWebsiteFunc: func(getBucketWebsiteInput *s3.GetBucketWebsiteInput) (*s3.GetBucketWebsiteOutput, error) {
@@ -423,7 +423,7 @@ var _ iface.S3API = &MockS3API{}
 //			GetBucketWebsiteRequestFunc: func(getBucketWebsiteInput *s3.GetBucketWebsiteInput) (*request.Request, *s3.GetBucketWebsiteOutput) {
 //				panic("mock out the GetBucketWebsiteRequest method")
 //			},
-//			GetBucketWebsiteWithContextFunc: func(contextMoqParam context.Context, getBucketWebsiteInput *s3.GetBucketWebsiteInput, options ...request.Option) (*s3.GetBucketWebsiteOutput, error) {
+//			GetBucketWebsiteWithContextFunc: func(v aws.Context, getBucketWebsiteInput *s3.GetBucketWebsiteInput, options ...request.Option) (*s3.GetBucketWebsiteOutput, error) {
 //				panic("mock out the GetBucketWebsiteWithContext method")
 //			},
 //			GetObjectFunc: func(getObjectInput *s3.GetObjectInput) (*s3.GetObjectOutput, error) {
@@ -435,7 +435,7 @@ var _ iface.S3API = &MockS3API{}
 //			GetObjectAclRequestFunc: func(getObjectAclInput *s3.GetObjectAclInput) (*request.Request, *s3.GetObjectAclOutput) {
 //				panic("mock out the GetObjectAclRequest method")
 //			},
-//			GetObjectAclWithContextFunc: func(contextMoqParam context.Context, getObjectAclInput *s3.GetObjectAclInput, options ...request.Option) (*s3.GetObjectAclOutput, error) {
+//			GetObjectAclWithContextFunc: func(v aws.Context, getObjectAclInput *s3.GetObjectAclInput, options ...request.Option) (*s3.GetObjectAclOutput, error) {
 //				panic("mock out the GetObjectAclWithContext method")
 //			},
 //			GetObjectAttributesFunc: func(getObjectAttributesInput *s3.GetObjectAttributesInput) (*s3.GetObjectAttributesOutput, error) {
@@ -444,7 +444,7 @@ var _ iface.S3API = &MockS3API{}
 //			GetObjectAttributesRequestFunc: func(getObjectAttributesInput *s3.GetObjectAttributesInput) (*request.Request, *s3.GetObjectAttributesOutput) {
 //				panic("mock out the GetObjectAttributesRequest method")
 //			},
-//			GetObjectAttributesWithContextFunc: func(contextMoqParam context.Context, getObjectAttributesInput *s3.GetObjectAttributesInput, options ...request.Option) (*s3.GetObjectAttributesOutput, error) {
+//			GetObjectAttributesWithContextFunc: func(v aws.Context, getObjectAttributesInput *s3.GetObjectAttributesInput, options ...request.Option) (*s3.GetObjectAttributesOutput, error) {
 //				panic("mock out the GetObjectAttributesWithContext method")
 //			},
 //			GetObjectLegalHoldFunc: func(getObjectLegalHoldInput *s3.GetObjectLegalHoldInput) (*s3.GetObjectLegalHoldOutput, error) {
@@ -453,7 +453,7 @@ var _ iface.S3API = &MockS3API{}
 //			GetObjectLegalHoldRequestFunc: func(getObjectLegalHoldInput *s3.GetObjectLegalHoldInput) (*request.Request, *s3.GetObjectLegalHoldOutput) {
 //				panic("mock out the GetObjectLegalHoldRequest method")
 //			},
-//			GetObjectLegalHoldWithContextFunc: func(contextMoqParam context.Context, getObjectLegalHoldInput *s3.GetObjectLegalHoldInput, options ...request.Option) (*s3.GetObjectLegalHoldOutput, error) {
+//			GetObjectLegalHoldWithContextFunc: func(v aws.Context, getObjectLegalHoldInput *s3.GetObjectLegalHoldInput, options ...request.Option) (*s3.GetObjectLegalHoldOutput, error) {
 //				panic("mock out the GetObjectLegalHoldWithContext method")
 //			},
 //			GetObjectLockConfigurationFunc: func(getObjectLockConfigurationInput *s3.GetObjectLockConfigurationInput) (*s3.GetObjectLockConfigurationOutput, error) {
@@ -462,7 +462,7 @@ var _ iface.S3API = &MockS3API{}
 //			GetObjectLockConfigurationRequestFunc: func(getObjectLockConfigurationInput *s3.GetObjectLockConfigurationInput) (*request.Request, *s3.GetObjectLockConfigurationOutput) {
 //				panic("mock out the GetObjectLockConfigurationRequest method")
 //			},
-//			GetObjectLockConfigurationWithContextFunc: func(contextMoqParam context.Context, getObjectLockConfigurationInput *s3.GetObjectLockConfigurationInput, options ...request.Option) (*s3.GetObjectLockConfigurationOutput, error) {
+//			GetObjectLockConfigurationWithContextFunc: func(v aws.Context, getObjectLockConfigurationInput *s3.GetObjectLockConfigurationInput, options ...request.Option) (*s3.GetObjectLockConfigurationOutput, error) {
 //				panic("mock out the GetObjectLockConfigurationWithContext method")
 //			},
 //			GetObjectRequestFunc: func(getObjectInput *s3.GetObjectInput) (*request.Request, *s3.GetObjectOutput) {
@@ -474,7 +474,7 @@ var _ iface.S3API = &MockS3API{}
 //			GetObjectRetentionRequestFunc: func(getObjectRetentionInput *s3.GetObjectRetentionInput) (*request.Request, *s3.GetObjectRetentionOutput) {
 //				panic("mock out the GetObjectRetentionRequest method")
 //			},
-//			GetObjectRetentionWithContextFunc: func(contextMoqParam context.Context, getObjectRetentionInput *s3.GetObjectRetentionInput, options ...request.Option) (*s3.GetObjectRetentionOutput, error) {
+//			GetObjectRetentionWithContextFunc: func(v aws.Context, getObjectRetentionInput *s3.GetObjectRetentionInput, options ...request.Option) (*s3.GetObjectRetentionOutput, error) {
 //				panic("mock out the GetObjectRetentionWithContext method")
 //			},
 //			GetObjectTaggingFunc: func(getObjectTaggingInput *s3.GetObjectTaggingInput) (*s3.GetObjectTaggingOutput, error) {
@@ -483,7 +483,7 @@ var _ iface.S3API = &MockS3API{}
 //			GetObjectTaggingRequestFunc: func(getObjectTaggingInput *s3.GetObjectTaggingInput) (*request.Request, *s3.GetObjectTaggingOutput) {
 //				panic("mock out the GetObjectTaggingRequest method")
 //			},
-//			GetObjectTaggingWithContextFunc: func(contextMoqParam context.Context, getObjectTaggingInput *s3.GetObjectTaggingInput, options ...request.Option) (*s3.GetObjectTaggingOutput, error) {
+//			GetObjectTaggingWithContextFunc: func(v aws.Context, getObjectTaggingInput *s3.GetObjectTaggingInput, options ...request.Option) (*s3.GetObjectTaggingOutput, error) {
 //				panic("mock out the GetObjectTaggingWithContext method")
 //			},
 //			GetObjectTorrentFunc: func(getObjectTorrentInput *s3.GetObjectTorrentInput) (*s3.GetObjectTorrentOutput, error) {
@@ -492,10 +492,10 @@ var _ iface.S3API = &MockS3API{}
 //			GetObjectTorrentRequestFunc: func(getObjectTorrentInput *s3.GetObjectTorrentInput) (*request.Request, *s3.GetObjectTorrentOutput) {
 //				panic("mock out the GetObjectTorrentRequest method")
 //			},
-//			GetObjectTorrentWithContextFunc: func(contextMoqParam context.Context, getObjectTorrentInput *s3.GetObjectTorrentInput, options ...request.Option) (*s3.GetObjectTorrentOutput, error) {
+//			GetObjectTorrentWithContextFunc: func(v aws.Context, getObjectTorrentInput *s3.GetObjectTorrentInput, options ...request.Option) (*s3.GetObjectTorrentOutput, error) {
 //				panic("mock out the GetObjectTorrentWithContext method")
 //			},
-//			GetObjectWithContextFunc: func(contextMoqParam context.Context, getObjectInput *s3.GetObjectInput, options ...request.Option) (*s3.GetObjectOutput, error) {
+//			GetObjectWithContextFunc: func(v aws.Context, getObjectInput *s3.GetObjectInput, options ...request.Option) (*s3.GetObjectOutput, error) {
 //				panic("mock out the GetObjectWithContext method")
 //			},
 //			GetPublicAccessBlockFunc: func(getPublicAccessBlockInput *s3.GetPublicAccessBlockInput) (*s3.GetPublicAccessBlockOutput, error) {
@@ -504,7 +504,7 @@ var _ iface.S3API = &MockS3API{}
 //			GetPublicAccessBlockRequestFunc: func(getPublicAccessBlockInput *s3.GetPublicAccessBlockInput) (*request.Request, *s3.GetPublicAccessBlockOutput) {
 //				panic("mock out the GetPublicAccessBlockRequest method")
 //			},
-//			GetPublicAccessBlockWithContextFunc: func(contextMoqParam context.Context, getPublicAccessBlockInput *s3.GetPublicAccessBlockInput, options ...request.Option) (*s3.GetPublicAccessBlockOutput, error) {
+//			GetPublicAccessBlockWithContextFunc: func(v aws.Context, getPublicAccessBlockInput *s3.GetPublicAccessBlockInput, options ...request.Option) (*s3.GetPublicAccessBlockOutput, error) {
 //				panic("mock out the GetPublicAccessBlockWithContext method")
 //			},
 //			HeadBucketFunc: func(headBucketInput *s3.HeadBucketInput) (*s3.HeadBucketOutput, error) {
@@ -513,7 +513,7 @@ var _ iface.S3API = &MockS3API{}
 //			HeadBucketRequestFunc: func(headBucketInput *s3.HeadBucketInput) (*request.Request, *s3.HeadBucketOutput) {
 //				panic("mock out the HeadBucketRequest method")
 //			},
-//			HeadBucketWithContextFunc: func(contextMoqParam context.Context, headBucketInput *s3.HeadBucketInput, options ...request.Option) (*s3.HeadBucketOutput, error) {
+//			HeadBucketWithContextFunc: func(v aws.Context, headBucketInput *s3.HeadBucketInput, options ...request.Option) (*s3.HeadBucketOutput, error) {
 //				panic("mock out the HeadBucketWithContext method")
 //			},
 //			HeadObjectFunc: func(headObjectInput *s3.HeadObjectInput) (*s3.HeadObjectOutput, error) {
@@ -522,7 +522,7 @@ var _ iface.S3API = &MockS3API{}
 //			HeadObjectRequestFunc: func(headObjectInput *s3.HeadObjectInput) (*request.Request, *s3.HeadObjectOutput) {
 //				panic("mock out the HeadObjectRequest method")
 //			},
-//			HeadObjectWithContextFunc: func(contextMoqParam context.Context, headObjectInput *s3.HeadObjectInput, options ...request.Option) (*s3.HeadObjectOutput, error) {
+//			HeadObjectWithContextFunc: func(v aws.Context, headObjectInput *s3.HeadObjectInput, options ...request.Option) (*s3.HeadObjectOutput, error) {
 //				panic("mock out the HeadObjectWithContext method")
 //			},
 //			ListBucketAnalyticsConfigurationsFunc: func(listBucketAnalyticsConfigurationsInput *s3.ListBucketAnalyticsConfigurationsInput) (*s3.ListBucketAnalyticsConfigurationsOutput, error) {
@@ -531,7 +531,7 @@ var _ iface.S3API = &MockS3API{}
 //			ListBucketAnalyticsConfigurationsRequestFunc: func(listBucketAnalyticsConfigurationsInput *s3.ListBucketAnalyticsConfigurationsInput) (*request.Request, *s3.ListBucketAnalyticsConfigurationsOutput) {
 //				panic("mock out the ListBucketAnalyticsConfigurationsRequest method")
 //			},
-//			ListBucketAnalyticsConfigurationsWithContextFunc: func(contextMoqParam context.Context, listBucketAnalyticsConfigurationsInput *s3.ListBucketAnalyticsConfigurationsInput, options ...request.Option) (*s3.ListBucketAnalyticsConfigurationsOutput, error) {
+//			ListBucketAnalyticsConfigurationsWithContextFunc: func(v aws.Context, listBucketAnalyticsConfigurationsInput *s3.ListBucketAnalyticsConfigurationsInput, options ...request.Option) (*s3.ListBucketAnalyticsConfigurationsOutput, error) {
 //				panic("mock out the ListBucketAnalyticsConfigurationsWithContext method")
 //			},
 //			ListBucketIntelligentTieringConfigurationsFunc: func(listBucketIntelligentTieringConfigurationsInput *s3.ListBucketIntelligentTieringConfigurationsInput) (*s3.ListBucketIntelligentTieringConfigurationsOutput, error) {
@@ -540,7 +540,7 @@ var _ iface.S3API = &MockS3API{}
 //			ListBucketIntelligentTieringConfigurationsRequestFunc: func(listBucketIntelligentTieringConfigurationsInput *s3.ListBucketIntelligentTieringConfigurationsInput) (*request.Request, *s3.ListBucketIntelligentTieringConfigurationsOutput) {
 //				panic("mock out the ListBucketIntelligentTieringConfigurationsRequest method")
 //			},
-//			ListBucketIntelligentTieringConfigurationsWithContextFunc: func(contextMoqParam context.Context, listBucketIntelligentTieringConfigurationsInput *s3.ListBucketIntelligentTieringConfigurationsInput, options ...request.Option) (*s3.ListBucketIntelligentTieringConfigurationsOutput, error) {
+//			ListBucketIntelligentTieringConfigurationsWithContextFunc: func(v aws.Context, listBucketIntelligentTieringConfigurationsInput *s3.ListBucketIntelligentTieringConfigurationsInput, options ...request.Option) (*s3.ListBucketIntelligentTieringConfigurationsOutput, error) {
 //				panic("mock out the ListBucketIntelligentTieringConfigurationsWithContext method")
 //			},
 //			ListBucketInventoryConfigurationsFunc: func(listBucketInventoryConfigurationsInput *s3.ListBucketInventoryConfigurationsInput) (*s3.ListBucketInventoryConfigurationsOutput, error) {
@@ -549,7 +549,7 @@ var _ iface.S3API = &MockS3API{}
 //			ListBucketInventoryConfigurationsRequestFunc: func(listBucketInventoryConfigurationsInput *s3.ListBucketInventoryConfigurationsInput) (*request.Request, *s3.ListBucketInventoryConfigurationsOutput) {
 //				panic("mock out the ListBucketInventoryConfigurationsRequest method")
 //			},
-//			ListBucketInventoryConfigurationsWithContextFunc: func(contextMoqParam context.Context, listBucketInventoryConfigurationsInput *s3.ListBucketInventoryConfigurationsInput, options ...request.Option) (*s3.ListBucketInventoryConfigurationsOutput, error) {
+//			ListBucketInventoryConfigurationsWithContextFunc: func(v aws.Context, listBucketInventoryConfigurationsInput *s3.ListBucketInventoryConfigurationsInput, options ...request.Option) (*s3.ListBucketInventoryConfigurationsOutput, error) {
 //				panic("mock out the ListBucketInventoryConfigurationsWithContext method")
 //			},
 //			ListBucketMetricsConfigurationsFunc: func(listBucketMetricsConfigurationsInput *s3.ListBucketMetricsConfigurationsInput) (*s3.ListBucketMetricsConfigurationsOutput, error) {
@@ -558,7 +558,7 @@ var _ iface.S3API = &MockS3API{}
 //			ListBucketMetricsConfigurationsRequestFunc: func(listBucketMetricsConfigurationsInput *s3.ListBucketMetricsConfigurationsInput) (*request.Request, *s3.ListBucketMetricsConfigurationsOutput) {
 //				panic("mock out the ListBucketMetricsConfigurationsRequest method")
 //			},
-//			ListBucketMetricsConfigurationsWithContextFunc: func(contextMoqParam context.Context, listBucketMetricsConfigurationsInput *s3.ListBucketMetricsConfigurationsInput, options ...request.Option) (*s3.ListBucketMetricsConfigurationsOutput, error) {
+//			ListBucketMetricsConfigurationsWithContextFunc: func(v aws.Context, listBucketMetricsConfigurationsInput *s3.ListBucketMetricsConfigurationsInput, options ...request.Option) (*s3.ListBucketMetricsConfigurationsOutput, error) {
 //				panic("mock out the ListBucketMetricsConfigurationsWithContext method")
 //			},
 //			ListBucketsFunc: func(listBucketsInput *s3.ListBucketsInput) (*s3.ListBucketsOutput, error) {
@@ -567,7 +567,7 @@ var _ iface.S3API = &MockS3API{}
 //			ListBucketsRequestFunc: func(listBucketsInput *s3.ListBucketsInput) (*request.Request, *s3.ListBucketsOutput) {
 //				panic("mock out the ListBucketsRequest method")
 //			},
-//			ListBucketsWithContextFunc: func(contextMoqParam context.Context, listBucketsInput *s3.ListBucketsInput, options ...request.Option) (*s3.ListBucketsOutput, error) {
+//			ListBucketsWithContextFunc: func(v aws.Context, listBucketsInput *s3.ListBucketsInput, options ...request.Option) (*s3.ListBucketsOutput, error) {
 //				panic("mock out the ListBucketsWithContext method")
 //			},
 //			ListDirectoryBucketsFunc: func(listDirectoryBucketsInput *s3.ListDirectoryBucketsInput) (*s3.ListDirectoryBucketsOutput, error) {
@@ -576,13 +576,13 @@ var _ iface.S3API = &MockS3API{}
 //			ListDirectoryBucketsPagesFunc: func(listDirectoryBucketsInput *s3.ListDirectoryBucketsInput, fn func(*s3.ListDirectoryBucketsOutput, bool) bool) error {
 //				panic("mock out the ListDirectoryBucketsPages method")
 //			},
-//			ListDirectoryBucketsPagesWithContextFunc: func(contextMoqParam context.Context, listDirectoryBucketsInput *s3.ListDirectoryBucketsInput, fn func(*s3.ListDirectoryBucketsOutput, bool) bool, options ...request.Option) error {
+//			ListDirectoryBucketsPagesWithContextFunc: func(v aws.Context, listDirectoryBucketsInput *s3.ListDirectoryBucketsInput, fn func(*s3.ListDirectoryBucketsOutput, bool) bool, options ...request.Option) error {
 //				panic("mock out the ListDirectoryBucketsPagesWithContext method")
 //			},
 //			ListDirectoryBucketsRequestFunc: func(listDirectoryBucketsInput *s3.ListDirectoryBucketsInput) (*request.Request, *s3.ListDirectoryBucketsOutput) {
 //				panic("mock out the ListDirectoryBucketsRequest method")
 //			},
-//			ListDirectoryBucketsWithContextFunc: func(contextMoqParam context.Context, listDirectoryBucketsInput *s3.ListDirectoryBucketsInput, options ...request.Option) (*s3.ListDirectoryBucketsOutput, error) {
+//			ListDirectoryBucketsWithContextFunc: func(v aws.Context, listDirectoryBucketsInput *s3.ListDirectoryBucketsInput, options ...request.Option) (*s3.ListDirectoryBucketsOutput, error) {
 //				panic("mock out the ListDirectoryBucketsWithContext method")
 //			},
 //			ListMultipartUploadsFunc: func(listMultipartUploadsInput *s3.ListMultipartUploadsInput) (*s3.ListMultipartUploadsOutput, error) {
@@ -591,13 +591,13 @@ var _ iface.S3API = &MockS3API{}
 //			ListMultipartUploadsPagesFunc: func(listMultipartUploadsInput *s3.ListMultipartUploadsInput, fn func(*s3.ListMultipartUploadsOutput, bool) bool) error {
 //				panic("mock out the ListMultipartUploadsPages method")
 //			},
-//			ListMultipartUploadsPagesWithContextFunc: func(contextMoqParam context.Context, listMultipartUploadsInput *s3.ListMultipartUploadsInput, fn func(*s3.ListMultipartUploadsOutput, bool) bool, options ...request.Option) error {
+//			ListMultipartUploadsPagesWithContextFunc: func(v aws.Context, listMultipartUploadsInput *s3.ListMultipartUploadsInput, fn func(*s3.ListMultipartUploadsOutput, bool) bool, options ...request.Option) error {
 //				panic("mock out the ListMultipartUploadsPagesWithContext method")
 //			},
 //			ListMultipartUploadsRequestFunc: func(listMultipartUploadsInput *s3.ListMultipartUploadsInput) (*request.Request, *s3.ListMultipartUploadsOutput) {
 //				panic("mock out the ListMultipartUploadsRequest method")
 //			},
-//			ListMultipartUploadsWithContextFunc: func(contextMoqParam context.Context, listMultipartUploadsInput *s3.ListMultipartUploadsInput, options ...request.Option) (*s3.ListMultipartUploadsOutput, error) {
+//			ListMultipartUploadsWithContextFunc: func(v aws.Context, listMultipartUploadsInput *s3.ListMultipartUploadsInput, options ...request.Option) (*s3.ListMultipartUploadsOutput, error) {
 //				panic("mock out the ListMultipartUploadsWithContext method")
 //			},
 //			ListObjectVersionsFunc: func(listObjectVersionsInput *s3.ListObjectVersionsInput) (*s3.ListObjectVersionsOutput, error) {
@@ -606,13 +606,13 @@ var _ iface.S3API = &MockS3API{}
 //			ListObjectVersionsPagesFunc: func(listObjectVersionsInput *s3.ListObjectVersionsInput, fn func(*s3.ListObjectVersionsOutput, bool) bool) error {
 //				panic("mock out the ListObjectVersionsPages method")
 //			},
-//			ListObjectVersionsPagesWithContextFunc: func(contextMoqParam context.Context, listObjectVersionsInput *s3.ListObjectVersionsInput, fn func(*s3.ListObjectVersionsOutput, bool) bool, options ...request.Option) error {
+//			ListObjectVersionsPagesWithContextFunc: func(v aws.Context, listObjectVersionsInput *s3.ListObjectVersionsInput, fn func(*s3.ListObjectVersionsOutput, bool) bool, options ...request.Option) error {
 //				panic("mock out the ListObjectVersionsPagesWithContext method")
 //			},
 //			ListObjectVersionsRequestFunc: func(listObjectVersionsInput *s3.ListObjectVersionsInput) (*request.Request, *s3.ListObjectVersionsOutput) {
 //				panic("mock out the ListObjectVersionsRequest method")
 //			},
-//			ListObjectVersionsWithContextFunc: func(contextMoqParam context.Context, listObjectVersionsInput *s3.ListObjectVersionsInput, options ...request.Option) (*s3.ListObjectVersionsOutput, error) {
+//			ListObjectVersionsWithContextFunc: func(v aws.Context, listObjectVersionsInput *s3.ListObjectVersionsInput, options ...request.Option) (*s3.ListObjectVersionsOutput, error) {
 //				panic("mock out the ListObjectVersionsWithContext method")
 //			},
 //			ListObjectsFunc: func(listObjectsInput *s3.ListObjectsInput) (*s3.ListObjectsOutput, error) {
@@ -621,7 +621,7 @@ var _ iface.S3API = &MockS3API{}
 //			ListObjectsPagesFunc: func(listObjectsInput *s3.ListObjectsInput, fn func(*s3.ListObjectsOutput, bool) bool) error {
 //				panic("mock out the ListObjectsPages method")
 //			},
-//			ListObjectsPagesWithContextFunc: func(contextMoqParam context.Context, listObjectsInput *s3.ListObjectsInput, fn func(*s3.ListObjectsOutput, bool) bool, options ...request.Option) error {
+//			ListObjectsPagesWithContextFunc: func(v aws.Context, listObjectsInput *s3.ListObjectsInput, fn func(*s3.ListObjectsOutput, bool) bool, options ...request.Option) error {
 //				panic("mock out the ListObjectsPagesWithContext method")
 //			},
 //			ListObjectsRequestFunc: func(listObjectsInput *s3.ListObjectsInput) (*request.Request, *s3.ListObjectsOutput) {
@@ -633,16 +633,16 @@ var _ iface.S3API = &MockS3API{}
 //			ListObjectsV2PagesFunc: func(listObjectsV2Input *s3.ListObjectsV2Input, fn func(*s3.ListObjectsV2Output, bool) bool) error {
 //				panic("mock out the ListObjectsV2Pages method")
 //			},
-//			ListObjectsV2PagesWithContextFunc: func(contextMoqParam context.Context, listObjectsV2Input *s3.ListObjectsV2Input, fn func(*s3.ListObjectsV2Output, bool) bool, options ...request.Option) error {
+//			ListObjectsV2PagesWithContextFunc: func(v aws.Context, listObjectsV2Input *s3.ListObjectsV2Input, fn func(*s3.ListObjectsV2Output, bool) bool, options ...request.Option) error {
 //				panic("mock out the ListObjectsV2PagesWithContext method")
 //			},
 //			ListObjectsV2RequestFunc: func(listObjectsV2Input *s3.ListObjectsV2Input) (*request.Request, *s3.ListObjectsV2Output) {
 //				panic("mock out the ListObjectsV2Request method")
 //			},
-//			ListObjectsV2WithContextFunc: func(contextMoqParam context.Context, listObjectsV2Input *s3.ListObjectsV2Input, options ...request.Option) (*s3.ListObjectsV2Output, error) {
+//			ListObjectsV2WithContextFunc: func(v aws.Context, listObjectsV2Input *s3.ListObjectsV2Input, options ...request.Option) (*s3.ListObjectsV2Output, error) {
 //				panic("mock out the ListObjectsV2WithContext method")
 //			},
-//			ListObjectsWithContextFunc: func(contextMoqParam context.Context, listObjectsInput *s3.ListObjectsInput, options ...request.Option) (*s3.ListObjectsOutput, error) {
+//			ListObjectsWithContextFunc: func(v aws.Context, listObjectsInput *s3.ListObjectsInput, options ...request.Option) (*s3.ListObjectsOutput, error) {
 //				panic("mock out the ListObjectsWithContext method")
 //			},
 //			ListPartsFunc: func(listPartsInput *s3.ListPartsInput) (*s3.ListPartsOutput, error) {
@@ -651,13 +651,13 @@ var _ iface.S3API = &MockS3API{}
 //			ListPartsPagesFunc: func(listPartsInput *s3.ListPartsInput, fn func(*s3.ListPartsOutput, bool) bool) error {
 //				panic("mock out the ListPartsPages method")
 //			},
-//			ListPartsPagesWithContextFunc: func(contextMoqParam context.Context, listPartsInput *s3.ListPartsInput, fn func(*s3.ListPartsOutput, bool) bool, options ...request.Option) error {
+//			ListPartsPagesWithContextFunc: func(v aws.Context, listPartsInput *s3.ListPartsInput, fn func(*s3.ListPartsOutput, bool) bool, options ...request.Option) error {
 //				panic("mock out the ListPartsPagesWithContext method")
 //			},
 //			ListPartsRequestFunc: func(listPartsInput *s3.ListPartsInput) (*request.Request, *s3.ListPartsOutput) {
 //				panic("mock out the ListPartsRequest method")
 //			},
-//			ListPartsWithContextFunc: func(contextMoqParam context.Context, listPartsInput *s3.ListPartsInput, options ...request.Option) (*s3.ListPartsOutput, error) {
+//			ListPartsWithContextFunc: func(v aws.Context, listPartsInput *s3.ListPartsInput, options ...request.Option) (*s3.ListPartsOutput, error) {
 //				panic("mock out the ListPartsWithContext method")
 //			},
 //			PutBucketAccelerateConfigurationFunc: func(putBucketAccelerateConfigurationInput *s3.PutBucketAccelerateConfigurationInput) (*s3.PutBucketAccelerateConfigurationOutput, error) {
@@ -666,7 +666,7 @@ var _ iface.S3API = &MockS3API{}
 //			PutBucketAccelerateConfigurationRequestFunc: func(putBucketAccelerateConfigurationInput *s3.PutBucketAccelerateConfigurationInput) (*request.Request, *s3.PutBucketAccelerateConfigurationOutput) {
 //				panic("mock out the PutBucketAccelerateConfigurationRequest method")
 //			},
-//			PutBucketAccelerateConfigurationWithContextFunc: func(contextMoqParam context.Context, putBucketAccelerateConfigurationInput *s3.PutBucketAccelerateConfigurationInput, options ...request.Option) (*s3.PutBucketAccelerateConfigurationOutput, error) {
+//			PutBucketAccelerateConfigurationWithContextFunc: func(v aws.Context, putBucketAccelerateConfigurationInput *s3.PutBucketAccelerateConfigurationInput, options ...request.Option) (*s3.PutBucketAccelerateConfigurationOutput, error) {
 //				panic("mock out the PutBucketAccelerateConfigurationWithContext method")
 //			},
 //			PutBucketAclFunc: func(putBucketAclInput *s3.PutBucketAclInput) (*s3.PutBucketAclOutput, error) {
@@ -675,7 +675,7 @@ var _ iface.S3API = &MockS3API{}
 //			PutBucketAclRequestFunc: func(putBucketAclInput *s3.PutBucketAclInput) (*request.Request, *s3.PutBucketAclOutput) {
 //				panic("mock out the PutBucketAclRequest method")
 //			},
-//			PutBucketAclWithContextFunc: func(contextMoqParam context.Context, putBucketAclInput *s3.PutBucketAclInput, options ...request.Option) (*s3.PutBucketAclOutput, error) {
+//			PutBucketAclWithContextFunc: func(v aws.Context, putBucketAclInput *s3.PutBucketAclInput, options ...request.Option) (*s3.PutBucketAclOutput, error) {
 //				panic("mock out the PutBucketAclWithContext method")
 //			},
 //			PutBucketAnalyticsConfigurationFunc: func(putBucketAnalyticsConfigurationInput *s3.PutBucketAnalyticsConfigurationInput) (*s3.PutBucketAnalyticsConfigurationOutput, error) {
@@ -684,7 +684,7 @@ var _ iface.S3API = &MockS3API{}
 //			PutBucketAnalyticsConfigurationRequestFunc: func(putBucketAnalyticsConfigurationInput *s3.PutBucketAnalyticsConfigurationInput) (*request.Request, *s3.PutBucketAnalyticsConfigurationOutput) {
 //				panic("mock out the PutBucketAnalyticsConfigurationRequest method")
 //			},
-//			PutBucketAnalyticsConfigurationWithContextFunc: func(contextMoqParam context.Context, putBucketAnalyticsConfigurationInput *s3.PutBucketAnalyticsConfigurationInput, options ...request.Option) (*s3.PutBucketAnalyticsConfigurationOutput, error) {
+//			PutBucketAnalyticsConfigurationWithContextFunc: func(v aws.Context, putBucketAnalyticsConfigurationInput *s3.PutBucketAnalyticsConfigurationInput, options ...request.Option) (*s3.PutBucketAnalyticsConfigurationOutput, error) {
 //				panic("mock out the PutBucketAnalyticsConfigurationWithContext method")
 //			},
 //			PutBucketCorsFunc: func(putBucketCorsInput *s3.PutBucketCorsInput) (*s3.PutBucketCorsOutput, error) {
@@ -693,7 +693,7 @@ var _ iface.S3API = &MockS3API{}
 //			PutBucketCorsRequestFunc: func(putBucketCorsInput *s3.PutBucketCorsInput) (*request.Request, *s3.PutBucketCorsOutput) {
 //				panic("mock out the PutBucketCorsRequest method")
 //			},
-//			PutBucketCorsWithContextFunc: func(contextMoqParam context.Context, putBucketCorsInput *s3.PutBucketCorsInput, options ...request.Option) (*s3.PutBucketCorsOutput, error) {
+//			PutBucketCorsWithContextFunc: func(v aws.Context, putBucketCorsInput *s3.PutBucketCorsInput, options ...request.Option) (*s3.PutBucketCorsOutput, error) {
 //				panic("mock out the PutBucketCorsWithContext method")
 //			},
 //			PutBucketEncryptionFunc: func(putBucketEncryptionInput *s3.PutBucketEncryptionInput) (*s3.PutBucketEncryptionOutput, error) {
@@ -702,7 +702,7 @@ var _ iface.S3API = &MockS3API{}
 //			PutBucketEncryptionRequestFunc: func(putBucketEncryptionInput *s3.PutBucketEncryptionInput) (*request.Request, *s3.PutBucketEncryptionOutput) {
 //				panic("mock out the PutBucketEncryptionRequest method")
 //			},
-//			PutBucketEncryptionWithContextFunc: func(contextMoqParam context.Context, putBucketEncryptionInput *s3.PutBucketEncryptionInput, options ...request.Option) (*s3.PutBucketEncryptionOutput, error) {
+//			PutBucketEncryptionWithContextFunc: func(v aws.Context, putBucketEncryptionInput *s3.PutBucketEncryptionInput, options ...request.Option) (*s3.PutBucketEncryptionOutput, error) {
 //				panic("mock out the PutBucketEncryptionWithContext method")
 //			},
 //			PutBucketIntelligentTieringConfigurationFunc: func(putBucketIntelligentTieringConfigurationInput *s3.PutBucketIntelligentTieringConfigurationInput) (*s3.PutBucketIntelligentTieringConfigurationOutput, error) {
@@ -711,7 +711,7 @@ var _ iface.S3API = &MockS3API{}
 //			PutBucketIntelligentTieringConfigurationRequestFunc: func(putBucketIntelligentTieringConfigurationInput *s3.PutBucketIntelligentTieringConfigurationInput) (*request.Request, *s3.PutBucketIntelligentTieringConfigurationOutput) {
 //				panic("mock out the PutBucketIntelligentTieringConfigurationRequest method")
 //			},
-//			PutBucketIntelligentTieringConfigurationWithContextFunc: func(contextMoqParam context.Context, putBucketIntelligentTieringConfigurationInput *s3.PutBucketIntelligentTieringConfigurationInput, options ...request.Option) (*s3.PutBucketIntelligentTieringConfigurationOutput, error) {
+//			PutBucketIntelligentTieringConfigurationWithContextFunc: func(v aws.Context, putBucketIntelligentTieringConfigurationInput *s3.PutBucketIntelligentTieringConfigurationInput, options ...request.Option) (*s3.PutBucketIntelligentTieringConfigurationOutput, error) {
 //				panic("mock out the PutBucketIntelligentTieringConfigurationWithContext method")
 //			},
 //			PutBucketInventoryConfigurationFunc: func(putBucketInventoryConfigurationInput *s3.PutBucketInventoryConfigurationInput) (*s3.PutBucketInventoryConfigurationOutput, error) {
@@ -720,7 +720,7 @@ var _ iface.S3API = &MockS3API{}
 //			PutBucketInventoryConfigurationRequestFunc: func(putBucketInventoryConfigurationInput *s3.PutBucketInventoryConfigurationInput) (*request.Request, *s3.PutBucketInventoryConfigurationOutput) {
 //				panic("mock out the PutBucketInventoryConfigurationRequest method")
 //			},
-//			PutBucketInventoryConfigurationWithContextFunc: func(contextMoqParam context.Context, putBucketInventoryConfigurationInput *s3.PutBucketInventoryConfigurationInput, options ...request.Option) (*s3.PutBucketInventoryConfigurationOutput, error) {
+//			PutBucketInventoryConfigurationWithContextFunc: func(v aws.Context, putBucketInventoryConfigurationInput *s3.PutBucketInventoryConfigurationInput, options ...request.Option) (*s3.PutBucketInventoryConfigurationOutput, error) {
 //				panic("mock out the PutBucketInventoryConfigurationWithContext method")
 //			},
 //			PutBucketLifecycleFunc: func(putBucketLifecycleInput *s3.PutBucketLifecycleInput) (*s3.PutBucketLifecycleOutput, error) {
@@ -732,13 +732,13 @@ var _ iface.S3API = &MockS3API{}
 //			PutBucketLifecycleConfigurationRequestFunc: func(putBucketLifecycleConfigurationInput *s3.PutBucketLifecycleConfigurationInput) (*request.Request, *s3.PutBucketLifecycleConfigurationOutput) {
 //				panic("mock out the PutBucketLifecycleConfigurationRequest method")
 //			},
-//			PutBucketLifecycleConfigurationWithContextFunc: func(contextMoqParam context.Context, putBucketLifecycleConfigurationInput *s3.PutBucketLifecycleConfigurationInput, options ...request.Option) (*s3.PutBucketLifecycleConfigurationOutput, error) {
+//			PutBucketLifecycleConfigurationWithContextFunc: func(v aws.Context, putBucketLifecycleConfigurationInput *s3.PutBucketLifecycleConfigurationInput, options ...request.Option) (*s3.PutBucketLifecycleConfigurationOutput, error) {
 //				panic("mock out the PutBucketLifecycleConfigurationWithContext method")
 //			},
 //			PutBucketLifecycleRequestFunc: func(putBucketLifecycleInput *s3.PutBucketLifecycleInput) (*request.Request, *s3.PutBucketLifecycleOutput) {
 //				panic("mock out the PutBucketLifecycleRequest method")
 //			},
-//			PutBucketLifecycleWithContextFunc: func(contextMoqParam context.Context, putBucketLifecycleInput *s3.PutBucketLifecycleInput, options ...request.Option) (*s3.PutBucketLifecycleOutput, error) {
+//			PutBucketLifecycleWithContextFunc: func(v aws.Context, putBucketLifecycleInput *s3.PutBucketLifecycleInput, options ...request.Option) (*s3.PutBucketLifecycleOutput, error) {
 //				panic("mock out the PutBucketLifecycleWithContext method")
 //			},
 //			PutBucketLoggingFunc: func(putBucketLoggingInput *s3.PutBucketLoggingInput) (*s3.PutBucketLoggingOutput, error) {
@@ -747,7 +747,7 @@ var _ iface.S3API = &MockS3API{}
 //			PutBucketLoggingRequestFunc: func(putBucketLoggingInput *s3.PutBucketLoggingInput) (*request.Request, *s3.PutBucketLoggingOutput) {
 //				panic("mock out the PutBucketLoggingRequest method")
 //			},
-//			PutBucketLoggingWithContextFunc: func(contextMoqParam context.Context, putBucketLoggingInput *s3.PutBucketLoggingInput, options ...request.Option) (*s3.PutBucketLoggingOutput, error) {
+//			PutBucketLoggingWithContextFunc: func(v aws.Context, putBucketLoggingInput *s3.PutBucketLoggingInput, options ...request.Option) (*s3.PutBucketLoggingOutput, error) {
 //				panic("mock out the PutBucketLoggingWithContext method")
 //			},
 //			PutBucketMetricsConfigurationFunc: func(putBucketMetricsConfigurationInput *s3.PutBucketMetricsConfigurationInput) (*s3.PutBucketMetricsConfigurationOutput, error) {
@@ -756,7 +756,7 @@ var _ iface.S3API = &MockS3API{}
 //			PutBucketMetricsConfigurationRequestFunc: func(putBucketMetricsConfigurationInput *s3.PutBucketMetricsConfigurationInput) (*request.Request, *s3.PutBucketMetricsConfigurationOutput) {
 //				panic("mock out the PutBucketMetricsConfigurationRequest method")
 //			},
-//			PutBucketMetricsConfigurationWithContextFunc: func(contextMoqParam context.Context, putBucketMetricsConfigurationInput *s3.PutBucketMetricsConfigurationInput, options ...request.Option) (*s3.PutBucketMetricsConfigurationOutput, error) {
+//			PutBucketMetricsConfigurationWithContextFunc: func(v aws.Context, putBucketMetricsConfigurationInput *s3.PutBucketMetricsConfigurationInput, options ...request.Option) (*s3.PutBucketMetricsConfigurationOutput, error) {
 //				panic("mock out the PutBucketMetricsConfigurationWithContext method")
 //			},
 //			PutBucketNotificationFunc: func(putBucketNotificationInput *s3.PutBucketNotificationInput) (*s3.PutBucketNotificationOutput, error) {
@@ -768,13 +768,13 @@ var _ iface.S3API = &MockS3API{}
 //			PutBucketNotificationConfigurationRequestFunc: func(putBucketNotificationConfigurationInput *s3.PutBucketNotificationConfigurationInput) (*request.Request, *s3.PutBucketNotificationConfigurationOutput) {
 //				panic("mock out the PutBucketNotificationConfigurationRequest method")
 //			},
-//			PutBucketNotificationConfigurationWithContextFunc: func(contextMoqParam context.Context, putBucketNotificationConfigurationInput *s3.PutBucketNotificationConfigurationInput, options ...request.Option) (*s3.PutBucketNotificationConfigurationOutput, error) {
+//			PutBucketNotificationConfigurationWithContextFunc: func(v aws.Context, putBucketNotificationConfigurationInput *s3.PutBucketNotificationConfigurationInput, options ...request.Option) (*s3.PutBucketNotificationConfigurationOutput, error) {
 //				panic("mock out the PutBucketNotificationConfigurationWithContext method")
 //			},
 //			PutBucketNotificationRequestFunc: func(putBucketNotificationInput *s3.PutBucketNotificationInput) (*request.Request, *s3.PutBucketNotificationOutput) {
 //				panic("mock out the PutBucketNotificationRequest method")
 //			},
-//			PutBucketNotificationWithContextFunc: func(contextMoqParam context.Context, putBucketNotificationInput *s3.PutBucketNotificationInput, options ...request.Option) (*s3.PutBucketNotificationOutput, error) {
+//			PutBucketNotificationWithContextFunc: func(v aws.Context, putBucketNotificationInput *s3.PutBucketNotificationInput, options ...request.Option) (*s3.PutBucketNotificationOutput, error) {
 //				panic("mock out the PutBucketNotificationWithContext method")
 //			},
 //			PutBucketOwnershipControlsFunc: func(putBucketOwnershipControlsInput *s3.PutBucketOwnershipControlsInput) (*s3.PutBucketOwnershipControlsOutput, error) {
@@ -783,7 +783,7 @@ var _ iface.S3API = &MockS3API{}
 //			PutBucketOwnershipControlsRequestFunc: func(putBucketOwnershipControlsInput *s3.PutBucketOwnershipControlsInput) (*request.Request, *s3.PutBucketOwnershipControlsOutput) {
 //				panic("mock out the PutBucketOwnershipControlsRequest method")
 //			},
-//			PutBucketOwnershipControlsWithContextFunc: func(contextMoqParam context.Context, putBucketOwnershipControlsInput *s3.PutBucketOwnershipControlsInput, options ...request.Option) (*s3.PutBucketOwnershipControlsOutput, error) {
+//			PutBucketOwnershipControlsWithContextFunc: func(v aws.Context, putBucketOwnershipControlsInput *s3.PutBucketOwnershipControlsInput, options ...request.Option) (*s3.PutBucketOwnershipControlsOutput, error) {
 //				panic("mock out the PutBucketOwnershipControlsWithContext method")
 //			},
 //			PutBucketPolicyFunc: func(putBucketPolicyInput *s3.PutBucketPolicyInput) (*s3.PutBucketPolicyOutput, error) {
@@ -792,7 +792,7 @@ var _ iface.S3API = &MockS3API{}
 //			PutBucketPolicyRequestFunc: func(putBucketPolicyInput *s3.PutBucketPolicyInput) (*request.Request, *s3.PutBucketPolicyOutput) {
 //				panic("mock out the PutBucketPolicyRequest method")
 //			},
-//			PutBucketPolicyWithContextFunc: func(contextMoqParam context.Context, putBucketPolicyInput *s3.PutBucketPolicyInput, options ...request.Option) (*s3.PutBucketPolicyOutput, error) {
+//			PutBucketPolicyWithContextFunc: func(v aws.Context, putBucketPolicyInput *s3.PutBucketPolicyInput, options ...request.Option) (*s3.PutBucketPolicyOutput, error) {
 //				panic("mock out the PutBucketPolicyWithContext method")
 //			},
 //			PutBucketReplicationFunc: func(putBucketReplicationInput *s3.PutBucketReplicationInput) (*s3.PutBucketReplicationOutput, error) {
@@ -801,7 +801,7 @@ var _ iface.S3API = &MockS3API{}
 //			PutBucketReplicationRequestFunc: func(putBucketReplicationInput *s3.PutBucketReplicationInput) (*request.Request, *s3.PutBucketReplicationOutput) {
 //				panic("mock out the PutBucketReplicationRequest method")
 //			},
-//			PutBucketReplicationWithContextFunc: func(contextMoqParam context.Context, putBucketReplicationInput *s3.PutBucketReplicationInput, options ...request.Option) (*s3.PutBucketReplicationOutput, error) {
+//			PutBucketReplicationWithContextFunc: func(v aws.Context, putBucketReplicationInput *s3.PutBucketReplicationInput, options ...request.Option) (*s3.PutBucketReplicationOutput, error) {
 //				panic("mock out the PutBucketReplicationWithContext method")
 //			},
 //			PutBucketRequestPaymentFunc: func(putBucketRequestPaymentInput *s3.PutBucketRequestPaymentInput) (*s3.PutBucketRequestPaymentOutput, error) {
@@ -810,7 +810,7 @@ var _ iface.S3API = &MockS3API{}
 //			PutBucketRequestPaymentRequestFunc: func(putBucketRequestPaymentInput *s3.PutBucketRequestPaymentInput) (*request.Request, *s3.PutBucketRequestPaymentOutput) {
 //				panic("mock out the PutBucketRequestPaymentRequest method")
 //			},
-//			PutBucketRequestPaymentWithContextFunc: func(contextMoqParam context.Context, putBucketRequestPaymentInput *s3.PutBucketRequestPaymentInput, options ...request.Option) (*s3.PutBucketRequestPaymentOutput, error) {
+//			PutBucketRequestPaymentWithContextFunc: func(v aws.Context, putBucketRequestPaymentInput *s3.PutBucketRequestPaymentInput, options ...request.Option) (*s3.PutBucketRequestPaymentOutput, error) {
 //				panic("mock out the PutBucketRequestPaymentWithContext method")
 //			},
 //			PutBucketTaggingFunc: func(putBucketTaggingInput *s3.PutBucketTaggingInput) (*s3.PutBucketTaggingOutput, error) {
@@ -819,7 +819,7 @@ var _ iface.S3API = &MockS3API{}
 //			PutBucketTaggingRequestFunc: func(putBucketTaggingInput *s3.PutBucketTaggingInput) (*request.Request, *s3.PutBucketTaggingOutput) {
 //				panic("mock out the PutBucketTaggingRequest method")
 //			},
-//			PutBucketTaggingWithContextFunc: func(contextMoqParam context.Context, putBucketTaggingInput *s3.PutBucketTaggingInput, options ...request.Option) (*s3.PutBucketTaggingOutput, error) {
+//			PutBucketTaggingWithContextFunc: func(v aws.Context, putBucketTaggingInput *s3.PutBucketTaggingInput, options ...request.Option) (*s3.PutBucketTaggingOutput, error) {
 //				panic("mock out the PutBucketTaggingWithContext method")
 //			},
 //			PutBucketVersioningFunc: func(putBucketVersioningInput *s3.PutBucketVersioningInput) (*s3.PutBucketVersioningOutput, error) {
@@ -828,7 +828,7 @@ var _ iface.S3API = &MockS3API{}
 //			PutBucketVersioningRequestFunc: func(putBucketVersioningInput *s3.PutBucketVersioningInput) (*request.Request, *s3.PutBucketVersioningOutput) {
 //				panic("mock out the PutBucketVersioningRequest method")
 //			},
-//			PutBucketVersioningWithContextFunc: func(contextMoqParam context.Context, putBucketVersioningInput *s3.PutBucketVersioningInput, options ...request.Option) (*s3.PutBucketVersioningOutput, error) {
+//			PutBucketVersioningWithContextFunc: func(v aws.Context, putBucketVersioningInput *s3.PutBucketVersioningInput, options ...request.Option) (*s3.PutBucketVersioningOutput, error) {
 //				panic("mock out the PutBucketVersioningWithContext method")
 //			},
 //			PutBucketWebsiteFunc: func(putBucketWebsiteInput *s3.PutBucketWebsiteInput) (*s3.PutBucketWebsiteOutput, error) {
@@ -837,7 +837,7 @@ var _ iface.S3API = &MockS3API{}
 //			PutBucketWebsiteRequestFunc: func(putBucketWebsiteInput *s3.PutBucketWebsiteInput) (*request.Request, *s3.PutBucketWebsiteOutput) {
 //				panic("mock out the PutBucketWebsiteRequest method")
 //			},
-//			PutBucketWebsiteWithContextFunc: func(contextMoqParam context.Context, putBucketWebsiteInput *s3.PutBucketWebsiteInput, options ...request.Option) (*s3.PutBucketWebsiteOutput, error) {
+//			PutBucketWebsiteWithContextFunc: func(v aws.Context, putBucketWebsiteInput *s3.PutBucketWebsiteInput, options ...request.Option) (*s3.PutBucketWebsiteOutput, error) {
 //				panic("mock out the PutBucketWebsiteWithContext method")
 //			},
 //			PutObjectFunc: func(putObjectInput *s3.PutObjectInput) (*s3.PutObjectOutput, error) {
@@ -849,7 +849,7 @@ var _ iface.S3API = &MockS3API{}
 //			PutObjectAclRequestFunc: func(putObjectAclInput *s3.PutObjectAclInput) (*request.Request, *s3.PutObjectAclOutput) {
 //				panic("mock out the PutObjectAclRequest method")
 //			},
-//			PutObjectAclWithContextFunc: func(contextMoqParam context.Context, putObjectAclInput *s3.PutObjectAclInput, options ...request.Option) (*s3.PutObjectAclOutput, error) {
+//			PutObjectAclWithContextFunc: func(v aws.Context, putObjectAclInput *s3.PutObjectAclInput, options ...request.Option) (*s3.PutObjectAclOutput, error) {
 //				panic("mock out the PutObjectAclWithContext method")
 //			},
 //			PutObjectLegalHoldFunc: func(putObjectLegalHoldInput *s3.PutObjectLegalHoldInput) (*s3.PutObjectLegalHoldOutput, error) {
@@ -858,7 +858,7 @@ var _ iface.S3API = &MockS3API{}
 //			PutObjectLegalHoldRequestFunc: func(putObjectLegalHoldInput *s3.PutObjectLegalHoldInput) (*request.Request, *s3.PutObjectLegalHoldOutput) {
 //				panic("mock out the PutObjectLegalHoldRequest method")
 //			},
-//			PutObjectLegalHoldWithContextFunc: func(contextMoqParam context.Context, putObjectLegalHoldInput *s3.PutObjectLegalHoldInput, options ...request.Option) (*s3.PutObjectLegalHoldOutput, error) {
+//			PutObjectLegalHoldWithContextFunc: func(v aws.Context, putObjectLegalHoldInput *s3.PutObjectLegalHoldInput, options ...request.Option) (*s3.PutObjectLegalHoldOutput, error) {
 //				panic("mock out the PutObjectLegalHoldWithContext method")
 //			},
 //			PutObjectLockConfigurationFunc: func(putObjectLockConfigurationInput *s3.PutObjectLockConfigurationInput) (*s3.PutObjectLockConfigurationOutput, error) {
@@ -867,7 +867,7 @@ var _ iface.S3API = &MockS3API{}
 //			PutObjectLockConfigurationRequestFunc: func(putObjectLockConfigurationInput *s3.PutObjectLockConfigurationInput) (*request.Request, *s3.PutObjectLockConfigurationOutput) {
 //				panic("mock out the PutObjectLockConfigurationRequest method")
 //			},
-//			PutObjectLockConfigurationWithContextFunc: func(contextMoqParam context.Context, putObjectLockConfigurationInput *s3.PutObjectLockConfigurationInput, options ...request.Option) (*s3.PutObjectLockConfigurationOutput, error) {
+//			PutObjectLockConfigurationWithContextFunc: func(v aws.Context, putObjectLockConfigurationInput *s3.PutObjectLockConfigurationInput, options ...request.Option) (*s3.PutObjectLockConfigurationOutput, error) {
 //				panic("mock out the PutObjectLockConfigurationWithContext method")
 //			},
 //			PutObjectRequestFunc: func(putObjectInput *s3.PutObjectInput) (*request.Request, *s3.PutObjectOutput) {
@@ -879,7 +879,7 @@ var _ iface.S3API = &MockS3API{}
 //			PutObjectRetentionRequestFunc: func(putObjectRetentionInput *s3.PutObjectRetentionInput) (*request.Request, *s3.PutObjectRetentionOutput) {
 //				panic("mock out the PutObjectRetentionRequest method")
 //			},
-//			PutObjectRetentionWithContextFunc: func(contextMoqParam context.Context, putObjectRetentionInput *s3.PutObjectRetentionInput, options ...request.Option) (*s3.PutObjectRetentionOutput, error) {
+//			PutObjectRetentionWithContextFunc: func(v aws.Context, putObjectRetentionInput *s3.PutObjectRetentionInput, options ...request.Option) (*s3.PutObjectRetentionOutput, error) {
 //				panic("mock out the PutObjectRetentionWithContext method")
 //			},
 //			PutObjectTaggingFunc: func(putObjectTaggingInput *s3.PutObjectTaggingInput) (*s3.PutObjectTaggingOutput, error) {
@@ -888,10 +888,10 @@ var _ iface.S3API = &MockS3API{}
 //			PutObjectTaggingRequestFunc: func(putObjectTaggingInput *s3.PutObjectTaggingInput) (*request.Request, *s3.PutObjectTaggingOutput) {
 //				panic("mock out the PutObjectTaggingRequest method")
 //			},
-//			PutObjectTaggingWithContextFunc: func(contextMoqParam context.Context, putObjectTaggingInput *s3.PutObjectTaggingInput, options ...request.Option) (*s3.PutObjectTaggingOutput, error) {
+//			PutObjectTaggingWithContextFunc: func(v aws.Context, putObjectTaggingInput *s3.PutObjectTaggingInput, options ...request.Option) (*s3.PutObjectTaggingOutput, error) {
 //				panic("mock out the PutObjectTaggingWithContext method")
 //			},
-//			PutObjectWithContextFunc: func(contextMoqParam context.Context, putObjectInput *s3.PutObjectInput, options ...request.Option) (*s3.PutObjectOutput, error) {
+//			PutObjectWithContextFunc: func(v aws.Context, putObjectInput *s3.PutObjectInput, options ...request.Option) (*s3.PutObjectOutput, error) {
 //				panic("mock out the PutObjectWithContext method")
 //			},
 //			PutPublicAccessBlockFunc: func(putPublicAccessBlockInput *s3.PutPublicAccessBlockInput) (*s3.PutPublicAccessBlockOutput, error) {
@@ -900,7 +900,7 @@ var _ iface.S3API = &MockS3API{}
 //			PutPublicAccessBlockRequestFunc: func(putPublicAccessBlockInput *s3.PutPublicAccessBlockInput) (*request.Request, *s3.PutPublicAccessBlockOutput) {
 //				panic("mock out the PutPublicAccessBlockRequest method")
 //			},
-//			PutPublicAccessBlockWithContextFunc: func(contextMoqParam context.Context, putPublicAccessBlockInput *s3.PutPublicAccessBlockInput, options ...request.Option) (*s3.PutPublicAccessBlockOutput, error) {
+//			PutPublicAccessBlockWithContextFunc: func(v aws.Context, putPublicAccessBlockInput *s3.PutPublicAccessBlockInput, options ...request.Option) (*s3.PutPublicAccessBlockOutput, error) {
 //				panic("mock out the PutPublicAccessBlockWithContext method")
 //			},
 //			RestoreObjectFunc: func(restoreObjectInput *s3.RestoreObjectInput) (*s3.RestoreObjectOutput, error) {
@@ -909,7 +909,7 @@ var _ iface.S3API = &MockS3API{}
 //			RestoreObjectRequestFunc: func(restoreObjectInput *s3.RestoreObjectInput) (*request.Request, *s3.RestoreObjectOutput) {
 //				panic("mock out the RestoreObjectRequest method")
 //			},
-//			RestoreObjectWithContextFunc: func(contextMoqParam context.Context, restoreObjectInput *s3.RestoreObjectInput, options ...request.Option) (*s3.RestoreObjectOutput, error) {
+//			RestoreObjectWithContextFunc: func(v aws.Context, restoreObjectInput *s3.RestoreObjectInput, options ...request.Option) (*s3.RestoreObjectOutput, error) {
 //				panic("mock out the RestoreObjectWithContext method")
 //			},
 //			SelectObjectContentFunc: func(selectObjectContentInput *s3.SelectObjectContentInput) (*s3.SelectObjectContentOutput, error) {
@@ -918,7 +918,7 @@ var _ iface.S3API = &MockS3API{}
 //			SelectObjectContentRequestFunc: func(selectObjectContentInput *s3.SelectObjectContentInput) (*request.Request, *s3.SelectObjectContentOutput) {
 //				panic("mock out the SelectObjectContentRequest method")
 //			},
-//			SelectObjectContentWithContextFunc: func(contextMoqParam context.Context, selectObjectContentInput *s3.SelectObjectContentInput, options ...request.Option) (*s3.SelectObjectContentOutput, error) {
+//			SelectObjectContentWithContextFunc: func(v aws.Context, selectObjectContentInput *s3.SelectObjectContentInput, options ...request.Option) (*s3.SelectObjectContentOutput, error) {
 //				panic("mock out the SelectObjectContentWithContext method")
 //			},
 //			UploadPartFunc: func(uploadPartInput *s3.UploadPartInput) (*s3.UploadPartOutput, error) {
@@ -930,37 +930,37 @@ var _ iface.S3API = &MockS3API{}
 //			UploadPartCopyRequestFunc: func(uploadPartCopyInput *s3.UploadPartCopyInput) (*request.Request, *s3.UploadPartCopyOutput) {
 //				panic("mock out the UploadPartCopyRequest method")
 //			},
-//			UploadPartCopyWithContextFunc: func(contextMoqParam context.Context, uploadPartCopyInput *s3.UploadPartCopyInput, options ...request.Option) (*s3.UploadPartCopyOutput, error) {
+//			UploadPartCopyWithContextFunc: func(v aws.Context, uploadPartCopyInput *s3.UploadPartCopyInput, options ...request.Option) (*s3.UploadPartCopyOutput, error) {
 //				panic("mock out the UploadPartCopyWithContext method")
 //			},
 //			UploadPartRequestFunc: func(uploadPartInput *s3.UploadPartInput) (*request.Request, *s3.UploadPartOutput) {
 //				panic("mock out the UploadPartRequest method")
 //			},
-//			UploadPartWithContextFunc: func(contextMoqParam context.Context, uploadPartInput *s3.UploadPartInput, options ...request.Option) (*s3.UploadPartOutput, error) {
+//			UploadPartWithContextFunc: func(v aws.Context, uploadPartInput *s3.UploadPartInput, options ...request.Option) (*s3.UploadPartOutput, error) {
 //				panic("mock out the UploadPartWithContext method")
 //			},
 //			WaitUntilBucketExistsFunc: func(headBucketInput *s3.HeadBucketInput) error {
 //				panic("mock out the WaitUntilBucketExists method")
 //			},
-//			WaitUntilBucketExistsWithContextFunc: func(contextMoqParam context.Context, headBucketInput *s3.HeadBucketInput, waiterOptions ...request.WaiterOption) error {
+//			WaitUntilBucketExistsWithContextFunc: func(v aws.Context, headBucketInput *s3.HeadBucketInput, waiterOptions ...request.WaiterOption) error {
 //				panic("mock out the WaitUntilBucketExistsWithContext method")
 //			},
 //			WaitUntilBucketNotExistsFunc: func(headBucketInput *s3.HeadBucketInput) error {
 //				panic("mock out the WaitUntilBucketNotExists method")
 //			},
-//			WaitUntilBucketNotExistsWithContextFunc: func(contextMoqParam context.Context, headBucketInput *s3.HeadBucketInput, waiterOptions ...request.WaiterOption) error {
+//			WaitUntilBucketNotExistsWithContextFunc: func(v aws.Context, headBucketInput *s3.HeadBucketInput, waiterOptions ...request.WaiterOption) error {
 //				panic("mock out the WaitUntilBucketNotExistsWithContext method")
 //			},
 //			WaitUntilObjectExistsFunc: func(headObjectInput *s3.HeadObjectInput) error {
 //				panic("mock out the WaitUntilObjectExists method")
 //			},
-//			WaitUntilObjectExistsWithContextFunc: func(contextMoqParam context.Context, headObjectInput *s3.HeadObjectInput, waiterOptions ...request.WaiterOption) error {
+//			WaitUntilObjectExistsWithContextFunc: func(v aws.Context, headObjectInput *s3.HeadObjectInput, waiterOptions ...request.WaiterOption) error {
 //				panic("mock out the WaitUntilObjectExistsWithContext method")
 //			},
 //			WaitUntilObjectNotExistsFunc: func(headObjectInput *s3.HeadObjectInput) error {
 //				panic("mock out the WaitUntilObjectNotExists method")
 //			},
-//			WaitUntilObjectNotExistsWithContextFunc: func(contextMoqParam context.Context, headObjectInput *s3.HeadObjectInput, waiterOptions ...request.WaiterOption) error {
+//			WaitUntilObjectNotExistsWithContextFunc: func(v aws.Context, headObjectInput *s3.HeadObjectInput, waiterOptions ...request.WaiterOption) error {
 //				panic("mock out the WaitUntilObjectNotExistsWithContext method")
 //			},
 //			WriteGetObjectResponseFunc: func(writeGetObjectResponseInput *s3.WriteGetObjectResponseInput) (*s3.WriteGetObjectResponseOutput, error) {
@@ -969,7 +969,7 @@ var _ iface.S3API = &MockS3API{}
 //			WriteGetObjectResponseRequestFunc: func(writeGetObjectResponseInput *s3.WriteGetObjectResponseInput) (*request.Request, *s3.WriteGetObjectResponseOutput) {
 //				panic("mock out the WriteGetObjectResponseRequest method")
 //			},
-//			WriteGetObjectResponseWithContextFunc: func(contextMoqParam context.Context, writeGetObjectResponseInput *s3.WriteGetObjectResponseInput, options ...request.Option) (*s3.WriteGetObjectResponseOutput, error) {
+//			WriteGetObjectResponseWithContextFunc: func(v aws.Context, writeGetObjectResponseInput *s3.WriteGetObjectResponseInput, options ...request.Option) (*s3.WriteGetObjectResponseOutput, error) {
 //				panic("mock out the WriteGetObjectResponseWithContext method")
 //			},
 //		}
@@ -986,7 +986,7 @@ type MockS3API struct {
 	AbortMultipartUploadRequestFunc func(abortMultipartUploadInput *s3.AbortMultipartUploadInput) (*request.Request, *s3.AbortMultipartUploadOutput)
 
 	// AbortMultipartUploadWithContextFunc mocks the AbortMultipartUploadWithContext method.
-	AbortMultipartUploadWithContextFunc func(contextMoqParam context.Context, abortMultipartUploadInput *s3.AbortMultipartUploadInput, options ...request.Option) (*s3.AbortMultipartUploadOutput, error)
+	AbortMultipartUploadWithContextFunc func(v aws.Context, abortMultipartUploadInput *s3.AbortMultipartUploadInput, options ...request.Option) (*s3.AbortMultipartUploadOutput, error)
 
 	// CompleteMultipartUploadFunc mocks the CompleteMultipartUpload method.
 	CompleteMultipartUploadFunc func(completeMultipartUploadInput *s3.CompleteMultipartUploadInput) (*s3.CompleteMultipartUploadOutput, error)
@@ -995,7 +995,7 @@ type MockS3API struct {
 	CompleteMultipartUploadRequestFunc func(completeMultipartUploadInput *s3.CompleteMultipartUploadInput) (*request.Request, *s3.CompleteMultipartUploadOutput)
 
 	// CompleteMultipartUploadWithContextFunc mocks the CompleteMultipartUploadWithContext method.
-	CompleteMultipartUploadWithContextFunc func(contextMoqParam context.Context, completeMultipartUploadInput *s3.CompleteMultipartUploadInput, options ...request.Option) (*s3.CompleteMultipartUploadOutput, error)
+	CompleteMultipartUploadWithContextFunc func(v aws.Context, completeMultipartUploadInput *s3.CompleteMultipartUploadInput, options ...request.Option) (*s3.CompleteMultipartUploadOutput, error)
 
 	// CopyObjectFunc mocks the CopyObject method.
 	CopyObjectFunc func(copyObjectInput *s3.CopyObjectInput) (*s3.CopyObjectOutput, error)
@@ -1004,7 +1004,7 @@ type MockS3API struct {
 	CopyObjectRequestFunc func(copyObjectInput *s3.CopyObjectInput) (*request.Request, *s3.CopyObjectOutput)
 
 	// CopyObjectWithContextFunc mocks the CopyObjectWithContext method.
-	CopyObjectWithContextFunc func(contextMoqParam context.Context, copyObjectInput *s3.CopyObjectInput, options ...request.Option) (*s3.CopyObjectOutput, error)
+	CopyObjectWithContextFunc func(v aws.Context, copyObjectInput *s3.CopyObjectInput, options ...request.Option) (*s3.CopyObjectOutput, error)
 
 	// CreateBucketFunc mocks the CreateBucket method.
 	CreateBucketFunc func(createBucketInput *s3.CreateBucketInput) (*s3.CreateBucketOutput, error)
@@ -1013,7 +1013,7 @@ type MockS3API struct {
 	CreateBucketRequestFunc func(createBucketInput *s3.CreateBucketInput) (*request.Request, *s3.CreateBucketOutput)
 
 	// CreateBucketWithContextFunc mocks the CreateBucketWithContext method.
-	CreateBucketWithContextFunc func(contextMoqParam context.Context, createBucketInput *s3.CreateBucketInput, options ...request.Option) (*s3.CreateBucketOutput, error)
+	CreateBucketWithContextFunc func(v aws.Context, createBucketInput *s3.CreateBucketInput, options ...request.Option) (*s3.CreateBucketOutput, error)
 
 	// CreateMultipartUploadFunc mocks the CreateMultipartUpload method.
 	CreateMultipartUploadFunc func(createMultipartUploadInput *s3.CreateMultipartUploadInput) (*s3.CreateMultipartUploadOutput, error)
@@ -1022,7 +1022,7 @@ type MockS3API struct {
 	CreateMultipartUploadRequestFunc func(createMultipartUploadInput *s3.CreateMultipartUploadInput) (*request.Request, *s3.CreateMultipartUploadOutput)
 
 	// CreateMultipartUploadWithContextFunc mocks the CreateMultipartUploadWithContext method.
-	CreateMultipartUploadWithContextFunc func(contextMoqParam context.Context, createMultipartUploadInput *s3.CreateMultipartUploadInput, options ...request.Option) (*s3.CreateMultipartUploadOutput, error)
+	CreateMultipartUploadWithContextFunc func(v aws.Context, createMultipartUploadInput *s3.CreateMultipartUploadInput, options ...request.Option) (*s3.CreateMultipartUploadOutput, error)
 
 	// CreateSessionFunc mocks the CreateSession method.
 	CreateSessionFunc func(createSessionInput *s3.CreateSessionInput) (*s3.CreateSessionOutput, error)
@@ -1031,7 +1031,7 @@ type MockS3API struct {
 	CreateSessionRequestFunc func(createSessionInput *s3.CreateSessionInput) (*request.Request, *s3.CreateSessionOutput)
 
 	// CreateSessionWithContextFunc mocks the CreateSessionWithContext method.
-	CreateSessionWithContextFunc func(contextMoqParam context.Context, createSessionInput *s3.CreateSessionInput, options ...request.Option) (*s3.CreateSessionOutput, error)
+	CreateSessionWithContextFunc func(v aws.Context, createSessionInput *s3.CreateSessionInput, options ...request.Option) (*s3.CreateSessionOutput, error)
 
 	// DeleteBucketFunc mocks the DeleteBucket method.
 	DeleteBucketFunc func(deleteBucketInput *s3.DeleteBucketInput) (*s3.DeleteBucketOutput, error)
@@ -1043,7 +1043,7 @@ type MockS3API struct {
 	DeleteBucketAnalyticsConfigurationRequestFunc func(deleteBucketAnalyticsConfigurationInput *s3.DeleteBucketAnalyticsConfigurationInput) (*request.Request, *s3.DeleteBucketAnalyticsConfigurationOutput)
 
 	// DeleteBucketAnalyticsConfigurationWithContextFunc mocks the DeleteBucketAnalyticsConfigurationWithContext method.
-	DeleteBucketAnalyticsConfigurationWithContextFunc func(contextMoqParam context.Context, deleteBucketAnalyticsConfigurationInput *s3.DeleteBucketAnalyticsConfigurationInput, options ...request.Option) (*s3.DeleteBucketAnalyticsConfigurationOutput, error)
+	DeleteBucketAnalyticsConfigurationWithContextFunc func(v aws.Context, deleteBucketAnalyticsConfigurationInput *s3.DeleteBucketAnalyticsConfigurationInput, options ...request.Option) (*s3.DeleteBucketAnalyticsConfigurationOutput, error)
 
 	// DeleteBucketCorsFunc mocks the DeleteBucketCors method.
 	DeleteBucketCorsFunc func(deleteBucketCorsInput *s3.DeleteBucketCorsInput) (*s3.DeleteBucketCorsOutput, error)
@@ -1052,7 +1052,7 @@ type MockS3API struct {
 	DeleteBucketCorsRequestFunc func(deleteBucketCorsInput *s3.DeleteBucketCorsInput) (*request.Request, *s3.DeleteBucketCorsOutput)
 
 	// DeleteBucketCorsWithContextFunc mocks the DeleteBucketCorsWithContext method.
-	DeleteBucketCorsWithContextFunc func(contextMoqParam context.Context, deleteBucketCorsInput *s3.DeleteBucketCorsInput, options ...request.Option) (*s3.DeleteBucketCorsOutput, error)
+	DeleteBucketCorsWithContextFunc func(v aws.Context, deleteBucketCorsInput *s3.DeleteBucketCorsInput, options ...request.Option) (*s3.DeleteBucketCorsOutput, error)
 
 	// DeleteBucketEncryptionFunc mocks the DeleteBucketEncryption method.
 	DeleteBucketEncryptionFunc func(deleteBucketEncryptionInput *s3.DeleteBucketEncryptionInput) (*s3.DeleteBucketEncryptionOutput, error)
@@ -1061,7 +1061,7 @@ type MockS3API struct {
 	DeleteBucketEncryptionRequestFunc func(deleteBucketEncryptionInput *s3.DeleteBucketEncryptionInput) (*request.Request, *s3.DeleteBucketEncryptionOutput)
 
 	// DeleteBucketEncryptionWithContextFunc mocks the DeleteBucketEncryptionWithContext method.
-	DeleteBucketEncryptionWithContextFunc func(contextMoqParam context.Context, deleteBucketEncryptionInput *s3.DeleteBucketEncryptionInput, options ...request.Option) (*s3.DeleteBucketEncryptionOutput, error)
+	DeleteBucketEncryptionWithContextFunc func(v aws.Context, deleteBucketEncryptionInput *s3.DeleteBucketEncryptionInput, options ...request.Option) (*s3.DeleteBucketEncryptionOutput, error)
 
 	// DeleteBucketIntelligentTieringConfigurationFunc mocks the DeleteBucketIntelligentTieringConfiguration method.
 	DeleteBucketIntelligentTieringConfigurationFunc func(deleteBucketIntelligentTieringConfigurationInput *s3.DeleteBucketIntelligentTieringConfigurationInput) (*s3.DeleteBucketIntelligentTieringConfigurationOutput, error)
@@ -1070,7 +1070,7 @@ type MockS3API struct {
 	DeleteBucketIntelligentTieringConfigurationRequestFunc func(deleteBucketIntelligentTieringConfigurationInput *s3.DeleteBucketIntelligentTieringConfigurationInput) (*request.Request, *s3.DeleteBucketIntelligentTieringConfigurationOutput)
 
 	// DeleteBucketIntelligentTieringConfigurationWithContextFunc mocks the DeleteBucketIntelligentTieringConfigurationWithContext method.
-	DeleteBucketIntelligentTieringConfigurationWithContextFunc func(contextMoqParam context.Context, deleteBucketIntelligentTieringConfigurationInput *s3.DeleteBucketIntelligentTieringConfigurationInput, options ...request.Option) (*s3.DeleteBucketIntelligentTieringConfigurationOutput, error)
+	DeleteBucketIntelligentTieringConfigurationWithContextFunc func(v aws.Context, deleteBucketIntelligentTieringConfigurationInput *s3.DeleteBucketIntelligentTieringConfigurationInput, options ...request.Option) (*s3.DeleteBucketIntelligentTieringConfigurationOutput, error)
 
 	// DeleteBucketInventoryConfigurationFunc mocks the DeleteBucketInventoryConfiguration method.
 	DeleteBucketInventoryConfigurationFunc func(deleteBucketInventoryConfigurationInput *s3.DeleteBucketInventoryConfigurationInput) (*s3.DeleteBucketInventoryConfigurationOutput, error)
@@ -1079,7 +1079,7 @@ type MockS3API struct {
 	DeleteBucketInventoryConfigurationRequestFunc func(deleteBucketInventoryConfigurationInput *s3.DeleteBucketInventoryConfigurationInput) (*request.Request, *s3.DeleteBucketInventoryConfigurationOutput)
 
 	// DeleteBucketInventoryConfigurationWithContextFunc mocks the DeleteBucketInventoryConfigurationWithContext method.
-	DeleteBucketInventoryConfigurationWithContextFunc func(contextMoqParam context.Context, deleteBucketInventoryConfigurationInput *s3.DeleteBucketInventoryConfigurationInput, options ...request.Option) (*s3.DeleteBucketInventoryConfigurationOutput, error)
+	DeleteBucketInventoryConfigurationWithContextFunc func(v aws.Context, deleteBucketInventoryConfigurationInput *s3.DeleteBucketInventoryConfigurationInput, options ...request.Option) (*s3.DeleteBucketInventoryConfigurationOutput, error)
 
 	// DeleteBucketLifecycleFunc mocks the DeleteBucketLifecycle method.
 	DeleteBucketLifecycleFunc func(deleteBucketLifecycleInput *s3.DeleteBucketLifecycleInput) (*s3.DeleteBucketLifecycleOutput, error)
@@ -1088,7 +1088,7 @@ type MockS3API struct {
 	DeleteBucketLifecycleRequestFunc func(deleteBucketLifecycleInput *s3.DeleteBucketLifecycleInput) (*request.Request, *s3.DeleteBucketLifecycleOutput)
 
 	// DeleteBucketLifecycleWithContextFunc mocks the DeleteBucketLifecycleWithContext method.
-	DeleteBucketLifecycleWithContextFunc func(contextMoqParam context.Context, deleteBucketLifecycleInput *s3.DeleteBucketLifecycleInput, options ...request.Option) (*s3.DeleteBucketLifecycleOutput, error)
+	DeleteBucketLifecycleWithContextFunc func(v aws.Context, deleteBucketLifecycleInput *s3.DeleteBucketLifecycleInput, options ...request.Option) (*s3.DeleteBucketLifecycleOutput, error)
 
 	// DeleteBucketMetricsConfigurationFunc mocks the DeleteBucketMetricsConfiguration method.
 	DeleteBucketMetricsConfigurationFunc func(deleteBucketMetricsConfigurationInput *s3.DeleteBucketMetricsConfigurationInput) (*s3.DeleteBucketMetricsConfigurationOutput, error)
@@ -1097,7 +1097,7 @@ type MockS3API struct {
 	DeleteBucketMetricsConfigurationRequestFunc func(deleteBucketMetricsConfigurationInput *s3.DeleteBucketMetricsConfigurationInput) (*request.Request, *s3.DeleteBucketMetricsConfigurationOutput)
 
 	// DeleteBucketMetricsConfigurationWithContextFunc mocks the DeleteBucketMetricsConfigurationWithContext method.
-	DeleteBucketMetricsConfigurationWithContextFunc func(contextMoqParam context.Context, deleteBucketMetricsConfigurationInput *s3.DeleteBucketMetricsConfigurationInput, options ...request.Option) (*s3.DeleteBucketMetricsConfigurationOutput, error)
+	DeleteBucketMetricsConfigurationWithContextFunc func(v aws.Context, deleteBucketMetricsConfigurationInput *s3.DeleteBucketMetricsConfigurationInput, options ...request.Option) (*s3.DeleteBucketMetricsConfigurationOutput, error)
 
 	// DeleteBucketOwnershipControlsFunc mocks the DeleteBucketOwnershipControls method.
 	DeleteBucketOwnershipControlsFunc func(deleteBucketOwnershipControlsInput *s3.DeleteBucketOwnershipControlsInput) (*s3.DeleteBucketOwnershipControlsOutput, error)
@@ -1106,7 +1106,7 @@ type MockS3API struct {
 	DeleteBucketOwnershipControlsRequestFunc func(deleteBucketOwnershipControlsInput *s3.DeleteBucketOwnershipControlsInput) (*request.Request, *s3.DeleteBucketOwnershipControlsOutput)
 
 	// DeleteBucketOwnershipControlsWithContextFunc mocks the DeleteBucketOwnershipControlsWithContext method.
-	DeleteBucketOwnershipControlsWithContextFunc func(contextMoqParam context.Context, deleteBucketOwnershipControlsInput *s3.DeleteBucketOwnershipControlsInput, options ...request.Option) (*s3.DeleteBucketOwnershipControlsOutput, error)
+	DeleteBucketOwnershipControlsWithContextFunc func(v aws.Context, deleteBucketOwnershipControlsInput *s3.DeleteBucketOwnershipControlsInput, options ...request.Option) (*s3.DeleteBucketOwnershipControlsOutput, error)
 
 	// DeleteBucketPolicyFunc mocks the DeleteBucketPolicy method.
 	DeleteBucketPolicyFunc func(deleteBucketPolicyInput *s3.DeleteBucketPolicyInput) (*s3.DeleteBucketPolicyOutput, error)
@@ -1115,7 +1115,7 @@ type MockS3API struct {
 	DeleteBucketPolicyRequestFunc func(deleteBucketPolicyInput *s3.DeleteBucketPolicyInput) (*request.Request, *s3.DeleteBucketPolicyOutput)
 
 	// DeleteBucketPolicyWithContextFunc mocks the DeleteBucketPolicyWithContext method.
-	DeleteBucketPolicyWithContextFunc func(contextMoqParam context.Context, deleteBucketPolicyInput *s3.DeleteBucketPolicyInput, options ...request.Option) (*s3.DeleteBucketPolicyOutput, error)
+	DeleteBucketPolicyWithContextFunc func(v aws.Context, deleteBucketPolicyInput *s3.DeleteBucketPolicyInput, options ...request.Option) (*s3.DeleteBucketPolicyOutput, error)
 
 	// DeleteBucketReplicationFunc mocks the DeleteBucketReplication method.
 	DeleteBucketReplicationFunc func(deleteBucketReplicationInput *s3.DeleteBucketReplicationInput) (*s3.DeleteBucketReplicationOutput, error)
@@ -1124,7 +1124,7 @@ type MockS3API struct {
 	DeleteBucketReplicationRequestFunc func(deleteBucketReplicationInput *s3.DeleteBucketReplicationInput) (*request.Request, *s3.DeleteBucketReplicationOutput)
 
 	// DeleteBucketReplicationWithContextFunc mocks the DeleteBucketReplicationWithContext method.
-	DeleteBucketReplicationWithContextFunc func(contextMoqParam context.Context, deleteBucketReplicationInput *s3.DeleteBucketReplicationInput, options ...request.Option) (*s3.DeleteBucketReplicationOutput, error)
+	DeleteBucketReplicationWithContextFunc func(v aws.Context, deleteBucketReplicationInput *s3.DeleteBucketReplicationInput, options ...request.Option) (*s3.DeleteBucketReplicationOutput, error)
 
 	// DeleteBucketRequestFunc mocks the DeleteBucketRequest method.
 	DeleteBucketRequestFunc func(deleteBucketInput *s3.DeleteBucketInput) (*request.Request, *s3.DeleteBucketOutput)
@@ -1136,7 +1136,7 @@ type MockS3API struct {
 	DeleteBucketTaggingRequestFunc func(deleteBucketTaggingInput *s3.DeleteBucketTaggingInput) (*request.Request, *s3.DeleteBucketTaggingOutput)
 
 	// DeleteBucketTaggingWithContextFunc mocks the DeleteBucketTaggingWithContext method.
-	DeleteBucketTaggingWithContextFunc func(contextMoqParam context.Context, deleteBucketTaggingInput *s3.DeleteBucketTaggingInput, options ...request.Option) (*s3.DeleteBucketTaggingOutput, error)
+	DeleteBucketTaggingWithContextFunc func(v aws.Context, deleteBucketTaggingInput *s3.DeleteBucketTaggingInput, options ...request.Option) (*s3.DeleteBucketTaggingOutput, error)
 
 	// DeleteBucketWebsiteFunc mocks the DeleteBucketWebsite method.
 	DeleteBucketWebsiteFunc func(deleteBucketWebsiteInput *s3.DeleteBucketWebsiteInput) (*s3.DeleteBucketWebsiteOutput, error)
@@ -1145,10 +1145,10 @@ type MockS3API struct {
 	DeleteBucketWebsiteRequestFunc func(deleteBucketWebsiteInput *s3.DeleteBucketWebsiteInput) (*request.Request, *s3.DeleteBucketWebsiteOutput)
 
 	// DeleteBucketWebsiteWithContextFunc mocks the DeleteBucketWebsiteWithContext method.
-	DeleteBucketWebsiteWithContextFunc func(contextMoqParam context.Context, deleteBucketWebsiteInput *s3.DeleteBucketWebsiteInput, options ...request.Option) (*s3.DeleteBucketWebsiteOutput, error)
+	DeleteBucketWebsiteWithContextFunc func(v aws.Context, deleteBucketWebsiteInput *s3.DeleteBucketWebsiteInput, options ...request.Option) (*s3.DeleteBucketWebsiteOutput, error)
 
 	// DeleteBucketWithContextFunc mocks the DeleteBucketWithContext method.
-	DeleteBucketWithContextFunc func(contextMoqParam context.Context, deleteBucketInput *s3.DeleteBucketInput, options ...request.Option) (*s3.DeleteBucketOutput, error)
+	DeleteBucketWithContextFunc func(v aws.Context, deleteBucketInput *s3.DeleteBucketInput, options ...request.Option) (*s3.DeleteBucketOutput, error)
 
 	// DeleteObjectFunc mocks the DeleteObject method.
 	DeleteObjectFunc func(deleteObjectInput *s3.DeleteObjectInput) (*s3.DeleteObjectOutput, error)
@@ -1163,10 +1163,10 @@ type MockS3API struct {
 	DeleteObjectTaggingRequestFunc func(deleteObjectTaggingInput *s3.DeleteObjectTaggingInput) (*request.Request, *s3.DeleteObjectTaggingOutput)
 
 	// DeleteObjectTaggingWithContextFunc mocks the DeleteObjectTaggingWithContext method.
-	DeleteObjectTaggingWithContextFunc func(contextMoqParam context.Context, deleteObjectTaggingInput *s3.DeleteObjectTaggingInput, options ...request.Option) (*s3.DeleteObjectTaggingOutput, error)
+	DeleteObjectTaggingWithContextFunc func(v aws.Context, deleteObjectTaggingInput *s3.DeleteObjectTaggingInput, options ...request.Option) (*s3.DeleteObjectTaggingOutput, error)
 
 	// DeleteObjectWithContextFunc mocks the DeleteObjectWithContext method.
-	DeleteObjectWithContextFunc func(contextMoqParam context.Context, deleteObjectInput *s3.DeleteObjectInput, options ...request.Option) (*s3.DeleteObjectOutput, error)
+	DeleteObjectWithContextFunc func(v aws.Context, deleteObjectInput *s3.DeleteObjectInput, options ...request.Option) (*s3.DeleteObjectOutput, error)
 
 	// DeleteObjectsFunc mocks the DeleteObjects method.
 	DeleteObjectsFunc func(deleteObjectsInput *s3.DeleteObjectsInput) (*s3.DeleteObjectsOutput, error)
@@ -1175,7 +1175,7 @@ type MockS3API struct {
 	DeleteObjectsRequestFunc func(deleteObjectsInput *s3.DeleteObjectsInput) (*request.Request, *s3.DeleteObjectsOutput)
 
 	// DeleteObjectsWithContextFunc mocks the DeleteObjectsWithContext method.
-	DeleteObjectsWithContextFunc func(contextMoqParam context.Context, deleteObjectsInput *s3.DeleteObjectsInput, options ...request.Option) (*s3.DeleteObjectsOutput, error)
+	DeleteObjectsWithContextFunc func(v aws.Context, deleteObjectsInput *s3.DeleteObjectsInput, options ...request.Option) (*s3.DeleteObjectsOutput, error)
 
 	// DeletePublicAccessBlockFunc mocks the DeletePublicAccessBlock method.
 	DeletePublicAccessBlockFunc func(deletePublicAccessBlockInput *s3.DeletePublicAccessBlockInput) (*s3.DeletePublicAccessBlockOutput, error)
@@ -1184,7 +1184,7 @@ type MockS3API struct {
 	DeletePublicAccessBlockRequestFunc func(deletePublicAccessBlockInput *s3.DeletePublicAccessBlockInput) (*request.Request, *s3.DeletePublicAccessBlockOutput)
 
 	// DeletePublicAccessBlockWithContextFunc mocks the DeletePublicAccessBlockWithContext method.
-	DeletePublicAccessBlockWithContextFunc func(contextMoqParam context.Context, deletePublicAccessBlockInput *s3.DeletePublicAccessBlockInput, options ...request.Option) (*s3.DeletePublicAccessBlockOutput, error)
+	DeletePublicAccessBlockWithContextFunc func(v aws.Context, deletePublicAccessBlockInput *s3.DeletePublicAccessBlockInput, options ...request.Option) (*s3.DeletePublicAccessBlockOutput, error)
 
 	// GetBucketAccelerateConfigurationFunc mocks the GetBucketAccelerateConfiguration method.
 	GetBucketAccelerateConfigurationFunc func(getBucketAccelerateConfigurationInput *s3.GetBucketAccelerateConfigurationInput) (*s3.GetBucketAccelerateConfigurationOutput, error)
@@ -1193,7 +1193,7 @@ type MockS3API struct {
 	GetBucketAccelerateConfigurationRequestFunc func(getBucketAccelerateConfigurationInput *s3.GetBucketAccelerateConfigurationInput) (*request.Request, *s3.GetBucketAccelerateConfigurationOutput)
 
 	// GetBucketAccelerateConfigurationWithContextFunc mocks the GetBucketAccelerateConfigurationWithContext method.
-	GetBucketAccelerateConfigurationWithContextFunc func(contextMoqParam context.Context, getBucketAccelerateConfigurationInput *s3.GetBucketAccelerateConfigurationInput, options ...request.Option) (*s3.GetBucketAccelerateConfigurationOutput, error)
+	GetBucketAccelerateConfigurationWithContextFunc func(v aws.Context, getBucketAccelerateConfigurationInput *s3.GetBucketAccelerateConfigurationInput, options ...request.Option) (*s3.GetBucketAccelerateConfigurationOutput, error)
 
 	// GetBucketAclFunc mocks the GetBucketAcl method.
 	GetBucketAclFunc func(getBucketAclInput *s3.GetBucketAclInput) (*s3.GetBucketAclOutput, error)
@@ -1202,7 +1202,7 @@ type MockS3API struct {
 	GetBucketAclRequestFunc func(getBucketAclInput *s3.GetBucketAclInput) (*request.Request, *s3.GetBucketAclOutput)
 
 	// GetBucketAclWithContextFunc mocks the GetBucketAclWithContext method.
-	GetBucketAclWithContextFunc func(contextMoqParam context.Context, getBucketAclInput *s3.GetBucketAclInput, options ...request.Option) (*s3.GetBucketAclOutput, error)
+	GetBucketAclWithContextFunc func(v aws.Context, getBucketAclInput *s3.GetBucketAclInput, options ...request.Option) (*s3.GetBucketAclOutput, error)
 
 	// GetBucketAnalyticsConfigurationFunc mocks the GetBucketAnalyticsConfiguration method.
 	GetBucketAnalyticsConfigurationFunc func(getBucketAnalyticsConfigurationInput *s3.GetBucketAnalyticsConfigurationInput) (*s3.GetBucketAnalyticsConfigurationOutput, error)
@@ -1211,7 +1211,7 @@ type MockS3API struct {
 	GetBucketAnalyticsConfigurationRequestFunc func(getBucketAnalyticsConfigurationInput *s3.GetBucketAnalyticsConfigurationInput) (*request.Request, *s3.GetBucketAnalyticsConfigurationOutput)
 
 	// GetBucketAnalyticsConfigurationWithContextFunc mocks the GetBucketAnalyticsConfigurationWithContext method.
-	GetBucketAnalyticsConfigurationWithContextFunc func(contextMoqParam context.Context, getBucketAnalyticsConfigurationInput *s3.GetBucketAnalyticsConfigurationInput, options ...request.Option) (*s3.GetBucketAnalyticsConfigurationOutput, error)
+	GetBucketAnalyticsConfigurationWithContextFunc func(v aws.Context, getBucketAnalyticsConfigurationInput *s3.GetBucketAnalyticsConfigurationInput, options ...request.Option) (*s3.GetBucketAnalyticsConfigurationOutput, error)
 
 	// GetBucketCorsFunc mocks the GetBucketCors method.
 	GetBucketCorsFunc func(getBucketCorsInput *s3.GetBucketCorsInput) (*s3.GetBucketCorsOutput, error)
@@ -1220,7 +1220,7 @@ type MockS3API struct {
 	GetBucketCorsRequestFunc func(getBucketCorsInput *s3.GetBucketCorsInput) (*request.Request, *s3.GetBucketCorsOutput)
 
 	// GetBucketCorsWithContextFunc mocks the GetBucketCorsWithContext method.
-	GetBucketCorsWithContextFunc func(contextMoqParam context.Context, getBucketCorsInput *s3.GetBucketCorsInput, options ...request.Option) (*s3.GetBucketCorsOutput, error)
+	GetBucketCorsWithContextFunc func(v aws.Context, getBucketCorsInput *s3.GetBucketCorsInput, options ...request.Option) (*s3.GetBucketCorsOutput, error)
 
 	// GetBucketEncryptionFunc mocks the GetBucketEncryption method.
 	GetBucketEncryptionFunc func(getBucketEncryptionInput *s3.GetBucketEncryptionInput) (*s3.GetBucketEncryptionOutput, error)
@@ -1229,7 +1229,7 @@ type MockS3API struct {
 	GetBucketEncryptionRequestFunc func(getBucketEncryptionInput *s3.GetBucketEncryptionInput) (*request.Request, *s3.GetBucketEncryptionOutput)
 
 	// GetBucketEncryptionWithContextFunc mocks the GetBucketEncryptionWithContext method.
-	GetBucketEncryptionWithContextFunc func(contextMoqParam context.Context, getBucketEncryptionInput *s3.GetBucketEncryptionInput, options ...request.Option) (*s3.GetBucketEncryptionOutput, error)
+	GetBucketEncryptionWithContextFunc func(v aws.Context, getBucketEncryptionInput *s3.GetBucketEncryptionInput, options ...request.Option) (*s3.GetBucketEncryptionOutput, error)
 
 	// GetBucketIntelligentTieringConfigurationFunc mocks the GetBucketIntelligentTieringConfiguration method.
 	GetBucketIntelligentTieringConfigurationFunc func(getBucketIntelligentTieringConfigurationInput *s3.GetBucketIntelligentTieringConfigurationInput) (*s3.GetBucketIntelligentTieringConfigurationOutput, error)
@@ -1238,7 +1238,7 @@ type MockS3API struct {
 	GetBucketIntelligentTieringConfigurationRequestFunc func(getBucketIntelligentTieringConfigurationInput *s3.GetBucketIntelligentTieringConfigurationInput) (*request.Request, *s3.GetBucketIntelligentTieringConfigurationOutput)
 
 	// GetBucketIntelligentTieringConfigurationWithContextFunc mocks the GetBucketIntelligentTieringConfigurationWithContext method.
-	GetBucketIntelligentTieringConfigurationWithContextFunc func(contextMoqParam context.Context, getBucketIntelligentTieringConfigurationInput *s3.GetBucketIntelligentTieringConfigurationInput, options ...request.Option) (*s3.GetBucketIntelligentTieringConfigurationOutput, error)
+	GetBucketIntelligentTieringConfigurationWithContextFunc func(v aws.Context, getBucketIntelligentTieringConfigurationInput *s3.GetBucketIntelligentTieringConfigurationInput, options ...request.Option) (*s3.GetBucketIntelligentTieringConfigurationOutput, error)
 
 	// GetBucketInventoryConfigurationFunc mocks the GetBucketInventoryConfiguration method.
 	GetBucketInventoryConfigurationFunc func(getBucketInventoryConfigurationInput *s3.GetBucketInventoryConfigurationInput) (*s3.GetBucketInventoryConfigurationOutput, error)
@@ -1247,7 +1247,7 @@ type MockS3API struct {
 	GetBucketInventoryConfigurationRequestFunc func(getBucketInventoryConfigurationInput *s3.GetBucketInventoryConfigurationInput) (*request.Request, *s3.GetBucketInventoryConfigurationOutput)
 
 	// GetBucketInventoryConfigurationWithContextFunc mocks the GetBucketInventoryConfigurationWithContext method.
-	GetBucketInventoryConfigurationWithContextFunc func(contextMoqParam context.Context, getBucketInventoryConfigurationInput *s3.GetBucketInventoryConfigurationInput, options ...request.Option) (*s3.GetBucketInventoryConfigurationOutput, error)
+	GetBucketInventoryConfigurationWithContextFunc func(v aws.Context, getBucketInventoryConfigurationInput *s3.GetBucketInventoryConfigurationInput, options ...request.Option) (*s3.GetBucketInventoryConfigurationOutput, error)
 
 	// GetBucketLifecycleFunc mocks the GetBucketLifecycle method.
 	GetBucketLifecycleFunc func(getBucketLifecycleInput *s3.GetBucketLifecycleInput) (*s3.GetBucketLifecycleOutput, error)
@@ -1259,13 +1259,13 @@ type MockS3API struct {
 	GetBucketLifecycleConfigurationRequestFunc func(getBucketLifecycleConfigurationInput *s3.GetBucketLifecycleConfigurationInput) (*request.Request, *s3.GetBucketLifecycleConfigurationOutput)
 
 	// GetBucketLifecycleConfigurationWithContextFunc mocks the GetBucketLifecycleConfigurationWithContext method.
-	GetBucketLifecycleConfigurationWithContextFunc func(contextMoqParam context.Context, getBucketLifecycleConfigurationInput *s3.GetBucketLifecycleConfigurationInput, options ...request.Option) (*s3.GetBucketLifecycleConfigurationOutput, error)
+	GetBucketLifecycleConfigurationWithContextFunc func(v aws.Context, getBucketLifecycleConfigurationInput *s3.GetBucketLifecycleConfigurationInput, options ...request.Option) (*s3.GetBucketLifecycleConfigurationOutput, error)
 
 	// GetBucketLifecycleRequestFunc mocks the GetBucketLifecycleRequest method.
 	GetBucketLifecycleRequestFunc func(getBucketLifecycleInput *s3.GetBucketLifecycleInput) (*request.Request, *s3.GetBucketLifecycleOutput)
 
 	// GetBucketLifecycleWithContextFunc mocks the GetBucketLifecycleWithContext method.
-	GetBucketLifecycleWithContextFunc func(contextMoqParam context.Context, getBucketLifecycleInput *s3.GetBucketLifecycleInput, options ...request.Option) (*s3.GetBucketLifecycleOutput, error)
+	GetBucketLifecycleWithContextFunc func(v aws.Context, getBucketLifecycleInput *s3.GetBucketLifecycleInput, options ...request.Option) (*s3.GetBucketLifecycleOutput, error)
 
 	// GetBucketLocationFunc mocks the GetBucketLocation method.
 	GetBucketLocationFunc func(getBucketLocationInput *s3.GetBucketLocationInput) (*s3.GetBucketLocationOutput, error)
@@ -1274,7 +1274,7 @@ type MockS3API struct {
 	GetBucketLocationRequestFunc func(getBucketLocationInput *s3.GetBucketLocationInput) (*request.Request, *s3.GetBucketLocationOutput)
 
 	// GetBucketLocationWithContextFunc mocks the GetBucketLocationWithContext method.
-	GetBucketLocationWithContextFunc func(contextMoqParam context.Context, getBucketLocationInput *s3.GetBucketLocationInput, options ...request.Option) (*s3.GetBucketLocationOutput, error)
+	GetBucketLocationWithContextFunc func(v aws.Context, getBucketLocationInput *s3.GetBucketLocationInput, options ...request.Option) (*s3.GetBucketLocationOutput, error)
 
 	// GetBucketLoggingFunc mocks the GetBucketLogging method.
 	GetBucketLoggingFunc func(getBucketLoggingInput *s3.GetBucketLoggingInput) (*s3.GetBucketLoggingOutput, error)
@@ -1283,7 +1283,7 @@ type MockS3API struct {
 	GetBucketLoggingRequestFunc func(getBucketLoggingInput *s3.GetBucketLoggingInput) (*request.Request, *s3.GetBucketLoggingOutput)
 
 	// GetBucketLoggingWithContextFunc mocks the GetBucketLoggingWithContext method.
-	GetBucketLoggingWithContextFunc func(contextMoqParam context.Context, getBucketLoggingInput *s3.GetBucketLoggingInput, options ...request.Option) (*s3.GetBucketLoggingOutput, error)
+	GetBucketLoggingWithContextFunc func(v aws.Context, getBucketLoggingInput *s3.GetBucketLoggingInput, options ...request.Option) (*s3.GetBucketLoggingOutput, error)
 
 	// GetBucketMetricsConfigurationFunc mocks the GetBucketMetricsConfiguration method.
 	GetBucketMetricsConfigurationFunc func(getBucketMetricsConfigurationInput *s3.GetBucketMetricsConfigurationInput) (*s3.GetBucketMetricsConfigurationOutput, error)
@@ -1292,7 +1292,7 @@ type MockS3API struct {
 	GetBucketMetricsConfigurationRequestFunc func(getBucketMetricsConfigurationInput *s3.GetBucketMetricsConfigurationInput) (*request.Request, *s3.GetBucketMetricsConfigurationOutput)
 
 	// GetBucketMetricsConfigurationWithContextFunc mocks the GetBucketMetricsConfigurationWithContext method.
-	GetBucketMetricsConfigurationWithContextFunc func(contextMoqParam context.Context, getBucketMetricsConfigurationInput *s3.GetBucketMetricsConfigurationInput, options ...request.Option) (*s3.GetBucketMetricsConfigurationOutput, error)
+	GetBucketMetricsConfigurationWithContextFunc func(v aws.Context, getBucketMetricsConfigurationInput *s3.GetBucketMetricsConfigurationInput, options ...request.Option) (*s3.GetBucketMetricsConfigurationOutput, error)
 
 	// GetBucketNotificationFunc mocks the GetBucketNotification method.
 	GetBucketNotificationFunc func(getBucketNotificationConfigurationRequest *s3.GetBucketNotificationConfigurationRequest) (*s3.NotificationConfigurationDeprecated, error)
@@ -1304,13 +1304,13 @@ type MockS3API struct {
 	GetBucketNotificationConfigurationRequestFunc func(getBucketNotificationConfigurationRequest *s3.GetBucketNotificationConfigurationRequest) (*request.Request, *s3.NotificationConfiguration)
 
 	// GetBucketNotificationConfigurationWithContextFunc mocks the GetBucketNotificationConfigurationWithContext method.
-	GetBucketNotificationConfigurationWithContextFunc func(contextMoqParam context.Context, getBucketNotificationConfigurationRequest *s3.GetBucketNotificationConfigurationRequest, options ...request.Option) (*s3.NotificationConfiguration, error)
+	GetBucketNotificationConfigurationWithContextFunc func(v aws.Context, getBucketNotificationConfigurationRequest *s3.GetBucketNotificationConfigurationRequest, options ...request.Option) (*s3.NotificationConfiguration, error)
 
 	// GetBucketNotificationRequestFunc mocks the GetBucketNotificationRequest method.
 	GetBucketNotificationRequestFunc func(getBucketNotificationConfigurationRequest *s3.GetBucketNotificationConfigurationRequest) (*request.Request, *s3.NotificationConfigurationDeprecated)
 
 	// GetBucketNotificationWithContextFunc mocks the GetBucketNotificationWithContext method.
-	GetBucketNotificationWithContextFunc func(contextMoqParam context.Context, getBucketNotificationConfigurationRequest *s3.GetBucketNotificationConfigurationRequest, options ...request.Option) (*s3.NotificationConfigurationDeprecated, error)
+	GetBucketNotificationWithContextFunc func(v aws.Context, getBucketNotificationConfigurationRequest *s3.GetBucketNotificationConfigurationRequest, options ...request.Option) (*s3.NotificationConfigurationDeprecated, error)
 
 	// GetBucketOwnershipControlsFunc mocks the GetBucketOwnershipControls method.
 	GetBucketOwnershipControlsFunc func(getBucketOwnershipControlsInput *s3.GetBucketOwnershipControlsInput) (*s3.GetBucketOwnershipControlsOutput, error)
@@ -1319,7 +1319,7 @@ type MockS3API struct {
 	GetBucketOwnershipControlsRequestFunc func(getBucketOwnershipControlsInput *s3.GetBucketOwnershipControlsInput) (*request.Request, *s3.GetBucketOwnershipControlsOutput)
 
 	// GetBucketOwnershipControlsWithContextFunc mocks the GetBucketOwnershipControlsWithContext method.
-	GetBucketOwnershipControlsWithContextFunc func(contextMoqParam context.Context, getBucketOwnershipControlsInput *s3.GetBucketOwnershipControlsInput, options ...request.Option) (*s3.GetBucketOwnershipControlsOutput, error)
+	GetBucketOwnershipControlsWithContextFunc func(v aws.Context, getBucketOwnershipControlsInput *s3.GetBucketOwnershipControlsInput, options ...request.Option) (*s3.GetBucketOwnershipControlsOutput, error)
 
 	// GetBucketPolicyFunc mocks the GetBucketPolicy method.
 	GetBucketPolicyFunc func(getBucketPolicyInput *s3.GetBucketPolicyInput) (*s3.GetBucketPolicyOutput, error)
@@ -1334,10 +1334,10 @@ type MockS3API struct {
 	GetBucketPolicyStatusRequestFunc func(getBucketPolicyStatusInput *s3.GetBucketPolicyStatusInput) (*request.Request, *s3.GetBucketPolicyStatusOutput)
 
 	// GetBucketPolicyStatusWithContextFunc mocks the GetBucketPolicyStatusWithContext method.
-	GetBucketPolicyStatusWithContextFunc func(contextMoqParam context.Context, getBucketPolicyStatusInput *s3.GetBucketPolicyStatusInput, options ...request.Option) (*s3.GetBucketPolicyStatusOutput, error)
+	GetBucketPolicyStatusWithContextFunc func(v aws.Context, getBucketPolicyStatusInput *s3.GetBucketPolicyStatusInput, options ...request.Option) (*s3.GetBucketPolicyStatusOutput, error)
 
 	// GetBucketPolicyWithContextFunc mocks the GetBucketPolicyWithContext method.
-	GetBucketPolicyWithContextFunc func(contextMoqParam context.Context, getBucketPolicyInput *s3.GetBucketPolicyInput, options ...request.Option) (*s3.GetBucketPolicyOutput, error)
+	GetBucketPolicyWithContextFunc func(v aws.Context, getBucketPolicyInput *s3.GetBucketPolicyInput, options ...request.Option) (*s3.GetBucketPolicyOutput, error)
 
 	// GetBucketReplicationFunc mocks the GetBucketReplication method.
 	GetBucketReplicationFunc func(getBucketReplicationInput *s3.GetBucketReplicationInput) (*s3.GetBucketReplicationOutput, error)
@@ -1346,7 +1346,7 @@ type MockS3API struct {
 	GetBucketReplicationRequestFunc func(getBucketReplicationInput *s3.GetBucketReplicationInput) (*request.Request, *s3.GetBucketReplicationOutput)
 
 	// GetBucketReplicationWithContextFunc mocks the GetBucketReplicationWithContext method.
-	GetBucketReplicationWithContextFunc func(contextMoqParam context.Context, getBucketReplicationInput *s3.GetBucketReplicationInput, options ...request.Option) (*s3.GetBucketReplicationOutput, error)
+	GetBucketReplicationWithContextFunc func(v aws.Context, getBucketReplicationInput *s3.GetBucketReplicationInput, options ...request.Option) (*s3.GetBucketReplicationOutput, error)
 
 	// GetBucketRequestPaymentFunc mocks the GetBucketRequestPayment method.
 	GetBucketRequestPaymentFunc func(getBucketRequestPaymentInput *s3.GetBucketRequestPaymentInput) (*s3.GetBucketRequestPaymentOutput, error)
@@ -1355,7 +1355,7 @@ type MockS3API struct {
 	GetBucketRequestPaymentRequestFunc func(getBucketRequestPaymentInput *s3.GetBucketRequestPaymentInput) (*request.Request, *s3.GetBucketRequestPaymentOutput)
 
 	// GetBucketRequestPaymentWithContextFunc mocks the GetBucketRequestPaymentWithContext method.
-	GetBucketRequestPaymentWithContextFunc func(contextMoqParam context.Context, getBucketRequestPaymentInput *s3.GetBucketRequestPaymentInput, options ...request.Option) (*s3.GetBucketRequestPaymentOutput, error)
+	GetBucketRequestPaymentWithContextFunc func(v aws.Context, getBucketRequestPaymentInput *s3.GetBucketRequestPaymentInput, options ...request.Option) (*s3.GetBucketRequestPaymentOutput, error)
 
 	// GetBucketTaggingFunc mocks the GetBucketTagging method.
 	GetBucketTaggingFunc func(getBucketTaggingInput *s3.GetBucketTaggingInput) (*s3.GetBucketTaggingOutput, error)
@@ -1364,7 +1364,7 @@ type MockS3API struct {
 	GetBucketTaggingRequestFunc func(getBucketTaggingInput *s3.GetBucketTaggingInput) (*request.Request, *s3.GetBucketTaggingOutput)
 
 	// GetBucketTaggingWithContextFunc mocks the GetBucketTaggingWithContext method.
-	GetBucketTaggingWithContextFunc func(contextMoqParam context.Context, getBucketTaggingInput *s3.GetBucketTaggingInput, options ...request.Option) (*s3.GetBucketTaggingOutput, error)
+	GetBucketTaggingWithContextFunc func(v aws.Context, getBucketTaggingInput *s3.GetBucketTaggingInput, options ...request.Option) (*s3.GetBucketTaggingOutput, error)
 
 	// GetBucketVersioningFunc mocks the GetBucketVersioning method.
 	GetBucketVersioningFunc func(getBucketVersioningInput *s3.GetBucketVersioningInput) (*s3.GetBucketVersioningOutput, error)
@@ -1373,7 +1373,7 @@ type MockS3API struct {
 	GetBucketVersioningRequestFunc func(getBucketVersioningInput *s3.GetBucketVersioningInput) (*request.Request, *s3.GetBucketVersioningOutput)
 
 	// GetBucketVersioningWithContextFunc mocks the GetBucketVersioningWithContext method.
-	GetBucketVersioningWithContextFunc func(contextMoqParam context.Context, getBucketVersioningInput *s3.GetBucketVersioningInput, options ...request.Option) (*s3.GetBucketVersioningOutput, error)
+	GetBucketVersioningWithContextFunc func(v aws.Context, getBucketVersioningInput *s3.GetBucketVersioningInput, options ...request.Option) (*s3.GetBucketVersioningOutput, error)
 
 	// GetBucketWebsiteFunc mocks the GetBucketWebsite method.
 	GetBucketWebsiteFunc func(getBucketWebsiteInput *s3.GetBucketWebsiteInput) (*s3.GetBucketWebsiteOutput, error)
@@ -1382,7 +1382,7 @@ type MockS3API struct {
 	GetBucketWebsiteRequestFunc func(getBucketWebsiteInput *s3.GetBucketWebsiteInput) (*request.Request, *s3.GetBucketWebsiteOutput)
 
 	// GetBucketWebsiteWithContextFunc mocks the GetBucketWebsiteWithContext method.
-	GetBucketWebsiteWithContextFunc func(contextMoqParam context.Context, getBucketWebsiteInput *s3.GetBucketWebsiteInput, options ...request.Option) (*s3.GetBucketWebsiteOutput, error)
+	GetBucketWebsiteWithContextFunc func(v aws.Context, getBucketWebsiteInput *s3.GetBucketWebsiteInput, options ...request.Option) (*s3.GetBucketWebsiteOutput, error)
 
 	// GetObjectFunc mocks the GetObject method.
 	GetObjectFunc func(getObjectInput *s3.GetObjectInput) (*s3.GetObjectOutput, error)
@@ -1394,7 +1394,7 @@ type MockS3API struct {
 	GetObjectAclRequestFunc func(getObjectAclInput *s3.GetObjectAclInput) (*request.Request, *s3.GetObjectAclOutput)
 
 	// GetObjectAclWithContextFunc mocks the GetObjectAclWithContext method.
-	GetObjectAclWithContextFunc func(contextMoqParam context.Context, getObjectAclInput *s3.GetObjectAclInput, options ...request.Option) (*s3.GetObjectAclOutput, error)
+	GetObjectAclWithContextFunc func(v aws.Context, getObjectAclInput *s3.GetObjectAclInput, options ...request.Option) (*s3.GetObjectAclOutput, error)
 
 	// GetObjectAttributesFunc mocks the GetObjectAttributes method.
 	GetObjectAttributesFunc func(getObjectAttributesInput *s3.GetObjectAttributesInput) (*s3.GetObjectAttributesOutput, error)
@@ -1403,7 +1403,7 @@ type MockS3API struct {
 	GetObjectAttributesRequestFunc func(getObjectAttributesInput *s3.GetObjectAttributesInput) (*request.Request, *s3.GetObjectAttributesOutput)
 
 	// GetObjectAttributesWithContextFunc mocks the GetObjectAttributesWithContext method.
-	GetObjectAttributesWithContextFunc func(contextMoqParam context.Context, getObjectAttributesInput *s3.GetObjectAttributesInput, options ...request.Option) (*s3.GetObjectAttributesOutput, error)
+	GetObjectAttributesWithContextFunc func(v aws.Context, getObjectAttributesInput *s3.GetObjectAttributesInput, options ...request.Option) (*s3.GetObjectAttributesOutput, error)
 
 	// GetObjectLegalHoldFunc mocks the GetObjectLegalHold method.
 	GetObjectLegalHoldFunc func(getObjectLegalHoldInput *s3.GetObjectLegalHoldInput) (*s3.GetObjectLegalHoldOutput, error)
@@ -1412,7 +1412,7 @@ type MockS3API struct {
 	GetObjectLegalHoldRequestFunc func(getObjectLegalHoldInput *s3.GetObjectLegalHoldInput) (*request.Request, *s3.GetObjectLegalHoldOutput)
 
 	// GetObjectLegalHoldWithContextFunc mocks the GetObjectLegalHoldWithContext method.
-	GetObjectLegalHoldWithContextFunc func(contextMoqParam context.Context, getObjectLegalHoldInput *s3.GetObjectLegalHoldInput, options ...request.Option) (*s3.GetObjectLegalHoldOutput, error)
+	GetObjectLegalHoldWithContextFunc func(v aws.Context, getObjectLegalHoldInput *s3.GetObjectLegalHoldInput, options ...request.Option) (*s3.GetObjectLegalHoldOutput, error)
 
 	// GetObjectLockConfigurationFunc mocks the GetObjectLockConfiguration method.
 	GetObjectLockConfigurationFunc func(getObjectLockConfigurationInput *s3.GetObjectLockConfigurationInput) (*s3.GetObjectLockConfigurationOutput, error)
@@ -1421,7 +1421,7 @@ type MockS3API struct {
 	GetObjectLockConfigurationRequestFunc func(getObjectLockConfigurationInput *s3.GetObjectLockConfigurationInput) (*request.Request, *s3.GetObjectLockConfigurationOutput)
 
 	// GetObjectLockConfigurationWithContextFunc mocks the GetObjectLockConfigurationWithContext method.
-	GetObjectLockConfigurationWithContextFunc func(contextMoqParam context.Context, getObjectLockConfigurationInput *s3.GetObjectLockConfigurationInput, options ...request.Option) (*s3.GetObjectLockConfigurationOutput, error)
+	GetObjectLockConfigurationWithContextFunc func(v aws.Context, getObjectLockConfigurationInput *s3.GetObjectLockConfigurationInput, options ...request.Option) (*s3.GetObjectLockConfigurationOutput, error)
 
 	// GetObjectRequestFunc mocks the GetObjectRequest method.
 	GetObjectRequestFunc func(getObjectInput *s3.GetObjectInput) (*request.Request, *s3.GetObjectOutput)
@@ -1433,7 +1433,7 @@ type MockS3API struct {
 	GetObjectRetentionRequestFunc func(getObjectRetentionInput *s3.GetObjectRetentionInput) (*request.Request, *s3.GetObjectRetentionOutput)
 
 	// GetObjectRetentionWithContextFunc mocks the GetObjectRetentionWithContext method.
-	GetObjectRetentionWithContextFunc func(contextMoqParam context.Context, getObjectRetentionInput *s3.GetObjectRetentionInput, options ...request.Option) (*s3.GetObjectRetentionOutput, error)
+	GetObjectRetentionWithContextFunc func(v aws.Context, getObjectRetentionInput *s3.GetObjectRetentionInput, options ...request.Option) (*s3.GetObjectRetentionOutput, error)
 
 	// GetObjectTaggingFunc mocks the GetObjectTagging method.
 	GetObjectTaggingFunc func(getObjectTaggingInput *s3.GetObjectTaggingInput) (*s3.GetObjectTaggingOutput, error)
@@ -1442,7 +1442,7 @@ type MockS3API struct {
 	GetObjectTaggingRequestFunc func(getObjectTaggingInput *s3.GetObjectTaggingInput) (*request.Request, *s3.GetObjectTaggingOutput)
 
 	// GetObjectTaggingWithContextFunc mocks the GetObjectTaggingWithContext method.
-	GetObjectTaggingWithContextFunc func(contextMoqParam context.Context, getObjectTaggingInput *s3.GetObjectTaggingInput, options ...request.Option) (*s3.GetObjectTaggingOutput, error)
+	GetObjectTaggingWithContextFunc func(v aws.Context, getObjectTaggingInput *s3.GetObjectTaggingInput, options ...request.Option) (*s3.GetObjectTaggingOutput, error)
 
 	// GetObjectTorrentFunc mocks the GetObjectTorrent method.
 	GetObjectTorrentFunc func(getObjectTorrentInput *s3.GetObjectTorrentInput) (*s3.GetObjectTorrentOutput, error)
@@ -1451,10 +1451,10 @@ type MockS3API struct {
 	GetObjectTorrentRequestFunc func(getObjectTorrentInput *s3.GetObjectTorrentInput) (*request.Request, *s3.GetObjectTorrentOutput)
 
 	// GetObjectTorrentWithContextFunc mocks the GetObjectTorrentWithContext method.
-	GetObjectTorrentWithContextFunc func(contextMoqParam context.Context, getObjectTorrentInput *s3.GetObjectTorrentInput, options ...request.Option) (*s3.GetObjectTorrentOutput, error)
+	GetObjectTorrentWithContextFunc func(v aws.Context, getObjectTorrentInput *s3.GetObjectTorrentInput, options ...request.Option) (*s3.GetObjectTorrentOutput, error)
 
 	// GetObjectWithContextFunc mocks the GetObjectWithContext method.
-	GetObjectWithContextFunc func(contextMoqParam context.Context, getObjectInput *s3.GetObjectInput, options ...request.Option) (*s3.GetObjectOutput, error)
+	GetObjectWithContextFunc func(v aws.Context, getObjectInput *s3.GetObjectInput, options ...request.Option) (*s3.GetObjectOutput, error)
 
 	// GetPublicAccessBlockFunc mocks the GetPublicAccessBlock method.
 	GetPublicAccessBlockFunc func(getPublicAccessBlockInput *s3.GetPublicAccessBlockInput) (*s3.GetPublicAccessBlockOutput, error)
@@ -1463,7 +1463,7 @@ type MockS3API struct {
 	GetPublicAccessBlockRequestFunc func(getPublicAccessBlockInput *s3.GetPublicAccessBlockInput) (*request.Request, *s3.GetPublicAccessBlockOutput)
 
 	// GetPublicAccessBlockWithContextFunc mocks the GetPublicAccessBlockWithContext method.
-	GetPublicAccessBlockWithContextFunc func(contextMoqParam context.Context, getPublicAccessBlockInput *s3.GetPublicAccessBlockInput, options ...request.Option) (*s3.GetPublicAccessBlockOutput, error)
+	GetPublicAccessBlockWithContextFunc func(v aws.Context, getPublicAccessBlockInput *s3.GetPublicAccessBlockInput, options ...request.Option) (*s3.GetPublicAccessBlockOutput, error)
 
 	// HeadBucketFunc mocks the HeadBucket method.
 	HeadBucketFunc func(headBucketInput *s3.HeadBucketInput) (*s3.HeadBucketOutput, error)
@@ -1472,7 +1472,7 @@ type MockS3API struct {
 	HeadBucketRequestFunc func(headBucketInput *s3.HeadBucketInput) (*request.Request, *s3.HeadBucketOutput)
 
 	// HeadBucketWithContextFunc mocks the HeadBucketWithContext method.
-	HeadBucketWithContextFunc func(contextMoqParam context.Context, headBucketInput *s3.HeadBucketInput, options ...request.Option) (*s3.HeadBucketOutput, error)
+	HeadBucketWithContextFunc func(v aws.Context, headBucketInput *s3.HeadBucketInput, options ...request.Option) (*s3.HeadBucketOutput, error)
 
 	// HeadObjectFunc mocks the HeadObject method.
 	HeadObjectFunc func(headObjectInput *s3.HeadObjectInput) (*s3.HeadObjectOutput, error)
@@ -1481,7 +1481,7 @@ type MockS3API struct {
 	HeadObjectRequestFunc func(headObjectInput *s3.HeadObjectInput) (*request.Request, *s3.HeadObjectOutput)
 
 	// HeadObjectWithContextFunc mocks the HeadObjectWithContext method.
-	HeadObjectWithContextFunc func(contextMoqParam context.Context, headObjectInput *s3.HeadObjectInput, options ...request.Option) (*s3.HeadObjectOutput, error)
+	HeadObjectWithContextFunc func(v aws.Context, headObjectInput *s3.HeadObjectInput, options ...request.Option) (*s3.HeadObjectOutput, error)
 
 	// ListBucketAnalyticsConfigurationsFunc mocks the ListBucketAnalyticsConfigurations method.
 	ListBucketAnalyticsConfigurationsFunc func(listBucketAnalyticsConfigurationsInput *s3.ListBucketAnalyticsConfigurationsInput) (*s3.ListBucketAnalyticsConfigurationsOutput, error)
@@ -1490,7 +1490,7 @@ type MockS3API struct {
 	ListBucketAnalyticsConfigurationsRequestFunc func(listBucketAnalyticsConfigurationsInput *s3.ListBucketAnalyticsConfigurationsInput) (*request.Request, *s3.ListBucketAnalyticsConfigurationsOutput)
 
 	// ListBucketAnalyticsConfigurationsWithContextFunc mocks the ListBucketAnalyticsConfigurationsWithContext method.
-	ListBucketAnalyticsConfigurationsWithContextFunc func(contextMoqParam context.Context, listBucketAnalyticsConfigurationsInput *s3.ListBucketAnalyticsConfigurationsInput, options ...request.Option) (*s3.ListBucketAnalyticsConfigurationsOutput, error)
+	ListBucketAnalyticsConfigurationsWithContextFunc func(v aws.Context, listBucketAnalyticsConfigurationsInput *s3.ListBucketAnalyticsConfigurationsInput, options ...request.Option) (*s3.ListBucketAnalyticsConfigurationsOutput, error)
 
 	// ListBucketIntelligentTieringConfigurationsFunc mocks the ListBucketIntelligentTieringConfigurations method.
 	ListBucketIntelligentTieringConfigurationsFunc func(listBucketIntelligentTieringConfigurationsInput *s3.ListBucketIntelligentTieringConfigurationsInput) (*s3.ListBucketIntelligentTieringConfigurationsOutput, error)
@@ -1499,7 +1499,7 @@ type MockS3API struct {
 	ListBucketIntelligentTieringConfigurationsRequestFunc func(listBucketIntelligentTieringConfigurationsInput *s3.ListBucketIntelligentTieringConfigurationsInput) (*request.Request, *s3.ListBucketIntelligentTieringConfigurationsOutput)
 
 	// ListBucketIntelligentTieringConfigurationsWithContextFunc mocks the ListBucketIntelligentTieringConfigurationsWithContext method.
-	ListBucketIntelligentTieringConfigurationsWithContextFunc func(contextMoqParam context.Context, listBucketIntelligentTieringConfigurationsInput *s3.ListBucketIntelligentTieringConfigurationsInput, options ...request.Option) (*s3.ListBucketIntelligentTieringConfigurationsOutput, error)
+	ListBucketIntelligentTieringConfigurationsWithContextFunc func(v aws.Context, listBucketIntelligentTieringConfigurationsInput *s3.ListBucketIntelligentTieringConfigurationsInput, options ...request.Option) (*s3.ListBucketIntelligentTieringConfigurationsOutput, error)
 
 	// ListBucketInventoryConfigurationsFunc mocks the ListBucketInventoryConfigurations method.
 	ListBucketInventoryConfigurationsFunc func(listBucketInventoryConfigurationsInput *s3.ListBucketInventoryConfigurationsInput) (*s3.ListBucketInventoryConfigurationsOutput, error)
@@ -1508,7 +1508,7 @@ type MockS3API struct {
 	ListBucketInventoryConfigurationsRequestFunc func(listBucketInventoryConfigurationsInput *s3.ListBucketInventoryConfigurationsInput) (*request.Request, *s3.ListBucketInventoryConfigurationsOutput)
 
 	// ListBucketInventoryConfigurationsWithContextFunc mocks the ListBucketInventoryConfigurationsWithContext method.
-	ListBucketInventoryConfigurationsWithContextFunc func(contextMoqParam context.Context, listBucketInventoryConfigurationsInput *s3.ListBucketInventoryConfigurationsInput, options ...request.Option) (*s3.ListBucketInventoryConfigurationsOutput, error)
+	ListBucketInventoryConfigurationsWithContextFunc func(v aws.Context, listBucketInventoryConfigurationsInput *s3.ListBucketInventoryConfigurationsInput, options ...request.Option) (*s3.ListBucketInventoryConfigurationsOutput, error)
 
 	// ListBucketMetricsConfigurationsFunc mocks the ListBucketMetricsConfigurations method.
 	ListBucketMetricsConfigurationsFunc func(listBucketMetricsConfigurationsInput *s3.ListBucketMetricsConfigurationsInput) (*s3.ListBucketMetricsConfigurationsOutput, error)
@@ -1517,7 +1517,7 @@ type MockS3API struct {
 	ListBucketMetricsConfigurationsRequestFunc func(listBucketMetricsConfigurationsInput *s3.ListBucketMetricsConfigurationsInput) (*request.Request, *s3.ListBucketMetricsConfigurationsOutput)
 
 	// ListBucketMetricsConfigurationsWithContextFunc mocks the ListBucketMetricsConfigurationsWithContext method.
-	ListBucketMetricsConfigurationsWithContextFunc func(contextMoqParam context.Context, listBucketMetricsConfigurationsInput *s3.ListBucketMetricsConfigurationsInput, options ...request.Option) (*s3.ListBucketMetricsConfigurationsOutput, error)
+	ListBucketMetricsConfigurationsWithContextFunc func(v aws.Context, listBucketMetricsConfigurationsInput *s3.ListBucketMetricsConfigurationsInput, options ...request.Option) (*s3.ListBucketMetricsConfigurationsOutput, error)
 
 	// ListBucketsFunc mocks the ListBuckets method.
 	ListBucketsFunc func(listBucketsInput *s3.ListBucketsInput) (*s3.ListBucketsOutput, error)
@@ -1526,7 +1526,7 @@ type MockS3API struct {
 	ListBucketsRequestFunc func(listBucketsInput *s3.ListBucketsInput) (*request.Request, *s3.ListBucketsOutput)
 
 	// ListBucketsWithContextFunc mocks the ListBucketsWithContext method.
-	ListBucketsWithContextFunc func(contextMoqParam context.Context, listBucketsInput *s3.ListBucketsInput, options ...request.Option) (*s3.ListBucketsOutput, error)
+	ListBucketsWithContextFunc func(v aws.Context, listBucketsInput *s3.ListBucketsInput, options ...request.Option) (*s3.ListBucketsOutput, error)
 
 	// ListDirectoryBucketsFunc mocks the ListDirectoryBuckets method.
 	ListDirectoryBucketsFunc func(listDirectoryBucketsInput *s3.ListDirectoryBucketsInput) (*s3.ListDirectoryBucketsOutput, error)
@@ -1535,13 +1535,13 @@ type MockS3API struct {
 	ListDirectoryBucketsPagesFunc func(listDirectoryBucketsInput *s3.ListDirectoryBucketsInput, fn func(*s3.ListDirectoryBucketsOutput, bool) bool) error
 
 	// ListDirectoryBucketsPagesWithContextFunc mocks the ListDirectoryBucketsPagesWithContext method.
-	ListDirectoryBucketsPagesWithContextFunc func(contextMoqParam context.Context, listDirectoryBucketsInput *s3.ListDirectoryBucketsInput, fn func(*s3.ListDirectoryBucketsOutput, bool) bool, options ...request.Option) error
+	ListDirectoryBucketsPagesWithContextFunc func(v aws.Context, listDirectoryBucketsInput *s3.ListDirectoryBucketsInput, fn func(*s3.ListDirectoryBucketsOutput, bool) bool, options ...request.Option) error
 
 	// ListDirectoryBucketsRequestFunc mocks the ListDirectoryBucketsRequest method.
 	ListDirectoryBucketsRequestFunc func(listDirectoryBucketsInput *s3.ListDirectoryBucketsInput) (*request.Request, *s3.ListDirectoryBucketsOutput)
 
 	// ListDirectoryBucketsWithContextFunc mocks the ListDirectoryBucketsWithContext method.
-	ListDirectoryBucketsWithContextFunc func(contextMoqParam context.Context, listDirectoryBucketsInput *s3.ListDirectoryBucketsInput, options ...request.Option) (*s3.ListDirectoryBucketsOutput, error)
+	ListDirectoryBucketsWithContextFunc func(v aws.Context, listDirectoryBucketsInput *s3.ListDirectoryBucketsInput, options ...request.Option) (*s3.ListDirectoryBucketsOutput, error)
 
 	// ListMultipartUploadsFunc mocks the ListMultipartUploads method.
 	ListMultipartUploadsFunc func(listMultipartUploadsInput *s3.ListMultipartUploadsInput) (*s3.ListMultipartUploadsOutput, error)
@@ -1550,13 +1550,13 @@ type MockS3API struct {
 	ListMultipartUploadsPagesFunc func(listMultipartUploadsInput *s3.ListMultipartUploadsInput, fn func(*s3.ListMultipartUploadsOutput, bool) bool) error
 
 	// ListMultipartUploadsPagesWithContextFunc mocks the ListMultipartUploadsPagesWithContext method.
-	ListMultipartUploadsPagesWithContextFunc func(contextMoqParam context.Context, listMultipartUploadsInput *s3.ListMultipartUploadsInput, fn func(*s3.ListMultipartUploadsOutput, bool) bool, options ...request.Option) error
+	ListMultipartUploadsPagesWithContextFunc func(v aws.Context, listMultipartUploadsInput *s3.ListMultipartUploadsInput, fn func(*s3.ListMultipartUploadsOutput, bool) bool, options ...request.Option) error
 
 	// ListMultipartUploadsRequestFunc mocks the ListMultipartUploadsRequest method.
 	ListMultipartUploadsRequestFunc func(listMultipartUploadsInput *s3.ListMultipartUploadsInput) (*request.Request, *s3.ListMultipartUploadsOutput)
 
 	// ListMultipartUploadsWithContextFunc mocks the ListMultipartUploadsWithContext method.
-	ListMultipartUploadsWithContextFunc func(contextMoqParam context.Context, listMultipartUploadsInput *s3.ListMultipartUploadsInput, options ...request.Option) (*s3.ListMultipartUploadsOutput, error)
+	ListMultipartUploadsWithContextFunc func(v aws.Context, listMultipartUploadsInput *s3.ListMultipartUploadsInput, options ...request.Option) (*s3.ListMultipartUploadsOutput, error)
 
 	// ListObjectVersionsFunc mocks the ListObjectVersions method.
 	ListObjectVersionsFunc func(listObjectVersionsInput *s3.ListObjectVersionsInput) (*s3.ListObjectVersionsOutput, error)
@@ -1565,13 +1565,13 @@ type MockS3API struct {
 	ListObjectVersionsPagesFunc func(listObjectVersionsInput *s3.ListObjectVersionsInput, fn func(*s3.ListObjectVersionsOutput, bool) bool) error
 
 	// ListObjectVersionsPagesWithContextFunc mocks the ListObjectVersionsPagesWithContext method.
-	ListObjectVersionsPagesWithContextFunc func(contextMoqParam context.Context, listObjectVersionsInput *s3.ListObjectVersionsInput, fn func(*s3.ListObjectVersionsOutput, bool) bool, options ...request.Option) error
+	ListObjectVersionsPagesWithContextFunc func(v aws.Context, listObjectVersionsInput *s3.ListObjectVersionsInput, fn func(*s3.ListObjectVersionsOutput, bool) bool, options ...request.Option) error
 
 	// ListObjectVersionsRequestFunc mocks the ListObjectVersionsRequest method.
 	ListObjectVersionsRequestFunc func(listObjectVersionsInput *s3.ListObjectVersionsInput) (*request.Request, *s3.ListObjectVersionsOutput)
 
 	// ListObjectVersionsWithContextFunc mocks the ListObjectVersionsWithContext method.
-	ListObjectVersionsWithContextFunc func(contextMoqParam context.Context, listObjectVersionsInput *s3.ListObjectVersionsInput, options ...request.Option) (*s3.ListObjectVersionsOutput, error)
+	ListObjectVersionsWithContextFunc func(v aws.Context, listObjectVersionsInput *s3.ListObjectVersionsInput, options ...request.Option) (*s3.ListObjectVersionsOutput, error)
 
 	// ListObjectsFunc mocks the ListObjects method.
 	ListObjectsFunc func(listObjectsInput *s3.ListObjectsInput) (*s3.ListObjectsOutput, error)
@@ -1580,7 +1580,7 @@ type MockS3API struct {
 	ListObjectsPagesFunc func(listObjectsInput *s3.ListObjectsInput, fn func(*s3.ListObjectsOutput, bool) bool) error
 
 	// ListObjectsPagesWithContextFunc mocks the ListObjectsPagesWithContext method.
-	ListObjectsPagesWithContextFunc func(contextMoqParam context.Context, listObjectsInput *s3.ListObjectsInput, fn func(*s3.ListObjectsOutput, bool) bool, options ...request.Option) error
+	ListObjectsPagesWithContextFunc func(v aws.Context, listObjectsInput *s3.ListObjectsInput, fn func(*s3.ListObjectsOutput, bool) bool, options ...request.Option) error
 
 	// ListObjectsRequestFunc mocks the ListObjectsRequest method.
 	ListObjectsRequestFunc func(listObjectsInput *s3.ListObjectsInput) (*request.Request, *s3.ListObjectsOutput)
@@ -1592,16 +1592,16 @@ type MockS3API struct {
 	ListObjectsV2PagesFunc func(listObjectsV2Input *s3.ListObjectsV2Input, fn func(*s3.ListObjectsV2Output, bool) bool) error
 
 	// ListObjectsV2PagesWithContextFunc mocks the ListObjectsV2PagesWithContext method.
-	ListObjectsV2PagesWithContextFunc func(contextMoqParam context.Context, listObjectsV2Input *s3.ListObjectsV2Input, fn func(*s3.ListObjectsV2Output, bool) bool, options ...request.Option) error
+	ListObjectsV2PagesWithContextFunc func(v aws.Context, listObjectsV2Input *s3.ListObjectsV2Input, fn func(*s3.ListObjectsV2Output, bool) bool, options ...request.Option) error
 
 	// ListObjectsV2RequestFunc mocks the ListObjectsV2Request method.
 	ListObjectsV2RequestFunc func(listObjectsV2Input *s3.ListObjectsV2Input) (*request.Request, *s3.ListObjectsV2Output)
 
 	// ListObjectsV2WithContextFunc mocks the ListObjectsV2WithContext method.
-	ListObjectsV2WithContextFunc func(contextMoqParam context.Context, listObjectsV2Input *s3.ListObjectsV2Input, options ...request.Option) (*s3.ListObjectsV2Output, error)
+	ListObjectsV2WithContextFunc func(v aws.Context, listObjectsV2Input *s3.ListObjectsV2Input, options ...request.Option) (*s3.ListObjectsV2Output, error)
 
 	// ListObjectsWithContextFunc mocks the ListObjectsWithContext method.
-	ListObjectsWithContextFunc func(contextMoqParam context.Context, listObjectsInput *s3.ListObjectsInput, options ...request.Option) (*s3.ListObjectsOutput, error)
+	ListObjectsWithContextFunc func(v aws.Context, listObjectsInput *s3.ListObjectsInput, options ...request.Option) (*s3.ListObjectsOutput, error)
 
 	// ListPartsFunc mocks the ListParts method.
 	ListPartsFunc func(listPartsInput *s3.ListPartsInput) (*s3.ListPartsOutput, error)
@@ -1610,13 +1610,13 @@ type MockS3API struct {
 	ListPartsPagesFunc func(listPartsInput *s3.ListPartsInput, fn func(*s3.ListPartsOutput, bool) bool) error
 
 	// ListPartsPagesWithContextFunc mocks the ListPartsPagesWithContext method.
-	ListPartsPagesWithContextFunc func(contextMoqParam context.Context, listPartsInput *s3.ListPartsInput, fn func(*s3.ListPartsOutput, bool) bool, options ...request.Option) error
+	ListPartsPagesWithContextFunc func(v aws.Context, listPartsInput *s3.ListPartsInput, fn func(*s3.ListPartsOutput, bool) bool, options ...request.Option) error
 
 	// ListPartsRequestFunc mocks the ListPartsRequest method.
 	ListPartsRequestFunc func(listPartsInput *s3.ListPartsInput) (*request.Request, *s3.ListPartsOutput)
 
 	// ListPartsWithContextFunc mocks the ListPartsWithContext method.
-	ListPartsWithContextFunc func(contextMoqParam context.Context, listPartsInput *s3.ListPartsInput, options ...request.Option) (*s3.ListPartsOutput, error)
+	ListPartsWithContextFunc func(v aws.Context, listPartsInput *s3.ListPartsInput, options ...request.Option) (*s3.ListPartsOutput, error)
 
 	// PutBucketAccelerateConfigurationFunc mocks the PutBucketAccelerateConfiguration method.
 	PutBucketAccelerateConfigurationFunc func(putBucketAccelerateConfigurationInput *s3.PutBucketAccelerateConfigurationInput) (*s3.PutBucketAccelerateConfigurationOutput, error)
@@ -1625,7 +1625,7 @@ type MockS3API struct {
 	PutBucketAccelerateConfigurationRequestFunc func(putBucketAccelerateConfigurationInput *s3.PutBucketAccelerateConfigurationInput) (*request.Request, *s3.PutBucketAccelerateConfigurationOutput)
 
 	// PutBucketAccelerateConfigurationWithContextFunc mocks the PutBucketAccelerateConfigurationWithContext method.
-	PutBucketAccelerateConfigurationWithContextFunc func(contextMoqParam context.Context, putBucketAccelerateConfigurationInput *s3.PutBucketAccelerateConfigurationInput, options ...request.Option) (*s3.PutBucketAccelerateConfigurationOutput, error)
+	PutBucketAccelerateConfigurationWithContextFunc func(v aws.Context, putBucketAccelerateConfigurationInput *s3.PutBucketAccelerateConfigurationInput, options ...request.Option) (*s3.PutBucketAccelerateConfigurationOutput, error)
 
 	// PutBucketAclFunc mocks the PutBucketAcl method.
 	PutBucketAclFunc func(putBucketAclInput *s3.PutBucketAclInput) (*s3.PutBucketAclOutput, error)
@@ -1634,7 +1634,7 @@ type MockS3API struct {
 	PutBucketAclRequestFunc func(putBucketAclInput *s3.PutBucketAclInput) (*request.Request, *s3.PutBucketAclOutput)
 
 	// PutBucketAclWithContextFunc mocks the PutBucketAclWithContext method.
-	PutBucketAclWithContextFunc func(contextMoqParam context.Context, putBucketAclInput *s3.PutBucketAclInput, options ...request.Option) (*s3.PutBucketAclOutput, error)
+	PutBucketAclWithContextFunc func(v aws.Context, putBucketAclInput *s3.PutBucketAclInput, options ...request.Option) (*s3.PutBucketAclOutput, error)
 
 	// PutBucketAnalyticsConfigurationFunc mocks the PutBucketAnalyticsConfiguration method.
 	PutBucketAnalyticsConfigurationFunc func(putBucketAnalyticsConfigurationInput *s3.PutBucketAnalyticsConfigurationInput) (*s3.PutBucketAnalyticsConfigurationOutput, error)
@@ -1643,7 +1643,7 @@ type MockS3API struct {
 	PutBucketAnalyticsConfigurationRequestFunc func(putBucketAnalyticsConfigurationInput *s3.PutBucketAnalyticsConfigurationInput) (*request.Request, *s3.PutBucketAnalyticsConfigurationOutput)
 
 	// PutBucketAnalyticsConfigurationWithContextFunc mocks the PutBucketAnalyticsConfigurationWithContext method.
-	PutBucketAnalyticsConfigurationWithContextFunc func(contextMoqParam context.Context, putBucketAnalyticsConfigurationInput *s3.PutBucketAnalyticsConfigurationInput, options ...request.Option) (*s3.PutBucketAnalyticsConfigurationOutput, error)
+	PutBucketAnalyticsConfigurationWithContextFunc func(v aws.Context, putBucketAnalyticsConfigurationInput *s3.PutBucketAnalyticsConfigurationInput, options ...request.Option) (*s3.PutBucketAnalyticsConfigurationOutput, error)
 
 	// PutBucketCorsFunc mocks the PutBucketCors method.
 	PutBucketCorsFunc func(putBucketCorsInput *s3.PutBucketCorsInput) (*s3.PutBucketCorsOutput, error)
@@ -1652,7 +1652,7 @@ type MockS3API struct {
 	PutBucketCorsRequestFunc func(putBucketCorsInput *s3.PutBucketCorsInput) (*request.Request, *s3.PutBucketCorsOutput)
 
 	// PutBucketCorsWithContextFunc mocks the PutBucketCorsWithContext method.
-	PutBucketCorsWithContextFunc func(contextMoqParam context.Context, putBucketCorsInput *s3.PutBucketCorsInput, options ...request.Option) (*s3.PutBucketCorsOutput, error)
+	PutBucketCorsWithContextFunc func(v aws.Context, putBucketCorsInput *s3.PutBucketCorsInput, options ...request.Option) (*s3.PutBucketCorsOutput, error)
 
 	// PutBucketEncryptionFunc mocks the PutBucketEncryption method.
 	PutBucketEncryptionFunc func(putBucketEncryptionInput *s3.PutBucketEncryptionInput) (*s3.PutBucketEncryptionOutput, error)
@@ -1661,7 +1661,7 @@ type MockS3API struct {
 	PutBucketEncryptionRequestFunc func(putBucketEncryptionInput *s3.PutBucketEncryptionInput) (*request.Request, *s3.PutBucketEncryptionOutput)
 
 	// PutBucketEncryptionWithContextFunc mocks the PutBucketEncryptionWithContext method.
-	PutBucketEncryptionWithContextFunc func(contextMoqParam context.Context, putBucketEncryptionInput *s3.PutBucketEncryptionInput, options ...request.Option) (*s3.PutBucketEncryptionOutput, error)
+	PutBucketEncryptionWithContextFunc func(v aws.Context, putBucketEncryptionInput *s3.PutBucketEncryptionInput, options ...request.Option) (*s3.PutBucketEncryptionOutput, error)
 
 	// PutBucketIntelligentTieringConfigurationFunc mocks the PutBucketIntelligentTieringConfiguration method.
 	PutBucketIntelligentTieringConfigurationFunc func(putBucketIntelligentTieringConfigurationInput *s3.PutBucketIntelligentTieringConfigurationInput) (*s3.PutBucketIntelligentTieringConfigurationOutput, error)
@@ -1670,7 +1670,7 @@ type MockS3API struct {
 	PutBucketIntelligentTieringConfigurationRequestFunc func(putBucketIntelligentTieringConfigurationInput *s3.PutBucketIntelligentTieringConfigurationInput) (*request.Request, *s3.PutBucketIntelligentTieringConfigurationOutput)
 
 	// PutBucketIntelligentTieringConfigurationWithContextFunc mocks the PutBucketIntelligentTieringConfigurationWithContext method.
-	PutBucketIntelligentTieringConfigurationWithContextFunc func(contextMoqParam context.Context, putBucketIntelligentTieringConfigurationInput *s3.PutBucketIntelligentTieringConfigurationInput, options ...request.Option) (*s3.PutBucketIntelligentTieringConfigurationOutput, error)
+	PutBucketIntelligentTieringConfigurationWithContextFunc func(v aws.Context, putBucketIntelligentTieringConfigurationInput *s3.PutBucketIntelligentTieringConfigurationInput, options ...request.Option) (*s3.PutBucketIntelligentTieringConfigurationOutput, error)
 
 	// PutBucketInventoryConfigurationFunc mocks the PutBucketInventoryConfiguration method.
 	PutBucketInventoryConfigurationFunc func(putBucketInventoryConfigurationInput *s3.PutBucketInventoryConfigurationInput) (*s3.PutBucketInventoryConfigurationOutput, error)
@@ -1679,7 +1679,7 @@ type MockS3API struct {
 	PutBucketInventoryConfigurationRequestFunc func(putBucketInventoryConfigurationInput *s3.PutBucketInventoryConfigurationInput) (*request.Request, *s3.PutBucketInventoryConfigurationOutput)
 
 	// PutBucketInventoryConfigurationWithContextFunc mocks the PutBucketInventoryConfigurationWithContext method.
-	PutBucketInventoryConfigurationWithContextFunc func(contextMoqParam context.Context, putBucketInventoryConfigurationInput *s3.PutBucketInventoryConfigurationInput, options ...request.Option) (*s3.PutBucketInventoryConfigurationOutput, error)
+	PutBucketInventoryConfigurationWithContextFunc func(v aws.Context, putBucketInventoryConfigurationInput *s3.PutBucketInventoryConfigurationInput, options ...request.Option) (*s3.PutBucketInventoryConfigurationOutput, error)
 
 	// PutBucketLifecycleFunc mocks the PutBucketLifecycle method.
 	PutBucketLifecycleFunc func(putBucketLifecycleInput *s3.PutBucketLifecycleInput) (*s3.PutBucketLifecycleOutput, error)
@@ -1691,13 +1691,13 @@ type MockS3API struct {
 	PutBucketLifecycleConfigurationRequestFunc func(putBucketLifecycleConfigurationInput *s3.PutBucketLifecycleConfigurationInput) (*request.Request, *s3.PutBucketLifecycleConfigurationOutput)
 
 	// PutBucketLifecycleConfigurationWithContextFunc mocks the PutBucketLifecycleConfigurationWithContext method.
-	PutBucketLifecycleConfigurationWithContextFunc func(contextMoqParam context.Context, putBucketLifecycleConfigurationInput *s3.PutBucketLifecycleConfigurationInput, options ...request.Option) (*s3.PutBucketLifecycleConfigurationOutput, error)
+	PutBucketLifecycleConfigurationWithContextFunc func(v aws.Context, putBucketLifecycleConfigurationInput *s3.PutBucketLifecycleConfigurationInput, options ...request.Option) (*s3.PutBucketLifecycleConfigurationOutput, error)
 
 	// PutBucketLifecycleRequestFunc mocks the PutBucketLifecycleRequest method.
 	PutBucketLifecycleRequestFunc func(putBucketLifecycleInput *s3.PutBucketLifecycleInput) (*request.Request, *s3.PutBucketLifecycleOutput)
 
 	// PutBucketLifecycleWithContextFunc mocks the PutBucketLifecycleWithContext method.
-	PutBucketLifecycleWithContextFunc func(contextMoqParam context.Context, putBucketLifecycleInput *s3.PutBucketLifecycleInput, options ...request.Option) (*s3.PutBucketLifecycleOutput, error)
+	PutBucketLifecycleWithContextFunc func(v aws.Context, putBucketLifecycleInput *s3.PutBucketLifecycleInput, options ...request.Option) (*s3.PutBucketLifecycleOutput, error)
 
 	// PutBucketLoggingFunc mocks the PutBucketLogging method.
 	PutBucketLoggingFunc func(putBucketLoggingInput *s3.PutBucketLoggingInput) (*s3.PutBucketLoggingOutput, error)
@@ -1706,7 +1706,7 @@ type MockS3API struct {
 	PutBucketLoggingRequestFunc func(putBucketLoggingInput *s3.PutBucketLoggingInput) (*request.Request, *s3.PutBucketLoggingOutput)
 
 	// PutBucketLoggingWithContextFunc mocks the PutBucketLoggingWithContext method.
-	PutBucketLoggingWithContextFunc func(contextMoqParam context.Context, putBucketLoggingInput *s3.PutBucketLoggingInput, options ...request.Option) (*s3.PutBucketLoggingOutput, error)
+	PutBucketLoggingWithContextFunc func(v aws.Context, putBucketLoggingInput *s3.PutBucketLoggingInput, options ...request.Option) (*s3.PutBucketLoggingOutput, error)
 
 	// PutBucketMetricsConfigurationFunc mocks the PutBucketMetricsConfiguration method.
 	PutBucketMetricsConfigurationFunc func(putBucketMetricsConfigurationInput *s3.PutBucketMetricsConfigurationInput) (*s3.PutBucketMetricsConfigurationOutput, error)
@@ -1715,7 +1715,7 @@ type MockS3API struct {
 	PutBucketMetricsConfigurationRequestFunc func(putBucketMetricsConfigurationInput *s3.PutBucketMetricsConfigurationInput) (*request.Request, *s3.PutBucketMetricsConfigurationOutput)
 
 	// PutBucketMetricsConfigurationWithContextFunc mocks the PutBucketMetricsConfigurationWithContext method.
-	PutBucketMetricsConfigurationWithContextFunc func(contextMoqParam context.Context, putBucketMetricsConfigurationInput *s3.PutBucketMetricsConfigurationInput, options ...request.Option) (*s3.PutBucketMetricsConfigurationOutput, error)
+	PutBucketMetricsConfigurationWithContextFunc func(v aws.Context, putBucketMetricsConfigurationInput *s3.PutBucketMetricsConfigurationInput, options ...request.Option) (*s3.PutBucketMetricsConfigurationOutput, error)
 
 	// PutBucketNotificationFunc mocks the PutBucketNotification method.
 	PutBucketNotificationFunc func(putBucketNotificationInput *s3.PutBucketNotificationInput) (*s3.PutBucketNotificationOutput, error)
@@ -1727,13 +1727,13 @@ type MockS3API struct {
 	PutBucketNotificationConfigurationRequestFunc func(putBucketNotificationConfigurationInput *s3.PutBucketNotificationConfigurationInput) (*request.Request, *s3.PutBucketNotificationConfigurationOutput)
 
 	// PutBucketNotificationConfigurationWithContextFunc mocks the PutBucketNotificationConfigurationWithContext method.
-	PutBucketNotificationConfigurationWithContextFunc func(contextMoqParam context.Context, putBucketNotificationConfigurationInput *s3.PutBucketNotificationConfigurationInput, options ...request.Option) (*s3.PutBucketNotificationConfigurationOutput, error)
+	PutBucketNotificationConfigurationWithContextFunc func(v aws.Context, putBucketNotificationConfigurationInput *s3.PutBucketNotificationConfigurationInput, options ...request.Option) (*s3.PutBucketNotificationConfigurationOutput, error)
 
 	// PutBucketNotificationRequestFunc mocks the PutBucketNotificationRequest method.
 	PutBucketNotificationRequestFunc func(putBucketNotificationInput *s3.PutBucketNotificationInput) (*request.Request, *s3.PutBucketNotificationOutput)
 
 	// PutBucketNotificationWithContextFunc mocks the PutBucketNotificationWithContext method.
-	PutBucketNotificationWithContextFunc func(contextMoqParam context.Context, putBucketNotificationInput *s3.PutBucketNotificationInput, options ...request.Option) (*s3.PutBucketNotificationOutput, error)
+	PutBucketNotificationWithContextFunc func(v aws.Context, putBucketNotificationInput *s3.PutBucketNotificationInput, options ...request.Option) (*s3.PutBucketNotificationOutput, error)
 
 	// PutBucketOwnershipControlsFunc mocks the PutBucketOwnershipControls method.
 	PutBucketOwnershipControlsFunc func(putBucketOwnershipControlsInput *s3.PutBucketOwnershipControlsInput) (*s3.PutBucketOwnershipControlsOutput, error)
@@ -1742,7 +1742,7 @@ type MockS3API struct {
 	PutBucketOwnershipControlsRequestFunc func(putBucketOwnershipControlsInput *s3.PutBucketOwnershipControlsInput) (*request.Request, *s3.PutBucketOwnershipControlsOutput)
 
 	// PutBucketOwnershipControlsWithContextFunc mocks the PutBucketOwnershipControlsWithContext method.
-	PutBucketOwnershipControlsWithContextFunc func(contextMoqParam context.Context, putBucketOwnershipControlsInput *s3.PutBucketOwnershipControlsInput, options ...request.Option) (*s3.PutBucketOwnershipControlsOutput, error)
+	PutBucketOwnershipControlsWithContextFunc func(v aws.Context, putBucketOwnershipControlsInput *s3.PutBucketOwnershipControlsInput, options ...request.Option) (*s3.PutBucketOwnershipControlsOutput, error)
 
 	// PutBucketPolicyFunc mocks the PutBucketPolicy method.
 	PutBucketPolicyFunc func(putBucketPolicyInput *s3.PutBucketPolicyInput) (*s3.PutBucketPolicyOutput, error)
@@ -1751,7 +1751,7 @@ type MockS3API struct {
 	PutBucketPolicyRequestFunc func(putBucketPolicyInput *s3.PutBucketPolicyInput) (*request.Request, *s3.PutBucketPolicyOutput)
 
 	// PutBucketPolicyWithContextFunc mocks the PutBucketPolicyWithContext method.
-	PutBucketPolicyWithContextFunc func(contextMoqParam context.Context, putBucketPolicyInput *s3.PutBucketPolicyInput, options ...request.Option) (*s3.PutBucketPolicyOutput, error)
+	PutBucketPolicyWithContextFunc func(v aws.Context, putBucketPolicyInput *s3.PutBucketPolicyInput, options ...request.Option) (*s3.PutBucketPolicyOutput, error)
 
 	// PutBucketReplicationFunc mocks the PutBucketReplication method.
 	PutBucketReplicationFunc func(putBucketReplicationInput *s3.PutBucketReplicationInput) (*s3.PutBucketReplicationOutput, error)
@@ -1760,7 +1760,7 @@ type MockS3API struct {
 	PutBucketReplicationRequestFunc func(putBucketReplicationInput *s3.PutBucketReplicationInput) (*request.Request, *s3.PutBucketReplicationOutput)
 
 	// PutBucketReplicationWithContextFunc mocks the PutBucketReplicationWithContext method.
-	PutBucketReplicationWithContextFunc func(contextMoqParam context.Context, putBucketReplicationInput *s3.PutBucketReplicationInput, options ...request.Option) (*s3.PutBucketReplicationOutput, error)
+	PutBucketReplicationWithContextFunc func(v aws.Context, putBucketReplicationInput *s3.PutBucketReplicationInput, options ...request.Option) (*s3.PutBucketReplicationOutput, error)
 
 	// PutBucketRequestPaymentFunc mocks the PutBucketRequestPayment method.
 	PutBucketRequestPaymentFunc func(putBucketRequestPaymentInput *s3.PutBucketRequestPaymentInput) (*s3.PutBucketRequestPaymentOutput, error)
@@ -1769,7 +1769,7 @@ type MockS3API struct {
 	PutBucketRequestPaymentRequestFunc func(putBucketRequestPaymentInput *s3.PutBucketRequestPaymentInput) (*request.Request, *s3.PutBucketRequestPaymentOutput)
 
 	// PutBucketRequestPaymentWithContextFunc mocks the PutBucketRequestPaymentWithContext method.
-	PutBucketRequestPaymentWithContextFunc func(contextMoqParam context.Context, putBucketRequestPaymentInput *s3.PutBucketRequestPaymentInput, options ...request.Option) (*s3.PutBucketRequestPaymentOutput, error)
+	PutBucketRequestPaymentWithContextFunc func(v aws.Context, putBucketRequestPaymentInput *s3.PutBucketRequestPaymentInput, options ...request.Option) (*s3.PutBucketRequestPaymentOutput, error)
 
 	// PutBucketTaggingFunc mocks the PutBucketTagging method.
 	PutBucketTaggingFunc func(putBucketTaggingInput *s3.PutBucketTaggingInput) (*s3.PutBucketTaggingOutput, error)
@@ -1778,7 +1778,7 @@ type MockS3API struct {
 	PutBucketTaggingRequestFunc func(putBucketTaggingInput *s3.PutBucketTaggingInput) (*request.Request, *s3.PutBucketTaggingOutput)
 
 	// PutBucketTaggingWithContextFunc mocks the PutBucketTaggingWithContext method.
-	PutBucketTaggingWithContextFunc func(contextMoqParam context.Context, putBucketTaggingInput *s3.PutBucketTaggingInput, options ...request.Option) (*s3.PutBucketTaggingOutput, error)
+	PutBucketTaggingWithContextFunc func(v aws.Context, putBucketTaggingInput *s3.PutBucketTaggingInput, options ...request.Option) (*s3.PutBucketTaggingOutput, error)
 
 	// PutBucketVersioningFunc mocks the PutBucketVersioning method.
 	PutBucketVersioningFunc func(putBucketVersioningInput *s3.PutBucketVersioningInput) (*s3.PutBucketVersioningOutput, error)
@@ -1787,7 +1787,7 @@ type MockS3API struct {
 	PutBucketVersioningRequestFunc func(putBucketVersioningInput *s3.PutBucketVersioningInput) (*request.Request, *s3.PutBucketVersioningOutput)
 
 	// PutBucketVersioningWithContextFunc mocks the PutBucketVersioningWithContext method.
-	PutBucketVersioningWithContextFunc func(contextMoqParam context.Context, putBucketVersioningInput *s3.PutBucketVersioningInput, options ...request.Option) (*s3.PutBucketVersioningOutput, error)
+	PutBucketVersioningWithContextFunc func(v aws.Context, putBucketVersioningInput *s3.PutBucketVersioningInput, options ...request.Option) (*s3.PutBucketVersioningOutput, error)
 
 	// PutBucketWebsiteFunc mocks the PutBucketWebsite method.
 	PutBucketWebsiteFunc func(putBucketWebsiteInput *s3.PutBucketWebsiteInput) (*s3.PutBucketWebsiteOutput, error)
@@ -1796,7 +1796,7 @@ type MockS3API struct {
 	PutBucketWebsiteRequestFunc func(putBucketWebsiteInput *s3.PutBucketWebsiteInput) (*request.Request, *s3.PutBucketWebsiteOutput)
 
 	// PutBucketWebsiteWithContextFunc mocks the PutBucketWebsiteWithContext method.
-	PutBucketWebsiteWithContextFunc func(contextMoqParam context.Context, putBucketWebsiteInput *s3.PutBucketWebsiteInput, options ...request.Option) (*s3.PutBucketWebsiteOutput, error)
+	PutBucketWebsiteWithContextFunc func(v aws.Context, putBucketWebsiteInput *s3.PutBucketWebsiteInput, options ...request.Option) (*s3.PutBucketWebsiteOutput, error)
 
 	// PutObjectFunc mocks the PutObject method.
 	PutObjectFunc func(putObjectInput *s3.PutObjectInput) (*s3.PutObjectOutput, error)
@@ -1808,7 +1808,7 @@ type MockS3API struct {
 	PutObjectAclRequestFunc func(putObjectAclInput *s3.PutObjectAclInput) (*request.Request, *s3.PutObjectAclOutput)
 
 	// PutObjectAclWithContextFunc mocks the PutObjectAclWithContext method.
-	PutObjectAclWithContextFunc func(contextMoqParam context.Context, putObjectAclInput *s3.PutObjectAclInput, options ...request.Option) (*s3.PutObjectAclOutput, error)
+	PutObjectAclWithContextFunc func(v aws.Context, putObjectAclInput *s3.PutObjectAclInput, options ...request.Option) (*s3.PutObjectAclOutput, error)
 
 	// PutObjectLegalHoldFunc mocks the PutObjectLegalHold method.
 	PutObjectLegalHoldFunc func(putObjectLegalHoldInput *s3.PutObjectLegalHoldInput) (*s3.PutObjectLegalHoldOutput, error)
@@ -1817,7 +1817,7 @@ type MockS3API struct {
 	PutObjectLegalHoldRequestFunc func(putObjectLegalHoldInput *s3.PutObjectLegalHoldInput) (*request.Request, *s3.PutObjectLegalHoldOutput)
 
 	// PutObjectLegalHoldWithContextFunc mocks the PutObjectLegalHoldWithContext method.
-	PutObjectLegalHoldWithContextFunc func(contextMoqParam context.Context, putObjectLegalHoldInput *s3.PutObjectLegalHoldInput, options ...request.Option) (*s3.PutObjectLegalHoldOutput, error)
+	PutObjectLegalHoldWithContextFunc func(v aws.Context, putObjectLegalHoldInput *s3.PutObjectLegalHoldInput, options ...request.Option) (*s3.PutObjectLegalHoldOutput, error)
 
 	// PutObjectLockConfigurationFunc mocks the PutObjectLockConfiguration method.
 	PutObjectLockConfigurationFunc func(putObjectLockConfigurationInput *s3.PutObjectLockConfigurationInput) (*s3.PutObjectLockConfigurationOutput, error)
@@ -1826,7 +1826,7 @@ type MockS3API struct {
 	PutObjectLockConfigurationRequestFunc func(putObjectLockConfigurationInput *s3.PutObjectLockConfigurationInput) (*request.Request, *s3.PutObjectLockConfigurationOutput)
 
 	// PutObjectLockConfigurationWithContextFunc mocks the PutObjectLockConfigurationWithContext method.
-	PutObjectLockConfigurationWithContextFunc func(contextMoqParam context.Context, putObjectLockConfigurationInput *s3.PutObjectLockConfigurationInput, options ...request.Option) (*s3.PutObjectLockConfigurationOutput, error)
+	PutObjectLockConfigurationWithContextFunc func(v aws.Context, putObjectLockConfigurationInput *s3.PutObjectLockConfigurationInput, options ...request.Option) (*s3.PutObjectLockConfigurationOutput, error)
 
 	// PutObjectRequestFunc mocks the PutObjectRequest method.
 	PutObjectRequestFunc func(putObjectInput *s3.PutObjectInput) (*request.Request, *s3.PutObjectOutput)
@@ -1838,7 +1838,7 @@ type MockS3API struct {
 	PutObjectRetentionRequestFunc func(putObjectRetentionInput *s3.PutObjectRetentionInput) (*request.Request, *s3.PutObjectRetentionOutput)
 
 	// PutObjectRetentionWithContextFunc mocks the PutObjectRetentionWithContext method.
-	PutObjectRetentionWithContextFunc func(contextMoqParam context.Context, putObjectRetentionInput *s3.PutObjectRetentionInput, options ...request.Option) (*s3.PutObjectRetentionOutput, error)
+	PutObjectRetentionWithContextFunc func(v aws.Context, putObjectRetentionInput *s3.PutObjectRetentionInput, options ...request.Option) (*s3.PutObjectRetentionOutput, error)
 
 	// PutObjectTaggingFunc mocks the PutObjectTagging method.
 	PutObjectTaggingFunc func(putObjectTaggingInput *s3.PutObjectTaggingInput) (*s3.PutObjectTaggingOutput, error)
@@ -1847,10 +1847,10 @@ type MockS3API struct {
 	PutObjectTaggingRequestFunc func(putObjectTaggingInput *s3.PutObjectTaggingInput) (*request.Request, *s3.PutObjectTaggingOutput)
 
 	// PutObjectTaggingWithContextFunc mocks the PutObjectTaggingWithContext method.
-	PutObjectTaggingWithContextFunc func(contextMoqParam context.Context, putObjectTaggingInput *s3.PutObjectTaggingInput, options ...request.Option) (*s3.PutObjectTaggingOutput, error)
+	PutObjectTaggingWithContextFunc func(v aws.Context, putObjectTaggingInput *s3.PutObjectTaggingInput, options ...request.Option) (*s3.PutObjectTaggingOutput, error)
 
 	// PutObjectWithContextFunc mocks the PutObjectWithContext method.
-	PutObjectWithContextFunc func(contextMoqParam context.Context, putObjectInput *s3.PutObjectInput, options ...request.Option) (*s3.PutObjectOutput, error)
+	PutObjectWithContextFunc func(v aws.Context, putObjectInput *s3.PutObjectInput, options ...request.Option) (*s3.PutObjectOutput, error)
 
 	// PutPublicAccessBlockFunc mocks the PutPublicAccessBlock method.
 	PutPublicAccessBlockFunc func(putPublicAccessBlockInput *s3.PutPublicAccessBlockInput) (*s3.PutPublicAccessBlockOutput, error)
@@ -1859,7 +1859,7 @@ type MockS3API struct {
 	PutPublicAccessBlockRequestFunc func(putPublicAccessBlockInput *s3.PutPublicAccessBlockInput) (*request.Request, *s3.PutPublicAccessBlockOutput)
 
 	// PutPublicAccessBlockWithContextFunc mocks the PutPublicAccessBlockWithContext method.
-	PutPublicAccessBlockWithContextFunc func(contextMoqParam context.Context, putPublicAccessBlockInput *s3.PutPublicAccessBlockInput, options ...request.Option) (*s3.PutPublicAccessBlockOutput, error)
+	PutPublicAccessBlockWithContextFunc func(v aws.Context, putPublicAccessBlockInput *s3.PutPublicAccessBlockInput, options ...request.Option) (*s3.PutPublicAccessBlockOutput, error)
 
 	// RestoreObjectFunc mocks the RestoreObject method.
 	RestoreObjectFunc func(restoreObjectInput *s3.RestoreObjectInput) (*s3.RestoreObjectOutput, error)
@@ -1868,7 +1868,7 @@ type MockS3API struct {
 	RestoreObjectRequestFunc func(restoreObjectInput *s3.RestoreObjectInput) (*request.Request, *s3.RestoreObjectOutput)
 
 	// RestoreObjectWithContextFunc mocks the RestoreObjectWithContext method.
-	RestoreObjectWithContextFunc func(contextMoqParam context.Context, restoreObjectInput *s3.RestoreObjectInput, options ...request.Option) (*s3.RestoreObjectOutput, error)
+	RestoreObjectWithContextFunc func(v aws.Context, restoreObjectInput *s3.RestoreObjectInput, options ...request.Option) (*s3.RestoreObjectOutput, error)
 
 	// SelectObjectContentFunc mocks the SelectObjectContent method.
 	SelectObjectContentFunc func(selectObjectContentInput *s3.SelectObjectContentInput) (*s3.SelectObjectContentOutput, error)
@@ -1877,7 +1877,7 @@ type MockS3API struct {
 	SelectObjectContentRequestFunc func(selectObjectContentInput *s3.SelectObjectContentInput) (*request.Request, *s3.SelectObjectContentOutput)
 
 	// SelectObjectContentWithContextFunc mocks the SelectObjectContentWithContext method.
-	SelectObjectContentWithContextFunc func(contextMoqParam context.Context, selectObjectContentInput *s3.SelectObjectContentInput, options ...request.Option) (*s3.SelectObjectContentOutput, error)
+	SelectObjectContentWithContextFunc func(v aws.Context, selectObjectContentInput *s3.SelectObjectContentInput, options ...request.Option) (*s3.SelectObjectContentOutput, error)
 
 	// UploadPartFunc mocks the UploadPart method.
 	UploadPartFunc func(uploadPartInput *s3.UploadPartInput) (*s3.UploadPartOutput, error)
@@ -1889,37 +1889,37 @@ type MockS3API struct {
 	UploadPartCopyRequestFunc func(uploadPartCopyInput *s3.UploadPartCopyInput) (*request.Request, *s3.UploadPartCopyOutput)
 
 	// UploadPartCopyWithContextFunc mocks the UploadPartCopyWithContext method.
-	UploadPartCopyWithContextFunc func(contextMoqParam context.Context, uploadPartCopyInput *s3.UploadPartCopyInput, options ...request.Option) (*s3.UploadPartCopyOutput, error)
+	UploadPartCopyWithContextFunc func(v aws.Context, uploadPartCopyInput *s3.UploadPartCopyInput, options ...request.Option) (*s3.UploadPartCopyOutput, error)
 
 	// UploadPartRequestFunc mocks the UploadPartRequest method.
 	UploadPartRequestFunc func(uploadPartInput *s3.UploadPartInput) (*request.Request, *s3.UploadPartOutput)
 
 	// UploadPartWithContextFunc mocks the UploadPartWithContext method.
-	UploadPartWithContextFunc func(contextMoqParam context.Context, uploadPartInput *s3.UploadPartInput, options ...request.Option) (*s3.UploadPartOutput, error)
+	UploadPartWithContextFunc func(v aws.Context, uploadPartInput *s3.UploadPartInput, options ...request.Option) (*s3.UploadPartOutput, error)
 
 	// WaitUntilBucketExistsFunc mocks the WaitUntilBucketExists method.
 	WaitUntilBucketExistsFunc func(headBucketInput *s3.HeadBucketInput) error
 
 	// WaitUntilBucketExistsWithContextFunc mocks the WaitUntilBucketExistsWithContext method.
-	WaitUntilBucketExistsWithContextFunc func(contextMoqParam context.Context, headBucketInput *s3.HeadBucketInput, waiterOptions ...request.WaiterOption) error
+	WaitUntilBucketExistsWithContextFunc func(v aws.Context, headBucketInput *s3.HeadBucketInput, waiterOptions ...request.WaiterOption) error
 
 	// WaitUntilBucketNotExistsFunc mocks the WaitUntilBucketNotExists method.
 	WaitUntilBucketNotExistsFunc func(headBucketInput *s3.HeadBucketInput) error
 
 	// WaitUntilBucketNotExistsWithContextFunc mocks the WaitUntilBucketNotExistsWithContext method.
-	WaitUntilBucketNotExistsWithContextFunc func(contextMoqParam context.Context, headBucketInput *s3.HeadBucketInput, waiterOptions ...request.WaiterOption) error
+	WaitUntilBucketNotExistsWithContextFunc func(v aws.Context, headBucketInput *s3.HeadBucketInput, waiterOptions ...request.WaiterOption) error
 
 	// WaitUntilObjectExistsFunc mocks the WaitUntilObjectExists method.
 	WaitUntilObjectExistsFunc func(headObjectInput *s3.HeadObjectInput) error
 
 	// WaitUntilObjectExistsWithContextFunc mocks the WaitUntilObjectExistsWithContext method.
-	WaitUntilObjectExistsWithContextFunc func(contextMoqParam context.Context, headObjectInput *s3.HeadObjectInput, waiterOptions ...request.WaiterOption) error
+	WaitUntilObjectExistsWithContextFunc func(v aws.Context, headObjectInput *s3.HeadObjectInput, waiterOptions ...request.WaiterOption) error
 
 	// WaitUntilObjectNotExistsFunc mocks the WaitUntilObjectNotExists method.
 	WaitUntilObjectNotExistsFunc func(headObjectInput *s3.HeadObjectInput) error
 
 	// WaitUntilObjectNotExistsWithContextFunc mocks the WaitUntilObjectNotExistsWithContext method.
-	WaitUntilObjectNotExistsWithContextFunc func(contextMoqParam context.Context, headObjectInput *s3.HeadObjectInput, waiterOptions ...request.WaiterOption) error
+	WaitUntilObjectNotExistsWithContextFunc func(v aws.Context, headObjectInput *s3.HeadObjectInput, waiterOptions ...request.WaiterOption) error
 
 	// WriteGetObjectResponseFunc mocks the WriteGetObjectResponse method.
 	WriteGetObjectResponseFunc func(writeGetObjectResponseInput *s3.WriteGetObjectResponseInput) (*s3.WriteGetObjectResponseOutput, error)
@@ -1928,7 +1928,7 @@ type MockS3API struct {
 	WriteGetObjectResponseRequestFunc func(writeGetObjectResponseInput *s3.WriteGetObjectResponseInput) (*request.Request, *s3.WriteGetObjectResponseOutput)
 
 	// WriteGetObjectResponseWithContextFunc mocks the WriteGetObjectResponseWithContext method.
-	WriteGetObjectResponseWithContextFunc func(contextMoqParam context.Context, writeGetObjectResponseInput *s3.WriteGetObjectResponseInput, options ...request.Option) (*s3.WriteGetObjectResponseOutput, error)
+	WriteGetObjectResponseWithContextFunc func(v aws.Context, writeGetObjectResponseInput *s3.WriteGetObjectResponseInput, options ...request.Option) (*s3.WriteGetObjectResponseOutput, error)
 
 	// calls tracks calls to the methods.
 	calls struct {
@@ -1944,8 +1944,8 @@ type MockS3API struct {
 		}
 		// AbortMultipartUploadWithContext holds details about calls to the AbortMultipartUploadWithContext method.
 		AbortMultipartUploadWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// AbortMultipartUploadInput is the abortMultipartUploadInput argument value.
 			AbortMultipartUploadInput *s3.AbortMultipartUploadInput
 			// Options is the options argument value.
@@ -1963,8 +1963,8 @@ type MockS3API struct {
 		}
 		// CompleteMultipartUploadWithContext holds details about calls to the CompleteMultipartUploadWithContext method.
 		CompleteMultipartUploadWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// CompleteMultipartUploadInput is the completeMultipartUploadInput argument value.
 			CompleteMultipartUploadInput *s3.CompleteMultipartUploadInput
 			// Options is the options argument value.
@@ -1982,8 +1982,8 @@ type MockS3API struct {
 		}
 		// CopyObjectWithContext holds details about calls to the CopyObjectWithContext method.
 		CopyObjectWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// CopyObjectInput is the copyObjectInput argument value.
 			CopyObjectInput *s3.CopyObjectInput
 			// Options is the options argument value.
@@ -2001,8 +2001,8 @@ type MockS3API struct {
 		}
 		// CreateBucketWithContext holds details about calls to the CreateBucketWithContext method.
 		CreateBucketWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// CreateBucketInput is the createBucketInput argument value.
 			CreateBucketInput *s3.CreateBucketInput
 			// Options is the options argument value.
@@ -2020,8 +2020,8 @@ type MockS3API struct {
 		}
 		// CreateMultipartUploadWithContext holds details about calls to the CreateMultipartUploadWithContext method.
 		CreateMultipartUploadWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// CreateMultipartUploadInput is the createMultipartUploadInput argument value.
 			CreateMultipartUploadInput *s3.CreateMultipartUploadInput
 			// Options is the options argument value.
@@ -2039,8 +2039,8 @@ type MockS3API struct {
 		}
 		// CreateSessionWithContext holds details about calls to the CreateSessionWithContext method.
 		CreateSessionWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// CreateSessionInput is the createSessionInput argument value.
 			CreateSessionInput *s3.CreateSessionInput
 			// Options is the options argument value.
@@ -2063,8 +2063,8 @@ type MockS3API struct {
 		}
 		// DeleteBucketAnalyticsConfigurationWithContext holds details about calls to the DeleteBucketAnalyticsConfigurationWithContext method.
 		DeleteBucketAnalyticsConfigurationWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// DeleteBucketAnalyticsConfigurationInput is the deleteBucketAnalyticsConfigurationInput argument value.
 			DeleteBucketAnalyticsConfigurationInput *s3.DeleteBucketAnalyticsConfigurationInput
 			// Options is the options argument value.
@@ -2082,8 +2082,8 @@ type MockS3API struct {
 		}
 		// DeleteBucketCorsWithContext holds details about calls to the DeleteBucketCorsWithContext method.
 		DeleteBucketCorsWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// DeleteBucketCorsInput is the deleteBucketCorsInput argument value.
 			DeleteBucketCorsInput *s3.DeleteBucketCorsInput
 			// Options is the options argument value.
@@ -2101,8 +2101,8 @@ type MockS3API struct {
 		}
 		// DeleteBucketEncryptionWithContext holds details about calls to the DeleteBucketEncryptionWithContext method.
 		DeleteBucketEncryptionWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// DeleteBucketEncryptionInput is the deleteBucketEncryptionInput argument value.
 			DeleteBucketEncryptionInput *s3.DeleteBucketEncryptionInput
 			// Options is the options argument value.
@@ -2120,8 +2120,8 @@ type MockS3API struct {
 		}
 		// DeleteBucketIntelligentTieringConfigurationWithContext holds details about calls to the DeleteBucketIntelligentTieringConfigurationWithContext method.
 		DeleteBucketIntelligentTieringConfigurationWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// DeleteBucketIntelligentTieringConfigurationInput is the deleteBucketIntelligentTieringConfigurationInput argument value.
 			DeleteBucketIntelligentTieringConfigurationInput *s3.DeleteBucketIntelligentTieringConfigurationInput
 			// Options is the options argument value.
@@ -2139,8 +2139,8 @@ type MockS3API struct {
 		}
 		// DeleteBucketInventoryConfigurationWithContext holds details about calls to the DeleteBucketInventoryConfigurationWithContext method.
 		DeleteBucketInventoryConfigurationWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// DeleteBucketInventoryConfigurationInput is the deleteBucketInventoryConfigurationInput argument value.
 			DeleteBucketInventoryConfigurationInput *s3.DeleteBucketInventoryConfigurationInput
 			// Options is the options argument value.
@@ -2158,8 +2158,8 @@ type MockS3API struct {
 		}
 		// DeleteBucketLifecycleWithContext holds details about calls to the DeleteBucketLifecycleWithContext method.
 		DeleteBucketLifecycleWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// DeleteBucketLifecycleInput is the deleteBucketLifecycleInput argument value.
 			DeleteBucketLifecycleInput *s3.DeleteBucketLifecycleInput
 			// Options is the options argument value.
@@ -2177,8 +2177,8 @@ type MockS3API struct {
 		}
 		// DeleteBucketMetricsConfigurationWithContext holds details about calls to the DeleteBucketMetricsConfigurationWithContext method.
 		DeleteBucketMetricsConfigurationWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// DeleteBucketMetricsConfigurationInput is the deleteBucketMetricsConfigurationInput argument value.
 			DeleteBucketMetricsConfigurationInput *s3.DeleteBucketMetricsConfigurationInput
 			// Options is the options argument value.
@@ -2196,8 +2196,8 @@ type MockS3API struct {
 		}
 		// DeleteBucketOwnershipControlsWithContext holds details about calls to the DeleteBucketOwnershipControlsWithContext method.
 		DeleteBucketOwnershipControlsWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// DeleteBucketOwnershipControlsInput is the deleteBucketOwnershipControlsInput argument value.
 			DeleteBucketOwnershipControlsInput *s3.DeleteBucketOwnershipControlsInput
 			// Options is the options argument value.
@@ -2215,8 +2215,8 @@ type MockS3API struct {
 		}
 		// DeleteBucketPolicyWithContext holds details about calls to the DeleteBucketPolicyWithContext method.
 		DeleteBucketPolicyWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// DeleteBucketPolicyInput is the deleteBucketPolicyInput argument value.
 			DeleteBucketPolicyInput *s3.DeleteBucketPolicyInput
 			// Options is the options argument value.
@@ -2234,8 +2234,8 @@ type MockS3API struct {
 		}
 		// DeleteBucketReplicationWithContext holds details about calls to the DeleteBucketReplicationWithContext method.
 		DeleteBucketReplicationWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// DeleteBucketReplicationInput is the deleteBucketReplicationInput argument value.
 			DeleteBucketReplicationInput *s3.DeleteBucketReplicationInput
 			// Options is the options argument value.
@@ -2258,8 +2258,8 @@ type MockS3API struct {
 		}
 		// DeleteBucketTaggingWithContext holds details about calls to the DeleteBucketTaggingWithContext method.
 		DeleteBucketTaggingWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// DeleteBucketTaggingInput is the deleteBucketTaggingInput argument value.
 			DeleteBucketTaggingInput *s3.DeleteBucketTaggingInput
 			// Options is the options argument value.
@@ -2277,8 +2277,8 @@ type MockS3API struct {
 		}
 		// DeleteBucketWebsiteWithContext holds details about calls to the DeleteBucketWebsiteWithContext method.
 		DeleteBucketWebsiteWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// DeleteBucketWebsiteInput is the deleteBucketWebsiteInput argument value.
 			DeleteBucketWebsiteInput *s3.DeleteBucketWebsiteInput
 			// Options is the options argument value.
@@ -2286,8 +2286,8 @@ type MockS3API struct {
 		}
 		// DeleteBucketWithContext holds details about calls to the DeleteBucketWithContext method.
 		DeleteBucketWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// DeleteBucketInput is the deleteBucketInput argument value.
 			DeleteBucketInput *s3.DeleteBucketInput
 			// Options is the options argument value.
@@ -2315,8 +2315,8 @@ type MockS3API struct {
 		}
 		// DeleteObjectTaggingWithContext holds details about calls to the DeleteObjectTaggingWithContext method.
 		DeleteObjectTaggingWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// DeleteObjectTaggingInput is the deleteObjectTaggingInput argument value.
 			DeleteObjectTaggingInput *s3.DeleteObjectTaggingInput
 			// Options is the options argument value.
@@ -2324,8 +2324,8 @@ type MockS3API struct {
 		}
 		// DeleteObjectWithContext holds details about calls to the DeleteObjectWithContext method.
 		DeleteObjectWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// DeleteObjectInput is the deleteObjectInput argument value.
 			DeleteObjectInput *s3.DeleteObjectInput
 			// Options is the options argument value.
@@ -2343,8 +2343,8 @@ type MockS3API struct {
 		}
 		// DeleteObjectsWithContext holds details about calls to the DeleteObjectsWithContext method.
 		DeleteObjectsWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// DeleteObjectsInput is the deleteObjectsInput argument value.
 			DeleteObjectsInput *s3.DeleteObjectsInput
 			// Options is the options argument value.
@@ -2362,8 +2362,8 @@ type MockS3API struct {
 		}
 		// DeletePublicAccessBlockWithContext holds details about calls to the DeletePublicAccessBlockWithContext method.
 		DeletePublicAccessBlockWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// DeletePublicAccessBlockInput is the deletePublicAccessBlockInput argument value.
 			DeletePublicAccessBlockInput *s3.DeletePublicAccessBlockInput
 			// Options is the options argument value.
@@ -2381,8 +2381,8 @@ type MockS3API struct {
 		}
 		// GetBucketAccelerateConfigurationWithContext holds details about calls to the GetBucketAccelerateConfigurationWithContext method.
 		GetBucketAccelerateConfigurationWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// GetBucketAccelerateConfigurationInput is the getBucketAccelerateConfigurationInput argument value.
 			GetBucketAccelerateConfigurationInput *s3.GetBucketAccelerateConfigurationInput
 			// Options is the options argument value.
@@ -2400,8 +2400,8 @@ type MockS3API struct {
 		}
 		// GetBucketAclWithContext holds details about calls to the GetBucketAclWithContext method.
 		GetBucketAclWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// GetBucketAclInput is the getBucketAclInput argument value.
 			GetBucketAclInput *s3.GetBucketAclInput
 			// Options is the options argument value.
@@ -2419,8 +2419,8 @@ type MockS3API struct {
 		}
 		// GetBucketAnalyticsConfigurationWithContext holds details about calls to the GetBucketAnalyticsConfigurationWithContext method.
 		GetBucketAnalyticsConfigurationWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// GetBucketAnalyticsConfigurationInput is the getBucketAnalyticsConfigurationInput argument value.
 			GetBucketAnalyticsConfigurationInput *s3.GetBucketAnalyticsConfigurationInput
 			// Options is the options argument value.
@@ -2438,8 +2438,8 @@ type MockS3API struct {
 		}
 		// GetBucketCorsWithContext holds details about calls to the GetBucketCorsWithContext method.
 		GetBucketCorsWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// GetBucketCorsInput is the getBucketCorsInput argument value.
 			GetBucketCorsInput *s3.GetBucketCorsInput
 			// Options is the options argument value.
@@ -2457,8 +2457,8 @@ type MockS3API struct {
 		}
 		// GetBucketEncryptionWithContext holds details about calls to the GetBucketEncryptionWithContext method.
 		GetBucketEncryptionWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// GetBucketEncryptionInput is the getBucketEncryptionInput argument value.
 			GetBucketEncryptionInput *s3.GetBucketEncryptionInput
 			// Options is the options argument value.
@@ -2476,8 +2476,8 @@ type MockS3API struct {
 		}
 		// GetBucketIntelligentTieringConfigurationWithContext holds details about calls to the GetBucketIntelligentTieringConfigurationWithContext method.
 		GetBucketIntelligentTieringConfigurationWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// GetBucketIntelligentTieringConfigurationInput is the getBucketIntelligentTieringConfigurationInput argument value.
 			GetBucketIntelligentTieringConfigurationInput *s3.GetBucketIntelligentTieringConfigurationInput
 			// Options is the options argument value.
@@ -2495,8 +2495,8 @@ type MockS3API struct {
 		}
 		// GetBucketInventoryConfigurationWithContext holds details about calls to the GetBucketInventoryConfigurationWithContext method.
 		GetBucketInventoryConfigurationWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// GetBucketInventoryConfigurationInput is the getBucketInventoryConfigurationInput argument value.
 			GetBucketInventoryConfigurationInput *s3.GetBucketInventoryConfigurationInput
 			// Options is the options argument value.
@@ -2519,8 +2519,8 @@ type MockS3API struct {
 		}
 		// GetBucketLifecycleConfigurationWithContext holds details about calls to the GetBucketLifecycleConfigurationWithContext method.
 		GetBucketLifecycleConfigurationWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// GetBucketLifecycleConfigurationInput is the getBucketLifecycleConfigurationInput argument value.
 			GetBucketLifecycleConfigurationInput *s3.GetBucketLifecycleConfigurationInput
 			// Options is the options argument value.
@@ -2533,8 +2533,8 @@ type MockS3API struct {
 		}
 		// GetBucketLifecycleWithContext holds details about calls to the GetBucketLifecycleWithContext method.
 		GetBucketLifecycleWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// GetBucketLifecycleInput is the getBucketLifecycleInput argument value.
 			GetBucketLifecycleInput *s3.GetBucketLifecycleInput
 			// Options is the options argument value.
@@ -2552,8 +2552,8 @@ type MockS3API struct {
 		}
 		// GetBucketLocationWithContext holds details about calls to the GetBucketLocationWithContext method.
 		GetBucketLocationWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// GetBucketLocationInput is the getBucketLocationInput argument value.
 			GetBucketLocationInput *s3.GetBucketLocationInput
 			// Options is the options argument value.
@@ -2571,8 +2571,8 @@ type MockS3API struct {
 		}
 		// GetBucketLoggingWithContext holds details about calls to the GetBucketLoggingWithContext method.
 		GetBucketLoggingWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// GetBucketLoggingInput is the getBucketLoggingInput argument value.
 			GetBucketLoggingInput *s3.GetBucketLoggingInput
 			// Options is the options argument value.
@@ -2590,8 +2590,8 @@ type MockS3API struct {
 		}
 		// GetBucketMetricsConfigurationWithContext holds details about calls to the GetBucketMetricsConfigurationWithContext method.
 		GetBucketMetricsConfigurationWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// GetBucketMetricsConfigurationInput is the getBucketMetricsConfigurationInput argument value.
 			GetBucketMetricsConfigurationInput *s3.GetBucketMetricsConfigurationInput
 			// Options is the options argument value.
@@ -2614,8 +2614,8 @@ type MockS3API struct {
 		}
 		// GetBucketNotificationConfigurationWithContext holds details about calls to the GetBucketNotificationConfigurationWithContext method.
 		GetBucketNotificationConfigurationWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// GetBucketNotificationConfigurationRequest is the getBucketNotificationConfigurationRequest argument value.
 			GetBucketNotificationConfigurationRequest *s3.GetBucketNotificationConfigurationRequest
 			// Options is the options argument value.
@@ -2628,8 +2628,8 @@ type MockS3API struct {
 		}
 		// GetBucketNotificationWithContext holds details about calls to the GetBucketNotificationWithContext method.
 		GetBucketNotificationWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// GetBucketNotificationConfigurationRequest is the getBucketNotificationConfigurationRequest argument value.
 			GetBucketNotificationConfigurationRequest *s3.GetBucketNotificationConfigurationRequest
 			// Options is the options argument value.
@@ -2647,8 +2647,8 @@ type MockS3API struct {
 		}
 		// GetBucketOwnershipControlsWithContext holds details about calls to the GetBucketOwnershipControlsWithContext method.
 		GetBucketOwnershipControlsWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// GetBucketOwnershipControlsInput is the getBucketOwnershipControlsInput argument value.
 			GetBucketOwnershipControlsInput *s3.GetBucketOwnershipControlsInput
 			// Options is the options argument value.
@@ -2676,8 +2676,8 @@ type MockS3API struct {
 		}
 		// GetBucketPolicyStatusWithContext holds details about calls to the GetBucketPolicyStatusWithContext method.
 		GetBucketPolicyStatusWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// GetBucketPolicyStatusInput is the getBucketPolicyStatusInput argument value.
 			GetBucketPolicyStatusInput *s3.GetBucketPolicyStatusInput
 			// Options is the options argument value.
@@ -2685,8 +2685,8 @@ type MockS3API struct {
 		}
 		// GetBucketPolicyWithContext holds details about calls to the GetBucketPolicyWithContext method.
 		GetBucketPolicyWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// GetBucketPolicyInput is the getBucketPolicyInput argument value.
 			GetBucketPolicyInput *s3.GetBucketPolicyInput
 			// Options is the options argument value.
@@ -2704,8 +2704,8 @@ type MockS3API struct {
 		}
 		// GetBucketReplicationWithContext holds details about calls to the GetBucketReplicationWithContext method.
 		GetBucketReplicationWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// GetBucketReplicationInput is the getBucketReplicationInput argument value.
 			GetBucketReplicationInput *s3.GetBucketReplicationInput
 			// Options is the options argument value.
@@ -2723,8 +2723,8 @@ type MockS3API struct {
 		}
 		// GetBucketRequestPaymentWithContext holds details about calls to the GetBucketRequestPaymentWithContext method.
 		GetBucketRequestPaymentWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// GetBucketRequestPaymentInput is the getBucketRequestPaymentInput argument value.
 			GetBucketRequestPaymentInput *s3.GetBucketRequestPaymentInput
 			// Options is the options argument value.
@@ -2742,8 +2742,8 @@ type MockS3API struct {
 		}
 		// GetBucketTaggingWithContext holds details about calls to the GetBucketTaggingWithContext method.
 		GetBucketTaggingWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// GetBucketTaggingInput is the getBucketTaggingInput argument value.
 			GetBucketTaggingInput *s3.GetBucketTaggingInput
 			// Options is the options argument value.
@@ -2761,8 +2761,8 @@ type MockS3API struct {
 		}
 		// GetBucketVersioningWithContext holds details about calls to the GetBucketVersioningWithContext method.
 		GetBucketVersioningWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// GetBucketVersioningInput is the getBucketVersioningInput argument value.
 			GetBucketVersioningInput *s3.GetBucketVersioningInput
 			// Options is the options argument value.
@@ -2780,8 +2780,8 @@ type MockS3API struct {
 		}
 		// GetBucketWebsiteWithContext holds details about calls to the GetBucketWebsiteWithContext method.
 		GetBucketWebsiteWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// GetBucketWebsiteInput is the getBucketWebsiteInput argument value.
 			GetBucketWebsiteInput *s3.GetBucketWebsiteInput
 			// Options is the options argument value.
@@ -2804,8 +2804,8 @@ type MockS3API struct {
 		}
 		// GetObjectAclWithContext holds details about calls to the GetObjectAclWithContext method.
 		GetObjectAclWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// GetObjectAclInput is the getObjectAclInput argument value.
 			GetObjectAclInput *s3.GetObjectAclInput
 			// Options is the options argument value.
@@ -2823,8 +2823,8 @@ type MockS3API struct {
 		}
 		// GetObjectAttributesWithContext holds details about calls to the GetObjectAttributesWithContext method.
 		GetObjectAttributesWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// GetObjectAttributesInput is the getObjectAttributesInput argument value.
 			GetObjectAttributesInput *s3.GetObjectAttributesInput
 			// Options is the options argument value.
@@ -2842,8 +2842,8 @@ type MockS3API struct {
 		}
 		// GetObjectLegalHoldWithContext holds details about calls to the GetObjectLegalHoldWithContext method.
 		GetObjectLegalHoldWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// GetObjectLegalHoldInput is the getObjectLegalHoldInput argument value.
 			GetObjectLegalHoldInput *s3.GetObjectLegalHoldInput
 			// Options is the options argument value.
@@ -2861,8 +2861,8 @@ type MockS3API struct {
 		}
 		// GetObjectLockConfigurationWithContext holds details about calls to the GetObjectLockConfigurationWithContext method.
 		GetObjectLockConfigurationWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// GetObjectLockConfigurationInput is the getObjectLockConfigurationInput argument value.
 			GetObjectLockConfigurationInput *s3.GetObjectLockConfigurationInput
 			// Options is the options argument value.
@@ -2885,8 +2885,8 @@ type MockS3API struct {
 		}
 		// GetObjectRetentionWithContext holds details about calls to the GetObjectRetentionWithContext method.
 		GetObjectRetentionWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// GetObjectRetentionInput is the getObjectRetentionInput argument value.
 			GetObjectRetentionInput *s3.GetObjectRetentionInput
 			// Options is the options argument value.
@@ -2904,8 +2904,8 @@ type MockS3API struct {
 		}
 		// GetObjectTaggingWithContext holds details about calls to the GetObjectTaggingWithContext method.
 		GetObjectTaggingWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// GetObjectTaggingInput is the getObjectTaggingInput argument value.
 			GetObjectTaggingInput *s3.GetObjectTaggingInput
 			// Options is the options argument value.
@@ -2923,8 +2923,8 @@ type MockS3API struct {
 		}
 		// GetObjectTorrentWithContext holds details about calls to the GetObjectTorrentWithContext method.
 		GetObjectTorrentWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// GetObjectTorrentInput is the getObjectTorrentInput argument value.
 			GetObjectTorrentInput *s3.GetObjectTorrentInput
 			// Options is the options argument value.
@@ -2932,8 +2932,8 @@ type MockS3API struct {
 		}
 		// GetObjectWithContext holds details about calls to the GetObjectWithContext method.
 		GetObjectWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// GetObjectInput is the getObjectInput argument value.
 			GetObjectInput *s3.GetObjectInput
 			// Options is the options argument value.
@@ -2951,8 +2951,8 @@ type MockS3API struct {
 		}
 		// GetPublicAccessBlockWithContext holds details about calls to the GetPublicAccessBlockWithContext method.
 		GetPublicAccessBlockWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// GetPublicAccessBlockInput is the getPublicAccessBlockInput argument value.
 			GetPublicAccessBlockInput *s3.GetPublicAccessBlockInput
 			// Options is the options argument value.
@@ -2970,8 +2970,8 @@ type MockS3API struct {
 		}
 		// HeadBucketWithContext holds details about calls to the HeadBucketWithContext method.
 		HeadBucketWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// HeadBucketInput is the headBucketInput argument value.
 			HeadBucketInput *s3.HeadBucketInput
 			// Options is the options argument value.
@@ -2989,8 +2989,8 @@ type MockS3API struct {
 		}
 		// HeadObjectWithContext holds details about calls to the HeadObjectWithContext method.
 		HeadObjectWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// HeadObjectInput is the headObjectInput argument value.
 			HeadObjectInput *s3.HeadObjectInput
 			// Options is the options argument value.
@@ -3008,8 +3008,8 @@ type MockS3API struct {
 		}
 		// ListBucketAnalyticsConfigurationsWithContext holds details about calls to the ListBucketAnalyticsConfigurationsWithContext method.
 		ListBucketAnalyticsConfigurationsWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// ListBucketAnalyticsConfigurationsInput is the listBucketAnalyticsConfigurationsInput argument value.
 			ListBucketAnalyticsConfigurationsInput *s3.ListBucketAnalyticsConfigurationsInput
 			// Options is the options argument value.
@@ -3027,8 +3027,8 @@ type MockS3API struct {
 		}
 		// ListBucketIntelligentTieringConfigurationsWithContext holds details about calls to the ListBucketIntelligentTieringConfigurationsWithContext method.
 		ListBucketIntelligentTieringConfigurationsWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// ListBucketIntelligentTieringConfigurationsInput is the listBucketIntelligentTieringConfigurationsInput argument value.
 			ListBucketIntelligentTieringConfigurationsInput *s3.ListBucketIntelligentTieringConfigurationsInput
 			// Options is the options argument value.
@@ -3046,8 +3046,8 @@ type MockS3API struct {
 		}
 		// ListBucketInventoryConfigurationsWithContext holds details about calls to the ListBucketInventoryConfigurationsWithContext method.
 		ListBucketInventoryConfigurationsWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// ListBucketInventoryConfigurationsInput is the listBucketInventoryConfigurationsInput argument value.
 			ListBucketInventoryConfigurationsInput *s3.ListBucketInventoryConfigurationsInput
 			// Options is the options argument value.
@@ -3065,8 +3065,8 @@ type MockS3API struct {
 		}
 		// ListBucketMetricsConfigurationsWithContext holds details about calls to the ListBucketMetricsConfigurationsWithContext method.
 		ListBucketMetricsConfigurationsWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// ListBucketMetricsConfigurationsInput is the listBucketMetricsConfigurationsInput argument value.
 			ListBucketMetricsConfigurationsInput *s3.ListBucketMetricsConfigurationsInput
 			// Options is the options argument value.
@@ -3084,8 +3084,8 @@ type MockS3API struct {
 		}
 		// ListBucketsWithContext holds details about calls to the ListBucketsWithContext method.
 		ListBucketsWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// ListBucketsInput is the listBucketsInput argument value.
 			ListBucketsInput *s3.ListBucketsInput
 			// Options is the options argument value.
@@ -3105,8 +3105,8 @@ type MockS3API struct {
 		}
 		// ListDirectoryBucketsPagesWithContext holds details about calls to the ListDirectoryBucketsPagesWithContext method.
 		ListDirectoryBucketsPagesWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// ListDirectoryBucketsInput is the listDirectoryBucketsInput argument value.
 			ListDirectoryBucketsInput *s3.ListDirectoryBucketsInput
 			// Fn is the fn argument value.
@@ -3121,8 +3121,8 @@ type MockS3API struct {
 		}
 		// ListDirectoryBucketsWithContext holds details about calls to the ListDirectoryBucketsWithContext method.
 		ListDirectoryBucketsWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// ListDirectoryBucketsInput is the listDirectoryBucketsInput argument value.
 			ListDirectoryBucketsInput *s3.ListDirectoryBucketsInput
 			// Options is the options argument value.
@@ -3142,8 +3142,8 @@ type MockS3API struct {
 		}
 		// ListMultipartUploadsPagesWithContext holds details about calls to the ListMultipartUploadsPagesWithContext method.
 		ListMultipartUploadsPagesWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// ListMultipartUploadsInput is the listMultipartUploadsInput argument value.
 			ListMultipartUploadsInput *s3.ListMultipartUploadsInput
 			// Fn is the fn argument value.
@@ -3158,8 +3158,8 @@ type MockS3API struct {
 		}
 		// ListMultipartUploadsWithContext holds details about calls to the ListMultipartUploadsWithContext method.
 		ListMultipartUploadsWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// ListMultipartUploadsInput is the listMultipartUploadsInput argument value.
 			ListMultipartUploadsInput *s3.ListMultipartUploadsInput
 			// Options is the options argument value.
@@ -3179,8 +3179,8 @@ type MockS3API struct {
 		}
 		// ListObjectVersionsPagesWithContext holds details about calls to the ListObjectVersionsPagesWithContext method.
 		ListObjectVersionsPagesWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// ListObjectVersionsInput is the listObjectVersionsInput argument value.
 			ListObjectVersionsInput *s3.ListObjectVersionsInput
 			// Fn is the fn argument value.
@@ -3195,8 +3195,8 @@ type MockS3API struct {
 		}
 		// ListObjectVersionsWithContext holds details about calls to the ListObjectVersionsWithContext method.
 		ListObjectVersionsWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// ListObjectVersionsInput is the listObjectVersionsInput argument value.
 			ListObjectVersionsInput *s3.ListObjectVersionsInput
 			// Options is the options argument value.
@@ -3216,8 +3216,8 @@ type MockS3API struct {
 		}
 		// ListObjectsPagesWithContext holds details about calls to the ListObjectsPagesWithContext method.
 		ListObjectsPagesWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// ListObjectsInput is the listObjectsInput argument value.
 			ListObjectsInput *s3.ListObjectsInput
 			// Fn is the fn argument value.
@@ -3244,8 +3244,8 @@ type MockS3API struct {
 		}
 		// ListObjectsV2PagesWithContext holds details about calls to the ListObjectsV2PagesWithContext method.
 		ListObjectsV2PagesWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// ListObjectsV2Input is the listObjectsV2Input argument value.
 			ListObjectsV2Input *s3.ListObjectsV2Input
 			// Fn is the fn argument value.
@@ -3260,8 +3260,8 @@ type MockS3API struct {
 		}
 		// ListObjectsV2WithContext holds details about calls to the ListObjectsV2WithContext method.
 		ListObjectsV2WithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// ListObjectsV2Input is the listObjectsV2Input argument value.
 			ListObjectsV2Input *s3.ListObjectsV2Input
 			// Options is the options argument value.
@@ -3269,8 +3269,8 @@ type MockS3API struct {
 		}
 		// ListObjectsWithContext holds details about calls to the ListObjectsWithContext method.
 		ListObjectsWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// ListObjectsInput is the listObjectsInput argument value.
 			ListObjectsInput *s3.ListObjectsInput
 			// Options is the options argument value.
@@ -3290,8 +3290,8 @@ type MockS3API struct {
 		}
 		// ListPartsPagesWithContext holds details about calls to the ListPartsPagesWithContext method.
 		ListPartsPagesWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// ListPartsInput is the listPartsInput argument value.
 			ListPartsInput *s3.ListPartsInput
 			// Fn is the fn argument value.
@@ -3306,8 +3306,8 @@ type MockS3API struct {
 		}
 		// ListPartsWithContext holds details about calls to the ListPartsWithContext method.
 		ListPartsWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// ListPartsInput is the listPartsInput argument value.
 			ListPartsInput *s3.ListPartsInput
 			// Options is the options argument value.
@@ -3325,8 +3325,8 @@ type MockS3API struct {
 		}
 		// PutBucketAccelerateConfigurationWithContext holds details about calls to the PutBucketAccelerateConfigurationWithContext method.
 		PutBucketAccelerateConfigurationWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// PutBucketAccelerateConfigurationInput is the putBucketAccelerateConfigurationInput argument value.
 			PutBucketAccelerateConfigurationInput *s3.PutBucketAccelerateConfigurationInput
 			// Options is the options argument value.
@@ -3344,8 +3344,8 @@ type MockS3API struct {
 		}
 		// PutBucketAclWithContext holds details about calls to the PutBucketAclWithContext method.
 		PutBucketAclWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// PutBucketAclInput is the putBucketAclInput argument value.
 			PutBucketAclInput *s3.PutBucketAclInput
 			// Options is the options argument value.
@@ -3363,8 +3363,8 @@ type MockS3API struct {
 		}
 		// PutBucketAnalyticsConfigurationWithContext holds details about calls to the PutBucketAnalyticsConfigurationWithContext method.
 		PutBucketAnalyticsConfigurationWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// PutBucketAnalyticsConfigurationInput is the putBucketAnalyticsConfigurationInput argument value.
 			PutBucketAnalyticsConfigurationInput *s3.PutBucketAnalyticsConfigurationInput
 			// Options is the options argument value.
@@ -3382,8 +3382,8 @@ type MockS3API struct {
 		}
 		// PutBucketCorsWithContext holds details about calls to the PutBucketCorsWithContext method.
 		PutBucketCorsWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// PutBucketCorsInput is the putBucketCorsInput argument value.
 			PutBucketCorsInput *s3.PutBucketCorsInput
 			// Options is the options argument value.
@@ -3401,8 +3401,8 @@ type MockS3API struct {
 		}
 		// PutBucketEncryptionWithContext holds details about calls to the PutBucketEncryptionWithContext method.
 		PutBucketEncryptionWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// PutBucketEncryptionInput is the putBucketEncryptionInput argument value.
 			PutBucketEncryptionInput *s3.PutBucketEncryptionInput
 			// Options is the options argument value.
@@ -3420,8 +3420,8 @@ type MockS3API struct {
 		}
 		// PutBucketIntelligentTieringConfigurationWithContext holds details about calls to the PutBucketIntelligentTieringConfigurationWithContext method.
 		PutBucketIntelligentTieringConfigurationWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// PutBucketIntelligentTieringConfigurationInput is the putBucketIntelligentTieringConfigurationInput argument value.
 			PutBucketIntelligentTieringConfigurationInput *s3.PutBucketIntelligentTieringConfigurationInput
 			// Options is the options argument value.
@@ -3439,8 +3439,8 @@ type MockS3API struct {
 		}
 		// PutBucketInventoryConfigurationWithContext holds details about calls to the PutBucketInventoryConfigurationWithContext method.
 		PutBucketInventoryConfigurationWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// PutBucketInventoryConfigurationInput is the putBucketInventoryConfigurationInput argument value.
 			PutBucketInventoryConfigurationInput *s3.PutBucketInventoryConfigurationInput
 			// Options is the options argument value.
@@ -3463,8 +3463,8 @@ type MockS3API struct {
 		}
 		// PutBucketLifecycleConfigurationWithContext holds details about calls to the PutBucketLifecycleConfigurationWithContext method.
 		PutBucketLifecycleConfigurationWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// PutBucketLifecycleConfigurationInput is the putBucketLifecycleConfigurationInput argument value.
 			PutBucketLifecycleConfigurationInput *s3.PutBucketLifecycleConfigurationInput
 			// Options is the options argument value.
@@ -3477,8 +3477,8 @@ type MockS3API struct {
 		}
 		// PutBucketLifecycleWithContext holds details about calls to the PutBucketLifecycleWithContext method.
 		PutBucketLifecycleWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// PutBucketLifecycleInput is the putBucketLifecycleInput argument value.
 			PutBucketLifecycleInput *s3.PutBucketLifecycleInput
 			// Options is the options argument value.
@@ -3496,8 +3496,8 @@ type MockS3API struct {
 		}
 		// PutBucketLoggingWithContext holds details about calls to the PutBucketLoggingWithContext method.
 		PutBucketLoggingWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// PutBucketLoggingInput is the putBucketLoggingInput argument value.
 			PutBucketLoggingInput *s3.PutBucketLoggingInput
 			// Options is the options argument value.
@@ -3515,8 +3515,8 @@ type MockS3API struct {
 		}
 		// PutBucketMetricsConfigurationWithContext holds details about calls to the PutBucketMetricsConfigurationWithContext method.
 		PutBucketMetricsConfigurationWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// PutBucketMetricsConfigurationInput is the putBucketMetricsConfigurationInput argument value.
 			PutBucketMetricsConfigurationInput *s3.PutBucketMetricsConfigurationInput
 			// Options is the options argument value.
@@ -3539,8 +3539,8 @@ type MockS3API struct {
 		}
 		// PutBucketNotificationConfigurationWithContext holds details about calls to the PutBucketNotificationConfigurationWithContext method.
 		PutBucketNotificationConfigurationWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// PutBucketNotificationConfigurationInput is the putBucketNotificationConfigurationInput argument value.
 			PutBucketNotificationConfigurationInput *s3.PutBucketNotificationConfigurationInput
 			// Options is the options argument value.
@@ -3553,8 +3553,8 @@ type MockS3API struct {
 		}
 		// PutBucketNotificationWithContext holds details about calls to the PutBucketNotificationWithContext method.
 		PutBucketNotificationWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// PutBucketNotificationInput is the putBucketNotificationInput argument value.
 			PutBucketNotificationInput *s3.PutBucketNotificationInput
 			// Options is the options argument value.
@@ -3572,8 +3572,8 @@ type MockS3API struct {
 		}
 		// PutBucketOwnershipControlsWithContext holds details about calls to the PutBucketOwnershipControlsWithContext method.
 		PutBucketOwnershipControlsWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// PutBucketOwnershipControlsInput is the putBucketOwnershipControlsInput argument value.
 			PutBucketOwnershipControlsInput *s3.PutBucketOwnershipControlsInput
 			// Options is the options argument value.
@@ -3591,8 +3591,8 @@ type MockS3API struct {
 		}
 		// PutBucketPolicyWithContext holds details about calls to the PutBucketPolicyWithContext method.
 		PutBucketPolicyWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// PutBucketPolicyInput is the putBucketPolicyInput argument value.
 			PutBucketPolicyInput *s3.PutBucketPolicyInput
 			// Options is the options argument value.
@@ -3610,8 +3610,8 @@ type MockS3API struct {
 		}
 		// PutBucketReplicationWithContext holds details about calls to the PutBucketReplicationWithContext method.
 		PutBucketReplicationWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// PutBucketReplicationInput is the putBucketReplicationInput argument value.
 			PutBucketReplicationInput *s3.PutBucketReplicationInput
 			// Options is the options argument value.
@@ -3629,8 +3629,8 @@ type MockS3API struct {
 		}
 		// PutBucketRequestPaymentWithContext holds details about calls to the PutBucketRequestPaymentWithContext method.
 		PutBucketRequestPaymentWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// PutBucketRequestPaymentInput is the putBucketRequestPaymentInput argument value.
 			PutBucketRequestPaymentInput *s3.PutBucketRequestPaymentInput
 			// Options is the options argument value.
@@ -3648,8 +3648,8 @@ type MockS3API struct {
 		}
 		// PutBucketTaggingWithContext holds details about calls to the PutBucketTaggingWithContext method.
 		PutBucketTaggingWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// PutBucketTaggingInput is the putBucketTaggingInput argument value.
 			PutBucketTaggingInput *s3.PutBucketTaggingInput
 			// Options is the options argument value.
@@ -3667,8 +3667,8 @@ type MockS3API struct {
 		}
 		// PutBucketVersioningWithContext holds details about calls to the PutBucketVersioningWithContext method.
 		PutBucketVersioningWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// PutBucketVersioningInput is the putBucketVersioningInput argument value.
 			PutBucketVersioningInput *s3.PutBucketVersioningInput
 			// Options is the options argument value.
@@ -3686,8 +3686,8 @@ type MockS3API struct {
 		}
 		// PutBucketWebsiteWithContext holds details about calls to the PutBucketWebsiteWithContext method.
 		PutBucketWebsiteWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// PutBucketWebsiteInput is the putBucketWebsiteInput argument value.
 			PutBucketWebsiteInput *s3.PutBucketWebsiteInput
 			// Options is the options argument value.
@@ -3710,8 +3710,8 @@ type MockS3API struct {
 		}
 		// PutObjectAclWithContext holds details about calls to the PutObjectAclWithContext method.
 		PutObjectAclWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// PutObjectAclInput is the putObjectAclInput argument value.
 			PutObjectAclInput *s3.PutObjectAclInput
 			// Options is the options argument value.
@@ -3729,8 +3729,8 @@ type MockS3API struct {
 		}
 		// PutObjectLegalHoldWithContext holds details about calls to the PutObjectLegalHoldWithContext method.
 		PutObjectLegalHoldWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// PutObjectLegalHoldInput is the putObjectLegalHoldInput argument value.
 			PutObjectLegalHoldInput *s3.PutObjectLegalHoldInput
 			// Options is the options argument value.
@@ -3748,8 +3748,8 @@ type MockS3API struct {
 		}
 		// PutObjectLockConfigurationWithContext holds details about calls to the PutObjectLockConfigurationWithContext method.
 		PutObjectLockConfigurationWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// PutObjectLockConfigurationInput is the putObjectLockConfigurationInput argument value.
 			PutObjectLockConfigurationInput *s3.PutObjectLockConfigurationInput
 			// Options is the options argument value.
@@ -3772,8 +3772,8 @@ type MockS3API struct {
 		}
 		// PutObjectRetentionWithContext holds details about calls to the PutObjectRetentionWithContext method.
 		PutObjectRetentionWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// PutObjectRetentionInput is the putObjectRetentionInput argument value.
 			PutObjectRetentionInput *s3.PutObjectRetentionInput
 			// Options is the options argument value.
@@ -3791,8 +3791,8 @@ type MockS3API struct {
 		}
 		// PutObjectTaggingWithContext holds details about calls to the PutObjectTaggingWithContext method.
 		PutObjectTaggingWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// PutObjectTaggingInput is the putObjectTaggingInput argument value.
 			PutObjectTaggingInput *s3.PutObjectTaggingInput
 			// Options is the options argument value.
@@ -3800,8 +3800,8 @@ type MockS3API struct {
 		}
 		// PutObjectWithContext holds details about calls to the PutObjectWithContext method.
 		PutObjectWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// PutObjectInput is the putObjectInput argument value.
 			PutObjectInput *s3.PutObjectInput
 			// Options is the options argument value.
@@ -3819,8 +3819,8 @@ type MockS3API struct {
 		}
 		// PutPublicAccessBlockWithContext holds details about calls to the PutPublicAccessBlockWithContext method.
 		PutPublicAccessBlockWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// PutPublicAccessBlockInput is the putPublicAccessBlockInput argument value.
 			PutPublicAccessBlockInput *s3.PutPublicAccessBlockInput
 			// Options is the options argument value.
@@ -3838,8 +3838,8 @@ type MockS3API struct {
 		}
 		// RestoreObjectWithContext holds details about calls to the RestoreObjectWithContext method.
 		RestoreObjectWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// RestoreObjectInput is the restoreObjectInput argument value.
 			RestoreObjectInput *s3.RestoreObjectInput
 			// Options is the options argument value.
@@ -3857,8 +3857,8 @@ type MockS3API struct {
 		}
 		// SelectObjectContentWithContext holds details about calls to the SelectObjectContentWithContext method.
 		SelectObjectContentWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// SelectObjectContentInput is the selectObjectContentInput argument value.
 			SelectObjectContentInput *s3.SelectObjectContentInput
 			// Options is the options argument value.
@@ -3881,8 +3881,8 @@ type MockS3API struct {
 		}
 		// UploadPartCopyWithContext holds details about calls to the UploadPartCopyWithContext method.
 		UploadPartCopyWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// UploadPartCopyInput is the uploadPartCopyInput argument value.
 			UploadPartCopyInput *s3.UploadPartCopyInput
 			// Options is the options argument value.
@@ -3895,8 +3895,8 @@ type MockS3API struct {
 		}
 		// UploadPartWithContext holds details about calls to the UploadPartWithContext method.
 		UploadPartWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// UploadPartInput is the uploadPartInput argument value.
 			UploadPartInput *s3.UploadPartInput
 			// Options is the options argument value.
@@ -3909,8 +3909,8 @@ type MockS3API struct {
 		}
 		// WaitUntilBucketExistsWithContext holds details about calls to the WaitUntilBucketExistsWithContext method.
 		WaitUntilBucketExistsWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// HeadBucketInput is the headBucketInput argument value.
 			HeadBucketInput *s3.HeadBucketInput
 			// WaiterOptions is the waiterOptions argument value.
@@ -3923,8 +3923,8 @@ type MockS3API struct {
 		}
 		// WaitUntilBucketNotExistsWithContext holds details about calls to the WaitUntilBucketNotExistsWithContext method.
 		WaitUntilBucketNotExistsWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// HeadBucketInput is the headBucketInput argument value.
 			HeadBucketInput *s3.HeadBucketInput
 			// WaiterOptions is the waiterOptions argument value.
@@ -3937,8 +3937,8 @@ type MockS3API struct {
 		}
 		// WaitUntilObjectExistsWithContext holds details about calls to the WaitUntilObjectExistsWithContext method.
 		WaitUntilObjectExistsWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// HeadObjectInput is the headObjectInput argument value.
 			HeadObjectInput *s3.HeadObjectInput
 			// WaiterOptions is the waiterOptions argument value.
@@ -3951,8 +3951,8 @@ type MockS3API struct {
 		}
 		// WaitUntilObjectNotExistsWithContext holds details about calls to the WaitUntilObjectNotExistsWithContext method.
 		WaitUntilObjectNotExistsWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// HeadObjectInput is the headObjectInput argument value.
 			HeadObjectInput *s3.HeadObjectInput
 			// WaiterOptions is the waiterOptions argument value.
@@ -3970,8 +3970,8 @@ type MockS3API struct {
 		}
 		// WriteGetObjectResponseWithContext holds details about calls to the WriteGetObjectResponseWithContext method.
 		WriteGetObjectResponseWithContext []struct {
-			// ContextMoqParam is the contextMoqParam argument value.
-			ContextMoqParam context.Context
+			// V is the v argument value.
+			V aws.Context
 			// WriteGetObjectResponseInput is the writeGetObjectResponseInput argument value.
 			WriteGetObjectResponseInput *s3.WriteGetObjectResponseInput
 			// Options is the options argument value.
@@ -4362,23 +4362,23 @@ func (mock *MockS3API) AbortMultipartUploadRequestCalls() []struct {
 }
 
 // AbortMultipartUploadWithContext calls AbortMultipartUploadWithContextFunc.
-func (mock *MockS3API) AbortMultipartUploadWithContext(contextMoqParam context.Context, abortMultipartUploadInput *s3.AbortMultipartUploadInput, options ...request.Option) (*s3.AbortMultipartUploadOutput, error) {
+func (mock *MockS3API) AbortMultipartUploadWithContext(v aws.Context, abortMultipartUploadInput *s3.AbortMultipartUploadInput, options ...request.Option) (*s3.AbortMultipartUploadOutput, error) {
 	if mock.AbortMultipartUploadWithContextFunc == nil {
 		panic("MockS3API.AbortMultipartUploadWithContextFunc: method is nil but S3API.AbortMultipartUploadWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam           context.Context
+		V                         aws.Context
 		AbortMultipartUploadInput *s3.AbortMultipartUploadInput
 		Options                   []request.Option
 	}{
-		ContextMoqParam:           contextMoqParam,
+		V:                         v,
 		AbortMultipartUploadInput: abortMultipartUploadInput,
 		Options:                   options,
 	}
 	mock.lockAbortMultipartUploadWithContext.Lock()
 	mock.calls.AbortMultipartUploadWithContext = append(mock.calls.AbortMultipartUploadWithContext, callInfo)
 	mock.lockAbortMultipartUploadWithContext.Unlock()
-	return mock.AbortMultipartUploadWithContextFunc(contextMoqParam, abortMultipartUploadInput, options...)
+	return mock.AbortMultipartUploadWithContextFunc(v, abortMultipartUploadInput, options...)
 }
 
 // AbortMultipartUploadWithContextCalls gets all the calls that were made to AbortMultipartUploadWithContext.
@@ -4386,12 +4386,12 @@ func (mock *MockS3API) AbortMultipartUploadWithContext(contextMoqParam context.C
 //
 //	len(mockedS3API.AbortMultipartUploadWithContextCalls())
 func (mock *MockS3API) AbortMultipartUploadWithContextCalls() []struct {
-	ContextMoqParam           context.Context
+	V                         aws.Context
 	AbortMultipartUploadInput *s3.AbortMultipartUploadInput
 	Options                   []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam           context.Context
+		V                         aws.Context
 		AbortMultipartUploadInput *s3.AbortMultipartUploadInput
 		Options                   []request.Option
 	}
@@ -4466,23 +4466,23 @@ func (mock *MockS3API) CompleteMultipartUploadRequestCalls() []struct {
 }
 
 // CompleteMultipartUploadWithContext calls CompleteMultipartUploadWithContextFunc.
-func (mock *MockS3API) CompleteMultipartUploadWithContext(contextMoqParam context.Context, completeMultipartUploadInput *s3.CompleteMultipartUploadInput, options ...request.Option) (*s3.CompleteMultipartUploadOutput, error) {
+func (mock *MockS3API) CompleteMultipartUploadWithContext(v aws.Context, completeMultipartUploadInput *s3.CompleteMultipartUploadInput, options ...request.Option) (*s3.CompleteMultipartUploadOutput, error) {
 	if mock.CompleteMultipartUploadWithContextFunc == nil {
 		panic("MockS3API.CompleteMultipartUploadWithContextFunc: method is nil but S3API.CompleteMultipartUploadWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam              context.Context
+		V                            aws.Context
 		CompleteMultipartUploadInput *s3.CompleteMultipartUploadInput
 		Options                      []request.Option
 	}{
-		ContextMoqParam:              contextMoqParam,
+		V:                            v,
 		CompleteMultipartUploadInput: completeMultipartUploadInput,
 		Options:                      options,
 	}
 	mock.lockCompleteMultipartUploadWithContext.Lock()
 	mock.calls.CompleteMultipartUploadWithContext = append(mock.calls.CompleteMultipartUploadWithContext, callInfo)
 	mock.lockCompleteMultipartUploadWithContext.Unlock()
-	return mock.CompleteMultipartUploadWithContextFunc(contextMoqParam, completeMultipartUploadInput, options...)
+	return mock.CompleteMultipartUploadWithContextFunc(v, completeMultipartUploadInput, options...)
 }
 
 // CompleteMultipartUploadWithContextCalls gets all the calls that were made to CompleteMultipartUploadWithContext.
@@ -4490,12 +4490,12 @@ func (mock *MockS3API) CompleteMultipartUploadWithContext(contextMoqParam contex
 //
 //	len(mockedS3API.CompleteMultipartUploadWithContextCalls())
 func (mock *MockS3API) CompleteMultipartUploadWithContextCalls() []struct {
-	ContextMoqParam              context.Context
+	V                            aws.Context
 	CompleteMultipartUploadInput *s3.CompleteMultipartUploadInput
 	Options                      []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam              context.Context
+		V                            aws.Context
 		CompleteMultipartUploadInput *s3.CompleteMultipartUploadInput
 		Options                      []request.Option
 	}
@@ -4570,23 +4570,23 @@ func (mock *MockS3API) CopyObjectRequestCalls() []struct {
 }
 
 // CopyObjectWithContext calls CopyObjectWithContextFunc.
-func (mock *MockS3API) CopyObjectWithContext(contextMoqParam context.Context, copyObjectInput *s3.CopyObjectInput, options ...request.Option) (*s3.CopyObjectOutput, error) {
+func (mock *MockS3API) CopyObjectWithContext(v aws.Context, copyObjectInput *s3.CopyObjectInput, options ...request.Option) (*s3.CopyObjectOutput, error) {
 	if mock.CopyObjectWithContextFunc == nil {
 		panic("MockS3API.CopyObjectWithContextFunc: method is nil but S3API.CopyObjectWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam context.Context
+		V               aws.Context
 		CopyObjectInput *s3.CopyObjectInput
 		Options         []request.Option
 	}{
-		ContextMoqParam: contextMoqParam,
+		V:               v,
 		CopyObjectInput: copyObjectInput,
 		Options:         options,
 	}
 	mock.lockCopyObjectWithContext.Lock()
 	mock.calls.CopyObjectWithContext = append(mock.calls.CopyObjectWithContext, callInfo)
 	mock.lockCopyObjectWithContext.Unlock()
-	return mock.CopyObjectWithContextFunc(contextMoqParam, copyObjectInput, options...)
+	return mock.CopyObjectWithContextFunc(v, copyObjectInput, options...)
 }
 
 // CopyObjectWithContextCalls gets all the calls that were made to CopyObjectWithContext.
@@ -4594,12 +4594,12 @@ func (mock *MockS3API) CopyObjectWithContext(contextMoqParam context.Context, co
 //
 //	len(mockedS3API.CopyObjectWithContextCalls())
 func (mock *MockS3API) CopyObjectWithContextCalls() []struct {
-	ContextMoqParam context.Context
+	V               aws.Context
 	CopyObjectInput *s3.CopyObjectInput
 	Options         []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam context.Context
+		V               aws.Context
 		CopyObjectInput *s3.CopyObjectInput
 		Options         []request.Option
 	}
@@ -4674,23 +4674,23 @@ func (mock *MockS3API) CreateBucketRequestCalls() []struct {
 }
 
 // CreateBucketWithContext calls CreateBucketWithContextFunc.
-func (mock *MockS3API) CreateBucketWithContext(contextMoqParam context.Context, createBucketInput *s3.CreateBucketInput, options ...request.Option) (*s3.CreateBucketOutput, error) {
+func (mock *MockS3API) CreateBucketWithContext(v aws.Context, createBucketInput *s3.CreateBucketInput, options ...request.Option) (*s3.CreateBucketOutput, error) {
 	if mock.CreateBucketWithContextFunc == nil {
 		panic("MockS3API.CreateBucketWithContextFunc: method is nil but S3API.CreateBucketWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam   context.Context
+		V                 aws.Context
 		CreateBucketInput *s3.CreateBucketInput
 		Options           []request.Option
 	}{
-		ContextMoqParam:   contextMoqParam,
+		V:                 v,
 		CreateBucketInput: createBucketInput,
 		Options:           options,
 	}
 	mock.lockCreateBucketWithContext.Lock()
 	mock.calls.CreateBucketWithContext = append(mock.calls.CreateBucketWithContext, callInfo)
 	mock.lockCreateBucketWithContext.Unlock()
-	return mock.CreateBucketWithContextFunc(contextMoqParam, createBucketInput, options...)
+	return mock.CreateBucketWithContextFunc(v, createBucketInput, options...)
 }
 
 // CreateBucketWithContextCalls gets all the calls that were made to CreateBucketWithContext.
@@ -4698,12 +4698,12 @@ func (mock *MockS3API) CreateBucketWithContext(contextMoqParam context.Context, 
 //
 //	len(mockedS3API.CreateBucketWithContextCalls())
 func (mock *MockS3API) CreateBucketWithContextCalls() []struct {
-	ContextMoqParam   context.Context
+	V                 aws.Context
 	CreateBucketInput *s3.CreateBucketInput
 	Options           []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam   context.Context
+		V                 aws.Context
 		CreateBucketInput *s3.CreateBucketInput
 		Options           []request.Option
 	}
@@ -4778,23 +4778,23 @@ func (mock *MockS3API) CreateMultipartUploadRequestCalls() []struct {
 }
 
 // CreateMultipartUploadWithContext calls CreateMultipartUploadWithContextFunc.
-func (mock *MockS3API) CreateMultipartUploadWithContext(contextMoqParam context.Context, createMultipartUploadInput *s3.CreateMultipartUploadInput, options ...request.Option) (*s3.CreateMultipartUploadOutput, error) {
+func (mock *MockS3API) CreateMultipartUploadWithContext(v aws.Context, createMultipartUploadInput *s3.CreateMultipartUploadInput, options ...request.Option) (*s3.CreateMultipartUploadOutput, error) {
 	if mock.CreateMultipartUploadWithContextFunc == nil {
 		panic("MockS3API.CreateMultipartUploadWithContextFunc: method is nil but S3API.CreateMultipartUploadWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam            context.Context
+		V                          aws.Context
 		CreateMultipartUploadInput *s3.CreateMultipartUploadInput
 		Options                    []request.Option
 	}{
-		ContextMoqParam:            contextMoqParam,
+		V:                          v,
 		CreateMultipartUploadInput: createMultipartUploadInput,
 		Options:                    options,
 	}
 	mock.lockCreateMultipartUploadWithContext.Lock()
 	mock.calls.CreateMultipartUploadWithContext = append(mock.calls.CreateMultipartUploadWithContext, callInfo)
 	mock.lockCreateMultipartUploadWithContext.Unlock()
-	return mock.CreateMultipartUploadWithContextFunc(contextMoqParam, createMultipartUploadInput, options...)
+	return mock.CreateMultipartUploadWithContextFunc(v, createMultipartUploadInput, options...)
 }
 
 // CreateMultipartUploadWithContextCalls gets all the calls that were made to CreateMultipartUploadWithContext.
@@ -4802,12 +4802,12 @@ func (mock *MockS3API) CreateMultipartUploadWithContext(contextMoqParam context.
 //
 //	len(mockedS3API.CreateMultipartUploadWithContextCalls())
 func (mock *MockS3API) CreateMultipartUploadWithContextCalls() []struct {
-	ContextMoqParam            context.Context
+	V                          aws.Context
 	CreateMultipartUploadInput *s3.CreateMultipartUploadInput
 	Options                    []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam            context.Context
+		V                          aws.Context
 		CreateMultipartUploadInput *s3.CreateMultipartUploadInput
 		Options                    []request.Option
 	}
@@ -4882,23 +4882,23 @@ func (mock *MockS3API) CreateSessionRequestCalls() []struct {
 }
 
 // CreateSessionWithContext calls CreateSessionWithContextFunc.
-func (mock *MockS3API) CreateSessionWithContext(contextMoqParam context.Context, createSessionInput *s3.CreateSessionInput, options ...request.Option) (*s3.CreateSessionOutput, error) {
+func (mock *MockS3API) CreateSessionWithContext(v aws.Context, createSessionInput *s3.CreateSessionInput, options ...request.Option) (*s3.CreateSessionOutput, error) {
 	if mock.CreateSessionWithContextFunc == nil {
 		panic("MockS3API.CreateSessionWithContextFunc: method is nil but S3API.CreateSessionWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam    context.Context
+		V                  aws.Context
 		CreateSessionInput *s3.CreateSessionInput
 		Options            []request.Option
 	}{
-		ContextMoqParam:    contextMoqParam,
+		V:                  v,
 		CreateSessionInput: createSessionInput,
 		Options:            options,
 	}
 	mock.lockCreateSessionWithContext.Lock()
 	mock.calls.CreateSessionWithContext = append(mock.calls.CreateSessionWithContext, callInfo)
 	mock.lockCreateSessionWithContext.Unlock()
-	return mock.CreateSessionWithContextFunc(contextMoqParam, createSessionInput, options...)
+	return mock.CreateSessionWithContextFunc(v, createSessionInput, options...)
 }
 
 // CreateSessionWithContextCalls gets all the calls that were made to CreateSessionWithContext.
@@ -4906,12 +4906,12 @@ func (mock *MockS3API) CreateSessionWithContext(contextMoqParam context.Context,
 //
 //	len(mockedS3API.CreateSessionWithContextCalls())
 func (mock *MockS3API) CreateSessionWithContextCalls() []struct {
-	ContextMoqParam    context.Context
+	V                  aws.Context
 	CreateSessionInput *s3.CreateSessionInput
 	Options            []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam    context.Context
+		V                  aws.Context
 		CreateSessionInput *s3.CreateSessionInput
 		Options            []request.Option
 	}
@@ -5018,23 +5018,23 @@ func (mock *MockS3API) DeleteBucketAnalyticsConfigurationRequestCalls() []struct
 }
 
 // DeleteBucketAnalyticsConfigurationWithContext calls DeleteBucketAnalyticsConfigurationWithContextFunc.
-func (mock *MockS3API) DeleteBucketAnalyticsConfigurationWithContext(contextMoqParam context.Context, deleteBucketAnalyticsConfigurationInput *s3.DeleteBucketAnalyticsConfigurationInput, options ...request.Option) (*s3.DeleteBucketAnalyticsConfigurationOutput, error) {
+func (mock *MockS3API) DeleteBucketAnalyticsConfigurationWithContext(v aws.Context, deleteBucketAnalyticsConfigurationInput *s3.DeleteBucketAnalyticsConfigurationInput, options ...request.Option) (*s3.DeleteBucketAnalyticsConfigurationOutput, error) {
 	if mock.DeleteBucketAnalyticsConfigurationWithContextFunc == nil {
 		panic("MockS3API.DeleteBucketAnalyticsConfigurationWithContextFunc: method is nil but S3API.DeleteBucketAnalyticsConfigurationWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam                         context.Context
+		V                                       aws.Context
 		DeleteBucketAnalyticsConfigurationInput *s3.DeleteBucketAnalyticsConfigurationInput
 		Options                                 []request.Option
 	}{
-		ContextMoqParam:                         contextMoqParam,
+		V:                                       v,
 		DeleteBucketAnalyticsConfigurationInput: deleteBucketAnalyticsConfigurationInput,
 		Options:                                 options,
 	}
 	mock.lockDeleteBucketAnalyticsConfigurationWithContext.Lock()
 	mock.calls.DeleteBucketAnalyticsConfigurationWithContext = append(mock.calls.DeleteBucketAnalyticsConfigurationWithContext, callInfo)
 	mock.lockDeleteBucketAnalyticsConfigurationWithContext.Unlock()
-	return mock.DeleteBucketAnalyticsConfigurationWithContextFunc(contextMoqParam, deleteBucketAnalyticsConfigurationInput, options...)
+	return mock.DeleteBucketAnalyticsConfigurationWithContextFunc(v, deleteBucketAnalyticsConfigurationInput, options...)
 }
 
 // DeleteBucketAnalyticsConfigurationWithContextCalls gets all the calls that were made to DeleteBucketAnalyticsConfigurationWithContext.
@@ -5042,12 +5042,12 @@ func (mock *MockS3API) DeleteBucketAnalyticsConfigurationWithContext(contextMoqP
 //
 //	len(mockedS3API.DeleteBucketAnalyticsConfigurationWithContextCalls())
 func (mock *MockS3API) DeleteBucketAnalyticsConfigurationWithContextCalls() []struct {
-	ContextMoqParam                         context.Context
+	V                                       aws.Context
 	DeleteBucketAnalyticsConfigurationInput *s3.DeleteBucketAnalyticsConfigurationInput
 	Options                                 []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam                         context.Context
+		V                                       aws.Context
 		DeleteBucketAnalyticsConfigurationInput *s3.DeleteBucketAnalyticsConfigurationInput
 		Options                                 []request.Option
 	}
@@ -5122,23 +5122,23 @@ func (mock *MockS3API) DeleteBucketCorsRequestCalls() []struct {
 }
 
 // DeleteBucketCorsWithContext calls DeleteBucketCorsWithContextFunc.
-func (mock *MockS3API) DeleteBucketCorsWithContext(contextMoqParam context.Context, deleteBucketCorsInput *s3.DeleteBucketCorsInput, options ...request.Option) (*s3.DeleteBucketCorsOutput, error) {
+func (mock *MockS3API) DeleteBucketCorsWithContext(v aws.Context, deleteBucketCorsInput *s3.DeleteBucketCorsInput, options ...request.Option) (*s3.DeleteBucketCorsOutput, error) {
 	if mock.DeleteBucketCorsWithContextFunc == nil {
 		panic("MockS3API.DeleteBucketCorsWithContextFunc: method is nil but S3API.DeleteBucketCorsWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam       context.Context
+		V                     aws.Context
 		DeleteBucketCorsInput *s3.DeleteBucketCorsInput
 		Options               []request.Option
 	}{
-		ContextMoqParam:       contextMoqParam,
+		V:                     v,
 		DeleteBucketCorsInput: deleteBucketCorsInput,
 		Options:               options,
 	}
 	mock.lockDeleteBucketCorsWithContext.Lock()
 	mock.calls.DeleteBucketCorsWithContext = append(mock.calls.DeleteBucketCorsWithContext, callInfo)
 	mock.lockDeleteBucketCorsWithContext.Unlock()
-	return mock.DeleteBucketCorsWithContextFunc(contextMoqParam, deleteBucketCorsInput, options...)
+	return mock.DeleteBucketCorsWithContextFunc(v, deleteBucketCorsInput, options...)
 }
 
 // DeleteBucketCorsWithContextCalls gets all the calls that were made to DeleteBucketCorsWithContext.
@@ -5146,12 +5146,12 @@ func (mock *MockS3API) DeleteBucketCorsWithContext(contextMoqParam context.Conte
 //
 //	len(mockedS3API.DeleteBucketCorsWithContextCalls())
 func (mock *MockS3API) DeleteBucketCorsWithContextCalls() []struct {
-	ContextMoqParam       context.Context
+	V                     aws.Context
 	DeleteBucketCorsInput *s3.DeleteBucketCorsInput
 	Options               []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam       context.Context
+		V                     aws.Context
 		DeleteBucketCorsInput *s3.DeleteBucketCorsInput
 		Options               []request.Option
 	}
@@ -5226,23 +5226,23 @@ func (mock *MockS3API) DeleteBucketEncryptionRequestCalls() []struct {
 }
 
 // DeleteBucketEncryptionWithContext calls DeleteBucketEncryptionWithContextFunc.
-func (mock *MockS3API) DeleteBucketEncryptionWithContext(contextMoqParam context.Context, deleteBucketEncryptionInput *s3.DeleteBucketEncryptionInput, options ...request.Option) (*s3.DeleteBucketEncryptionOutput, error) {
+func (mock *MockS3API) DeleteBucketEncryptionWithContext(v aws.Context, deleteBucketEncryptionInput *s3.DeleteBucketEncryptionInput, options ...request.Option) (*s3.DeleteBucketEncryptionOutput, error) {
 	if mock.DeleteBucketEncryptionWithContextFunc == nil {
 		panic("MockS3API.DeleteBucketEncryptionWithContextFunc: method is nil but S3API.DeleteBucketEncryptionWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam             context.Context
+		V                           aws.Context
 		DeleteBucketEncryptionInput *s3.DeleteBucketEncryptionInput
 		Options                     []request.Option
 	}{
-		ContextMoqParam:             contextMoqParam,
+		V:                           v,
 		DeleteBucketEncryptionInput: deleteBucketEncryptionInput,
 		Options:                     options,
 	}
 	mock.lockDeleteBucketEncryptionWithContext.Lock()
 	mock.calls.DeleteBucketEncryptionWithContext = append(mock.calls.DeleteBucketEncryptionWithContext, callInfo)
 	mock.lockDeleteBucketEncryptionWithContext.Unlock()
-	return mock.DeleteBucketEncryptionWithContextFunc(contextMoqParam, deleteBucketEncryptionInput, options...)
+	return mock.DeleteBucketEncryptionWithContextFunc(v, deleteBucketEncryptionInput, options...)
 }
 
 // DeleteBucketEncryptionWithContextCalls gets all the calls that were made to DeleteBucketEncryptionWithContext.
@@ -5250,12 +5250,12 @@ func (mock *MockS3API) DeleteBucketEncryptionWithContext(contextMoqParam context
 //
 //	len(mockedS3API.DeleteBucketEncryptionWithContextCalls())
 func (mock *MockS3API) DeleteBucketEncryptionWithContextCalls() []struct {
-	ContextMoqParam             context.Context
+	V                           aws.Context
 	DeleteBucketEncryptionInput *s3.DeleteBucketEncryptionInput
 	Options                     []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam             context.Context
+		V                           aws.Context
 		DeleteBucketEncryptionInput *s3.DeleteBucketEncryptionInput
 		Options                     []request.Option
 	}
@@ -5330,23 +5330,23 @@ func (mock *MockS3API) DeleteBucketIntelligentTieringConfigurationRequestCalls()
 }
 
 // DeleteBucketIntelligentTieringConfigurationWithContext calls DeleteBucketIntelligentTieringConfigurationWithContextFunc.
-func (mock *MockS3API) DeleteBucketIntelligentTieringConfigurationWithContext(contextMoqParam context.Context, deleteBucketIntelligentTieringConfigurationInput *s3.DeleteBucketIntelligentTieringConfigurationInput, options ...request.Option) (*s3.DeleteBucketIntelligentTieringConfigurationOutput, error) {
+func (mock *MockS3API) DeleteBucketIntelligentTieringConfigurationWithContext(v aws.Context, deleteBucketIntelligentTieringConfigurationInput *s3.DeleteBucketIntelligentTieringConfigurationInput, options ...request.Option) (*s3.DeleteBucketIntelligentTieringConfigurationOutput, error) {
 	if mock.DeleteBucketIntelligentTieringConfigurationWithContextFunc == nil {
 		panic("MockS3API.DeleteBucketIntelligentTieringConfigurationWithContextFunc: method is nil but S3API.DeleteBucketIntelligentTieringConfigurationWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam                                  context.Context
+		V                                                aws.Context
 		DeleteBucketIntelligentTieringConfigurationInput *s3.DeleteBucketIntelligentTieringConfigurationInput
 		Options                                          []request.Option
 	}{
-		ContextMoqParam: contextMoqParam,
+		V: v,
 		DeleteBucketIntelligentTieringConfigurationInput: deleteBucketIntelligentTieringConfigurationInput,
 		Options: options,
 	}
 	mock.lockDeleteBucketIntelligentTieringConfigurationWithContext.Lock()
 	mock.calls.DeleteBucketIntelligentTieringConfigurationWithContext = append(mock.calls.DeleteBucketIntelligentTieringConfigurationWithContext, callInfo)
 	mock.lockDeleteBucketIntelligentTieringConfigurationWithContext.Unlock()
-	return mock.DeleteBucketIntelligentTieringConfigurationWithContextFunc(contextMoqParam, deleteBucketIntelligentTieringConfigurationInput, options...)
+	return mock.DeleteBucketIntelligentTieringConfigurationWithContextFunc(v, deleteBucketIntelligentTieringConfigurationInput, options...)
 }
 
 // DeleteBucketIntelligentTieringConfigurationWithContextCalls gets all the calls that were made to DeleteBucketIntelligentTieringConfigurationWithContext.
@@ -5354,12 +5354,12 @@ func (mock *MockS3API) DeleteBucketIntelligentTieringConfigurationWithContext(co
 //
 //	len(mockedS3API.DeleteBucketIntelligentTieringConfigurationWithContextCalls())
 func (mock *MockS3API) DeleteBucketIntelligentTieringConfigurationWithContextCalls() []struct {
-	ContextMoqParam                                  context.Context
+	V                                                aws.Context
 	DeleteBucketIntelligentTieringConfigurationInput *s3.DeleteBucketIntelligentTieringConfigurationInput
 	Options                                          []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam                                  context.Context
+		V                                                aws.Context
 		DeleteBucketIntelligentTieringConfigurationInput *s3.DeleteBucketIntelligentTieringConfigurationInput
 		Options                                          []request.Option
 	}
@@ -5434,23 +5434,23 @@ func (mock *MockS3API) DeleteBucketInventoryConfigurationRequestCalls() []struct
 }
 
 // DeleteBucketInventoryConfigurationWithContext calls DeleteBucketInventoryConfigurationWithContextFunc.
-func (mock *MockS3API) DeleteBucketInventoryConfigurationWithContext(contextMoqParam context.Context, deleteBucketInventoryConfigurationInput *s3.DeleteBucketInventoryConfigurationInput, options ...request.Option) (*s3.DeleteBucketInventoryConfigurationOutput, error) {
+func (mock *MockS3API) DeleteBucketInventoryConfigurationWithContext(v aws.Context, deleteBucketInventoryConfigurationInput *s3.DeleteBucketInventoryConfigurationInput, options ...request.Option) (*s3.DeleteBucketInventoryConfigurationOutput, error) {
 	if mock.DeleteBucketInventoryConfigurationWithContextFunc == nil {
 		panic("MockS3API.DeleteBucketInventoryConfigurationWithContextFunc: method is nil but S3API.DeleteBucketInventoryConfigurationWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam                         context.Context
+		V                                       aws.Context
 		DeleteBucketInventoryConfigurationInput *s3.DeleteBucketInventoryConfigurationInput
 		Options                                 []request.Option
 	}{
-		ContextMoqParam:                         contextMoqParam,
+		V:                                       v,
 		DeleteBucketInventoryConfigurationInput: deleteBucketInventoryConfigurationInput,
 		Options:                                 options,
 	}
 	mock.lockDeleteBucketInventoryConfigurationWithContext.Lock()
 	mock.calls.DeleteBucketInventoryConfigurationWithContext = append(mock.calls.DeleteBucketInventoryConfigurationWithContext, callInfo)
 	mock.lockDeleteBucketInventoryConfigurationWithContext.Unlock()
-	return mock.DeleteBucketInventoryConfigurationWithContextFunc(contextMoqParam, deleteBucketInventoryConfigurationInput, options...)
+	return mock.DeleteBucketInventoryConfigurationWithContextFunc(v, deleteBucketInventoryConfigurationInput, options...)
 }
 
 // DeleteBucketInventoryConfigurationWithContextCalls gets all the calls that were made to DeleteBucketInventoryConfigurationWithContext.
@@ -5458,12 +5458,12 @@ func (mock *MockS3API) DeleteBucketInventoryConfigurationWithContext(contextMoqP
 //
 //	len(mockedS3API.DeleteBucketInventoryConfigurationWithContextCalls())
 func (mock *MockS3API) DeleteBucketInventoryConfigurationWithContextCalls() []struct {
-	ContextMoqParam                         context.Context
+	V                                       aws.Context
 	DeleteBucketInventoryConfigurationInput *s3.DeleteBucketInventoryConfigurationInput
 	Options                                 []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam                         context.Context
+		V                                       aws.Context
 		DeleteBucketInventoryConfigurationInput *s3.DeleteBucketInventoryConfigurationInput
 		Options                                 []request.Option
 	}
@@ -5538,23 +5538,23 @@ func (mock *MockS3API) DeleteBucketLifecycleRequestCalls() []struct {
 }
 
 // DeleteBucketLifecycleWithContext calls DeleteBucketLifecycleWithContextFunc.
-func (mock *MockS3API) DeleteBucketLifecycleWithContext(contextMoqParam context.Context, deleteBucketLifecycleInput *s3.DeleteBucketLifecycleInput, options ...request.Option) (*s3.DeleteBucketLifecycleOutput, error) {
+func (mock *MockS3API) DeleteBucketLifecycleWithContext(v aws.Context, deleteBucketLifecycleInput *s3.DeleteBucketLifecycleInput, options ...request.Option) (*s3.DeleteBucketLifecycleOutput, error) {
 	if mock.DeleteBucketLifecycleWithContextFunc == nil {
 		panic("MockS3API.DeleteBucketLifecycleWithContextFunc: method is nil but S3API.DeleteBucketLifecycleWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam            context.Context
+		V                          aws.Context
 		DeleteBucketLifecycleInput *s3.DeleteBucketLifecycleInput
 		Options                    []request.Option
 	}{
-		ContextMoqParam:            contextMoqParam,
+		V:                          v,
 		DeleteBucketLifecycleInput: deleteBucketLifecycleInput,
 		Options:                    options,
 	}
 	mock.lockDeleteBucketLifecycleWithContext.Lock()
 	mock.calls.DeleteBucketLifecycleWithContext = append(mock.calls.DeleteBucketLifecycleWithContext, callInfo)
 	mock.lockDeleteBucketLifecycleWithContext.Unlock()
-	return mock.DeleteBucketLifecycleWithContextFunc(contextMoqParam, deleteBucketLifecycleInput, options...)
+	return mock.DeleteBucketLifecycleWithContextFunc(v, deleteBucketLifecycleInput, options...)
 }
 
 // DeleteBucketLifecycleWithContextCalls gets all the calls that were made to DeleteBucketLifecycleWithContext.
@@ -5562,12 +5562,12 @@ func (mock *MockS3API) DeleteBucketLifecycleWithContext(contextMoqParam context.
 //
 //	len(mockedS3API.DeleteBucketLifecycleWithContextCalls())
 func (mock *MockS3API) DeleteBucketLifecycleWithContextCalls() []struct {
-	ContextMoqParam            context.Context
+	V                          aws.Context
 	DeleteBucketLifecycleInput *s3.DeleteBucketLifecycleInput
 	Options                    []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam            context.Context
+		V                          aws.Context
 		DeleteBucketLifecycleInput *s3.DeleteBucketLifecycleInput
 		Options                    []request.Option
 	}
@@ -5642,23 +5642,23 @@ func (mock *MockS3API) DeleteBucketMetricsConfigurationRequestCalls() []struct {
 }
 
 // DeleteBucketMetricsConfigurationWithContext calls DeleteBucketMetricsConfigurationWithContextFunc.
-func (mock *MockS3API) DeleteBucketMetricsConfigurationWithContext(contextMoqParam context.Context, deleteBucketMetricsConfigurationInput *s3.DeleteBucketMetricsConfigurationInput, options ...request.Option) (*s3.DeleteBucketMetricsConfigurationOutput, error) {
+func (mock *MockS3API) DeleteBucketMetricsConfigurationWithContext(v aws.Context, deleteBucketMetricsConfigurationInput *s3.DeleteBucketMetricsConfigurationInput, options ...request.Option) (*s3.DeleteBucketMetricsConfigurationOutput, error) {
 	if mock.DeleteBucketMetricsConfigurationWithContextFunc == nil {
 		panic("MockS3API.DeleteBucketMetricsConfigurationWithContextFunc: method is nil but S3API.DeleteBucketMetricsConfigurationWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam                       context.Context
+		V                                     aws.Context
 		DeleteBucketMetricsConfigurationInput *s3.DeleteBucketMetricsConfigurationInput
 		Options                               []request.Option
 	}{
-		ContextMoqParam:                       contextMoqParam,
+		V:                                     v,
 		DeleteBucketMetricsConfigurationInput: deleteBucketMetricsConfigurationInput,
 		Options:                               options,
 	}
 	mock.lockDeleteBucketMetricsConfigurationWithContext.Lock()
 	mock.calls.DeleteBucketMetricsConfigurationWithContext = append(mock.calls.DeleteBucketMetricsConfigurationWithContext, callInfo)
 	mock.lockDeleteBucketMetricsConfigurationWithContext.Unlock()
-	return mock.DeleteBucketMetricsConfigurationWithContextFunc(contextMoqParam, deleteBucketMetricsConfigurationInput, options...)
+	return mock.DeleteBucketMetricsConfigurationWithContextFunc(v, deleteBucketMetricsConfigurationInput, options...)
 }
 
 // DeleteBucketMetricsConfigurationWithContextCalls gets all the calls that were made to DeleteBucketMetricsConfigurationWithContext.
@@ -5666,12 +5666,12 @@ func (mock *MockS3API) DeleteBucketMetricsConfigurationWithContext(contextMoqPar
 //
 //	len(mockedS3API.DeleteBucketMetricsConfigurationWithContextCalls())
 func (mock *MockS3API) DeleteBucketMetricsConfigurationWithContextCalls() []struct {
-	ContextMoqParam                       context.Context
+	V                                     aws.Context
 	DeleteBucketMetricsConfigurationInput *s3.DeleteBucketMetricsConfigurationInput
 	Options                               []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam                       context.Context
+		V                                     aws.Context
 		DeleteBucketMetricsConfigurationInput *s3.DeleteBucketMetricsConfigurationInput
 		Options                               []request.Option
 	}
@@ -5746,23 +5746,23 @@ func (mock *MockS3API) DeleteBucketOwnershipControlsRequestCalls() []struct {
 }
 
 // DeleteBucketOwnershipControlsWithContext calls DeleteBucketOwnershipControlsWithContextFunc.
-func (mock *MockS3API) DeleteBucketOwnershipControlsWithContext(contextMoqParam context.Context, deleteBucketOwnershipControlsInput *s3.DeleteBucketOwnershipControlsInput, options ...request.Option) (*s3.DeleteBucketOwnershipControlsOutput, error) {
+func (mock *MockS3API) DeleteBucketOwnershipControlsWithContext(v aws.Context, deleteBucketOwnershipControlsInput *s3.DeleteBucketOwnershipControlsInput, options ...request.Option) (*s3.DeleteBucketOwnershipControlsOutput, error) {
 	if mock.DeleteBucketOwnershipControlsWithContextFunc == nil {
 		panic("MockS3API.DeleteBucketOwnershipControlsWithContextFunc: method is nil but S3API.DeleteBucketOwnershipControlsWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam                    context.Context
+		V                                  aws.Context
 		DeleteBucketOwnershipControlsInput *s3.DeleteBucketOwnershipControlsInput
 		Options                            []request.Option
 	}{
-		ContextMoqParam:                    contextMoqParam,
+		V:                                  v,
 		DeleteBucketOwnershipControlsInput: deleteBucketOwnershipControlsInput,
 		Options:                            options,
 	}
 	mock.lockDeleteBucketOwnershipControlsWithContext.Lock()
 	mock.calls.DeleteBucketOwnershipControlsWithContext = append(mock.calls.DeleteBucketOwnershipControlsWithContext, callInfo)
 	mock.lockDeleteBucketOwnershipControlsWithContext.Unlock()
-	return mock.DeleteBucketOwnershipControlsWithContextFunc(contextMoqParam, deleteBucketOwnershipControlsInput, options...)
+	return mock.DeleteBucketOwnershipControlsWithContextFunc(v, deleteBucketOwnershipControlsInput, options...)
 }
 
 // DeleteBucketOwnershipControlsWithContextCalls gets all the calls that were made to DeleteBucketOwnershipControlsWithContext.
@@ -5770,12 +5770,12 @@ func (mock *MockS3API) DeleteBucketOwnershipControlsWithContext(contextMoqParam 
 //
 //	len(mockedS3API.DeleteBucketOwnershipControlsWithContextCalls())
 func (mock *MockS3API) DeleteBucketOwnershipControlsWithContextCalls() []struct {
-	ContextMoqParam                    context.Context
+	V                                  aws.Context
 	DeleteBucketOwnershipControlsInput *s3.DeleteBucketOwnershipControlsInput
 	Options                            []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam                    context.Context
+		V                                  aws.Context
 		DeleteBucketOwnershipControlsInput *s3.DeleteBucketOwnershipControlsInput
 		Options                            []request.Option
 	}
@@ -5850,23 +5850,23 @@ func (mock *MockS3API) DeleteBucketPolicyRequestCalls() []struct {
 }
 
 // DeleteBucketPolicyWithContext calls DeleteBucketPolicyWithContextFunc.
-func (mock *MockS3API) DeleteBucketPolicyWithContext(contextMoqParam context.Context, deleteBucketPolicyInput *s3.DeleteBucketPolicyInput, options ...request.Option) (*s3.DeleteBucketPolicyOutput, error) {
+func (mock *MockS3API) DeleteBucketPolicyWithContext(v aws.Context, deleteBucketPolicyInput *s3.DeleteBucketPolicyInput, options ...request.Option) (*s3.DeleteBucketPolicyOutput, error) {
 	if mock.DeleteBucketPolicyWithContextFunc == nil {
 		panic("MockS3API.DeleteBucketPolicyWithContextFunc: method is nil but S3API.DeleteBucketPolicyWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam         context.Context
+		V                       aws.Context
 		DeleteBucketPolicyInput *s3.DeleteBucketPolicyInput
 		Options                 []request.Option
 	}{
-		ContextMoqParam:         contextMoqParam,
+		V:                       v,
 		DeleteBucketPolicyInput: deleteBucketPolicyInput,
 		Options:                 options,
 	}
 	mock.lockDeleteBucketPolicyWithContext.Lock()
 	mock.calls.DeleteBucketPolicyWithContext = append(mock.calls.DeleteBucketPolicyWithContext, callInfo)
 	mock.lockDeleteBucketPolicyWithContext.Unlock()
-	return mock.DeleteBucketPolicyWithContextFunc(contextMoqParam, deleteBucketPolicyInput, options...)
+	return mock.DeleteBucketPolicyWithContextFunc(v, deleteBucketPolicyInput, options...)
 }
 
 // DeleteBucketPolicyWithContextCalls gets all the calls that were made to DeleteBucketPolicyWithContext.
@@ -5874,12 +5874,12 @@ func (mock *MockS3API) DeleteBucketPolicyWithContext(contextMoqParam context.Con
 //
 //	len(mockedS3API.DeleteBucketPolicyWithContextCalls())
 func (mock *MockS3API) DeleteBucketPolicyWithContextCalls() []struct {
-	ContextMoqParam         context.Context
+	V                       aws.Context
 	DeleteBucketPolicyInput *s3.DeleteBucketPolicyInput
 	Options                 []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam         context.Context
+		V                       aws.Context
 		DeleteBucketPolicyInput *s3.DeleteBucketPolicyInput
 		Options                 []request.Option
 	}
@@ -5954,23 +5954,23 @@ func (mock *MockS3API) DeleteBucketReplicationRequestCalls() []struct {
 }
 
 // DeleteBucketReplicationWithContext calls DeleteBucketReplicationWithContextFunc.
-func (mock *MockS3API) DeleteBucketReplicationWithContext(contextMoqParam context.Context, deleteBucketReplicationInput *s3.DeleteBucketReplicationInput, options ...request.Option) (*s3.DeleteBucketReplicationOutput, error) {
+func (mock *MockS3API) DeleteBucketReplicationWithContext(v aws.Context, deleteBucketReplicationInput *s3.DeleteBucketReplicationInput, options ...request.Option) (*s3.DeleteBucketReplicationOutput, error) {
 	if mock.DeleteBucketReplicationWithContextFunc == nil {
 		panic("MockS3API.DeleteBucketReplicationWithContextFunc: method is nil but S3API.DeleteBucketReplicationWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam              context.Context
+		V                            aws.Context
 		DeleteBucketReplicationInput *s3.DeleteBucketReplicationInput
 		Options                      []request.Option
 	}{
-		ContextMoqParam:              contextMoqParam,
+		V:                            v,
 		DeleteBucketReplicationInput: deleteBucketReplicationInput,
 		Options:                      options,
 	}
 	mock.lockDeleteBucketReplicationWithContext.Lock()
 	mock.calls.DeleteBucketReplicationWithContext = append(mock.calls.DeleteBucketReplicationWithContext, callInfo)
 	mock.lockDeleteBucketReplicationWithContext.Unlock()
-	return mock.DeleteBucketReplicationWithContextFunc(contextMoqParam, deleteBucketReplicationInput, options...)
+	return mock.DeleteBucketReplicationWithContextFunc(v, deleteBucketReplicationInput, options...)
 }
 
 // DeleteBucketReplicationWithContextCalls gets all the calls that were made to DeleteBucketReplicationWithContext.
@@ -5978,12 +5978,12 @@ func (mock *MockS3API) DeleteBucketReplicationWithContext(contextMoqParam contex
 //
 //	len(mockedS3API.DeleteBucketReplicationWithContextCalls())
 func (mock *MockS3API) DeleteBucketReplicationWithContextCalls() []struct {
-	ContextMoqParam              context.Context
+	V                            aws.Context
 	DeleteBucketReplicationInput *s3.DeleteBucketReplicationInput
 	Options                      []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam              context.Context
+		V                            aws.Context
 		DeleteBucketReplicationInput *s3.DeleteBucketReplicationInput
 		Options                      []request.Option
 	}
@@ -6090,23 +6090,23 @@ func (mock *MockS3API) DeleteBucketTaggingRequestCalls() []struct {
 }
 
 // DeleteBucketTaggingWithContext calls DeleteBucketTaggingWithContextFunc.
-func (mock *MockS3API) DeleteBucketTaggingWithContext(contextMoqParam context.Context, deleteBucketTaggingInput *s3.DeleteBucketTaggingInput, options ...request.Option) (*s3.DeleteBucketTaggingOutput, error) {
+func (mock *MockS3API) DeleteBucketTaggingWithContext(v aws.Context, deleteBucketTaggingInput *s3.DeleteBucketTaggingInput, options ...request.Option) (*s3.DeleteBucketTaggingOutput, error) {
 	if mock.DeleteBucketTaggingWithContextFunc == nil {
 		panic("MockS3API.DeleteBucketTaggingWithContextFunc: method is nil but S3API.DeleteBucketTaggingWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam          context.Context
+		V                        aws.Context
 		DeleteBucketTaggingInput *s3.DeleteBucketTaggingInput
 		Options                  []request.Option
 	}{
-		ContextMoqParam:          contextMoqParam,
+		V:                        v,
 		DeleteBucketTaggingInput: deleteBucketTaggingInput,
 		Options:                  options,
 	}
 	mock.lockDeleteBucketTaggingWithContext.Lock()
 	mock.calls.DeleteBucketTaggingWithContext = append(mock.calls.DeleteBucketTaggingWithContext, callInfo)
 	mock.lockDeleteBucketTaggingWithContext.Unlock()
-	return mock.DeleteBucketTaggingWithContextFunc(contextMoqParam, deleteBucketTaggingInput, options...)
+	return mock.DeleteBucketTaggingWithContextFunc(v, deleteBucketTaggingInput, options...)
 }
 
 // DeleteBucketTaggingWithContextCalls gets all the calls that were made to DeleteBucketTaggingWithContext.
@@ -6114,12 +6114,12 @@ func (mock *MockS3API) DeleteBucketTaggingWithContext(contextMoqParam context.Co
 //
 //	len(mockedS3API.DeleteBucketTaggingWithContextCalls())
 func (mock *MockS3API) DeleteBucketTaggingWithContextCalls() []struct {
-	ContextMoqParam          context.Context
+	V                        aws.Context
 	DeleteBucketTaggingInput *s3.DeleteBucketTaggingInput
 	Options                  []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam          context.Context
+		V                        aws.Context
 		DeleteBucketTaggingInput *s3.DeleteBucketTaggingInput
 		Options                  []request.Option
 	}
@@ -6194,23 +6194,23 @@ func (mock *MockS3API) DeleteBucketWebsiteRequestCalls() []struct {
 }
 
 // DeleteBucketWebsiteWithContext calls DeleteBucketWebsiteWithContextFunc.
-func (mock *MockS3API) DeleteBucketWebsiteWithContext(contextMoqParam context.Context, deleteBucketWebsiteInput *s3.DeleteBucketWebsiteInput, options ...request.Option) (*s3.DeleteBucketWebsiteOutput, error) {
+func (mock *MockS3API) DeleteBucketWebsiteWithContext(v aws.Context, deleteBucketWebsiteInput *s3.DeleteBucketWebsiteInput, options ...request.Option) (*s3.DeleteBucketWebsiteOutput, error) {
 	if mock.DeleteBucketWebsiteWithContextFunc == nil {
 		panic("MockS3API.DeleteBucketWebsiteWithContextFunc: method is nil but S3API.DeleteBucketWebsiteWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam          context.Context
+		V                        aws.Context
 		DeleteBucketWebsiteInput *s3.DeleteBucketWebsiteInput
 		Options                  []request.Option
 	}{
-		ContextMoqParam:          contextMoqParam,
+		V:                        v,
 		DeleteBucketWebsiteInput: deleteBucketWebsiteInput,
 		Options:                  options,
 	}
 	mock.lockDeleteBucketWebsiteWithContext.Lock()
 	mock.calls.DeleteBucketWebsiteWithContext = append(mock.calls.DeleteBucketWebsiteWithContext, callInfo)
 	mock.lockDeleteBucketWebsiteWithContext.Unlock()
-	return mock.DeleteBucketWebsiteWithContextFunc(contextMoqParam, deleteBucketWebsiteInput, options...)
+	return mock.DeleteBucketWebsiteWithContextFunc(v, deleteBucketWebsiteInput, options...)
 }
 
 // DeleteBucketWebsiteWithContextCalls gets all the calls that were made to DeleteBucketWebsiteWithContext.
@@ -6218,12 +6218,12 @@ func (mock *MockS3API) DeleteBucketWebsiteWithContext(contextMoqParam context.Co
 //
 //	len(mockedS3API.DeleteBucketWebsiteWithContextCalls())
 func (mock *MockS3API) DeleteBucketWebsiteWithContextCalls() []struct {
-	ContextMoqParam          context.Context
+	V                        aws.Context
 	DeleteBucketWebsiteInput *s3.DeleteBucketWebsiteInput
 	Options                  []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam          context.Context
+		V                        aws.Context
 		DeleteBucketWebsiteInput *s3.DeleteBucketWebsiteInput
 		Options                  []request.Option
 	}
@@ -6234,23 +6234,23 @@ func (mock *MockS3API) DeleteBucketWebsiteWithContextCalls() []struct {
 }
 
 // DeleteBucketWithContext calls DeleteBucketWithContextFunc.
-func (mock *MockS3API) DeleteBucketWithContext(contextMoqParam context.Context, deleteBucketInput *s3.DeleteBucketInput, options ...request.Option) (*s3.DeleteBucketOutput, error) {
+func (mock *MockS3API) DeleteBucketWithContext(v aws.Context, deleteBucketInput *s3.DeleteBucketInput, options ...request.Option) (*s3.DeleteBucketOutput, error) {
 	if mock.DeleteBucketWithContextFunc == nil {
 		panic("MockS3API.DeleteBucketWithContextFunc: method is nil but S3API.DeleteBucketWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam   context.Context
+		V                 aws.Context
 		DeleteBucketInput *s3.DeleteBucketInput
 		Options           []request.Option
 	}{
-		ContextMoqParam:   contextMoqParam,
+		V:                 v,
 		DeleteBucketInput: deleteBucketInput,
 		Options:           options,
 	}
 	mock.lockDeleteBucketWithContext.Lock()
 	mock.calls.DeleteBucketWithContext = append(mock.calls.DeleteBucketWithContext, callInfo)
 	mock.lockDeleteBucketWithContext.Unlock()
-	return mock.DeleteBucketWithContextFunc(contextMoqParam, deleteBucketInput, options...)
+	return mock.DeleteBucketWithContextFunc(v, deleteBucketInput, options...)
 }
 
 // DeleteBucketWithContextCalls gets all the calls that were made to DeleteBucketWithContext.
@@ -6258,12 +6258,12 @@ func (mock *MockS3API) DeleteBucketWithContext(contextMoqParam context.Context, 
 //
 //	len(mockedS3API.DeleteBucketWithContextCalls())
 func (mock *MockS3API) DeleteBucketWithContextCalls() []struct {
-	ContextMoqParam   context.Context
+	V                 aws.Context
 	DeleteBucketInput *s3.DeleteBucketInput
 	Options           []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam   context.Context
+		V                 aws.Context
 		DeleteBucketInput *s3.DeleteBucketInput
 		Options           []request.Option
 	}
@@ -6402,23 +6402,23 @@ func (mock *MockS3API) DeleteObjectTaggingRequestCalls() []struct {
 }
 
 // DeleteObjectTaggingWithContext calls DeleteObjectTaggingWithContextFunc.
-func (mock *MockS3API) DeleteObjectTaggingWithContext(contextMoqParam context.Context, deleteObjectTaggingInput *s3.DeleteObjectTaggingInput, options ...request.Option) (*s3.DeleteObjectTaggingOutput, error) {
+func (mock *MockS3API) DeleteObjectTaggingWithContext(v aws.Context, deleteObjectTaggingInput *s3.DeleteObjectTaggingInput, options ...request.Option) (*s3.DeleteObjectTaggingOutput, error) {
 	if mock.DeleteObjectTaggingWithContextFunc == nil {
 		panic("MockS3API.DeleteObjectTaggingWithContextFunc: method is nil but S3API.DeleteObjectTaggingWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam          context.Context
+		V                        aws.Context
 		DeleteObjectTaggingInput *s3.DeleteObjectTaggingInput
 		Options                  []request.Option
 	}{
-		ContextMoqParam:          contextMoqParam,
+		V:                        v,
 		DeleteObjectTaggingInput: deleteObjectTaggingInput,
 		Options:                  options,
 	}
 	mock.lockDeleteObjectTaggingWithContext.Lock()
 	mock.calls.DeleteObjectTaggingWithContext = append(mock.calls.DeleteObjectTaggingWithContext, callInfo)
 	mock.lockDeleteObjectTaggingWithContext.Unlock()
-	return mock.DeleteObjectTaggingWithContextFunc(contextMoqParam, deleteObjectTaggingInput, options...)
+	return mock.DeleteObjectTaggingWithContextFunc(v, deleteObjectTaggingInput, options...)
 }
 
 // DeleteObjectTaggingWithContextCalls gets all the calls that were made to DeleteObjectTaggingWithContext.
@@ -6426,12 +6426,12 @@ func (mock *MockS3API) DeleteObjectTaggingWithContext(contextMoqParam context.Co
 //
 //	len(mockedS3API.DeleteObjectTaggingWithContextCalls())
 func (mock *MockS3API) DeleteObjectTaggingWithContextCalls() []struct {
-	ContextMoqParam          context.Context
+	V                        aws.Context
 	DeleteObjectTaggingInput *s3.DeleteObjectTaggingInput
 	Options                  []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam          context.Context
+		V                        aws.Context
 		DeleteObjectTaggingInput *s3.DeleteObjectTaggingInput
 		Options                  []request.Option
 	}
@@ -6442,23 +6442,23 @@ func (mock *MockS3API) DeleteObjectTaggingWithContextCalls() []struct {
 }
 
 // DeleteObjectWithContext calls DeleteObjectWithContextFunc.
-func (mock *MockS3API) DeleteObjectWithContext(contextMoqParam context.Context, deleteObjectInput *s3.DeleteObjectInput, options ...request.Option) (*s3.DeleteObjectOutput, error) {
+func (mock *MockS3API) DeleteObjectWithContext(v aws.Context, deleteObjectInput *s3.DeleteObjectInput, options ...request.Option) (*s3.DeleteObjectOutput, error) {
 	if mock.DeleteObjectWithContextFunc == nil {
 		panic("MockS3API.DeleteObjectWithContextFunc: method is nil but S3API.DeleteObjectWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam   context.Context
+		V                 aws.Context
 		DeleteObjectInput *s3.DeleteObjectInput
 		Options           []request.Option
 	}{
-		ContextMoqParam:   contextMoqParam,
+		V:                 v,
 		DeleteObjectInput: deleteObjectInput,
 		Options:           options,
 	}
 	mock.lockDeleteObjectWithContext.Lock()
 	mock.calls.DeleteObjectWithContext = append(mock.calls.DeleteObjectWithContext, callInfo)
 	mock.lockDeleteObjectWithContext.Unlock()
-	return mock.DeleteObjectWithContextFunc(contextMoqParam, deleteObjectInput, options...)
+	return mock.DeleteObjectWithContextFunc(v, deleteObjectInput, options...)
 }
 
 // DeleteObjectWithContextCalls gets all the calls that were made to DeleteObjectWithContext.
@@ -6466,12 +6466,12 @@ func (mock *MockS3API) DeleteObjectWithContext(contextMoqParam context.Context, 
 //
 //	len(mockedS3API.DeleteObjectWithContextCalls())
 func (mock *MockS3API) DeleteObjectWithContextCalls() []struct {
-	ContextMoqParam   context.Context
+	V                 aws.Context
 	DeleteObjectInput *s3.DeleteObjectInput
 	Options           []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam   context.Context
+		V                 aws.Context
 		DeleteObjectInput *s3.DeleteObjectInput
 		Options           []request.Option
 	}
@@ -6546,23 +6546,23 @@ func (mock *MockS3API) DeleteObjectsRequestCalls() []struct {
 }
 
 // DeleteObjectsWithContext calls DeleteObjectsWithContextFunc.
-func (mock *MockS3API) DeleteObjectsWithContext(contextMoqParam context.Context, deleteObjectsInput *s3.DeleteObjectsInput, options ...request.Option) (*s3.DeleteObjectsOutput, error) {
+func (mock *MockS3API) DeleteObjectsWithContext(v aws.Context, deleteObjectsInput *s3.DeleteObjectsInput, options ...request.Option) (*s3.DeleteObjectsOutput, error) {
 	if mock.DeleteObjectsWithContextFunc == nil {
 		panic("MockS3API.DeleteObjectsWithContextFunc: method is nil but S3API.DeleteObjectsWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam    context.Context
+		V                  aws.Context
 		DeleteObjectsInput *s3.DeleteObjectsInput
 		Options            []request.Option
 	}{
-		ContextMoqParam:    contextMoqParam,
+		V:                  v,
 		DeleteObjectsInput: deleteObjectsInput,
 		Options:            options,
 	}
 	mock.lockDeleteObjectsWithContext.Lock()
 	mock.calls.DeleteObjectsWithContext = append(mock.calls.DeleteObjectsWithContext, callInfo)
 	mock.lockDeleteObjectsWithContext.Unlock()
-	return mock.DeleteObjectsWithContextFunc(contextMoqParam, deleteObjectsInput, options...)
+	return mock.DeleteObjectsWithContextFunc(v, deleteObjectsInput, options...)
 }
 
 // DeleteObjectsWithContextCalls gets all the calls that were made to DeleteObjectsWithContext.
@@ -6570,12 +6570,12 @@ func (mock *MockS3API) DeleteObjectsWithContext(contextMoqParam context.Context,
 //
 //	len(mockedS3API.DeleteObjectsWithContextCalls())
 func (mock *MockS3API) DeleteObjectsWithContextCalls() []struct {
-	ContextMoqParam    context.Context
+	V                  aws.Context
 	DeleteObjectsInput *s3.DeleteObjectsInput
 	Options            []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam    context.Context
+		V                  aws.Context
 		DeleteObjectsInput *s3.DeleteObjectsInput
 		Options            []request.Option
 	}
@@ -6650,23 +6650,23 @@ func (mock *MockS3API) DeletePublicAccessBlockRequestCalls() []struct {
 }
 
 // DeletePublicAccessBlockWithContext calls DeletePublicAccessBlockWithContextFunc.
-func (mock *MockS3API) DeletePublicAccessBlockWithContext(contextMoqParam context.Context, deletePublicAccessBlockInput *s3.DeletePublicAccessBlockInput, options ...request.Option) (*s3.DeletePublicAccessBlockOutput, error) {
+func (mock *MockS3API) DeletePublicAccessBlockWithContext(v aws.Context, deletePublicAccessBlockInput *s3.DeletePublicAccessBlockInput, options ...request.Option) (*s3.DeletePublicAccessBlockOutput, error) {
 	if mock.DeletePublicAccessBlockWithContextFunc == nil {
 		panic("MockS3API.DeletePublicAccessBlockWithContextFunc: method is nil but S3API.DeletePublicAccessBlockWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam              context.Context
+		V                            aws.Context
 		DeletePublicAccessBlockInput *s3.DeletePublicAccessBlockInput
 		Options                      []request.Option
 	}{
-		ContextMoqParam:              contextMoqParam,
+		V:                            v,
 		DeletePublicAccessBlockInput: deletePublicAccessBlockInput,
 		Options:                      options,
 	}
 	mock.lockDeletePublicAccessBlockWithContext.Lock()
 	mock.calls.DeletePublicAccessBlockWithContext = append(mock.calls.DeletePublicAccessBlockWithContext, callInfo)
 	mock.lockDeletePublicAccessBlockWithContext.Unlock()
-	return mock.DeletePublicAccessBlockWithContextFunc(contextMoqParam, deletePublicAccessBlockInput, options...)
+	return mock.DeletePublicAccessBlockWithContextFunc(v, deletePublicAccessBlockInput, options...)
 }
 
 // DeletePublicAccessBlockWithContextCalls gets all the calls that were made to DeletePublicAccessBlockWithContext.
@@ -6674,12 +6674,12 @@ func (mock *MockS3API) DeletePublicAccessBlockWithContext(contextMoqParam contex
 //
 //	len(mockedS3API.DeletePublicAccessBlockWithContextCalls())
 func (mock *MockS3API) DeletePublicAccessBlockWithContextCalls() []struct {
-	ContextMoqParam              context.Context
+	V                            aws.Context
 	DeletePublicAccessBlockInput *s3.DeletePublicAccessBlockInput
 	Options                      []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam              context.Context
+		V                            aws.Context
 		DeletePublicAccessBlockInput *s3.DeletePublicAccessBlockInput
 		Options                      []request.Option
 	}
@@ -6754,23 +6754,23 @@ func (mock *MockS3API) GetBucketAccelerateConfigurationRequestCalls() []struct {
 }
 
 // GetBucketAccelerateConfigurationWithContext calls GetBucketAccelerateConfigurationWithContextFunc.
-func (mock *MockS3API) GetBucketAccelerateConfigurationWithContext(contextMoqParam context.Context, getBucketAccelerateConfigurationInput *s3.GetBucketAccelerateConfigurationInput, options ...request.Option) (*s3.GetBucketAccelerateConfigurationOutput, error) {
+func (mock *MockS3API) GetBucketAccelerateConfigurationWithContext(v aws.Context, getBucketAccelerateConfigurationInput *s3.GetBucketAccelerateConfigurationInput, options ...request.Option) (*s3.GetBucketAccelerateConfigurationOutput, error) {
 	if mock.GetBucketAccelerateConfigurationWithContextFunc == nil {
 		panic("MockS3API.GetBucketAccelerateConfigurationWithContextFunc: method is nil but S3API.GetBucketAccelerateConfigurationWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam                       context.Context
+		V                                     aws.Context
 		GetBucketAccelerateConfigurationInput *s3.GetBucketAccelerateConfigurationInput
 		Options                               []request.Option
 	}{
-		ContextMoqParam:                       contextMoqParam,
+		V:                                     v,
 		GetBucketAccelerateConfigurationInput: getBucketAccelerateConfigurationInput,
 		Options:                               options,
 	}
 	mock.lockGetBucketAccelerateConfigurationWithContext.Lock()
 	mock.calls.GetBucketAccelerateConfigurationWithContext = append(mock.calls.GetBucketAccelerateConfigurationWithContext, callInfo)
 	mock.lockGetBucketAccelerateConfigurationWithContext.Unlock()
-	return mock.GetBucketAccelerateConfigurationWithContextFunc(contextMoqParam, getBucketAccelerateConfigurationInput, options...)
+	return mock.GetBucketAccelerateConfigurationWithContextFunc(v, getBucketAccelerateConfigurationInput, options...)
 }
 
 // GetBucketAccelerateConfigurationWithContextCalls gets all the calls that were made to GetBucketAccelerateConfigurationWithContext.
@@ -6778,12 +6778,12 @@ func (mock *MockS3API) GetBucketAccelerateConfigurationWithContext(contextMoqPar
 //
 //	len(mockedS3API.GetBucketAccelerateConfigurationWithContextCalls())
 func (mock *MockS3API) GetBucketAccelerateConfigurationWithContextCalls() []struct {
-	ContextMoqParam                       context.Context
+	V                                     aws.Context
 	GetBucketAccelerateConfigurationInput *s3.GetBucketAccelerateConfigurationInput
 	Options                               []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam                       context.Context
+		V                                     aws.Context
 		GetBucketAccelerateConfigurationInput *s3.GetBucketAccelerateConfigurationInput
 		Options                               []request.Option
 	}
@@ -6858,23 +6858,23 @@ func (mock *MockS3API) GetBucketAclRequestCalls() []struct {
 }
 
 // GetBucketAclWithContext calls GetBucketAclWithContextFunc.
-func (mock *MockS3API) GetBucketAclWithContext(contextMoqParam context.Context, getBucketAclInput *s3.GetBucketAclInput, options ...request.Option) (*s3.GetBucketAclOutput, error) {
+func (mock *MockS3API) GetBucketAclWithContext(v aws.Context, getBucketAclInput *s3.GetBucketAclInput, options ...request.Option) (*s3.GetBucketAclOutput, error) {
 	if mock.GetBucketAclWithContextFunc == nil {
 		panic("MockS3API.GetBucketAclWithContextFunc: method is nil but S3API.GetBucketAclWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam   context.Context
+		V                 aws.Context
 		GetBucketAclInput *s3.GetBucketAclInput
 		Options           []request.Option
 	}{
-		ContextMoqParam:   contextMoqParam,
+		V:                 v,
 		GetBucketAclInput: getBucketAclInput,
 		Options:           options,
 	}
 	mock.lockGetBucketAclWithContext.Lock()
 	mock.calls.GetBucketAclWithContext = append(mock.calls.GetBucketAclWithContext, callInfo)
 	mock.lockGetBucketAclWithContext.Unlock()
-	return mock.GetBucketAclWithContextFunc(contextMoqParam, getBucketAclInput, options...)
+	return mock.GetBucketAclWithContextFunc(v, getBucketAclInput, options...)
 }
 
 // GetBucketAclWithContextCalls gets all the calls that were made to GetBucketAclWithContext.
@@ -6882,12 +6882,12 @@ func (mock *MockS3API) GetBucketAclWithContext(contextMoqParam context.Context, 
 //
 //	len(mockedS3API.GetBucketAclWithContextCalls())
 func (mock *MockS3API) GetBucketAclWithContextCalls() []struct {
-	ContextMoqParam   context.Context
+	V                 aws.Context
 	GetBucketAclInput *s3.GetBucketAclInput
 	Options           []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam   context.Context
+		V                 aws.Context
 		GetBucketAclInput *s3.GetBucketAclInput
 		Options           []request.Option
 	}
@@ -6962,23 +6962,23 @@ func (mock *MockS3API) GetBucketAnalyticsConfigurationRequestCalls() []struct {
 }
 
 // GetBucketAnalyticsConfigurationWithContext calls GetBucketAnalyticsConfigurationWithContextFunc.
-func (mock *MockS3API) GetBucketAnalyticsConfigurationWithContext(contextMoqParam context.Context, getBucketAnalyticsConfigurationInput *s3.GetBucketAnalyticsConfigurationInput, options ...request.Option) (*s3.GetBucketAnalyticsConfigurationOutput, error) {
+func (mock *MockS3API) GetBucketAnalyticsConfigurationWithContext(v aws.Context, getBucketAnalyticsConfigurationInput *s3.GetBucketAnalyticsConfigurationInput, options ...request.Option) (*s3.GetBucketAnalyticsConfigurationOutput, error) {
 	if mock.GetBucketAnalyticsConfigurationWithContextFunc == nil {
 		panic("MockS3API.GetBucketAnalyticsConfigurationWithContextFunc: method is nil but S3API.GetBucketAnalyticsConfigurationWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam                      context.Context
+		V                                    aws.Context
 		GetBucketAnalyticsConfigurationInput *s3.GetBucketAnalyticsConfigurationInput
 		Options                              []request.Option
 	}{
-		ContextMoqParam:                      contextMoqParam,
+		V:                                    v,
 		GetBucketAnalyticsConfigurationInput: getBucketAnalyticsConfigurationInput,
 		Options:                              options,
 	}
 	mock.lockGetBucketAnalyticsConfigurationWithContext.Lock()
 	mock.calls.GetBucketAnalyticsConfigurationWithContext = append(mock.calls.GetBucketAnalyticsConfigurationWithContext, callInfo)
 	mock.lockGetBucketAnalyticsConfigurationWithContext.Unlock()
-	return mock.GetBucketAnalyticsConfigurationWithContextFunc(contextMoqParam, getBucketAnalyticsConfigurationInput, options...)
+	return mock.GetBucketAnalyticsConfigurationWithContextFunc(v, getBucketAnalyticsConfigurationInput, options...)
 }
 
 // GetBucketAnalyticsConfigurationWithContextCalls gets all the calls that were made to GetBucketAnalyticsConfigurationWithContext.
@@ -6986,12 +6986,12 @@ func (mock *MockS3API) GetBucketAnalyticsConfigurationWithContext(contextMoqPara
 //
 //	len(mockedS3API.GetBucketAnalyticsConfigurationWithContextCalls())
 func (mock *MockS3API) GetBucketAnalyticsConfigurationWithContextCalls() []struct {
-	ContextMoqParam                      context.Context
+	V                                    aws.Context
 	GetBucketAnalyticsConfigurationInput *s3.GetBucketAnalyticsConfigurationInput
 	Options                              []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam                      context.Context
+		V                                    aws.Context
 		GetBucketAnalyticsConfigurationInput *s3.GetBucketAnalyticsConfigurationInput
 		Options                              []request.Option
 	}
@@ -7066,23 +7066,23 @@ func (mock *MockS3API) GetBucketCorsRequestCalls() []struct {
 }
 
 // GetBucketCorsWithContext calls GetBucketCorsWithContextFunc.
-func (mock *MockS3API) GetBucketCorsWithContext(contextMoqParam context.Context, getBucketCorsInput *s3.GetBucketCorsInput, options ...request.Option) (*s3.GetBucketCorsOutput, error) {
+func (mock *MockS3API) GetBucketCorsWithContext(v aws.Context, getBucketCorsInput *s3.GetBucketCorsInput, options ...request.Option) (*s3.GetBucketCorsOutput, error) {
 	if mock.GetBucketCorsWithContextFunc == nil {
 		panic("MockS3API.GetBucketCorsWithContextFunc: method is nil but S3API.GetBucketCorsWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam    context.Context
+		V                  aws.Context
 		GetBucketCorsInput *s3.GetBucketCorsInput
 		Options            []request.Option
 	}{
-		ContextMoqParam:    contextMoqParam,
+		V:                  v,
 		GetBucketCorsInput: getBucketCorsInput,
 		Options:            options,
 	}
 	mock.lockGetBucketCorsWithContext.Lock()
 	mock.calls.GetBucketCorsWithContext = append(mock.calls.GetBucketCorsWithContext, callInfo)
 	mock.lockGetBucketCorsWithContext.Unlock()
-	return mock.GetBucketCorsWithContextFunc(contextMoqParam, getBucketCorsInput, options...)
+	return mock.GetBucketCorsWithContextFunc(v, getBucketCorsInput, options...)
 }
 
 // GetBucketCorsWithContextCalls gets all the calls that were made to GetBucketCorsWithContext.
@@ -7090,12 +7090,12 @@ func (mock *MockS3API) GetBucketCorsWithContext(contextMoqParam context.Context,
 //
 //	len(mockedS3API.GetBucketCorsWithContextCalls())
 func (mock *MockS3API) GetBucketCorsWithContextCalls() []struct {
-	ContextMoqParam    context.Context
+	V                  aws.Context
 	GetBucketCorsInput *s3.GetBucketCorsInput
 	Options            []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam    context.Context
+		V                  aws.Context
 		GetBucketCorsInput *s3.GetBucketCorsInput
 		Options            []request.Option
 	}
@@ -7170,23 +7170,23 @@ func (mock *MockS3API) GetBucketEncryptionRequestCalls() []struct {
 }
 
 // GetBucketEncryptionWithContext calls GetBucketEncryptionWithContextFunc.
-func (mock *MockS3API) GetBucketEncryptionWithContext(contextMoqParam context.Context, getBucketEncryptionInput *s3.GetBucketEncryptionInput, options ...request.Option) (*s3.GetBucketEncryptionOutput, error) {
+func (mock *MockS3API) GetBucketEncryptionWithContext(v aws.Context, getBucketEncryptionInput *s3.GetBucketEncryptionInput, options ...request.Option) (*s3.GetBucketEncryptionOutput, error) {
 	if mock.GetBucketEncryptionWithContextFunc == nil {
 		panic("MockS3API.GetBucketEncryptionWithContextFunc: method is nil but S3API.GetBucketEncryptionWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam          context.Context
+		V                        aws.Context
 		GetBucketEncryptionInput *s3.GetBucketEncryptionInput
 		Options                  []request.Option
 	}{
-		ContextMoqParam:          contextMoqParam,
+		V:                        v,
 		GetBucketEncryptionInput: getBucketEncryptionInput,
 		Options:                  options,
 	}
 	mock.lockGetBucketEncryptionWithContext.Lock()
 	mock.calls.GetBucketEncryptionWithContext = append(mock.calls.GetBucketEncryptionWithContext, callInfo)
 	mock.lockGetBucketEncryptionWithContext.Unlock()
-	return mock.GetBucketEncryptionWithContextFunc(contextMoqParam, getBucketEncryptionInput, options...)
+	return mock.GetBucketEncryptionWithContextFunc(v, getBucketEncryptionInput, options...)
 }
 
 // GetBucketEncryptionWithContextCalls gets all the calls that were made to GetBucketEncryptionWithContext.
@@ -7194,12 +7194,12 @@ func (mock *MockS3API) GetBucketEncryptionWithContext(contextMoqParam context.Co
 //
 //	len(mockedS3API.GetBucketEncryptionWithContextCalls())
 func (mock *MockS3API) GetBucketEncryptionWithContextCalls() []struct {
-	ContextMoqParam          context.Context
+	V                        aws.Context
 	GetBucketEncryptionInput *s3.GetBucketEncryptionInput
 	Options                  []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam          context.Context
+		V                        aws.Context
 		GetBucketEncryptionInput *s3.GetBucketEncryptionInput
 		Options                  []request.Option
 	}
@@ -7274,23 +7274,23 @@ func (mock *MockS3API) GetBucketIntelligentTieringConfigurationRequestCalls() []
 }
 
 // GetBucketIntelligentTieringConfigurationWithContext calls GetBucketIntelligentTieringConfigurationWithContextFunc.
-func (mock *MockS3API) GetBucketIntelligentTieringConfigurationWithContext(contextMoqParam context.Context, getBucketIntelligentTieringConfigurationInput *s3.GetBucketIntelligentTieringConfigurationInput, options ...request.Option) (*s3.GetBucketIntelligentTieringConfigurationOutput, error) {
+func (mock *MockS3API) GetBucketIntelligentTieringConfigurationWithContext(v aws.Context, getBucketIntelligentTieringConfigurationInput *s3.GetBucketIntelligentTieringConfigurationInput, options ...request.Option) (*s3.GetBucketIntelligentTieringConfigurationOutput, error) {
 	if mock.GetBucketIntelligentTieringConfigurationWithContextFunc == nil {
 		panic("MockS3API.GetBucketIntelligentTieringConfigurationWithContextFunc: method is nil but S3API.GetBucketIntelligentTieringConfigurationWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam                               context.Context
+		V                                             aws.Context
 		GetBucketIntelligentTieringConfigurationInput *s3.GetBucketIntelligentTieringConfigurationInput
 		Options                                       []request.Option
 	}{
-		ContextMoqParam: contextMoqParam,
+		V: v,
 		GetBucketIntelligentTieringConfigurationInput: getBucketIntelligentTieringConfigurationInput,
 		Options: options,
 	}
 	mock.lockGetBucketIntelligentTieringConfigurationWithContext.Lock()
 	mock.calls.GetBucketIntelligentTieringConfigurationWithContext = append(mock.calls.GetBucketIntelligentTieringConfigurationWithContext, callInfo)
 	mock.lockGetBucketIntelligentTieringConfigurationWithContext.Unlock()
-	return mock.GetBucketIntelligentTieringConfigurationWithContextFunc(contextMoqParam, getBucketIntelligentTieringConfigurationInput, options...)
+	return mock.GetBucketIntelligentTieringConfigurationWithContextFunc(v, getBucketIntelligentTieringConfigurationInput, options...)
 }
 
 // GetBucketIntelligentTieringConfigurationWithContextCalls gets all the calls that were made to GetBucketIntelligentTieringConfigurationWithContext.
@@ -7298,12 +7298,12 @@ func (mock *MockS3API) GetBucketIntelligentTieringConfigurationWithContext(conte
 //
 //	len(mockedS3API.GetBucketIntelligentTieringConfigurationWithContextCalls())
 func (mock *MockS3API) GetBucketIntelligentTieringConfigurationWithContextCalls() []struct {
-	ContextMoqParam                               context.Context
+	V                                             aws.Context
 	GetBucketIntelligentTieringConfigurationInput *s3.GetBucketIntelligentTieringConfigurationInput
 	Options                                       []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam                               context.Context
+		V                                             aws.Context
 		GetBucketIntelligentTieringConfigurationInput *s3.GetBucketIntelligentTieringConfigurationInput
 		Options                                       []request.Option
 	}
@@ -7378,23 +7378,23 @@ func (mock *MockS3API) GetBucketInventoryConfigurationRequestCalls() []struct {
 }
 
 // GetBucketInventoryConfigurationWithContext calls GetBucketInventoryConfigurationWithContextFunc.
-func (mock *MockS3API) GetBucketInventoryConfigurationWithContext(contextMoqParam context.Context, getBucketInventoryConfigurationInput *s3.GetBucketInventoryConfigurationInput, options ...request.Option) (*s3.GetBucketInventoryConfigurationOutput, error) {
+func (mock *MockS3API) GetBucketInventoryConfigurationWithContext(v aws.Context, getBucketInventoryConfigurationInput *s3.GetBucketInventoryConfigurationInput, options ...request.Option) (*s3.GetBucketInventoryConfigurationOutput, error) {
 	if mock.GetBucketInventoryConfigurationWithContextFunc == nil {
 		panic("MockS3API.GetBucketInventoryConfigurationWithContextFunc: method is nil but S3API.GetBucketInventoryConfigurationWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam                      context.Context
+		V                                    aws.Context
 		GetBucketInventoryConfigurationInput *s3.GetBucketInventoryConfigurationInput
 		Options                              []request.Option
 	}{
-		ContextMoqParam:                      contextMoqParam,
+		V:                                    v,
 		GetBucketInventoryConfigurationInput: getBucketInventoryConfigurationInput,
 		Options:                              options,
 	}
 	mock.lockGetBucketInventoryConfigurationWithContext.Lock()
 	mock.calls.GetBucketInventoryConfigurationWithContext = append(mock.calls.GetBucketInventoryConfigurationWithContext, callInfo)
 	mock.lockGetBucketInventoryConfigurationWithContext.Unlock()
-	return mock.GetBucketInventoryConfigurationWithContextFunc(contextMoqParam, getBucketInventoryConfigurationInput, options...)
+	return mock.GetBucketInventoryConfigurationWithContextFunc(v, getBucketInventoryConfigurationInput, options...)
 }
 
 // GetBucketInventoryConfigurationWithContextCalls gets all the calls that were made to GetBucketInventoryConfigurationWithContext.
@@ -7402,12 +7402,12 @@ func (mock *MockS3API) GetBucketInventoryConfigurationWithContext(contextMoqPara
 //
 //	len(mockedS3API.GetBucketInventoryConfigurationWithContextCalls())
 func (mock *MockS3API) GetBucketInventoryConfigurationWithContextCalls() []struct {
-	ContextMoqParam                      context.Context
+	V                                    aws.Context
 	GetBucketInventoryConfigurationInput *s3.GetBucketInventoryConfigurationInput
 	Options                              []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam                      context.Context
+		V                                    aws.Context
 		GetBucketInventoryConfigurationInput *s3.GetBucketInventoryConfigurationInput
 		Options                              []request.Option
 	}
@@ -7514,23 +7514,23 @@ func (mock *MockS3API) GetBucketLifecycleConfigurationRequestCalls() []struct {
 }
 
 // GetBucketLifecycleConfigurationWithContext calls GetBucketLifecycleConfigurationWithContextFunc.
-func (mock *MockS3API) GetBucketLifecycleConfigurationWithContext(contextMoqParam context.Context, getBucketLifecycleConfigurationInput *s3.GetBucketLifecycleConfigurationInput, options ...request.Option) (*s3.GetBucketLifecycleConfigurationOutput, error) {
+func (mock *MockS3API) GetBucketLifecycleConfigurationWithContext(v aws.Context, getBucketLifecycleConfigurationInput *s3.GetBucketLifecycleConfigurationInput, options ...request.Option) (*s3.GetBucketLifecycleConfigurationOutput, error) {
 	if mock.GetBucketLifecycleConfigurationWithContextFunc == nil {
 		panic("MockS3API.GetBucketLifecycleConfigurationWithContextFunc: method is nil but S3API.GetBucketLifecycleConfigurationWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam                      context.Context
+		V                                    aws.Context
 		GetBucketLifecycleConfigurationInput *s3.GetBucketLifecycleConfigurationInput
 		Options                              []request.Option
 	}{
-		ContextMoqParam:                      contextMoqParam,
+		V:                                    v,
 		GetBucketLifecycleConfigurationInput: getBucketLifecycleConfigurationInput,
 		Options:                              options,
 	}
 	mock.lockGetBucketLifecycleConfigurationWithContext.Lock()
 	mock.calls.GetBucketLifecycleConfigurationWithContext = append(mock.calls.GetBucketLifecycleConfigurationWithContext, callInfo)
 	mock.lockGetBucketLifecycleConfigurationWithContext.Unlock()
-	return mock.GetBucketLifecycleConfigurationWithContextFunc(contextMoqParam, getBucketLifecycleConfigurationInput, options...)
+	return mock.GetBucketLifecycleConfigurationWithContextFunc(v, getBucketLifecycleConfigurationInput, options...)
 }
 
 // GetBucketLifecycleConfigurationWithContextCalls gets all the calls that were made to GetBucketLifecycleConfigurationWithContext.
@@ -7538,12 +7538,12 @@ func (mock *MockS3API) GetBucketLifecycleConfigurationWithContext(contextMoqPara
 //
 //	len(mockedS3API.GetBucketLifecycleConfigurationWithContextCalls())
 func (mock *MockS3API) GetBucketLifecycleConfigurationWithContextCalls() []struct {
-	ContextMoqParam                      context.Context
+	V                                    aws.Context
 	GetBucketLifecycleConfigurationInput *s3.GetBucketLifecycleConfigurationInput
 	Options                              []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam                      context.Context
+		V                                    aws.Context
 		GetBucketLifecycleConfigurationInput *s3.GetBucketLifecycleConfigurationInput
 		Options                              []request.Option
 	}
@@ -7586,23 +7586,23 @@ func (mock *MockS3API) GetBucketLifecycleRequestCalls() []struct {
 }
 
 // GetBucketLifecycleWithContext calls GetBucketLifecycleWithContextFunc.
-func (mock *MockS3API) GetBucketLifecycleWithContext(contextMoqParam context.Context, getBucketLifecycleInput *s3.GetBucketLifecycleInput, options ...request.Option) (*s3.GetBucketLifecycleOutput, error) {
+func (mock *MockS3API) GetBucketLifecycleWithContext(v aws.Context, getBucketLifecycleInput *s3.GetBucketLifecycleInput, options ...request.Option) (*s3.GetBucketLifecycleOutput, error) {
 	if mock.GetBucketLifecycleWithContextFunc == nil {
 		panic("MockS3API.GetBucketLifecycleWithContextFunc: method is nil but S3API.GetBucketLifecycleWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam         context.Context
+		V                       aws.Context
 		GetBucketLifecycleInput *s3.GetBucketLifecycleInput
 		Options                 []request.Option
 	}{
-		ContextMoqParam:         contextMoqParam,
+		V:                       v,
 		GetBucketLifecycleInput: getBucketLifecycleInput,
 		Options:                 options,
 	}
 	mock.lockGetBucketLifecycleWithContext.Lock()
 	mock.calls.GetBucketLifecycleWithContext = append(mock.calls.GetBucketLifecycleWithContext, callInfo)
 	mock.lockGetBucketLifecycleWithContext.Unlock()
-	return mock.GetBucketLifecycleWithContextFunc(contextMoqParam, getBucketLifecycleInput, options...)
+	return mock.GetBucketLifecycleWithContextFunc(v, getBucketLifecycleInput, options...)
 }
 
 // GetBucketLifecycleWithContextCalls gets all the calls that were made to GetBucketLifecycleWithContext.
@@ -7610,12 +7610,12 @@ func (mock *MockS3API) GetBucketLifecycleWithContext(contextMoqParam context.Con
 //
 //	len(mockedS3API.GetBucketLifecycleWithContextCalls())
 func (mock *MockS3API) GetBucketLifecycleWithContextCalls() []struct {
-	ContextMoqParam         context.Context
+	V                       aws.Context
 	GetBucketLifecycleInput *s3.GetBucketLifecycleInput
 	Options                 []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam         context.Context
+		V                       aws.Context
 		GetBucketLifecycleInput *s3.GetBucketLifecycleInput
 		Options                 []request.Option
 	}
@@ -7690,23 +7690,23 @@ func (mock *MockS3API) GetBucketLocationRequestCalls() []struct {
 }
 
 // GetBucketLocationWithContext calls GetBucketLocationWithContextFunc.
-func (mock *MockS3API) GetBucketLocationWithContext(contextMoqParam context.Context, getBucketLocationInput *s3.GetBucketLocationInput, options ...request.Option) (*s3.GetBucketLocationOutput, error) {
+func (mock *MockS3API) GetBucketLocationWithContext(v aws.Context, getBucketLocationInput *s3.GetBucketLocationInput, options ...request.Option) (*s3.GetBucketLocationOutput, error) {
 	if mock.GetBucketLocationWithContextFunc == nil {
 		panic("MockS3API.GetBucketLocationWithContextFunc: method is nil but S3API.GetBucketLocationWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam        context.Context
+		V                      aws.Context
 		GetBucketLocationInput *s3.GetBucketLocationInput
 		Options                []request.Option
 	}{
-		ContextMoqParam:        contextMoqParam,
+		V:                      v,
 		GetBucketLocationInput: getBucketLocationInput,
 		Options:                options,
 	}
 	mock.lockGetBucketLocationWithContext.Lock()
 	mock.calls.GetBucketLocationWithContext = append(mock.calls.GetBucketLocationWithContext, callInfo)
 	mock.lockGetBucketLocationWithContext.Unlock()
-	return mock.GetBucketLocationWithContextFunc(contextMoqParam, getBucketLocationInput, options...)
+	return mock.GetBucketLocationWithContextFunc(v, getBucketLocationInput, options...)
 }
 
 // GetBucketLocationWithContextCalls gets all the calls that were made to GetBucketLocationWithContext.
@@ -7714,12 +7714,12 @@ func (mock *MockS3API) GetBucketLocationWithContext(contextMoqParam context.Cont
 //
 //	len(mockedS3API.GetBucketLocationWithContextCalls())
 func (mock *MockS3API) GetBucketLocationWithContextCalls() []struct {
-	ContextMoqParam        context.Context
+	V                      aws.Context
 	GetBucketLocationInput *s3.GetBucketLocationInput
 	Options                []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam        context.Context
+		V                      aws.Context
 		GetBucketLocationInput *s3.GetBucketLocationInput
 		Options                []request.Option
 	}
@@ -7794,23 +7794,23 @@ func (mock *MockS3API) GetBucketLoggingRequestCalls() []struct {
 }
 
 // GetBucketLoggingWithContext calls GetBucketLoggingWithContextFunc.
-func (mock *MockS3API) GetBucketLoggingWithContext(contextMoqParam context.Context, getBucketLoggingInput *s3.GetBucketLoggingInput, options ...request.Option) (*s3.GetBucketLoggingOutput, error) {
+func (mock *MockS3API) GetBucketLoggingWithContext(v aws.Context, getBucketLoggingInput *s3.GetBucketLoggingInput, options ...request.Option) (*s3.GetBucketLoggingOutput, error) {
 	if mock.GetBucketLoggingWithContextFunc == nil {
 		panic("MockS3API.GetBucketLoggingWithContextFunc: method is nil but S3API.GetBucketLoggingWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam       context.Context
+		V                     aws.Context
 		GetBucketLoggingInput *s3.GetBucketLoggingInput
 		Options               []request.Option
 	}{
-		ContextMoqParam:       contextMoqParam,
+		V:                     v,
 		GetBucketLoggingInput: getBucketLoggingInput,
 		Options:               options,
 	}
 	mock.lockGetBucketLoggingWithContext.Lock()
 	mock.calls.GetBucketLoggingWithContext = append(mock.calls.GetBucketLoggingWithContext, callInfo)
 	mock.lockGetBucketLoggingWithContext.Unlock()
-	return mock.GetBucketLoggingWithContextFunc(contextMoqParam, getBucketLoggingInput, options...)
+	return mock.GetBucketLoggingWithContextFunc(v, getBucketLoggingInput, options...)
 }
 
 // GetBucketLoggingWithContextCalls gets all the calls that were made to GetBucketLoggingWithContext.
@@ -7818,12 +7818,12 @@ func (mock *MockS3API) GetBucketLoggingWithContext(contextMoqParam context.Conte
 //
 //	len(mockedS3API.GetBucketLoggingWithContextCalls())
 func (mock *MockS3API) GetBucketLoggingWithContextCalls() []struct {
-	ContextMoqParam       context.Context
+	V                     aws.Context
 	GetBucketLoggingInput *s3.GetBucketLoggingInput
 	Options               []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam       context.Context
+		V                     aws.Context
 		GetBucketLoggingInput *s3.GetBucketLoggingInput
 		Options               []request.Option
 	}
@@ -7898,23 +7898,23 @@ func (mock *MockS3API) GetBucketMetricsConfigurationRequestCalls() []struct {
 }
 
 // GetBucketMetricsConfigurationWithContext calls GetBucketMetricsConfigurationWithContextFunc.
-func (mock *MockS3API) GetBucketMetricsConfigurationWithContext(contextMoqParam context.Context, getBucketMetricsConfigurationInput *s3.GetBucketMetricsConfigurationInput, options ...request.Option) (*s3.GetBucketMetricsConfigurationOutput, error) {
+func (mock *MockS3API) GetBucketMetricsConfigurationWithContext(v aws.Context, getBucketMetricsConfigurationInput *s3.GetBucketMetricsConfigurationInput, options ...request.Option) (*s3.GetBucketMetricsConfigurationOutput, error) {
 	if mock.GetBucketMetricsConfigurationWithContextFunc == nil {
 		panic("MockS3API.GetBucketMetricsConfigurationWithContextFunc: method is nil but S3API.GetBucketMetricsConfigurationWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam                    context.Context
+		V                                  aws.Context
 		GetBucketMetricsConfigurationInput *s3.GetBucketMetricsConfigurationInput
 		Options                            []request.Option
 	}{
-		ContextMoqParam:                    contextMoqParam,
+		V:                                  v,
 		GetBucketMetricsConfigurationInput: getBucketMetricsConfigurationInput,
 		Options:                            options,
 	}
 	mock.lockGetBucketMetricsConfigurationWithContext.Lock()
 	mock.calls.GetBucketMetricsConfigurationWithContext = append(mock.calls.GetBucketMetricsConfigurationWithContext, callInfo)
 	mock.lockGetBucketMetricsConfigurationWithContext.Unlock()
-	return mock.GetBucketMetricsConfigurationWithContextFunc(contextMoqParam, getBucketMetricsConfigurationInput, options...)
+	return mock.GetBucketMetricsConfigurationWithContextFunc(v, getBucketMetricsConfigurationInput, options...)
 }
 
 // GetBucketMetricsConfigurationWithContextCalls gets all the calls that were made to GetBucketMetricsConfigurationWithContext.
@@ -7922,12 +7922,12 @@ func (mock *MockS3API) GetBucketMetricsConfigurationWithContext(contextMoqParam 
 //
 //	len(mockedS3API.GetBucketMetricsConfigurationWithContextCalls())
 func (mock *MockS3API) GetBucketMetricsConfigurationWithContextCalls() []struct {
-	ContextMoqParam                    context.Context
+	V                                  aws.Context
 	GetBucketMetricsConfigurationInput *s3.GetBucketMetricsConfigurationInput
 	Options                            []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam                    context.Context
+		V                                  aws.Context
 		GetBucketMetricsConfigurationInput *s3.GetBucketMetricsConfigurationInput
 		Options                            []request.Option
 	}
@@ -8034,23 +8034,23 @@ func (mock *MockS3API) GetBucketNotificationConfigurationRequestCalls() []struct
 }
 
 // GetBucketNotificationConfigurationWithContext calls GetBucketNotificationConfigurationWithContextFunc.
-func (mock *MockS3API) GetBucketNotificationConfigurationWithContext(contextMoqParam context.Context, getBucketNotificationConfigurationRequest *s3.GetBucketNotificationConfigurationRequest, options ...request.Option) (*s3.NotificationConfiguration, error) {
+func (mock *MockS3API) GetBucketNotificationConfigurationWithContext(v aws.Context, getBucketNotificationConfigurationRequest *s3.GetBucketNotificationConfigurationRequest, options ...request.Option) (*s3.NotificationConfiguration, error) {
 	if mock.GetBucketNotificationConfigurationWithContextFunc == nil {
 		panic("MockS3API.GetBucketNotificationConfigurationWithContextFunc: method is nil but S3API.GetBucketNotificationConfigurationWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam                           context.Context
+		V                                         aws.Context
 		GetBucketNotificationConfigurationRequest *s3.GetBucketNotificationConfigurationRequest
 		Options                                   []request.Option
 	}{
-		ContextMoqParam: contextMoqParam,
+		V: v,
 		GetBucketNotificationConfigurationRequest: getBucketNotificationConfigurationRequest,
 		Options: options,
 	}
 	mock.lockGetBucketNotificationConfigurationWithContext.Lock()
 	mock.calls.GetBucketNotificationConfigurationWithContext = append(mock.calls.GetBucketNotificationConfigurationWithContext, callInfo)
 	mock.lockGetBucketNotificationConfigurationWithContext.Unlock()
-	return mock.GetBucketNotificationConfigurationWithContextFunc(contextMoqParam, getBucketNotificationConfigurationRequest, options...)
+	return mock.GetBucketNotificationConfigurationWithContextFunc(v, getBucketNotificationConfigurationRequest, options...)
 }
 
 // GetBucketNotificationConfigurationWithContextCalls gets all the calls that were made to GetBucketNotificationConfigurationWithContext.
@@ -8058,12 +8058,12 @@ func (mock *MockS3API) GetBucketNotificationConfigurationWithContext(contextMoqP
 //
 //	len(mockedS3API.GetBucketNotificationConfigurationWithContextCalls())
 func (mock *MockS3API) GetBucketNotificationConfigurationWithContextCalls() []struct {
-	ContextMoqParam                           context.Context
+	V                                         aws.Context
 	GetBucketNotificationConfigurationRequest *s3.GetBucketNotificationConfigurationRequest
 	Options                                   []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam                           context.Context
+		V                                         aws.Context
 		GetBucketNotificationConfigurationRequest *s3.GetBucketNotificationConfigurationRequest
 		Options                                   []request.Option
 	}
@@ -8106,23 +8106,23 @@ func (mock *MockS3API) GetBucketNotificationRequestCalls() []struct {
 }
 
 // GetBucketNotificationWithContext calls GetBucketNotificationWithContextFunc.
-func (mock *MockS3API) GetBucketNotificationWithContext(contextMoqParam context.Context, getBucketNotificationConfigurationRequest *s3.GetBucketNotificationConfigurationRequest, options ...request.Option) (*s3.NotificationConfigurationDeprecated, error) {
+func (mock *MockS3API) GetBucketNotificationWithContext(v aws.Context, getBucketNotificationConfigurationRequest *s3.GetBucketNotificationConfigurationRequest, options ...request.Option) (*s3.NotificationConfigurationDeprecated, error) {
 	if mock.GetBucketNotificationWithContextFunc == nil {
 		panic("MockS3API.GetBucketNotificationWithContextFunc: method is nil but S3API.GetBucketNotificationWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam                           context.Context
+		V                                         aws.Context
 		GetBucketNotificationConfigurationRequest *s3.GetBucketNotificationConfigurationRequest
 		Options                                   []request.Option
 	}{
-		ContextMoqParam: contextMoqParam,
+		V: v,
 		GetBucketNotificationConfigurationRequest: getBucketNotificationConfigurationRequest,
 		Options: options,
 	}
 	mock.lockGetBucketNotificationWithContext.Lock()
 	mock.calls.GetBucketNotificationWithContext = append(mock.calls.GetBucketNotificationWithContext, callInfo)
 	mock.lockGetBucketNotificationWithContext.Unlock()
-	return mock.GetBucketNotificationWithContextFunc(contextMoqParam, getBucketNotificationConfigurationRequest, options...)
+	return mock.GetBucketNotificationWithContextFunc(v, getBucketNotificationConfigurationRequest, options...)
 }
 
 // GetBucketNotificationWithContextCalls gets all the calls that were made to GetBucketNotificationWithContext.
@@ -8130,12 +8130,12 @@ func (mock *MockS3API) GetBucketNotificationWithContext(contextMoqParam context.
 //
 //	len(mockedS3API.GetBucketNotificationWithContextCalls())
 func (mock *MockS3API) GetBucketNotificationWithContextCalls() []struct {
-	ContextMoqParam                           context.Context
+	V                                         aws.Context
 	GetBucketNotificationConfigurationRequest *s3.GetBucketNotificationConfigurationRequest
 	Options                                   []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam                           context.Context
+		V                                         aws.Context
 		GetBucketNotificationConfigurationRequest *s3.GetBucketNotificationConfigurationRequest
 		Options                                   []request.Option
 	}
@@ -8210,23 +8210,23 @@ func (mock *MockS3API) GetBucketOwnershipControlsRequestCalls() []struct {
 }
 
 // GetBucketOwnershipControlsWithContext calls GetBucketOwnershipControlsWithContextFunc.
-func (mock *MockS3API) GetBucketOwnershipControlsWithContext(contextMoqParam context.Context, getBucketOwnershipControlsInput *s3.GetBucketOwnershipControlsInput, options ...request.Option) (*s3.GetBucketOwnershipControlsOutput, error) {
+func (mock *MockS3API) GetBucketOwnershipControlsWithContext(v aws.Context, getBucketOwnershipControlsInput *s3.GetBucketOwnershipControlsInput, options ...request.Option) (*s3.GetBucketOwnershipControlsOutput, error) {
 	if mock.GetBucketOwnershipControlsWithContextFunc == nil {
 		panic("MockS3API.GetBucketOwnershipControlsWithContextFunc: method is nil but S3API.GetBucketOwnershipControlsWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam                 context.Context
+		V                               aws.Context
 		GetBucketOwnershipControlsInput *s3.GetBucketOwnershipControlsInput
 		Options                         []request.Option
 	}{
-		ContextMoqParam:                 contextMoqParam,
+		V:                               v,
 		GetBucketOwnershipControlsInput: getBucketOwnershipControlsInput,
 		Options:                         options,
 	}
 	mock.lockGetBucketOwnershipControlsWithContext.Lock()
 	mock.calls.GetBucketOwnershipControlsWithContext = append(mock.calls.GetBucketOwnershipControlsWithContext, callInfo)
 	mock.lockGetBucketOwnershipControlsWithContext.Unlock()
-	return mock.GetBucketOwnershipControlsWithContextFunc(contextMoqParam, getBucketOwnershipControlsInput, options...)
+	return mock.GetBucketOwnershipControlsWithContextFunc(v, getBucketOwnershipControlsInput, options...)
 }
 
 // GetBucketOwnershipControlsWithContextCalls gets all the calls that were made to GetBucketOwnershipControlsWithContext.
@@ -8234,12 +8234,12 @@ func (mock *MockS3API) GetBucketOwnershipControlsWithContext(contextMoqParam con
 //
 //	len(mockedS3API.GetBucketOwnershipControlsWithContextCalls())
 func (mock *MockS3API) GetBucketOwnershipControlsWithContextCalls() []struct {
-	ContextMoqParam                 context.Context
+	V                               aws.Context
 	GetBucketOwnershipControlsInput *s3.GetBucketOwnershipControlsInput
 	Options                         []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam                 context.Context
+		V                               aws.Context
 		GetBucketOwnershipControlsInput *s3.GetBucketOwnershipControlsInput
 		Options                         []request.Option
 	}
@@ -8378,23 +8378,23 @@ func (mock *MockS3API) GetBucketPolicyStatusRequestCalls() []struct {
 }
 
 // GetBucketPolicyStatusWithContext calls GetBucketPolicyStatusWithContextFunc.
-func (mock *MockS3API) GetBucketPolicyStatusWithContext(contextMoqParam context.Context, getBucketPolicyStatusInput *s3.GetBucketPolicyStatusInput, options ...request.Option) (*s3.GetBucketPolicyStatusOutput, error) {
+func (mock *MockS3API) GetBucketPolicyStatusWithContext(v aws.Context, getBucketPolicyStatusInput *s3.GetBucketPolicyStatusInput, options ...request.Option) (*s3.GetBucketPolicyStatusOutput, error) {
 	if mock.GetBucketPolicyStatusWithContextFunc == nil {
 		panic("MockS3API.GetBucketPolicyStatusWithContextFunc: method is nil but S3API.GetBucketPolicyStatusWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam            context.Context
+		V                          aws.Context
 		GetBucketPolicyStatusInput *s3.GetBucketPolicyStatusInput
 		Options                    []request.Option
 	}{
-		ContextMoqParam:            contextMoqParam,
+		V:                          v,
 		GetBucketPolicyStatusInput: getBucketPolicyStatusInput,
 		Options:                    options,
 	}
 	mock.lockGetBucketPolicyStatusWithContext.Lock()
 	mock.calls.GetBucketPolicyStatusWithContext = append(mock.calls.GetBucketPolicyStatusWithContext, callInfo)
 	mock.lockGetBucketPolicyStatusWithContext.Unlock()
-	return mock.GetBucketPolicyStatusWithContextFunc(contextMoqParam, getBucketPolicyStatusInput, options...)
+	return mock.GetBucketPolicyStatusWithContextFunc(v, getBucketPolicyStatusInput, options...)
 }
 
 // GetBucketPolicyStatusWithContextCalls gets all the calls that were made to GetBucketPolicyStatusWithContext.
@@ -8402,12 +8402,12 @@ func (mock *MockS3API) GetBucketPolicyStatusWithContext(contextMoqParam context.
 //
 //	len(mockedS3API.GetBucketPolicyStatusWithContextCalls())
 func (mock *MockS3API) GetBucketPolicyStatusWithContextCalls() []struct {
-	ContextMoqParam            context.Context
+	V                          aws.Context
 	GetBucketPolicyStatusInput *s3.GetBucketPolicyStatusInput
 	Options                    []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam            context.Context
+		V                          aws.Context
 		GetBucketPolicyStatusInput *s3.GetBucketPolicyStatusInput
 		Options                    []request.Option
 	}
@@ -8418,23 +8418,23 @@ func (mock *MockS3API) GetBucketPolicyStatusWithContextCalls() []struct {
 }
 
 // GetBucketPolicyWithContext calls GetBucketPolicyWithContextFunc.
-func (mock *MockS3API) GetBucketPolicyWithContext(contextMoqParam context.Context, getBucketPolicyInput *s3.GetBucketPolicyInput, options ...request.Option) (*s3.GetBucketPolicyOutput, error) {
+func (mock *MockS3API) GetBucketPolicyWithContext(v aws.Context, getBucketPolicyInput *s3.GetBucketPolicyInput, options ...request.Option) (*s3.GetBucketPolicyOutput, error) {
 	if mock.GetBucketPolicyWithContextFunc == nil {
 		panic("MockS3API.GetBucketPolicyWithContextFunc: method is nil but S3API.GetBucketPolicyWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam      context.Context
+		V                    aws.Context
 		GetBucketPolicyInput *s3.GetBucketPolicyInput
 		Options              []request.Option
 	}{
-		ContextMoqParam:      contextMoqParam,
+		V:                    v,
 		GetBucketPolicyInput: getBucketPolicyInput,
 		Options:              options,
 	}
 	mock.lockGetBucketPolicyWithContext.Lock()
 	mock.calls.GetBucketPolicyWithContext = append(mock.calls.GetBucketPolicyWithContext, callInfo)
 	mock.lockGetBucketPolicyWithContext.Unlock()
-	return mock.GetBucketPolicyWithContextFunc(contextMoqParam, getBucketPolicyInput, options...)
+	return mock.GetBucketPolicyWithContextFunc(v, getBucketPolicyInput, options...)
 }
 
 // GetBucketPolicyWithContextCalls gets all the calls that were made to GetBucketPolicyWithContext.
@@ -8442,12 +8442,12 @@ func (mock *MockS3API) GetBucketPolicyWithContext(contextMoqParam context.Contex
 //
 //	len(mockedS3API.GetBucketPolicyWithContextCalls())
 func (mock *MockS3API) GetBucketPolicyWithContextCalls() []struct {
-	ContextMoqParam      context.Context
+	V                    aws.Context
 	GetBucketPolicyInput *s3.GetBucketPolicyInput
 	Options              []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam      context.Context
+		V                    aws.Context
 		GetBucketPolicyInput *s3.GetBucketPolicyInput
 		Options              []request.Option
 	}
@@ -8522,23 +8522,23 @@ func (mock *MockS3API) GetBucketReplicationRequestCalls() []struct {
 }
 
 // GetBucketReplicationWithContext calls GetBucketReplicationWithContextFunc.
-func (mock *MockS3API) GetBucketReplicationWithContext(contextMoqParam context.Context, getBucketReplicationInput *s3.GetBucketReplicationInput, options ...request.Option) (*s3.GetBucketReplicationOutput, error) {
+func (mock *MockS3API) GetBucketReplicationWithContext(v aws.Context, getBucketReplicationInput *s3.GetBucketReplicationInput, options ...request.Option) (*s3.GetBucketReplicationOutput, error) {
 	if mock.GetBucketReplicationWithContextFunc == nil {
 		panic("MockS3API.GetBucketReplicationWithContextFunc: method is nil but S3API.GetBucketReplicationWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam           context.Context
+		V                         aws.Context
 		GetBucketReplicationInput *s3.GetBucketReplicationInput
 		Options                   []request.Option
 	}{
-		ContextMoqParam:           contextMoqParam,
+		V:                         v,
 		GetBucketReplicationInput: getBucketReplicationInput,
 		Options:                   options,
 	}
 	mock.lockGetBucketReplicationWithContext.Lock()
 	mock.calls.GetBucketReplicationWithContext = append(mock.calls.GetBucketReplicationWithContext, callInfo)
 	mock.lockGetBucketReplicationWithContext.Unlock()
-	return mock.GetBucketReplicationWithContextFunc(contextMoqParam, getBucketReplicationInput, options...)
+	return mock.GetBucketReplicationWithContextFunc(v, getBucketReplicationInput, options...)
 }
 
 // GetBucketReplicationWithContextCalls gets all the calls that were made to GetBucketReplicationWithContext.
@@ -8546,12 +8546,12 @@ func (mock *MockS3API) GetBucketReplicationWithContext(contextMoqParam context.C
 //
 //	len(mockedS3API.GetBucketReplicationWithContextCalls())
 func (mock *MockS3API) GetBucketReplicationWithContextCalls() []struct {
-	ContextMoqParam           context.Context
+	V                         aws.Context
 	GetBucketReplicationInput *s3.GetBucketReplicationInput
 	Options                   []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam           context.Context
+		V                         aws.Context
 		GetBucketReplicationInput *s3.GetBucketReplicationInput
 		Options                   []request.Option
 	}
@@ -8626,23 +8626,23 @@ func (mock *MockS3API) GetBucketRequestPaymentRequestCalls() []struct {
 }
 
 // GetBucketRequestPaymentWithContext calls GetBucketRequestPaymentWithContextFunc.
-func (mock *MockS3API) GetBucketRequestPaymentWithContext(contextMoqParam context.Context, getBucketRequestPaymentInput *s3.GetBucketRequestPaymentInput, options ...request.Option) (*s3.GetBucketRequestPaymentOutput, error) {
+func (mock *MockS3API) GetBucketRequestPaymentWithContext(v aws.Context, getBucketRequestPaymentInput *s3.GetBucketRequestPaymentInput, options ...request.Option) (*s3.GetBucketRequestPaymentOutput, error) {
 	if mock.GetBucketRequestPaymentWithContextFunc == nil {
 		panic("MockS3API.GetBucketRequestPaymentWithContextFunc: method is nil but S3API.GetBucketRequestPaymentWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam              context.Context
+		V                            aws.Context
 		GetBucketRequestPaymentInput *s3.GetBucketRequestPaymentInput
 		Options                      []request.Option
 	}{
-		ContextMoqParam:              contextMoqParam,
+		V:                            v,
 		GetBucketRequestPaymentInput: getBucketRequestPaymentInput,
 		Options:                      options,
 	}
 	mock.lockGetBucketRequestPaymentWithContext.Lock()
 	mock.calls.GetBucketRequestPaymentWithContext = append(mock.calls.GetBucketRequestPaymentWithContext, callInfo)
 	mock.lockGetBucketRequestPaymentWithContext.Unlock()
-	return mock.GetBucketRequestPaymentWithContextFunc(contextMoqParam, getBucketRequestPaymentInput, options...)
+	return mock.GetBucketRequestPaymentWithContextFunc(v, getBucketRequestPaymentInput, options...)
 }
 
 // GetBucketRequestPaymentWithContextCalls gets all the calls that were made to GetBucketRequestPaymentWithContext.
@@ -8650,12 +8650,12 @@ func (mock *MockS3API) GetBucketRequestPaymentWithContext(contextMoqParam contex
 //
 //	len(mockedS3API.GetBucketRequestPaymentWithContextCalls())
 func (mock *MockS3API) GetBucketRequestPaymentWithContextCalls() []struct {
-	ContextMoqParam              context.Context
+	V                            aws.Context
 	GetBucketRequestPaymentInput *s3.GetBucketRequestPaymentInput
 	Options                      []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam              context.Context
+		V                            aws.Context
 		GetBucketRequestPaymentInput *s3.GetBucketRequestPaymentInput
 		Options                      []request.Option
 	}
@@ -8730,23 +8730,23 @@ func (mock *MockS3API) GetBucketTaggingRequestCalls() []struct {
 }
 
 // GetBucketTaggingWithContext calls GetBucketTaggingWithContextFunc.
-func (mock *MockS3API) GetBucketTaggingWithContext(contextMoqParam context.Context, getBucketTaggingInput *s3.GetBucketTaggingInput, options ...request.Option) (*s3.GetBucketTaggingOutput, error) {
+func (mock *MockS3API) GetBucketTaggingWithContext(v aws.Context, getBucketTaggingInput *s3.GetBucketTaggingInput, options ...request.Option) (*s3.GetBucketTaggingOutput, error) {
 	if mock.GetBucketTaggingWithContextFunc == nil {
 		panic("MockS3API.GetBucketTaggingWithContextFunc: method is nil but S3API.GetBucketTaggingWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam       context.Context
+		V                     aws.Context
 		GetBucketTaggingInput *s3.GetBucketTaggingInput
 		Options               []request.Option
 	}{
-		ContextMoqParam:       contextMoqParam,
+		V:                     v,
 		GetBucketTaggingInput: getBucketTaggingInput,
 		Options:               options,
 	}
 	mock.lockGetBucketTaggingWithContext.Lock()
 	mock.calls.GetBucketTaggingWithContext = append(mock.calls.GetBucketTaggingWithContext, callInfo)
 	mock.lockGetBucketTaggingWithContext.Unlock()
-	return mock.GetBucketTaggingWithContextFunc(contextMoqParam, getBucketTaggingInput, options...)
+	return mock.GetBucketTaggingWithContextFunc(v, getBucketTaggingInput, options...)
 }
 
 // GetBucketTaggingWithContextCalls gets all the calls that were made to GetBucketTaggingWithContext.
@@ -8754,12 +8754,12 @@ func (mock *MockS3API) GetBucketTaggingWithContext(contextMoqParam context.Conte
 //
 //	len(mockedS3API.GetBucketTaggingWithContextCalls())
 func (mock *MockS3API) GetBucketTaggingWithContextCalls() []struct {
-	ContextMoqParam       context.Context
+	V                     aws.Context
 	GetBucketTaggingInput *s3.GetBucketTaggingInput
 	Options               []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam       context.Context
+		V                     aws.Context
 		GetBucketTaggingInput *s3.GetBucketTaggingInput
 		Options               []request.Option
 	}
@@ -8834,23 +8834,23 @@ func (mock *MockS3API) GetBucketVersioningRequestCalls() []struct {
 }
 
 // GetBucketVersioningWithContext calls GetBucketVersioningWithContextFunc.
-func (mock *MockS3API) GetBucketVersioningWithContext(contextMoqParam context.Context, getBucketVersioningInput *s3.GetBucketVersioningInput, options ...request.Option) (*s3.GetBucketVersioningOutput, error) {
+func (mock *MockS3API) GetBucketVersioningWithContext(v aws.Context, getBucketVersioningInput *s3.GetBucketVersioningInput, options ...request.Option) (*s3.GetBucketVersioningOutput, error) {
 	if mock.GetBucketVersioningWithContextFunc == nil {
 		panic("MockS3API.GetBucketVersioningWithContextFunc: method is nil but S3API.GetBucketVersioningWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam          context.Context
+		V                        aws.Context
 		GetBucketVersioningInput *s3.GetBucketVersioningInput
 		Options                  []request.Option
 	}{
-		ContextMoqParam:          contextMoqParam,
+		V:                        v,
 		GetBucketVersioningInput: getBucketVersioningInput,
 		Options:                  options,
 	}
 	mock.lockGetBucketVersioningWithContext.Lock()
 	mock.calls.GetBucketVersioningWithContext = append(mock.calls.GetBucketVersioningWithContext, callInfo)
 	mock.lockGetBucketVersioningWithContext.Unlock()
-	return mock.GetBucketVersioningWithContextFunc(contextMoqParam, getBucketVersioningInput, options...)
+	return mock.GetBucketVersioningWithContextFunc(v, getBucketVersioningInput, options...)
 }
 
 // GetBucketVersioningWithContextCalls gets all the calls that were made to GetBucketVersioningWithContext.
@@ -8858,12 +8858,12 @@ func (mock *MockS3API) GetBucketVersioningWithContext(contextMoqParam context.Co
 //
 //	len(mockedS3API.GetBucketVersioningWithContextCalls())
 func (mock *MockS3API) GetBucketVersioningWithContextCalls() []struct {
-	ContextMoqParam          context.Context
+	V                        aws.Context
 	GetBucketVersioningInput *s3.GetBucketVersioningInput
 	Options                  []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam          context.Context
+		V                        aws.Context
 		GetBucketVersioningInput *s3.GetBucketVersioningInput
 		Options                  []request.Option
 	}
@@ -8938,23 +8938,23 @@ func (mock *MockS3API) GetBucketWebsiteRequestCalls() []struct {
 }
 
 // GetBucketWebsiteWithContext calls GetBucketWebsiteWithContextFunc.
-func (mock *MockS3API) GetBucketWebsiteWithContext(contextMoqParam context.Context, getBucketWebsiteInput *s3.GetBucketWebsiteInput, options ...request.Option) (*s3.GetBucketWebsiteOutput, error) {
+func (mock *MockS3API) GetBucketWebsiteWithContext(v aws.Context, getBucketWebsiteInput *s3.GetBucketWebsiteInput, options ...request.Option) (*s3.GetBucketWebsiteOutput, error) {
 	if mock.GetBucketWebsiteWithContextFunc == nil {
 		panic("MockS3API.GetBucketWebsiteWithContextFunc: method is nil but S3API.GetBucketWebsiteWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam       context.Context
+		V                     aws.Context
 		GetBucketWebsiteInput *s3.GetBucketWebsiteInput
 		Options               []request.Option
 	}{
-		ContextMoqParam:       contextMoqParam,
+		V:                     v,
 		GetBucketWebsiteInput: getBucketWebsiteInput,
 		Options:               options,
 	}
 	mock.lockGetBucketWebsiteWithContext.Lock()
 	mock.calls.GetBucketWebsiteWithContext = append(mock.calls.GetBucketWebsiteWithContext, callInfo)
 	mock.lockGetBucketWebsiteWithContext.Unlock()
-	return mock.GetBucketWebsiteWithContextFunc(contextMoqParam, getBucketWebsiteInput, options...)
+	return mock.GetBucketWebsiteWithContextFunc(v, getBucketWebsiteInput, options...)
 }
 
 // GetBucketWebsiteWithContextCalls gets all the calls that were made to GetBucketWebsiteWithContext.
@@ -8962,12 +8962,12 @@ func (mock *MockS3API) GetBucketWebsiteWithContext(contextMoqParam context.Conte
 //
 //	len(mockedS3API.GetBucketWebsiteWithContextCalls())
 func (mock *MockS3API) GetBucketWebsiteWithContextCalls() []struct {
-	ContextMoqParam       context.Context
+	V                     aws.Context
 	GetBucketWebsiteInput *s3.GetBucketWebsiteInput
 	Options               []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam       context.Context
+		V                     aws.Context
 		GetBucketWebsiteInput *s3.GetBucketWebsiteInput
 		Options               []request.Option
 	}
@@ -9074,23 +9074,23 @@ func (mock *MockS3API) GetObjectAclRequestCalls() []struct {
 }
 
 // GetObjectAclWithContext calls GetObjectAclWithContextFunc.
-func (mock *MockS3API) GetObjectAclWithContext(contextMoqParam context.Context, getObjectAclInput *s3.GetObjectAclInput, options ...request.Option) (*s3.GetObjectAclOutput, error) {
+func (mock *MockS3API) GetObjectAclWithContext(v aws.Context, getObjectAclInput *s3.GetObjectAclInput, options ...request.Option) (*s3.GetObjectAclOutput, error) {
 	if mock.GetObjectAclWithContextFunc == nil {
 		panic("MockS3API.GetObjectAclWithContextFunc: method is nil but S3API.GetObjectAclWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam   context.Context
+		V                 aws.Context
 		GetObjectAclInput *s3.GetObjectAclInput
 		Options           []request.Option
 	}{
-		ContextMoqParam:   contextMoqParam,
+		V:                 v,
 		GetObjectAclInput: getObjectAclInput,
 		Options:           options,
 	}
 	mock.lockGetObjectAclWithContext.Lock()
 	mock.calls.GetObjectAclWithContext = append(mock.calls.GetObjectAclWithContext, callInfo)
 	mock.lockGetObjectAclWithContext.Unlock()
-	return mock.GetObjectAclWithContextFunc(contextMoqParam, getObjectAclInput, options...)
+	return mock.GetObjectAclWithContextFunc(v, getObjectAclInput, options...)
 }
 
 // GetObjectAclWithContextCalls gets all the calls that were made to GetObjectAclWithContext.
@@ -9098,12 +9098,12 @@ func (mock *MockS3API) GetObjectAclWithContext(contextMoqParam context.Context, 
 //
 //	len(mockedS3API.GetObjectAclWithContextCalls())
 func (mock *MockS3API) GetObjectAclWithContextCalls() []struct {
-	ContextMoqParam   context.Context
+	V                 aws.Context
 	GetObjectAclInput *s3.GetObjectAclInput
 	Options           []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam   context.Context
+		V                 aws.Context
 		GetObjectAclInput *s3.GetObjectAclInput
 		Options           []request.Option
 	}
@@ -9178,23 +9178,23 @@ func (mock *MockS3API) GetObjectAttributesRequestCalls() []struct {
 }
 
 // GetObjectAttributesWithContext calls GetObjectAttributesWithContextFunc.
-func (mock *MockS3API) GetObjectAttributesWithContext(contextMoqParam context.Context, getObjectAttributesInput *s3.GetObjectAttributesInput, options ...request.Option) (*s3.GetObjectAttributesOutput, error) {
+func (mock *MockS3API) GetObjectAttributesWithContext(v aws.Context, getObjectAttributesInput *s3.GetObjectAttributesInput, options ...request.Option) (*s3.GetObjectAttributesOutput, error) {
 	if mock.GetObjectAttributesWithContextFunc == nil {
 		panic("MockS3API.GetObjectAttributesWithContextFunc: method is nil but S3API.GetObjectAttributesWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam          context.Context
+		V                        aws.Context
 		GetObjectAttributesInput *s3.GetObjectAttributesInput
 		Options                  []request.Option
 	}{
-		ContextMoqParam:          contextMoqParam,
+		V:                        v,
 		GetObjectAttributesInput: getObjectAttributesInput,
 		Options:                  options,
 	}
 	mock.lockGetObjectAttributesWithContext.Lock()
 	mock.calls.GetObjectAttributesWithContext = append(mock.calls.GetObjectAttributesWithContext, callInfo)
 	mock.lockGetObjectAttributesWithContext.Unlock()
-	return mock.GetObjectAttributesWithContextFunc(contextMoqParam, getObjectAttributesInput, options...)
+	return mock.GetObjectAttributesWithContextFunc(v, getObjectAttributesInput, options...)
 }
 
 // GetObjectAttributesWithContextCalls gets all the calls that were made to GetObjectAttributesWithContext.
@@ -9202,12 +9202,12 @@ func (mock *MockS3API) GetObjectAttributesWithContext(contextMoqParam context.Co
 //
 //	len(mockedS3API.GetObjectAttributesWithContextCalls())
 func (mock *MockS3API) GetObjectAttributesWithContextCalls() []struct {
-	ContextMoqParam          context.Context
+	V                        aws.Context
 	GetObjectAttributesInput *s3.GetObjectAttributesInput
 	Options                  []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam          context.Context
+		V                        aws.Context
 		GetObjectAttributesInput *s3.GetObjectAttributesInput
 		Options                  []request.Option
 	}
@@ -9282,23 +9282,23 @@ func (mock *MockS3API) GetObjectLegalHoldRequestCalls() []struct {
 }
 
 // GetObjectLegalHoldWithContext calls GetObjectLegalHoldWithContextFunc.
-func (mock *MockS3API) GetObjectLegalHoldWithContext(contextMoqParam context.Context, getObjectLegalHoldInput *s3.GetObjectLegalHoldInput, options ...request.Option) (*s3.GetObjectLegalHoldOutput, error) {
+func (mock *MockS3API) GetObjectLegalHoldWithContext(v aws.Context, getObjectLegalHoldInput *s3.GetObjectLegalHoldInput, options ...request.Option) (*s3.GetObjectLegalHoldOutput, error) {
 	if mock.GetObjectLegalHoldWithContextFunc == nil {
 		panic("MockS3API.GetObjectLegalHoldWithContextFunc: method is nil but S3API.GetObjectLegalHoldWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam         context.Context
+		V                       aws.Context
 		GetObjectLegalHoldInput *s3.GetObjectLegalHoldInput
 		Options                 []request.Option
 	}{
-		ContextMoqParam:         contextMoqParam,
+		V:                       v,
 		GetObjectLegalHoldInput: getObjectLegalHoldInput,
 		Options:                 options,
 	}
 	mock.lockGetObjectLegalHoldWithContext.Lock()
 	mock.calls.GetObjectLegalHoldWithContext = append(mock.calls.GetObjectLegalHoldWithContext, callInfo)
 	mock.lockGetObjectLegalHoldWithContext.Unlock()
-	return mock.GetObjectLegalHoldWithContextFunc(contextMoqParam, getObjectLegalHoldInput, options...)
+	return mock.GetObjectLegalHoldWithContextFunc(v, getObjectLegalHoldInput, options...)
 }
 
 // GetObjectLegalHoldWithContextCalls gets all the calls that were made to GetObjectLegalHoldWithContext.
@@ -9306,12 +9306,12 @@ func (mock *MockS3API) GetObjectLegalHoldWithContext(contextMoqParam context.Con
 //
 //	len(mockedS3API.GetObjectLegalHoldWithContextCalls())
 func (mock *MockS3API) GetObjectLegalHoldWithContextCalls() []struct {
-	ContextMoqParam         context.Context
+	V                       aws.Context
 	GetObjectLegalHoldInput *s3.GetObjectLegalHoldInput
 	Options                 []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam         context.Context
+		V                       aws.Context
 		GetObjectLegalHoldInput *s3.GetObjectLegalHoldInput
 		Options                 []request.Option
 	}
@@ -9386,23 +9386,23 @@ func (mock *MockS3API) GetObjectLockConfigurationRequestCalls() []struct {
 }
 
 // GetObjectLockConfigurationWithContext calls GetObjectLockConfigurationWithContextFunc.
-func (mock *MockS3API) GetObjectLockConfigurationWithContext(contextMoqParam context.Context, getObjectLockConfigurationInput *s3.GetObjectLockConfigurationInput, options ...request.Option) (*s3.GetObjectLockConfigurationOutput, error) {
+func (mock *MockS3API) GetObjectLockConfigurationWithContext(v aws.Context, getObjectLockConfigurationInput *s3.GetObjectLockConfigurationInput, options ...request.Option) (*s3.GetObjectLockConfigurationOutput, error) {
 	if mock.GetObjectLockConfigurationWithContextFunc == nil {
 		panic("MockS3API.GetObjectLockConfigurationWithContextFunc: method is nil but S3API.GetObjectLockConfigurationWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam                 context.Context
+		V                               aws.Context
 		GetObjectLockConfigurationInput *s3.GetObjectLockConfigurationInput
 		Options                         []request.Option
 	}{
-		ContextMoqParam:                 contextMoqParam,
+		V:                               v,
 		GetObjectLockConfigurationInput: getObjectLockConfigurationInput,
 		Options:                         options,
 	}
 	mock.lockGetObjectLockConfigurationWithContext.Lock()
 	mock.calls.GetObjectLockConfigurationWithContext = append(mock.calls.GetObjectLockConfigurationWithContext, callInfo)
 	mock.lockGetObjectLockConfigurationWithContext.Unlock()
-	return mock.GetObjectLockConfigurationWithContextFunc(contextMoqParam, getObjectLockConfigurationInput, options...)
+	return mock.GetObjectLockConfigurationWithContextFunc(v, getObjectLockConfigurationInput, options...)
 }
 
 // GetObjectLockConfigurationWithContextCalls gets all the calls that were made to GetObjectLockConfigurationWithContext.
@@ -9410,12 +9410,12 @@ func (mock *MockS3API) GetObjectLockConfigurationWithContext(contextMoqParam con
 //
 //	len(mockedS3API.GetObjectLockConfigurationWithContextCalls())
 func (mock *MockS3API) GetObjectLockConfigurationWithContextCalls() []struct {
-	ContextMoqParam                 context.Context
+	V                               aws.Context
 	GetObjectLockConfigurationInput *s3.GetObjectLockConfigurationInput
 	Options                         []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam                 context.Context
+		V                               aws.Context
 		GetObjectLockConfigurationInput *s3.GetObjectLockConfigurationInput
 		Options                         []request.Option
 	}
@@ -9522,23 +9522,23 @@ func (mock *MockS3API) GetObjectRetentionRequestCalls() []struct {
 }
 
 // GetObjectRetentionWithContext calls GetObjectRetentionWithContextFunc.
-func (mock *MockS3API) GetObjectRetentionWithContext(contextMoqParam context.Context, getObjectRetentionInput *s3.GetObjectRetentionInput, options ...request.Option) (*s3.GetObjectRetentionOutput, error) {
+func (mock *MockS3API) GetObjectRetentionWithContext(v aws.Context, getObjectRetentionInput *s3.GetObjectRetentionInput, options ...request.Option) (*s3.GetObjectRetentionOutput, error) {
 	if mock.GetObjectRetentionWithContextFunc == nil {
 		panic("MockS3API.GetObjectRetentionWithContextFunc: method is nil but S3API.GetObjectRetentionWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam         context.Context
+		V                       aws.Context
 		GetObjectRetentionInput *s3.GetObjectRetentionInput
 		Options                 []request.Option
 	}{
-		ContextMoqParam:         contextMoqParam,
+		V:                       v,
 		GetObjectRetentionInput: getObjectRetentionInput,
 		Options:                 options,
 	}
 	mock.lockGetObjectRetentionWithContext.Lock()
 	mock.calls.GetObjectRetentionWithContext = append(mock.calls.GetObjectRetentionWithContext, callInfo)
 	mock.lockGetObjectRetentionWithContext.Unlock()
-	return mock.GetObjectRetentionWithContextFunc(contextMoqParam, getObjectRetentionInput, options...)
+	return mock.GetObjectRetentionWithContextFunc(v, getObjectRetentionInput, options...)
 }
 
 // GetObjectRetentionWithContextCalls gets all the calls that were made to GetObjectRetentionWithContext.
@@ -9546,12 +9546,12 @@ func (mock *MockS3API) GetObjectRetentionWithContext(contextMoqParam context.Con
 //
 //	len(mockedS3API.GetObjectRetentionWithContextCalls())
 func (mock *MockS3API) GetObjectRetentionWithContextCalls() []struct {
-	ContextMoqParam         context.Context
+	V                       aws.Context
 	GetObjectRetentionInput *s3.GetObjectRetentionInput
 	Options                 []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam         context.Context
+		V                       aws.Context
 		GetObjectRetentionInput *s3.GetObjectRetentionInput
 		Options                 []request.Option
 	}
@@ -9626,23 +9626,23 @@ func (mock *MockS3API) GetObjectTaggingRequestCalls() []struct {
 }
 
 // GetObjectTaggingWithContext calls GetObjectTaggingWithContextFunc.
-func (mock *MockS3API) GetObjectTaggingWithContext(contextMoqParam context.Context, getObjectTaggingInput *s3.GetObjectTaggingInput, options ...request.Option) (*s3.GetObjectTaggingOutput, error) {
+func (mock *MockS3API) GetObjectTaggingWithContext(v aws.Context, getObjectTaggingInput *s3.GetObjectTaggingInput, options ...request.Option) (*s3.GetObjectTaggingOutput, error) {
 	if mock.GetObjectTaggingWithContextFunc == nil {
 		panic("MockS3API.GetObjectTaggingWithContextFunc: method is nil but S3API.GetObjectTaggingWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam       context.Context
+		V                     aws.Context
 		GetObjectTaggingInput *s3.GetObjectTaggingInput
 		Options               []request.Option
 	}{
-		ContextMoqParam:       contextMoqParam,
+		V:                     v,
 		GetObjectTaggingInput: getObjectTaggingInput,
 		Options:               options,
 	}
 	mock.lockGetObjectTaggingWithContext.Lock()
 	mock.calls.GetObjectTaggingWithContext = append(mock.calls.GetObjectTaggingWithContext, callInfo)
 	mock.lockGetObjectTaggingWithContext.Unlock()
-	return mock.GetObjectTaggingWithContextFunc(contextMoqParam, getObjectTaggingInput, options...)
+	return mock.GetObjectTaggingWithContextFunc(v, getObjectTaggingInput, options...)
 }
 
 // GetObjectTaggingWithContextCalls gets all the calls that were made to GetObjectTaggingWithContext.
@@ -9650,12 +9650,12 @@ func (mock *MockS3API) GetObjectTaggingWithContext(contextMoqParam context.Conte
 //
 //	len(mockedS3API.GetObjectTaggingWithContextCalls())
 func (mock *MockS3API) GetObjectTaggingWithContextCalls() []struct {
-	ContextMoqParam       context.Context
+	V                     aws.Context
 	GetObjectTaggingInput *s3.GetObjectTaggingInput
 	Options               []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam       context.Context
+		V                     aws.Context
 		GetObjectTaggingInput *s3.GetObjectTaggingInput
 		Options               []request.Option
 	}
@@ -9730,23 +9730,23 @@ func (mock *MockS3API) GetObjectTorrentRequestCalls() []struct {
 }
 
 // GetObjectTorrentWithContext calls GetObjectTorrentWithContextFunc.
-func (mock *MockS3API) GetObjectTorrentWithContext(contextMoqParam context.Context, getObjectTorrentInput *s3.GetObjectTorrentInput, options ...request.Option) (*s3.GetObjectTorrentOutput, error) {
+func (mock *MockS3API) GetObjectTorrentWithContext(v aws.Context, getObjectTorrentInput *s3.GetObjectTorrentInput, options ...request.Option) (*s3.GetObjectTorrentOutput, error) {
 	if mock.GetObjectTorrentWithContextFunc == nil {
 		panic("MockS3API.GetObjectTorrentWithContextFunc: method is nil but S3API.GetObjectTorrentWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam       context.Context
+		V                     aws.Context
 		GetObjectTorrentInput *s3.GetObjectTorrentInput
 		Options               []request.Option
 	}{
-		ContextMoqParam:       contextMoqParam,
+		V:                     v,
 		GetObjectTorrentInput: getObjectTorrentInput,
 		Options:               options,
 	}
 	mock.lockGetObjectTorrentWithContext.Lock()
 	mock.calls.GetObjectTorrentWithContext = append(mock.calls.GetObjectTorrentWithContext, callInfo)
 	mock.lockGetObjectTorrentWithContext.Unlock()
-	return mock.GetObjectTorrentWithContextFunc(contextMoqParam, getObjectTorrentInput, options...)
+	return mock.GetObjectTorrentWithContextFunc(v, getObjectTorrentInput, options...)
 }
 
 // GetObjectTorrentWithContextCalls gets all the calls that were made to GetObjectTorrentWithContext.
@@ -9754,12 +9754,12 @@ func (mock *MockS3API) GetObjectTorrentWithContext(contextMoqParam context.Conte
 //
 //	len(mockedS3API.GetObjectTorrentWithContextCalls())
 func (mock *MockS3API) GetObjectTorrentWithContextCalls() []struct {
-	ContextMoqParam       context.Context
+	V                     aws.Context
 	GetObjectTorrentInput *s3.GetObjectTorrentInput
 	Options               []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam       context.Context
+		V                     aws.Context
 		GetObjectTorrentInput *s3.GetObjectTorrentInput
 		Options               []request.Option
 	}
@@ -9770,23 +9770,23 @@ func (mock *MockS3API) GetObjectTorrentWithContextCalls() []struct {
 }
 
 // GetObjectWithContext calls GetObjectWithContextFunc.
-func (mock *MockS3API) GetObjectWithContext(contextMoqParam context.Context, getObjectInput *s3.GetObjectInput, options ...request.Option) (*s3.GetObjectOutput, error) {
+func (mock *MockS3API) GetObjectWithContext(v aws.Context, getObjectInput *s3.GetObjectInput, options ...request.Option) (*s3.GetObjectOutput, error) {
 	if mock.GetObjectWithContextFunc == nil {
 		panic("MockS3API.GetObjectWithContextFunc: method is nil but S3API.GetObjectWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam context.Context
-		GetObjectInput  *s3.GetObjectInput
-		Options         []request.Option
+		V              aws.Context
+		GetObjectInput *s3.GetObjectInput
+		Options        []request.Option
 	}{
-		ContextMoqParam: contextMoqParam,
-		GetObjectInput:  getObjectInput,
-		Options:         options,
+		V:              v,
+		GetObjectInput: getObjectInput,
+		Options:        options,
 	}
 	mock.lockGetObjectWithContext.Lock()
 	mock.calls.GetObjectWithContext = append(mock.calls.GetObjectWithContext, callInfo)
 	mock.lockGetObjectWithContext.Unlock()
-	return mock.GetObjectWithContextFunc(contextMoqParam, getObjectInput, options...)
+	return mock.GetObjectWithContextFunc(v, getObjectInput, options...)
 }
 
 // GetObjectWithContextCalls gets all the calls that were made to GetObjectWithContext.
@@ -9794,14 +9794,14 @@ func (mock *MockS3API) GetObjectWithContext(contextMoqParam context.Context, get
 //
 //	len(mockedS3API.GetObjectWithContextCalls())
 func (mock *MockS3API) GetObjectWithContextCalls() []struct {
-	ContextMoqParam context.Context
-	GetObjectInput  *s3.GetObjectInput
-	Options         []request.Option
+	V              aws.Context
+	GetObjectInput *s3.GetObjectInput
+	Options        []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam context.Context
-		GetObjectInput  *s3.GetObjectInput
-		Options         []request.Option
+		V              aws.Context
+		GetObjectInput *s3.GetObjectInput
+		Options        []request.Option
 	}
 	mock.lockGetObjectWithContext.RLock()
 	calls = mock.calls.GetObjectWithContext
@@ -9874,23 +9874,23 @@ func (mock *MockS3API) GetPublicAccessBlockRequestCalls() []struct {
 }
 
 // GetPublicAccessBlockWithContext calls GetPublicAccessBlockWithContextFunc.
-func (mock *MockS3API) GetPublicAccessBlockWithContext(contextMoqParam context.Context, getPublicAccessBlockInput *s3.GetPublicAccessBlockInput, options ...request.Option) (*s3.GetPublicAccessBlockOutput, error) {
+func (mock *MockS3API) GetPublicAccessBlockWithContext(v aws.Context, getPublicAccessBlockInput *s3.GetPublicAccessBlockInput, options ...request.Option) (*s3.GetPublicAccessBlockOutput, error) {
 	if mock.GetPublicAccessBlockWithContextFunc == nil {
 		panic("MockS3API.GetPublicAccessBlockWithContextFunc: method is nil but S3API.GetPublicAccessBlockWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam           context.Context
+		V                         aws.Context
 		GetPublicAccessBlockInput *s3.GetPublicAccessBlockInput
 		Options                   []request.Option
 	}{
-		ContextMoqParam:           contextMoqParam,
+		V:                         v,
 		GetPublicAccessBlockInput: getPublicAccessBlockInput,
 		Options:                   options,
 	}
 	mock.lockGetPublicAccessBlockWithContext.Lock()
 	mock.calls.GetPublicAccessBlockWithContext = append(mock.calls.GetPublicAccessBlockWithContext, callInfo)
 	mock.lockGetPublicAccessBlockWithContext.Unlock()
-	return mock.GetPublicAccessBlockWithContextFunc(contextMoqParam, getPublicAccessBlockInput, options...)
+	return mock.GetPublicAccessBlockWithContextFunc(v, getPublicAccessBlockInput, options...)
 }
 
 // GetPublicAccessBlockWithContextCalls gets all the calls that were made to GetPublicAccessBlockWithContext.
@@ -9898,12 +9898,12 @@ func (mock *MockS3API) GetPublicAccessBlockWithContext(contextMoqParam context.C
 //
 //	len(mockedS3API.GetPublicAccessBlockWithContextCalls())
 func (mock *MockS3API) GetPublicAccessBlockWithContextCalls() []struct {
-	ContextMoqParam           context.Context
+	V                         aws.Context
 	GetPublicAccessBlockInput *s3.GetPublicAccessBlockInput
 	Options                   []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam           context.Context
+		V                         aws.Context
 		GetPublicAccessBlockInput *s3.GetPublicAccessBlockInput
 		Options                   []request.Option
 	}
@@ -9978,23 +9978,23 @@ func (mock *MockS3API) HeadBucketRequestCalls() []struct {
 }
 
 // HeadBucketWithContext calls HeadBucketWithContextFunc.
-func (mock *MockS3API) HeadBucketWithContext(contextMoqParam context.Context, headBucketInput *s3.HeadBucketInput, options ...request.Option) (*s3.HeadBucketOutput, error) {
+func (mock *MockS3API) HeadBucketWithContext(v aws.Context, headBucketInput *s3.HeadBucketInput, options ...request.Option) (*s3.HeadBucketOutput, error) {
 	if mock.HeadBucketWithContextFunc == nil {
 		panic("MockS3API.HeadBucketWithContextFunc: method is nil but S3API.HeadBucketWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam context.Context
+		V               aws.Context
 		HeadBucketInput *s3.HeadBucketInput
 		Options         []request.Option
 	}{
-		ContextMoqParam: contextMoqParam,
+		V:               v,
 		HeadBucketInput: headBucketInput,
 		Options:         options,
 	}
 	mock.lockHeadBucketWithContext.Lock()
 	mock.calls.HeadBucketWithContext = append(mock.calls.HeadBucketWithContext, callInfo)
 	mock.lockHeadBucketWithContext.Unlock()
-	return mock.HeadBucketWithContextFunc(contextMoqParam, headBucketInput, options...)
+	return mock.HeadBucketWithContextFunc(v, headBucketInput, options...)
 }
 
 // HeadBucketWithContextCalls gets all the calls that were made to HeadBucketWithContext.
@@ -10002,12 +10002,12 @@ func (mock *MockS3API) HeadBucketWithContext(contextMoqParam context.Context, he
 //
 //	len(mockedS3API.HeadBucketWithContextCalls())
 func (mock *MockS3API) HeadBucketWithContextCalls() []struct {
-	ContextMoqParam context.Context
+	V               aws.Context
 	HeadBucketInput *s3.HeadBucketInput
 	Options         []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam context.Context
+		V               aws.Context
 		HeadBucketInput *s3.HeadBucketInput
 		Options         []request.Option
 	}
@@ -10082,23 +10082,23 @@ func (mock *MockS3API) HeadObjectRequestCalls() []struct {
 }
 
 // HeadObjectWithContext calls HeadObjectWithContextFunc.
-func (mock *MockS3API) HeadObjectWithContext(contextMoqParam context.Context, headObjectInput *s3.HeadObjectInput, options ...request.Option) (*s3.HeadObjectOutput, error) {
+func (mock *MockS3API) HeadObjectWithContext(v aws.Context, headObjectInput *s3.HeadObjectInput, options ...request.Option) (*s3.HeadObjectOutput, error) {
 	if mock.HeadObjectWithContextFunc == nil {
 		panic("MockS3API.HeadObjectWithContextFunc: method is nil but S3API.HeadObjectWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam context.Context
+		V               aws.Context
 		HeadObjectInput *s3.HeadObjectInput
 		Options         []request.Option
 	}{
-		ContextMoqParam: contextMoqParam,
+		V:               v,
 		HeadObjectInput: headObjectInput,
 		Options:         options,
 	}
 	mock.lockHeadObjectWithContext.Lock()
 	mock.calls.HeadObjectWithContext = append(mock.calls.HeadObjectWithContext, callInfo)
 	mock.lockHeadObjectWithContext.Unlock()
-	return mock.HeadObjectWithContextFunc(contextMoqParam, headObjectInput, options...)
+	return mock.HeadObjectWithContextFunc(v, headObjectInput, options...)
 }
 
 // HeadObjectWithContextCalls gets all the calls that were made to HeadObjectWithContext.
@@ -10106,12 +10106,12 @@ func (mock *MockS3API) HeadObjectWithContext(contextMoqParam context.Context, he
 //
 //	len(mockedS3API.HeadObjectWithContextCalls())
 func (mock *MockS3API) HeadObjectWithContextCalls() []struct {
-	ContextMoqParam context.Context
+	V               aws.Context
 	HeadObjectInput *s3.HeadObjectInput
 	Options         []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam context.Context
+		V               aws.Context
 		HeadObjectInput *s3.HeadObjectInput
 		Options         []request.Option
 	}
@@ -10186,23 +10186,23 @@ func (mock *MockS3API) ListBucketAnalyticsConfigurationsRequestCalls() []struct 
 }
 
 // ListBucketAnalyticsConfigurationsWithContext calls ListBucketAnalyticsConfigurationsWithContextFunc.
-func (mock *MockS3API) ListBucketAnalyticsConfigurationsWithContext(contextMoqParam context.Context, listBucketAnalyticsConfigurationsInput *s3.ListBucketAnalyticsConfigurationsInput, options ...request.Option) (*s3.ListBucketAnalyticsConfigurationsOutput, error) {
+func (mock *MockS3API) ListBucketAnalyticsConfigurationsWithContext(v aws.Context, listBucketAnalyticsConfigurationsInput *s3.ListBucketAnalyticsConfigurationsInput, options ...request.Option) (*s3.ListBucketAnalyticsConfigurationsOutput, error) {
 	if mock.ListBucketAnalyticsConfigurationsWithContextFunc == nil {
 		panic("MockS3API.ListBucketAnalyticsConfigurationsWithContextFunc: method is nil but S3API.ListBucketAnalyticsConfigurationsWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam                        context.Context
+		V                                      aws.Context
 		ListBucketAnalyticsConfigurationsInput *s3.ListBucketAnalyticsConfigurationsInput
 		Options                                []request.Option
 	}{
-		ContextMoqParam:                        contextMoqParam,
+		V:                                      v,
 		ListBucketAnalyticsConfigurationsInput: listBucketAnalyticsConfigurationsInput,
 		Options:                                options,
 	}
 	mock.lockListBucketAnalyticsConfigurationsWithContext.Lock()
 	mock.calls.ListBucketAnalyticsConfigurationsWithContext = append(mock.calls.ListBucketAnalyticsConfigurationsWithContext, callInfo)
 	mock.lockListBucketAnalyticsConfigurationsWithContext.Unlock()
-	return mock.ListBucketAnalyticsConfigurationsWithContextFunc(contextMoqParam, listBucketAnalyticsConfigurationsInput, options...)
+	return mock.ListBucketAnalyticsConfigurationsWithContextFunc(v, listBucketAnalyticsConfigurationsInput, options...)
 }
 
 // ListBucketAnalyticsConfigurationsWithContextCalls gets all the calls that were made to ListBucketAnalyticsConfigurationsWithContext.
@@ -10210,12 +10210,12 @@ func (mock *MockS3API) ListBucketAnalyticsConfigurationsWithContext(contextMoqPa
 //
 //	len(mockedS3API.ListBucketAnalyticsConfigurationsWithContextCalls())
 func (mock *MockS3API) ListBucketAnalyticsConfigurationsWithContextCalls() []struct {
-	ContextMoqParam                        context.Context
+	V                                      aws.Context
 	ListBucketAnalyticsConfigurationsInput *s3.ListBucketAnalyticsConfigurationsInput
 	Options                                []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam                        context.Context
+		V                                      aws.Context
 		ListBucketAnalyticsConfigurationsInput *s3.ListBucketAnalyticsConfigurationsInput
 		Options                                []request.Option
 	}
@@ -10290,23 +10290,23 @@ func (mock *MockS3API) ListBucketIntelligentTieringConfigurationsRequestCalls() 
 }
 
 // ListBucketIntelligentTieringConfigurationsWithContext calls ListBucketIntelligentTieringConfigurationsWithContextFunc.
-func (mock *MockS3API) ListBucketIntelligentTieringConfigurationsWithContext(contextMoqParam context.Context, listBucketIntelligentTieringConfigurationsInput *s3.ListBucketIntelligentTieringConfigurationsInput, options ...request.Option) (*s3.ListBucketIntelligentTieringConfigurationsOutput, error) {
+func (mock *MockS3API) ListBucketIntelligentTieringConfigurationsWithContext(v aws.Context, listBucketIntelligentTieringConfigurationsInput *s3.ListBucketIntelligentTieringConfigurationsInput, options ...request.Option) (*s3.ListBucketIntelligentTieringConfigurationsOutput, error) {
 	if mock.ListBucketIntelligentTieringConfigurationsWithContextFunc == nil {
 		panic("MockS3API.ListBucketIntelligentTieringConfigurationsWithContextFunc: method is nil but S3API.ListBucketIntelligentTieringConfigurationsWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam                                 context.Context
+		V                                               aws.Context
 		ListBucketIntelligentTieringConfigurationsInput *s3.ListBucketIntelligentTieringConfigurationsInput
 		Options                                         []request.Option
 	}{
-		ContextMoqParam: contextMoqParam,
+		V: v,
 		ListBucketIntelligentTieringConfigurationsInput: listBucketIntelligentTieringConfigurationsInput,
 		Options: options,
 	}
 	mock.lockListBucketIntelligentTieringConfigurationsWithContext.Lock()
 	mock.calls.ListBucketIntelligentTieringConfigurationsWithContext = append(mock.calls.ListBucketIntelligentTieringConfigurationsWithContext, callInfo)
 	mock.lockListBucketIntelligentTieringConfigurationsWithContext.Unlock()
-	return mock.ListBucketIntelligentTieringConfigurationsWithContextFunc(contextMoqParam, listBucketIntelligentTieringConfigurationsInput, options...)
+	return mock.ListBucketIntelligentTieringConfigurationsWithContextFunc(v, listBucketIntelligentTieringConfigurationsInput, options...)
 }
 
 // ListBucketIntelligentTieringConfigurationsWithContextCalls gets all the calls that were made to ListBucketIntelligentTieringConfigurationsWithContext.
@@ -10314,12 +10314,12 @@ func (mock *MockS3API) ListBucketIntelligentTieringConfigurationsWithContext(con
 //
 //	len(mockedS3API.ListBucketIntelligentTieringConfigurationsWithContextCalls())
 func (mock *MockS3API) ListBucketIntelligentTieringConfigurationsWithContextCalls() []struct {
-	ContextMoqParam                                 context.Context
+	V                                               aws.Context
 	ListBucketIntelligentTieringConfigurationsInput *s3.ListBucketIntelligentTieringConfigurationsInput
 	Options                                         []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam                                 context.Context
+		V                                               aws.Context
 		ListBucketIntelligentTieringConfigurationsInput *s3.ListBucketIntelligentTieringConfigurationsInput
 		Options                                         []request.Option
 	}
@@ -10394,23 +10394,23 @@ func (mock *MockS3API) ListBucketInventoryConfigurationsRequestCalls() []struct 
 }
 
 // ListBucketInventoryConfigurationsWithContext calls ListBucketInventoryConfigurationsWithContextFunc.
-func (mock *MockS3API) ListBucketInventoryConfigurationsWithContext(contextMoqParam context.Context, listBucketInventoryConfigurationsInput *s3.ListBucketInventoryConfigurationsInput, options ...request.Option) (*s3.ListBucketInventoryConfigurationsOutput, error) {
+func (mock *MockS3API) ListBucketInventoryConfigurationsWithContext(v aws.Context, listBucketInventoryConfigurationsInput *s3.ListBucketInventoryConfigurationsInput, options ...request.Option) (*s3.ListBucketInventoryConfigurationsOutput, error) {
 	if mock.ListBucketInventoryConfigurationsWithContextFunc == nil {
 		panic("MockS3API.ListBucketInventoryConfigurationsWithContextFunc: method is nil but S3API.ListBucketInventoryConfigurationsWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam                        context.Context
+		V                                      aws.Context
 		ListBucketInventoryConfigurationsInput *s3.ListBucketInventoryConfigurationsInput
 		Options                                []request.Option
 	}{
-		ContextMoqParam:                        contextMoqParam,
+		V:                                      v,
 		ListBucketInventoryConfigurationsInput: listBucketInventoryConfigurationsInput,
 		Options:                                options,
 	}
 	mock.lockListBucketInventoryConfigurationsWithContext.Lock()
 	mock.calls.ListBucketInventoryConfigurationsWithContext = append(mock.calls.ListBucketInventoryConfigurationsWithContext, callInfo)
 	mock.lockListBucketInventoryConfigurationsWithContext.Unlock()
-	return mock.ListBucketInventoryConfigurationsWithContextFunc(contextMoqParam, listBucketInventoryConfigurationsInput, options...)
+	return mock.ListBucketInventoryConfigurationsWithContextFunc(v, listBucketInventoryConfigurationsInput, options...)
 }
 
 // ListBucketInventoryConfigurationsWithContextCalls gets all the calls that were made to ListBucketInventoryConfigurationsWithContext.
@@ -10418,12 +10418,12 @@ func (mock *MockS3API) ListBucketInventoryConfigurationsWithContext(contextMoqPa
 //
 //	len(mockedS3API.ListBucketInventoryConfigurationsWithContextCalls())
 func (mock *MockS3API) ListBucketInventoryConfigurationsWithContextCalls() []struct {
-	ContextMoqParam                        context.Context
+	V                                      aws.Context
 	ListBucketInventoryConfigurationsInput *s3.ListBucketInventoryConfigurationsInput
 	Options                                []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam                        context.Context
+		V                                      aws.Context
 		ListBucketInventoryConfigurationsInput *s3.ListBucketInventoryConfigurationsInput
 		Options                                []request.Option
 	}
@@ -10498,23 +10498,23 @@ func (mock *MockS3API) ListBucketMetricsConfigurationsRequestCalls() []struct {
 }
 
 // ListBucketMetricsConfigurationsWithContext calls ListBucketMetricsConfigurationsWithContextFunc.
-func (mock *MockS3API) ListBucketMetricsConfigurationsWithContext(contextMoqParam context.Context, listBucketMetricsConfigurationsInput *s3.ListBucketMetricsConfigurationsInput, options ...request.Option) (*s3.ListBucketMetricsConfigurationsOutput, error) {
+func (mock *MockS3API) ListBucketMetricsConfigurationsWithContext(v aws.Context, listBucketMetricsConfigurationsInput *s3.ListBucketMetricsConfigurationsInput, options ...request.Option) (*s3.ListBucketMetricsConfigurationsOutput, error) {
 	if mock.ListBucketMetricsConfigurationsWithContextFunc == nil {
 		panic("MockS3API.ListBucketMetricsConfigurationsWithContextFunc: method is nil but S3API.ListBucketMetricsConfigurationsWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam                      context.Context
+		V                                    aws.Context
 		ListBucketMetricsConfigurationsInput *s3.ListBucketMetricsConfigurationsInput
 		Options                              []request.Option
 	}{
-		ContextMoqParam:                      contextMoqParam,
+		V:                                    v,
 		ListBucketMetricsConfigurationsInput: listBucketMetricsConfigurationsInput,
 		Options:                              options,
 	}
 	mock.lockListBucketMetricsConfigurationsWithContext.Lock()
 	mock.calls.ListBucketMetricsConfigurationsWithContext = append(mock.calls.ListBucketMetricsConfigurationsWithContext, callInfo)
 	mock.lockListBucketMetricsConfigurationsWithContext.Unlock()
-	return mock.ListBucketMetricsConfigurationsWithContextFunc(contextMoqParam, listBucketMetricsConfigurationsInput, options...)
+	return mock.ListBucketMetricsConfigurationsWithContextFunc(v, listBucketMetricsConfigurationsInput, options...)
 }
 
 // ListBucketMetricsConfigurationsWithContextCalls gets all the calls that were made to ListBucketMetricsConfigurationsWithContext.
@@ -10522,12 +10522,12 @@ func (mock *MockS3API) ListBucketMetricsConfigurationsWithContext(contextMoqPara
 //
 //	len(mockedS3API.ListBucketMetricsConfigurationsWithContextCalls())
 func (mock *MockS3API) ListBucketMetricsConfigurationsWithContextCalls() []struct {
-	ContextMoqParam                      context.Context
+	V                                    aws.Context
 	ListBucketMetricsConfigurationsInput *s3.ListBucketMetricsConfigurationsInput
 	Options                              []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam                      context.Context
+		V                                    aws.Context
 		ListBucketMetricsConfigurationsInput *s3.ListBucketMetricsConfigurationsInput
 		Options                              []request.Option
 	}
@@ -10602,23 +10602,23 @@ func (mock *MockS3API) ListBucketsRequestCalls() []struct {
 }
 
 // ListBucketsWithContext calls ListBucketsWithContextFunc.
-func (mock *MockS3API) ListBucketsWithContext(contextMoqParam context.Context, listBucketsInput *s3.ListBucketsInput, options ...request.Option) (*s3.ListBucketsOutput, error) {
+func (mock *MockS3API) ListBucketsWithContext(v aws.Context, listBucketsInput *s3.ListBucketsInput, options ...request.Option) (*s3.ListBucketsOutput, error) {
 	if mock.ListBucketsWithContextFunc == nil {
 		panic("MockS3API.ListBucketsWithContextFunc: method is nil but S3API.ListBucketsWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam  context.Context
+		V                aws.Context
 		ListBucketsInput *s3.ListBucketsInput
 		Options          []request.Option
 	}{
-		ContextMoqParam:  contextMoqParam,
+		V:                v,
 		ListBucketsInput: listBucketsInput,
 		Options:          options,
 	}
 	mock.lockListBucketsWithContext.Lock()
 	mock.calls.ListBucketsWithContext = append(mock.calls.ListBucketsWithContext, callInfo)
 	mock.lockListBucketsWithContext.Unlock()
-	return mock.ListBucketsWithContextFunc(contextMoqParam, listBucketsInput, options...)
+	return mock.ListBucketsWithContextFunc(v, listBucketsInput, options...)
 }
 
 // ListBucketsWithContextCalls gets all the calls that were made to ListBucketsWithContext.
@@ -10626,12 +10626,12 @@ func (mock *MockS3API) ListBucketsWithContext(contextMoqParam context.Context, l
 //
 //	len(mockedS3API.ListBucketsWithContextCalls())
 func (mock *MockS3API) ListBucketsWithContextCalls() []struct {
-	ContextMoqParam  context.Context
+	V                aws.Context
 	ListBucketsInput *s3.ListBucketsInput
 	Options          []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam  context.Context
+		V                aws.Context
 		ListBucketsInput *s3.ListBucketsInput
 		Options          []request.Option
 	}
@@ -10710,17 +10710,17 @@ func (mock *MockS3API) ListDirectoryBucketsPagesCalls() []struct {
 }
 
 // ListDirectoryBucketsPagesWithContext calls ListDirectoryBucketsPagesWithContextFunc.
-func (mock *MockS3API) ListDirectoryBucketsPagesWithContext(contextMoqParam context.Context, listDirectoryBucketsInput *s3.ListDirectoryBucketsInput, fn func(*s3.ListDirectoryBucketsOutput, bool) bool, options ...request.Option) error {
+func (mock *MockS3API) ListDirectoryBucketsPagesWithContext(v aws.Context, listDirectoryBucketsInput *s3.ListDirectoryBucketsInput, fn func(*s3.ListDirectoryBucketsOutput, bool) bool, options ...request.Option) error {
 	if mock.ListDirectoryBucketsPagesWithContextFunc == nil {
 		panic("MockS3API.ListDirectoryBucketsPagesWithContextFunc: method is nil but S3API.ListDirectoryBucketsPagesWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam           context.Context
+		V                         aws.Context
 		ListDirectoryBucketsInput *s3.ListDirectoryBucketsInput
 		Fn                        func(*s3.ListDirectoryBucketsOutput, bool) bool
 		Options                   []request.Option
 	}{
-		ContextMoqParam:           contextMoqParam,
+		V:                         v,
 		ListDirectoryBucketsInput: listDirectoryBucketsInput,
 		Fn:                        fn,
 		Options:                   options,
@@ -10728,7 +10728,7 @@ func (mock *MockS3API) ListDirectoryBucketsPagesWithContext(contextMoqParam cont
 	mock.lockListDirectoryBucketsPagesWithContext.Lock()
 	mock.calls.ListDirectoryBucketsPagesWithContext = append(mock.calls.ListDirectoryBucketsPagesWithContext, callInfo)
 	mock.lockListDirectoryBucketsPagesWithContext.Unlock()
-	return mock.ListDirectoryBucketsPagesWithContextFunc(contextMoqParam, listDirectoryBucketsInput, fn, options...)
+	return mock.ListDirectoryBucketsPagesWithContextFunc(v, listDirectoryBucketsInput, fn, options...)
 }
 
 // ListDirectoryBucketsPagesWithContextCalls gets all the calls that were made to ListDirectoryBucketsPagesWithContext.
@@ -10736,13 +10736,13 @@ func (mock *MockS3API) ListDirectoryBucketsPagesWithContext(contextMoqParam cont
 //
 //	len(mockedS3API.ListDirectoryBucketsPagesWithContextCalls())
 func (mock *MockS3API) ListDirectoryBucketsPagesWithContextCalls() []struct {
-	ContextMoqParam           context.Context
+	V                         aws.Context
 	ListDirectoryBucketsInput *s3.ListDirectoryBucketsInput
 	Fn                        func(*s3.ListDirectoryBucketsOutput, bool) bool
 	Options                   []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam           context.Context
+		V                         aws.Context
 		ListDirectoryBucketsInput *s3.ListDirectoryBucketsInput
 		Fn                        func(*s3.ListDirectoryBucketsOutput, bool) bool
 		Options                   []request.Option
@@ -10786,23 +10786,23 @@ func (mock *MockS3API) ListDirectoryBucketsRequestCalls() []struct {
 }
 
 // ListDirectoryBucketsWithContext calls ListDirectoryBucketsWithContextFunc.
-func (mock *MockS3API) ListDirectoryBucketsWithContext(contextMoqParam context.Context, listDirectoryBucketsInput *s3.ListDirectoryBucketsInput, options ...request.Option) (*s3.ListDirectoryBucketsOutput, error) {
+func (mock *MockS3API) ListDirectoryBucketsWithContext(v aws.Context, listDirectoryBucketsInput *s3.ListDirectoryBucketsInput, options ...request.Option) (*s3.ListDirectoryBucketsOutput, error) {
 	if mock.ListDirectoryBucketsWithContextFunc == nil {
 		panic("MockS3API.ListDirectoryBucketsWithContextFunc: method is nil but S3API.ListDirectoryBucketsWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam           context.Context
+		V                         aws.Context
 		ListDirectoryBucketsInput *s3.ListDirectoryBucketsInput
 		Options                   []request.Option
 	}{
-		ContextMoqParam:           contextMoqParam,
+		V:                         v,
 		ListDirectoryBucketsInput: listDirectoryBucketsInput,
 		Options:                   options,
 	}
 	mock.lockListDirectoryBucketsWithContext.Lock()
 	mock.calls.ListDirectoryBucketsWithContext = append(mock.calls.ListDirectoryBucketsWithContext, callInfo)
 	mock.lockListDirectoryBucketsWithContext.Unlock()
-	return mock.ListDirectoryBucketsWithContextFunc(contextMoqParam, listDirectoryBucketsInput, options...)
+	return mock.ListDirectoryBucketsWithContextFunc(v, listDirectoryBucketsInput, options...)
 }
 
 // ListDirectoryBucketsWithContextCalls gets all the calls that were made to ListDirectoryBucketsWithContext.
@@ -10810,12 +10810,12 @@ func (mock *MockS3API) ListDirectoryBucketsWithContext(contextMoqParam context.C
 //
 //	len(mockedS3API.ListDirectoryBucketsWithContextCalls())
 func (mock *MockS3API) ListDirectoryBucketsWithContextCalls() []struct {
-	ContextMoqParam           context.Context
+	V                         aws.Context
 	ListDirectoryBucketsInput *s3.ListDirectoryBucketsInput
 	Options                   []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam           context.Context
+		V                         aws.Context
 		ListDirectoryBucketsInput *s3.ListDirectoryBucketsInput
 		Options                   []request.Option
 	}
@@ -10894,17 +10894,17 @@ func (mock *MockS3API) ListMultipartUploadsPagesCalls() []struct {
 }
 
 // ListMultipartUploadsPagesWithContext calls ListMultipartUploadsPagesWithContextFunc.
-func (mock *MockS3API) ListMultipartUploadsPagesWithContext(contextMoqParam context.Context, listMultipartUploadsInput *s3.ListMultipartUploadsInput, fn func(*s3.ListMultipartUploadsOutput, bool) bool, options ...request.Option) error {
+func (mock *MockS3API) ListMultipartUploadsPagesWithContext(v aws.Context, listMultipartUploadsInput *s3.ListMultipartUploadsInput, fn func(*s3.ListMultipartUploadsOutput, bool) bool, options ...request.Option) error {
 	if mock.ListMultipartUploadsPagesWithContextFunc == nil {
 		panic("MockS3API.ListMultipartUploadsPagesWithContextFunc: method is nil but S3API.ListMultipartUploadsPagesWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam           context.Context
+		V                         aws.Context
 		ListMultipartUploadsInput *s3.ListMultipartUploadsInput
 		Fn                        func(*s3.ListMultipartUploadsOutput, bool) bool
 		Options                   []request.Option
 	}{
-		ContextMoqParam:           contextMoqParam,
+		V:                         v,
 		ListMultipartUploadsInput: listMultipartUploadsInput,
 		Fn:                        fn,
 		Options:                   options,
@@ -10912,7 +10912,7 @@ func (mock *MockS3API) ListMultipartUploadsPagesWithContext(contextMoqParam cont
 	mock.lockListMultipartUploadsPagesWithContext.Lock()
 	mock.calls.ListMultipartUploadsPagesWithContext = append(mock.calls.ListMultipartUploadsPagesWithContext, callInfo)
 	mock.lockListMultipartUploadsPagesWithContext.Unlock()
-	return mock.ListMultipartUploadsPagesWithContextFunc(contextMoqParam, listMultipartUploadsInput, fn, options...)
+	return mock.ListMultipartUploadsPagesWithContextFunc(v, listMultipartUploadsInput, fn, options...)
 }
 
 // ListMultipartUploadsPagesWithContextCalls gets all the calls that were made to ListMultipartUploadsPagesWithContext.
@@ -10920,13 +10920,13 @@ func (mock *MockS3API) ListMultipartUploadsPagesWithContext(contextMoqParam cont
 //
 //	len(mockedS3API.ListMultipartUploadsPagesWithContextCalls())
 func (mock *MockS3API) ListMultipartUploadsPagesWithContextCalls() []struct {
-	ContextMoqParam           context.Context
+	V                         aws.Context
 	ListMultipartUploadsInput *s3.ListMultipartUploadsInput
 	Fn                        func(*s3.ListMultipartUploadsOutput, bool) bool
 	Options                   []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam           context.Context
+		V                         aws.Context
 		ListMultipartUploadsInput *s3.ListMultipartUploadsInput
 		Fn                        func(*s3.ListMultipartUploadsOutput, bool) bool
 		Options                   []request.Option
@@ -10970,23 +10970,23 @@ func (mock *MockS3API) ListMultipartUploadsRequestCalls() []struct {
 }
 
 // ListMultipartUploadsWithContext calls ListMultipartUploadsWithContextFunc.
-func (mock *MockS3API) ListMultipartUploadsWithContext(contextMoqParam context.Context, listMultipartUploadsInput *s3.ListMultipartUploadsInput, options ...request.Option) (*s3.ListMultipartUploadsOutput, error) {
+func (mock *MockS3API) ListMultipartUploadsWithContext(v aws.Context, listMultipartUploadsInput *s3.ListMultipartUploadsInput, options ...request.Option) (*s3.ListMultipartUploadsOutput, error) {
 	if mock.ListMultipartUploadsWithContextFunc == nil {
 		panic("MockS3API.ListMultipartUploadsWithContextFunc: method is nil but S3API.ListMultipartUploadsWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam           context.Context
+		V                         aws.Context
 		ListMultipartUploadsInput *s3.ListMultipartUploadsInput
 		Options                   []request.Option
 	}{
-		ContextMoqParam:           contextMoqParam,
+		V:                         v,
 		ListMultipartUploadsInput: listMultipartUploadsInput,
 		Options:                   options,
 	}
 	mock.lockListMultipartUploadsWithContext.Lock()
 	mock.calls.ListMultipartUploadsWithContext = append(mock.calls.ListMultipartUploadsWithContext, callInfo)
 	mock.lockListMultipartUploadsWithContext.Unlock()
-	return mock.ListMultipartUploadsWithContextFunc(contextMoqParam, listMultipartUploadsInput, options...)
+	return mock.ListMultipartUploadsWithContextFunc(v, listMultipartUploadsInput, options...)
 }
 
 // ListMultipartUploadsWithContextCalls gets all the calls that were made to ListMultipartUploadsWithContext.
@@ -10994,12 +10994,12 @@ func (mock *MockS3API) ListMultipartUploadsWithContext(contextMoqParam context.C
 //
 //	len(mockedS3API.ListMultipartUploadsWithContextCalls())
 func (mock *MockS3API) ListMultipartUploadsWithContextCalls() []struct {
-	ContextMoqParam           context.Context
+	V                         aws.Context
 	ListMultipartUploadsInput *s3.ListMultipartUploadsInput
 	Options                   []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam           context.Context
+		V                         aws.Context
 		ListMultipartUploadsInput *s3.ListMultipartUploadsInput
 		Options                   []request.Option
 	}
@@ -11078,17 +11078,17 @@ func (mock *MockS3API) ListObjectVersionsPagesCalls() []struct {
 }
 
 // ListObjectVersionsPagesWithContext calls ListObjectVersionsPagesWithContextFunc.
-func (mock *MockS3API) ListObjectVersionsPagesWithContext(contextMoqParam context.Context, listObjectVersionsInput *s3.ListObjectVersionsInput, fn func(*s3.ListObjectVersionsOutput, bool) bool, options ...request.Option) error {
+func (mock *MockS3API) ListObjectVersionsPagesWithContext(v aws.Context, listObjectVersionsInput *s3.ListObjectVersionsInput, fn func(*s3.ListObjectVersionsOutput, bool) bool, options ...request.Option) error {
 	if mock.ListObjectVersionsPagesWithContextFunc == nil {
 		panic("MockS3API.ListObjectVersionsPagesWithContextFunc: method is nil but S3API.ListObjectVersionsPagesWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam         context.Context
+		V                       aws.Context
 		ListObjectVersionsInput *s3.ListObjectVersionsInput
 		Fn                      func(*s3.ListObjectVersionsOutput, bool) bool
 		Options                 []request.Option
 	}{
-		ContextMoqParam:         contextMoqParam,
+		V:                       v,
 		ListObjectVersionsInput: listObjectVersionsInput,
 		Fn:                      fn,
 		Options:                 options,
@@ -11096,7 +11096,7 @@ func (mock *MockS3API) ListObjectVersionsPagesWithContext(contextMoqParam contex
 	mock.lockListObjectVersionsPagesWithContext.Lock()
 	mock.calls.ListObjectVersionsPagesWithContext = append(mock.calls.ListObjectVersionsPagesWithContext, callInfo)
 	mock.lockListObjectVersionsPagesWithContext.Unlock()
-	return mock.ListObjectVersionsPagesWithContextFunc(contextMoqParam, listObjectVersionsInput, fn, options...)
+	return mock.ListObjectVersionsPagesWithContextFunc(v, listObjectVersionsInput, fn, options...)
 }
 
 // ListObjectVersionsPagesWithContextCalls gets all the calls that were made to ListObjectVersionsPagesWithContext.
@@ -11104,13 +11104,13 @@ func (mock *MockS3API) ListObjectVersionsPagesWithContext(contextMoqParam contex
 //
 //	len(mockedS3API.ListObjectVersionsPagesWithContextCalls())
 func (mock *MockS3API) ListObjectVersionsPagesWithContextCalls() []struct {
-	ContextMoqParam         context.Context
+	V                       aws.Context
 	ListObjectVersionsInput *s3.ListObjectVersionsInput
 	Fn                      func(*s3.ListObjectVersionsOutput, bool) bool
 	Options                 []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam         context.Context
+		V                       aws.Context
 		ListObjectVersionsInput *s3.ListObjectVersionsInput
 		Fn                      func(*s3.ListObjectVersionsOutput, bool) bool
 		Options                 []request.Option
@@ -11154,23 +11154,23 @@ func (mock *MockS3API) ListObjectVersionsRequestCalls() []struct {
 }
 
 // ListObjectVersionsWithContext calls ListObjectVersionsWithContextFunc.
-func (mock *MockS3API) ListObjectVersionsWithContext(contextMoqParam context.Context, listObjectVersionsInput *s3.ListObjectVersionsInput, options ...request.Option) (*s3.ListObjectVersionsOutput, error) {
+func (mock *MockS3API) ListObjectVersionsWithContext(v aws.Context, listObjectVersionsInput *s3.ListObjectVersionsInput, options ...request.Option) (*s3.ListObjectVersionsOutput, error) {
 	if mock.ListObjectVersionsWithContextFunc == nil {
 		panic("MockS3API.ListObjectVersionsWithContextFunc: method is nil but S3API.ListObjectVersionsWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam         context.Context
+		V                       aws.Context
 		ListObjectVersionsInput *s3.ListObjectVersionsInput
 		Options                 []request.Option
 	}{
-		ContextMoqParam:         contextMoqParam,
+		V:                       v,
 		ListObjectVersionsInput: listObjectVersionsInput,
 		Options:                 options,
 	}
 	mock.lockListObjectVersionsWithContext.Lock()
 	mock.calls.ListObjectVersionsWithContext = append(mock.calls.ListObjectVersionsWithContext, callInfo)
 	mock.lockListObjectVersionsWithContext.Unlock()
-	return mock.ListObjectVersionsWithContextFunc(contextMoqParam, listObjectVersionsInput, options...)
+	return mock.ListObjectVersionsWithContextFunc(v, listObjectVersionsInput, options...)
 }
 
 // ListObjectVersionsWithContextCalls gets all the calls that were made to ListObjectVersionsWithContext.
@@ -11178,12 +11178,12 @@ func (mock *MockS3API) ListObjectVersionsWithContext(contextMoqParam context.Con
 //
 //	len(mockedS3API.ListObjectVersionsWithContextCalls())
 func (mock *MockS3API) ListObjectVersionsWithContextCalls() []struct {
-	ContextMoqParam         context.Context
+	V                       aws.Context
 	ListObjectVersionsInput *s3.ListObjectVersionsInput
 	Options                 []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam         context.Context
+		V                       aws.Context
 		ListObjectVersionsInput *s3.ListObjectVersionsInput
 		Options                 []request.Option
 	}
@@ -11262,17 +11262,17 @@ func (mock *MockS3API) ListObjectsPagesCalls() []struct {
 }
 
 // ListObjectsPagesWithContext calls ListObjectsPagesWithContextFunc.
-func (mock *MockS3API) ListObjectsPagesWithContext(contextMoqParam context.Context, listObjectsInput *s3.ListObjectsInput, fn func(*s3.ListObjectsOutput, bool) bool, options ...request.Option) error {
+func (mock *MockS3API) ListObjectsPagesWithContext(v aws.Context, listObjectsInput *s3.ListObjectsInput, fn func(*s3.ListObjectsOutput, bool) bool, options ...request.Option) error {
 	if mock.ListObjectsPagesWithContextFunc == nil {
 		panic("MockS3API.ListObjectsPagesWithContextFunc: method is nil but S3API.ListObjectsPagesWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam  context.Context
+		V                aws.Context
 		ListObjectsInput *s3.ListObjectsInput
 		Fn               func(*s3.ListObjectsOutput, bool) bool
 		Options          []request.Option
 	}{
-		ContextMoqParam:  contextMoqParam,
+		V:                v,
 		ListObjectsInput: listObjectsInput,
 		Fn:               fn,
 		Options:          options,
@@ -11280,7 +11280,7 @@ func (mock *MockS3API) ListObjectsPagesWithContext(contextMoqParam context.Conte
 	mock.lockListObjectsPagesWithContext.Lock()
 	mock.calls.ListObjectsPagesWithContext = append(mock.calls.ListObjectsPagesWithContext, callInfo)
 	mock.lockListObjectsPagesWithContext.Unlock()
-	return mock.ListObjectsPagesWithContextFunc(contextMoqParam, listObjectsInput, fn, options...)
+	return mock.ListObjectsPagesWithContextFunc(v, listObjectsInput, fn, options...)
 }
 
 // ListObjectsPagesWithContextCalls gets all the calls that were made to ListObjectsPagesWithContext.
@@ -11288,13 +11288,13 @@ func (mock *MockS3API) ListObjectsPagesWithContext(contextMoqParam context.Conte
 //
 //	len(mockedS3API.ListObjectsPagesWithContextCalls())
 func (mock *MockS3API) ListObjectsPagesWithContextCalls() []struct {
-	ContextMoqParam  context.Context
+	V                aws.Context
 	ListObjectsInput *s3.ListObjectsInput
 	Fn               func(*s3.ListObjectsOutput, bool) bool
 	Options          []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam  context.Context
+		V                aws.Context
 		ListObjectsInput *s3.ListObjectsInput
 		Fn               func(*s3.ListObjectsOutput, bool) bool
 		Options          []request.Option
@@ -11406,17 +11406,17 @@ func (mock *MockS3API) ListObjectsV2PagesCalls() []struct {
 }
 
 // ListObjectsV2PagesWithContext calls ListObjectsV2PagesWithContextFunc.
-func (mock *MockS3API) ListObjectsV2PagesWithContext(contextMoqParam context.Context, listObjectsV2Input *s3.ListObjectsV2Input, fn func(*s3.ListObjectsV2Output, bool) bool, options ...request.Option) error {
+func (mock *MockS3API) ListObjectsV2PagesWithContext(v aws.Context, listObjectsV2Input *s3.ListObjectsV2Input, fn func(*s3.ListObjectsV2Output, bool) bool, options ...request.Option) error {
 	if mock.ListObjectsV2PagesWithContextFunc == nil {
 		panic("MockS3API.ListObjectsV2PagesWithContextFunc: method is nil but S3API.ListObjectsV2PagesWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam    context.Context
+		V                  aws.Context
 		ListObjectsV2Input *s3.ListObjectsV2Input
 		Fn                 func(*s3.ListObjectsV2Output, bool) bool
 		Options            []request.Option
 	}{
-		ContextMoqParam:    contextMoqParam,
+		V:                  v,
 		ListObjectsV2Input: listObjectsV2Input,
 		Fn:                 fn,
 		Options:            options,
@@ -11424,7 +11424,7 @@ func (mock *MockS3API) ListObjectsV2PagesWithContext(contextMoqParam context.Con
 	mock.lockListObjectsV2PagesWithContext.Lock()
 	mock.calls.ListObjectsV2PagesWithContext = append(mock.calls.ListObjectsV2PagesWithContext, callInfo)
 	mock.lockListObjectsV2PagesWithContext.Unlock()
-	return mock.ListObjectsV2PagesWithContextFunc(contextMoqParam, listObjectsV2Input, fn, options...)
+	return mock.ListObjectsV2PagesWithContextFunc(v, listObjectsV2Input, fn, options...)
 }
 
 // ListObjectsV2PagesWithContextCalls gets all the calls that were made to ListObjectsV2PagesWithContext.
@@ -11432,13 +11432,13 @@ func (mock *MockS3API) ListObjectsV2PagesWithContext(contextMoqParam context.Con
 //
 //	len(mockedS3API.ListObjectsV2PagesWithContextCalls())
 func (mock *MockS3API) ListObjectsV2PagesWithContextCalls() []struct {
-	ContextMoqParam    context.Context
+	V                  aws.Context
 	ListObjectsV2Input *s3.ListObjectsV2Input
 	Fn                 func(*s3.ListObjectsV2Output, bool) bool
 	Options            []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam    context.Context
+		V                  aws.Context
 		ListObjectsV2Input *s3.ListObjectsV2Input
 		Fn                 func(*s3.ListObjectsV2Output, bool) bool
 		Options            []request.Option
@@ -11482,23 +11482,23 @@ func (mock *MockS3API) ListObjectsV2RequestCalls() []struct {
 }
 
 // ListObjectsV2WithContext calls ListObjectsV2WithContextFunc.
-func (mock *MockS3API) ListObjectsV2WithContext(contextMoqParam context.Context, listObjectsV2Input *s3.ListObjectsV2Input, options ...request.Option) (*s3.ListObjectsV2Output, error) {
+func (mock *MockS3API) ListObjectsV2WithContext(v aws.Context, listObjectsV2Input *s3.ListObjectsV2Input, options ...request.Option) (*s3.ListObjectsV2Output, error) {
 	if mock.ListObjectsV2WithContextFunc == nil {
 		panic("MockS3API.ListObjectsV2WithContextFunc: method is nil but S3API.ListObjectsV2WithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam    context.Context
+		V                  aws.Context
 		ListObjectsV2Input *s3.ListObjectsV2Input
 		Options            []request.Option
 	}{
-		ContextMoqParam:    contextMoqParam,
+		V:                  v,
 		ListObjectsV2Input: listObjectsV2Input,
 		Options:            options,
 	}
 	mock.lockListObjectsV2WithContext.Lock()
 	mock.calls.ListObjectsV2WithContext = append(mock.calls.ListObjectsV2WithContext, callInfo)
 	mock.lockListObjectsV2WithContext.Unlock()
-	return mock.ListObjectsV2WithContextFunc(contextMoqParam, listObjectsV2Input, options...)
+	return mock.ListObjectsV2WithContextFunc(v, listObjectsV2Input, options...)
 }
 
 // ListObjectsV2WithContextCalls gets all the calls that were made to ListObjectsV2WithContext.
@@ -11506,12 +11506,12 @@ func (mock *MockS3API) ListObjectsV2WithContext(contextMoqParam context.Context,
 //
 //	len(mockedS3API.ListObjectsV2WithContextCalls())
 func (mock *MockS3API) ListObjectsV2WithContextCalls() []struct {
-	ContextMoqParam    context.Context
+	V                  aws.Context
 	ListObjectsV2Input *s3.ListObjectsV2Input
 	Options            []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam    context.Context
+		V                  aws.Context
 		ListObjectsV2Input *s3.ListObjectsV2Input
 		Options            []request.Option
 	}
@@ -11522,23 +11522,23 @@ func (mock *MockS3API) ListObjectsV2WithContextCalls() []struct {
 }
 
 // ListObjectsWithContext calls ListObjectsWithContextFunc.
-func (mock *MockS3API) ListObjectsWithContext(contextMoqParam context.Context, listObjectsInput *s3.ListObjectsInput, options ...request.Option) (*s3.ListObjectsOutput, error) {
+func (mock *MockS3API) ListObjectsWithContext(v aws.Context, listObjectsInput *s3.ListObjectsInput, options ...request.Option) (*s3.ListObjectsOutput, error) {
 	if mock.ListObjectsWithContextFunc == nil {
 		panic("MockS3API.ListObjectsWithContextFunc: method is nil but S3API.ListObjectsWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam  context.Context
+		V                aws.Context
 		ListObjectsInput *s3.ListObjectsInput
 		Options          []request.Option
 	}{
-		ContextMoqParam:  contextMoqParam,
+		V:                v,
 		ListObjectsInput: listObjectsInput,
 		Options:          options,
 	}
 	mock.lockListObjectsWithContext.Lock()
 	mock.calls.ListObjectsWithContext = append(mock.calls.ListObjectsWithContext, callInfo)
 	mock.lockListObjectsWithContext.Unlock()
-	return mock.ListObjectsWithContextFunc(contextMoqParam, listObjectsInput, options...)
+	return mock.ListObjectsWithContextFunc(v, listObjectsInput, options...)
 }
 
 // ListObjectsWithContextCalls gets all the calls that were made to ListObjectsWithContext.
@@ -11546,12 +11546,12 @@ func (mock *MockS3API) ListObjectsWithContext(contextMoqParam context.Context, l
 //
 //	len(mockedS3API.ListObjectsWithContextCalls())
 func (mock *MockS3API) ListObjectsWithContextCalls() []struct {
-	ContextMoqParam  context.Context
+	V                aws.Context
 	ListObjectsInput *s3.ListObjectsInput
 	Options          []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam  context.Context
+		V                aws.Context
 		ListObjectsInput *s3.ListObjectsInput
 		Options          []request.Option
 	}
@@ -11630,25 +11630,25 @@ func (mock *MockS3API) ListPartsPagesCalls() []struct {
 }
 
 // ListPartsPagesWithContext calls ListPartsPagesWithContextFunc.
-func (mock *MockS3API) ListPartsPagesWithContext(contextMoqParam context.Context, listPartsInput *s3.ListPartsInput, fn func(*s3.ListPartsOutput, bool) bool, options ...request.Option) error {
+func (mock *MockS3API) ListPartsPagesWithContext(v aws.Context, listPartsInput *s3.ListPartsInput, fn func(*s3.ListPartsOutput, bool) bool, options ...request.Option) error {
 	if mock.ListPartsPagesWithContextFunc == nil {
 		panic("MockS3API.ListPartsPagesWithContextFunc: method is nil but S3API.ListPartsPagesWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam context.Context
-		ListPartsInput  *s3.ListPartsInput
-		Fn              func(*s3.ListPartsOutput, bool) bool
-		Options         []request.Option
+		V              aws.Context
+		ListPartsInput *s3.ListPartsInput
+		Fn             func(*s3.ListPartsOutput, bool) bool
+		Options        []request.Option
 	}{
-		ContextMoqParam: contextMoqParam,
-		ListPartsInput:  listPartsInput,
-		Fn:              fn,
-		Options:         options,
+		V:              v,
+		ListPartsInput: listPartsInput,
+		Fn:             fn,
+		Options:        options,
 	}
 	mock.lockListPartsPagesWithContext.Lock()
 	mock.calls.ListPartsPagesWithContext = append(mock.calls.ListPartsPagesWithContext, callInfo)
 	mock.lockListPartsPagesWithContext.Unlock()
-	return mock.ListPartsPagesWithContextFunc(contextMoqParam, listPartsInput, fn, options...)
+	return mock.ListPartsPagesWithContextFunc(v, listPartsInput, fn, options...)
 }
 
 // ListPartsPagesWithContextCalls gets all the calls that were made to ListPartsPagesWithContext.
@@ -11656,16 +11656,16 @@ func (mock *MockS3API) ListPartsPagesWithContext(contextMoqParam context.Context
 //
 //	len(mockedS3API.ListPartsPagesWithContextCalls())
 func (mock *MockS3API) ListPartsPagesWithContextCalls() []struct {
-	ContextMoqParam context.Context
-	ListPartsInput  *s3.ListPartsInput
-	Fn              func(*s3.ListPartsOutput, bool) bool
-	Options         []request.Option
+	V              aws.Context
+	ListPartsInput *s3.ListPartsInput
+	Fn             func(*s3.ListPartsOutput, bool) bool
+	Options        []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam context.Context
-		ListPartsInput  *s3.ListPartsInput
-		Fn              func(*s3.ListPartsOutput, bool) bool
-		Options         []request.Option
+		V              aws.Context
+		ListPartsInput *s3.ListPartsInput
+		Fn             func(*s3.ListPartsOutput, bool) bool
+		Options        []request.Option
 	}
 	mock.lockListPartsPagesWithContext.RLock()
 	calls = mock.calls.ListPartsPagesWithContext
@@ -11706,23 +11706,23 @@ func (mock *MockS3API) ListPartsRequestCalls() []struct {
 }
 
 // ListPartsWithContext calls ListPartsWithContextFunc.
-func (mock *MockS3API) ListPartsWithContext(contextMoqParam context.Context, listPartsInput *s3.ListPartsInput, options ...request.Option) (*s3.ListPartsOutput, error) {
+func (mock *MockS3API) ListPartsWithContext(v aws.Context, listPartsInput *s3.ListPartsInput, options ...request.Option) (*s3.ListPartsOutput, error) {
 	if mock.ListPartsWithContextFunc == nil {
 		panic("MockS3API.ListPartsWithContextFunc: method is nil but S3API.ListPartsWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam context.Context
-		ListPartsInput  *s3.ListPartsInput
-		Options         []request.Option
+		V              aws.Context
+		ListPartsInput *s3.ListPartsInput
+		Options        []request.Option
 	}{
-		ContextMoqParam: contextMoqParam,
-		ListPartsInput:  listPartsInput,
-		Options:         options,
+		V:              v,
+		ListPartsInput: listPartsInput,
+		Options:        options,
 	}
 	mock.lockListPartsWithContext.Lock()
 	mock.calls.ListPartsWithContext = append(mock.calls.ListPartsWithContext, callInfo)
 	mock.lockListPartsWithContext.Unlock()
-	return mock.ListPartsWithContextFunc(contextMoqParam, listPartsInput, options...)
+	return mock.ListPartsWithContextFunc(v, listPartsInput, options...)
 }
 
 // ListPartsWithContextCalls gets all the calls that were made to ListPartsWithContext.
@@ -11730,14 +11730,14 @@ func (mock *MockS3API) ListPartsWithContext(contextMoqParam context.Context, lis
 //
 //	len(mockedS3API.ListPartsWithContextCalls())
 func (mock *MockS3API) ListPartsWithContextCalls() []struct {
-	ContextMoqParam context.Context
-	ListPartsInput  *s3.ListPartsInput
-	Options         []request.Option
+	V              aws.Context
+	ListPartsInput *s3.ListPartsInput
+	Options        []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam context.Context
-		ListPartsInput  *s3.ListPartsInput
-		Options         []request.Option
+		V              aws.Context
+		ListPartsInput *s3.ListPartsInput
+		Options        []request.Option
 	}
 	mock.lockListPartsWithContext.RLock()
 	calls = mock.calls.ListPartsWithContext
@@ -11810,23 +11810,23 @@ func (mock *MockS3API) PutBucketAccelerateConfigurationRequestCalls() []struct {
 }
 
 // PutBucketAccelerateConfigurationWithContext calls PutBucketAccelerateConfigurationWithContextFunc.
-func (mock *MockS3API) PutBucketAccelerateConfigurationWithContext(contextMoqParam context.Context, putBucketAccelerateConfigurationInput *s3.PutBucketAccelerateConfigurationInput, options ...request.Option) (*s3.PutBucketAccelerateConfigurationOutput, error) {
+func (mock *MockS3API) PutBucketAccelerateConfigurationWithContext(v aws.Context, putBucketAccelerateConfigurationInput *s3.PutBucketAccelerateConfigurationInput, options ...request.Option) (*s3.PutBucketAccelerateConfigurationOutput, error) {
 	if mock.PutBucketAccelerateConfigurationWithContextFunc == nil {
 		panic("MockS3API.PutBucketAccelerateConfigurationWithContextFunc: method is nil but S3API.PutBucketAccelerateConfigurationWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam                       context.Context
+		V                                     aws.Context
 		PutBucketAccelerateConfigurationInput *s3.PutBucketAccelerateConfigurationInput
 		Options                               []request.Option
 	}{
-		ContextMoqParam:                       contextMoqParam,
+		V:                                     v,
 		PutBucketAccelerateConfigurationInput: putBucketAccelerateConfigurationInput,
 		Options:                               options,
 	}
 	mock.lockPutBucketAccelerateConfigurationWithContext.Lock()
 	mock.calls.PutBucketAccelerateConfigurationWithContext = append(mock.calls.PutBucketAccelerateConfigurationWithContext, callInfo)
 	mock.lockPutBucketAccelerateConfigurationWithContext.Unlock()
-	return mock.PutBucketAccelerateConfigurationWithContextFunc(contextMoqParam, putBucketAccelerateConfigurationInput, options...)
+	return mock.PutBucketAccelerateConfigurationWithContextFunc(v, putBucketAccelerateConfigurationInput, options...)
 }
 
 // PutBucketAccelerateConfigurationWithContextCalls gets all the calls that were made to PutBucketAccelerateConfigurationWithContext.
@@ -11834,12 +11834,12 @@ func (mock *MockS3API) PutBucketAccelerateConfigurationWithContext(contextMoqPar
 //
 //	len(mockedS3API.PutBucketAccelerateConfigurationWithContextCalls())
 func (mock *MockS3API) PutBucketAccelerateConfigurationWithContextCalls() []struct {
-	ContextMoqParam                       context.Context
+	V                                     aws.Context
 	PutBucketAccelerateConfigurationInput *s3.PutBucketAccelerateConfigurationInput
 	Options                               []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam                       context.Context
+		V                                     aws.Context
 		PutBucketAccelerateConfigurationInput *s3.PutBucketAccelerateConfigurationInput
 		Options                               []request.Option
 	}
@@ -11914,23 +11914,23 @@ func (mock *MockS3API) PutBucketAclRequestCalls() []struct {
 }
 
 // PutBucketAclWithContext calls PutBucketAclWithContextFunc.
-func (mock *MockS3API) PutBucketAclWithContext(contextMoqParam context.Context, putBucketAclInput *s3.PutBucketAclInput, options ...request.Option) (*s3.PutBucketAclOutput, error) {
+func (mock *MockS3API) PutBucketAclWithContext(v aws.Context, putBucketAclInput *s3.PutBucketAclInput, options ...request.Option) (*s3.PutBucketAclOutput, error) {
 	if mock.PutBucketAclWithContextFunc == nil {
 		panic("MockS3API.PutBucketAclWithContextFunc: method is nil but S3API.PutBucketAclWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam   context.Context
+		V                 aws.Context
 		PutBucketAclInput *s3.PutBucketAclInput
 		Options           []request.Option
 	}{
-		ContextMoqParam:   contextMoqParam,
+		V:                 v,
 		PutBucketAclInput: putBucketAclInput,
 		Options:           options,
 	}
 	mock.lockPutBucketAclWithContext.Lock()
 	mock.calls.PutBucketAclWithContext = append(mock.calls.PutBucketAclWithContext, callInfo)
 	mock.lockPutBucketAclWithContext.Unlock()
-	return mock.PutBucketAclWithContextFunc(contextMoqParam, putBucketAclInput, options...)
+	return mock.PutBucketAclWithContextFunc(v, putBucketAclInput, options...)
 }
 
 // PutBucketAclWithContextCalls gets all the calls that were made to PutBucketAclWithContext.
@@ -11938,12 +11938,12 @@ func (mock *MockS3API) PutBucketAclWithContext(contextMoqParam context.Context, 
 //
 //	len(mockedS3API.PutBucketAclWithContextCalls())
 func (mock *MockS3API) PutBucketAclWithContextCalls() []struct {
-	ContextMoqParam   context.Context
+	V                 aws.Context
 	PutBucketAclInput *s3.PutBucketAclInput
 	Options           []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam   context.Context
+		V                 aws.Context
 		PutBucketAclInput *s3.PutBucketAclInput
 		Options           []request.Option
 	}
@@ -12018,23 +12018,23 @@ func (mock *MockS3API) PutBucketAnalyticsConfigurationRequestCalls() []struct {
 }
 
 // PutBucketAnalyticsConfigurationWithContext calls PutBucketAnalyticsConfigurationWithContextFunc.
-func (mock *MockS3API) PutBucketAnalyticsConfigurationWithContext(contextMoqParam context.Context, putBucketAnalyticsConfigurationInput *s3.PutBucketAnalyticsConfigurationInput, options ...request.Option) (*s3.PutBucketAnalyticsConfigurationOutput, error) {
+func (mock *MockS3API) PutBucketAnalyticsConfigurationWithContext(v aws.Context, putBucketAnalyticsConfigurationInput *s3.PutBucketAnalyticsConfigurationInput, options ...request.Option) (*s3.PutBucketAnalyticsConfigurationOutput, error) {
 	if mock.PutBucketAnalyticsConfigurationWithContextFunc == nil {
 		panic("MockS3API.PutBucketAnalyticsConfigurationWithContextFunc: method is nil but S3API.PutBucketAnalyticsConfigurationWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam                      context.Context
+		V                                    aws.Context
 		PutBucketAnalyticsConfigurationInput *s3.PutBucketAnalyticsConfigurationInput
 		Options                              []request.Option
 	}{
-		ContextMoqParam:                      contextMoqParam,
+		V:                                    v,
 		PutBucketAnalyticsConfigurationInput: putBucketAnalyticsConfigurationInput,
 		Options:                              options,
 	}
 	mock.lockPutBucketAnalyticsConfigurationWithContext.Lock()
 	mock.calls.PutBucketAnalyticsConfigurationWithContext = append(mock.calls.PutBucketAnalyticsConfigurationWithContext, callInfo)
 	mock.lockPutBucketAnalyticsConfigurationWithContext.Unlock()
-	return mock.PutBucketAnalyticsConfigurationWithContextFunc(contextMoqParam, putBucketAnalyticsConfigurationInput, options...)
+	return mock.PutBucketAnalyticsConfigurationWithContextFunc(v, putBucketAnalyticsConfigurationInput, options...)
 }
 
 // PutBucketAnalyticsConfigurationWithContextCalls gets all the calls that were made to PutBucketAnalyticsConfigurationWithContext.
@@ -12042,12 +12042,12 @@ func (mock *MockS3API) PutBucketAnalyticsConfigurationWithContext(contextMoqPara
 //
 //	len(mockedS3API.PutBucketAnalyticsConfigurationWithContextCalls())
 func (mock *MockS3API) PutBucketAnalyticsConfigurationWithContextCalls() []struct {
-	ContextMoqParam                      context.Context
+	V                                    aws.Context
 	PutBucketAnalyticsConfigurationInput *s3.PutBucketAnalyticsConfigurationInput
 	Options                              []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam                      context.Context
+		V                                    aws.Context
 		PutBucketAnalyticsConfigurationInput *s3.PutBucketAnalyticsConfigurationInput
 		Options                              []request.Option
 	}
@@ -12122,23 +12122,23 @@ func (mock *MockS3API) PutBucketCorsRequestCalls() []struct {
 }
 
 // PutBucketCorsWithContext calls PutBucketCorsWithContextFunc.
-func (mock *MockS3API) PutBucketCorsWithContext(contextMoqParam context.Context, putBucketCorsInput *s3.PutBucketCorsInput, options ...request.Option) (*s3.PutBucketCorsOutput, error) {
+func (mock *MockS3API) PutBucketCorsWithContext(v aws.Context, putBucketCorsInput *s3.PutBucketCorsInput, options ...request.Option) (*s3.PutBucketCorsOutput, error) {
 	if mock.PutBucketCorsWithContextFunc == nil {
 		panic("MockS3API.PutBucketCorsWithContextFunc: method is nil but S3API.PutBucketCorsWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam    context.Context
+		V                  aws.Context
 		PutBucketCorsInput *s3.PutBucketCorsInput
 		Options            []request.Option
 	}{
-		ContextMoqParam:    contextMoqParam,
+		V:                  v,
 		PutBucketCorsInput: putBucketCorsInput,
 		Options:            options,
 	}
 	mock.lockPutBucketCorsWithContext.Lock()
 	mock.calls.PutBucketCorsWithContext = append(mock.calls.PutBucketCorsWithContext, callInfo)
 	mock.lockPutBucketCorsWithContext.Unlock()
-	return mock.PutBucketCorsWithContextFunc(contextMoqParam, putBucketCorsInput, options...)
+	return mock.PutBucketCorsWithContextFunc(v, putBucketCorsInput, options...)
 }
 
 // PutBucketCorsWithContextCalls gets all the calls that were made to PutBucketCorsWithContext.
@@ -12146,12 +12146,12 @@ func (mock *MockS3API) PutBucketCorsWithContext(contextMoqParam context.Context,
 //
 //	len(mockedS3API.PutBucketCorsWithContextCalls())
 func (mock *MockS3API) PutBucketCorsWithContextCalls() []struct {
-	ContextMoqParam    context.Context
+	V                  aws.Context
 	PutBucketCorsInput *s3.PutBucketCorsInput
 	Options            []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam    context.Context
+		V                  aws.Context
 		PutBucketCorsInput *s3.PutBucketCorsInput
 		Options            []request.Option
 	}
@@ -12226,23 +12226,23 @@ func (mock *MockS3API) PutBucketEncryptionRequestCalls() []struct {
 }
 
 // PutBucketEncryptionWithContext calls PutBucketEncryptionWithContextFunc.
-func (mock *MockS3API) PutBucketEncryptionWithContext(contextMoqParam context.Context, putBucketEncryptionInput *s3.PutBucketEncryptionInput, options ...request.Option) (*s3.PutBucketEncryptionOutput, error) {
+func (mock *MockS3API) PutBucketEncryptionWithContext(v aws.Context, putBucketEncryptionInput *s3.PutBucketEncryptionInput, options ...request.Option) (*s3.PutBucketEncryptionOutput, error) {
 	if mock.PutBucketEncryptionWithContextFunc == nil {
 		panic("MockS3API.PutBucketEncryptionWithContextFunc: method is nil but S3API.PutBucketEncryptionWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam          context.Context
+		V                        aws.Context
 		PutBucketEncryptionInput *s3.PutBucketEncryptionInput
 		Options                  []request.Option
 	}{
-		ContextMoqParam:          contextMoqParam,
+		V:                        v,
 		PutBucketEncryptionInput: putBucketEncryptionInput,
 		Options:                  options,
 	}
 	mock.lockPutBucketEncryptionWithContext.Lock()
 	mock.calls.PutBucketEncryptionWithContext = append(mock.calls.PutBucketEncryptionWithContext, callInfo)
 	mock.lockPutBucketEncryptionWithContext.Unlock()
-	return mock.PutBucketEncryptionWithContextFunc(contextMoqParam, putBucketEncryptionInput, options...)
+	return mock.PutBucketEncryptionWithContextFunc(v, putBucketEncryptionInput, options...)
 }
 
 // PutBucketEncryptionWithContextCalls gets all the calls that were made to PutBucketEncryptionWithContext.
@@ -12250,12 +12250,12 @@ func (mock *MockS3API) PutBucketEncryptionWithContext(contextMoqParam context.Co
 //
 //	len(mockedS3API.PutBucketEncryptionWithContextCalls())
 func (mock *MockS3API) PutBucketEncryptionWithContextCalls() []struct {
-	ContextMoqParam          context.Context
+	V                        aws.Context
 	PutBucketEncryptionInput *s3.PutBucketEncryptionInput
 	Options                  []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam          context.Context
+		V                        aws.Context
 		PutBucketEncryptionInput *s3.PutBucketEncryptionInput
 		Options                  []request.Option
 	}
@@ -12330,23 +12330,23 @@ func (mock *MockS3API) PutBucketIntelligentTieringConfigurationRequestCalls() []
 }
 
 // PutBucketIntelligentTieringConfigurationWithContext calls PutBucketIntelligentTieringConfigurationWithContextFunc.
-func (mock *MockS3API) PutBucketIntelligentTieringConfigurationWithContext(contextMoqParam context.Context, putBucketIntelligentTieringConfigurationInput *s3.PutBucketIntelligentTieringConfigurationInput, options ...request.Option) (*s3.PutBucketIntelligentTieringConfigurationOutput, error) {
+func (mock *MockS3API) PutBucketIntelligentTieringConfigurationWithContext(v aws.Context, putBucketIntelligentTieringConfigurationInput *s3.PutBucketIntelligentTieringConfigurationInput, options ...request.Option) (*s3.PutBucketIntelligentTieringConfigurationOutput, error) {
 	if mock.PutBucketIntelligentTieringConfigurationWithContextFunc == nil {
 		panic("MockS3API.PutBucketIntelligentTieringConfigurationWithContextFunc: method is nil but S3API.PutBucketIntelligentTieringConfigurationWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam                               context.Context
+		V                                             aws.Context
 		PutBucketIntelligentTieringConfigurationInput *s3.PutBucketIntelligentTieringConfigurationInput
 		Options                                       []request.Option
 	}{
-		ContextMoqParam: contextMoqParam,
+		V: v,
 		PutBucketIntelligentTieringConfigurationInput: putBucketIntelligentTieringConfigurationInput,
 		Options: options,
 	}
 	mock.lockPutBucketIntelligentTieringConfigurationWithContext.Lock()
 	mock.calls.PutBucketIntelligentTieringConfigurationWithContext = append(mock.calls.PutBucketIntelligentTieringConfigurationWithContext, callInfo)
 	mock.lockPutBucketIntelligentTieringConfigurationWithContext.Unlock()
-	return mock.PutBucketIntelligentTieringConfigurationWithContextFunc(contextMoqParam, putBucketIntelligentTieringConfigurationInput, options...)
+	return mock.PutBucketIntelligentTieringConfigurationWithContextFunc(v, putBucketIntelligentTieringConfigurationInput, options...)
 }
 
 // PutBucketIntelligentTieringConfigurationWithContextCalls gets all the calls that were made to PutBucketIntelligentTieringConfigurationWithContext.
@@ -12354,12 +12354,12 @@ func (mock *MockS3API) PutBucketIntelligentTieringConfigurationWithContext(conte
 //
 //	len(mockedS3API.PutBucketIntelligentTieringConfigurationWithContextCalls())
 func (mock *MockS3API) PutBucketIntelligentTieringConfigurationWithContextCalls() []struct {
-	ContextMoqParam                               context.Context
+	V                                             aws.Context
 	PutBucketIntelligentTieringConfigurationInput *s3.PutBucketIntelligentTieringConfigurationInput
 	Options                                       []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam                               context.Context
+		V                                             aws.Context
 		PutBucketIntelligentTieringConfigurationInput *s3.PutBucketIntelligentTieringConfigurationInput
 		Options                                       []request.Option
 	}
@@ -12434,23 +12434,23 @@ func (mock *MockS3API) PutBucketInventoryConfigurationRequestCalls() []struct {
 }
 
 // PutBucketInventoryConfigurationWithContext calls PutBucketInventoryConfigurationWithContextFunc.
-func (mock *MockS3API) PutBucketInventoryConfigurationWithContext(contextMoqParam context.Context, putBucketInventoryConfigurationInput *s3.PutBucketInventoryConfigurationInput, options ...request.Option) (*s3.PutBucketInventoryConfigurationOutput, error) {
+func (mock *MockS3API) PutBucketInventoryConfigurationWithContext(v aws.Context, putBucketInventoryConfigurationInput *s3.PutBucketInventoryConfigurationInput, options ...request.Option) (*s3.PutBucketInventoryConfigurationOutput, error) {
 	if mock.PutBucketInventoryConfigurationWithContextFunc == nil {
 		panic("MockS3API.PutBucketInventoryConfigurationWithContextFunc: method is nil but S3API.PutBucketInventoryConfigurationWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam                      context.Context
+		V                                    aws.Context
 		PutBucketInventoryConfigurationInput *s3.PutBucketInventoryConfigurationInput
 		Options                              []request.Option
 	}{
-		ContextMoqParam:                      contextMoqParam,
+		V:                                    v,
 		PutBucketInventoryConfigurationInput: putBucketInventoryConfigurationInput,
 		Options:                              options,
 	}
 	mock.lockPutBucketInventoryConfigurationWithContext.Lock()
 	mock.calls.PutBucketInventoryConfigurationWithContext = append(mock.calls.PutBucketInventoryConfigurationWithContext, callInfo)
 	mock.lockPutBucketInventoryConfigurationWithContext.Unlock()
-	return mock.PutBucketInventoryConfigurationWithContextFunc(contextMoqParam, putBucketInventoryConfigurationInput, options...)
+	return mock.PutBucketInventoryConfigurationWithContextFunc(v, putBucketInventoryConfigurationInput, options...)
 }
 
 // PutBucketInventoryConfigurationWithContextCalls gets all the calls that were made to PutBucketInventoryConfigurationWithContext.
@@ -12458,12 +12458,12 @@ func (mock *MockS3API) PutBucketInventoryConfigurationWithContext(contextMoqPara
 //
 //	len(mockedS3API.PutBucketInventoryConfigurationWithContextCalls())
 func (mock *MockS3API) PutBucketInventoryConfigurationWithContextCalls() []struct {
-	ContextMoqParam                      context.Context
+	V                                    aws.Context
 	PutBucketInventoryConfigurationInput *s3.PutBucketInventoryConfigurationInput
 	Options                              []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam                      context.Context
+		V                                    aws.Context
 		PutBucketInventoryConfigurationInput *s3.PutBucketInventoryConfigurationInput
 		Options                              []request.Option
 	}
@@ -12570,23 +12570,23 @@ func (mock *MockS3API) PutBucketLifecycleConfigurationRequestCalls() []struct {
 }
 
 // PutBucketLifecycleConfigurationWithContext calls PutBucketLifecycleConfigurationWithContextFunc.
-func (mock *MockS3API) PutBucketLifecycleConfigurationWithContext(contextMoqParam context.Context, putBucketLifecycleConfigurationInput *s3.PutBucketLifecycleConfigurationInput, options ...request.Option) (*s3.PutBucketLifecycleConfigurationOutput, error) {
+func (mock *MockS3API) PutBucketLifecycleConfigurationWithContext(v aws.Context, putBucketLifecycleConfigurationInput *s3.PutBucketLifecycleConfigurationInput, options ...request.Option) (*s3.PutBucketLifecycleConfigurationOutput, error) {
 	if mock.PutBucketLifecycleConfigurationWithContextFunc == nil {
 		panic("MockS3API.PutBucketLifecycleConfigurationWithContextFunc: method is nil but S3API.PutBucketLifecycleConfigurationWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam                      context.Context
+		V                                    aws.Context
 		PutBucketLifecycleConfigurationInput *s3.PutBucketLifecycleConfigurationInput
 		Options                              []request.Option
 	}{
-		ContextMoqParam:                      contextMoqParam,
+		V:                                    v,
 		PutBucketLifecycleConfigurationInput: putBucketLifecycleConfigurationInput,
 		Options:                              options,
 	}
 	mock.lockPutBucketLifecycleConfigurationWithContext.Lock()
 	mock.calls.PutBucketLifecycleConfigurationWithContext = append(mock.calls.PutBucketLifecycleConfigurationWithContext, callInfo)
 	mock.lockPutBucketLifecycleConfigurationWithContext.Unlock()
-	return mock.PutBucketLifecycleConfigurationWithContextFunc(contextMoqParam, putBucketLifecycleConfigurationInput, options...)
+	return mock.PutBucketLifecycleConfigurationWithContextFunc(v, putBucketLifecycleConfigurationInput, options...)
 }
 
 // PutBucketLifecycleConfigurationWithContextCalls gets all the calls that were made to PutBucketLifecycleConfigurationWithContext.
@@ -12594,12 +12594,12 @@ func (mock *MockS3API) PutBucketLifecycleConfigurationWithContext(contextMoqPara
 //
 //	len(mockedS3API.PutBucketLifecycleConfigurationWithContextCalls())
 func (mock *MockS3API) PutBucketLifecycleConfigurationWithContextCalls() []struct {
-	ContextMoqParam                      context.Context
+	V                                    aws.Context
 	PutBucketLifecycleConfigurationInput *s3.PutBucketLifecycleConfigurationInput
 	Options                              []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam                      context.Context
+		V                                    aws.Context
 		PutBucketLifecycleConfigurationInput *s3.PutBucketLifecycleConfigurationInput
 		Options                              []request.Option
 	}
@@ -12642,23 +12642,23 @@ func (mock *MockS3API) PutBucketLifecycleRequestCalls() []struct {
 }
 
 // PutBucketLifecycleWithContext calls PutBucketLifecycleWithContextFunc.
-func (mock *MockS3API) PutBucketLifecycleWithContext(contextMoqParam context.Context, putBucketLifecycleInput *s3.PutBucketLifecycleInput, options ...request.Option) (*s3.PutBucketLifecycleOutput, error) {
+func (mock *MockS3API) PutBucketLifecycleWithContext(v aws.Context, putBucketLifecycleInput *s3.PutBucketLifecycleInput, options ...request.Option) (*s3.PutBucketLifecycleOutput, error) {
 	if mock.PutBucketLifecycleWithContextFunc == nil {
 		panic("MockS3API.PutBucketLifecycleWithContextFunc: method is nil but S3API.PutBucketLifecycleWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam         context.Context
+		V                       aws.Context
 		PutBucketLifecycleInput *s3.PutBucketLifecycleInput
 		Options                 []request.Option
 	}{
-		ContextMoqParam:         contextMoqParam,
+		V:                       v,
 		PutBucketLifecycleInput: putBucketLifecycleInput,
 		Options:                 options,
 	}
 	mock.lockPutBucketLifecycleWithContext.Lock()
 	mock.calls.PutBucketLifecycleWithContext = append(mock.calls.PutBucketLifecycleWithContext, callInfo)
 	mock.lockPutBucketLifecycleWithContext.Unlock()
-	return mock.PutBucketLifecycleWithContextFunc(contextMoqParam, putBucketLifecycleInput, options...)
+	return mock.PutBucketLifecycleWithContextFunc(v, putBucketLifecycleInput, options...)
 }
 
 // PutBucketLifecycleWithContextCalls gets all the calls that were made to PutBucketLifecycleWithContext.
@@ -12666,12 +12666,12 @@ func (mock *MockS3API) PutBucketLifecycleWithContext(contextMoqParam context.Con
 //
 //	len(mockedS3API.PutBucketLifecycleWithContextCalls())
 func (mock *MockS3API) PutBucketLifecycleWithContextCalls() []struct {
-	ContextMoqParam         context.Context
+	V                       aws.Context
 	PutBucketLifecycleInput *s3.PutBucketLifecycleInput
 	Options                 []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam         context.Context
+		V                       aws.Context
 		PutBucketLifecycleInput *s3.PutBucketLifecycleInput
 		Options                 []request.Option
 	}
@@ -12746,23 +12746,23 @@ func (mock *MockS3API) PutBucketLoggingRequestCalls() []struct {
 }
 
 // PutBucketLoggingWithContext calls PutBucketLoggingWithContextFunc.
-func (mock *MockS3API) PutBucketLoggingWithContext(contextMoqParam context.Context, putBucketLoggingInput *s3.PutBucketLoggingInput, options ...request.Option) (*s3.PutBucketLoggingOutput, error) {
+func (mock *MockS3API) PutBucketLoggingWithContext(v aws.Context, putBucketLoggingInput *s3.PutBucketLoggingInput, options ...request.Option) (*s3.PutBucketLoggingOutput, error) {
 	if mock.PutBucketLoggingWithContextFunc == nil {
 		panic("MockS3API.PutBucketLoggingWithContextFunc: method is nil but S3API.PutBucketLoggingWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam       context.Context
+		V                     aws.Context
 		PutBucketLoggingInput *s3.PutBucketLoggingInput
 		Options               []request.Option
 	}{
-		ContextMoqParam:       contextMoqParam,
+		V:                     v,
 		PutBucketLoggingInput: putBucketLoggingInput,
 		Options:               options,
 	}
 	mock.lockPutBucketLoggingWithContext.Lock()
 	mock.calls.PutBucketLoggingWithContext = append(mock.calls.PutBucketLoggingWithContext, callInfo)
 	mock.lockPutBucketLoggingWithContext.Unlock()
-	return mock.PutBucketLoggingWithContextFunc(contextMoqParam, putBucketLoggingInput, options...)
+	return mock.PutBucketLoggingWithContextFunc(v, putBucketLoggingInput, options...)
 }
 
 // PutBucketLoggingWithContextCalls gets all the calls that were made to PutBucketLoggingWithContext.
@@ -12770,12 +12770,12 @@ func (mock *MockS3API) PutBucketLoggingWithContext(contextMoqParam context.Conte
 //
 //	len(mockedS3API.PutBucketLoggingWithContextCalls())
 func (mock *MockS3API) PutBucketLoggingWithContextCalls() []struct {
-	ContextMoqParam       context.Context
+	V                     aws.Context
 	PutBucketLoggingInput *s3.PutBucketLoggingInput
 	Options               []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam       context.Context
+		V                     aws.Context
 		PutBucketLoggingInput *s3.PutBucketLoggingInput
 		Options               []request.Option
 	}
@@ -12850,23 +12850,23 @@ func (mock *MockS3API) PutBucketMetricsConfigurationRequestCalls() []struct {
 }
 
 // PutBucketMetricsConfigurationWithContext calls PutBucketMetricsConfigurationWithContextFunc.
-func (mock *MockS3API) PutBucketMetricsConfigurationWithContext(contextMoqParam context.Context, putBucketMetricsConfigurationInput *s3.PutBucketMetricsConfigurationInput, options ...request.Option) (*s3.PutBucketMetricsConfigurationOutput, error) {
+func (mock *MockS3API) PutBucketMetricsConfigurationWithContext(v aws.Context, putBucketMetricsConfigurationInput *s3.PutBucketMetricsConfigurationInput, options ...request.Option) (*s3.PutBucketMetricsConfigurationOutput, error) {
 	if mock.PutBucketMetricsConfigurationWithContextFunc == nil {
 		panic("MockS3API.PutBucketMetricsConfigurationWithContextFunc: method is nil but S3API.PutBucketMetricsConfigurationWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam                    context.Context
+		V                                  aws.Context
 		PutBucketMetricsConfigurationInput *s3.PutBucketMetricsConfigurationInput
 		Options                            []request.Option
 	}{
-		ContextMoqParam:                    contextMoqParam,
+		V:                                  v,
 		PutBucketMetricsConfigurationInput: putBucketMetricsConfigurationInput,
 		Options:                            options,
 	}
 	mock.lockPutBucketMetricsConfigurationWithContext.Lock()
 	mock.calls.PutBucketMetricsConfigurationWithContext = append(mock.calls.PutBucketMetricsConfigurationWithContext, callInfo)
 	mock.lockPutBucketMetricsConfigurationWithContext.Unlock()
-	return mock.PutBucketMetricsConfigurationWithContextFunc(contextMoqParam, putBucketMetricsConfigurationInput, options...)
+	return mock.PutBucketMetricsConfigurationWithContextFunc(v, putBucketMetricsConfigurationInput, options...)
 }
 
 // PutBucketMetricsConfigurationWithContextCalls gets all the calls that were made to PutBucketMetricsConfigurationWithContext.
@@ -12874,12 +12874,12 @@ func (mock *MockS3API) PutBucketMetricsConfigurationWithContext(contextMoqParam 
 //
 //	len(mockedS3API.PutBucketMetricsConfigurationWithContextCalls())
 func (mock *MockS3API) PutBucketMetricsConfigurationWithContextCalls() []struct {
-	ContextMoqParam                    context.Context
+	V                                  aws.Context
 	PutBucketMetricsConfigurationInput *s3.PutBucketMetricsConfigurationInput
 	Options                            []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam                    context.Context
+		V                                  aws.Context
 		PutBucketMetricsConfigurationInput *s3.PutBucketMetricsConfigurationInput
 		Options                            []request.Option
 	}
@@ -12986,23 +12986,23 @@ func (mock *MockS3API) PutBucketNotificationConfigurationRequestCalls() []struct
 }
 
 // PutBucketNotificationConfigurationWithContext calls PutBucketNotificationConfigurationWithContextFunc.
-func (mock *MockS3API) PutBucketNotificationConfigurationWithContext(contextMoqParam context.Context, putBucketNotificationConfigurationInput *s3.PutBucketNotificationConfigurationInput, options ...request.Option) (*s3.PutBucketNotificationConfigurationOutput, error) {
+func (mock *MockS3API) PutBucketNotificationConfigurationWithContext(v aws.Context, putBucketNotificationConfigurationInput *s3.PutBucketNotificationConfigurationInput, options ...request.Option) (*s3.PutBucketNotificationConfigurationOutput, error) {
 	if mock.PutBucketNotificationConfigurationWithContextFunc == nil {
 		panic("MockS3API.PutBucketNotificationConfigurationWithContextFunc: method is nil but S3API.PutBucketNotificationConfigurationWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam                         context.Context
+		V                                       aws.Context
 		PutBucketNotificationConfigurationInput *s3.PutBucketNotificationConfigurationInput
 		Options                                 []request.Option
 	}{
-		ContextMoqParam:                         contextMoqParam,
+		V:                                       v,
 		PutBucketNotificationConfigurationInput: putBucketNotificationConfigurationInput,
 		Options:                                 options,
 	}
 	mock.lockPutBucketNotificationConfigurationWithContext.Lock()
 	mock.calls.PutBucketNotificationConfigurationWithContext = append(mock.calls.PutBucketNotificationConfigurationWithContext, callInfo)
 	mock.lockPutBucketNotificationConfigurationWithContext.Unlock()
-	return mock.PutBucketNotificationConfigurationWithContextFunc(contextMoqParam, putBucketNotificationConfigurationInput, options...)
+	return mock.PutBucketNotificationConfigurationWithContextFunc(v, putBucketNotificationConfigurationInput, options...)
 }
 
 // PutBucketNotificationConfigurationWithContextCalls gets all the calls that were made to PutBucketNotificationConfigurationWithContext.
@@ -13010,12 +13010,12 @@ func (mock *MockS3API) PutBucketNotificationConfigurationWithContext(contextMoqP
 //
 //	len(mockedS3API.PutBucketNotificationConfigurationWithContextCalls())
 func (mock *MockS3API) PutBucketNotificationConfigurationWithContextCalls() []struct {
-	ContextMoqParam                         context.Context
+	V                                       aws.Context
 	PutBucketNotificationConfigurationInput *s3.PutBucketNotificationConfigurationInput
 	Options                                 []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam                         context.Context
+		V                                       aws.Context
 		PutBucketNotificationConfigurationInput *s3.PutBucketNotificationConfigurationInput
 		Options                                 []request.Option
 	}
@@ -13058,23 +13058,23 @@ func (mock *MockS3API) PutBucketNotificationRequestCalls() []struct {
 }
 
 // PutBucketNotificationWithContext calls PutBucketNotificationWithContextFunc.
-func (mock *MockS3API) PutBucketNotificationWithContext(contextMoqParam context.Context, putBucketNotificationInput *s3.PutBucketNotificationInput, options ...request.Option) (*s3.PutBucketNotificationOutput, error) {
+func (mock *MockS3API) PutBucketNotificationWithContext(v aws.Context, putBucketNotificationInput *s3.PutBucketNotificationInput, options ...request.Option) (*s3.PutBucketNotificationOutput, error) {
 	if mock.PutBucketNotificationWithContextFunc == nil {
 		panic("MockS3API.PutBucketNotificationWithContextFunc: method is nil but S3API.PutBucketNotificationWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam            context.Context
+		V                          aws.Context
 		PutBucketNotificationInput *s3.PutBucketNotificationInput
 		Options                    []request.Option
 	}{
-		ContextMoqParam:            contextMoqParam,
+		V:                          v,
 		PutBucketNotificationInput: putBucketNotificationInput,
 		Options:                    options,
 	}
 	mock.lockPutBucketNotificationWithContext.Lock()
 	mock.calls.PutBucketNotificationWithContext = append(mock.calls.PutBucketNotificationWithContext, callInfo)
 	mock.lockPutBucketNotificationWithContext.Unlock()
-	return mock.PutBucketNotificationWithContextFunc(contextMoqParam, putBucketNotificationInput, options...)
+	return mock.PutBucketNotificationWithContextFunc(v, putBucketNotificationInput, options...)
 }
 
 // PutBucketNotificationWithContextCalls gets all the calls that were made to PutBucketNotificationWithContext.
@@ -13082,12 +13082,12 @@ func (mock *MockS3API) PutBucketNotificationWithContext(contextMoqParam context.
 //
 //	len(mockedS3API.PutBucketNotificationWithContextCalls())
 func (mock *MockS3API) PutBucketNotificationWithContextCalls() []struct {
-	ContextMoqParam            context.Context
+	V                          aws.Context
 	PutBucketNotificationInput *s3.PutBucketNotificationInput
 	Options                    []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam            context.Context
+		V                          aws.Context
 		PutBucketNotificationInput *s3.PutBucketNotificationInput
 		Options                    []request.Option
 	}
@@ -13162,23 +13162,23 @@ func (mock *MockS3API) PutBucketOwnershipControlsRequestCalls() []struct {
 }
 
 // PutBucketOwnershipControlsWithContext calls PutBucketOwnershipControlsWithContextFunc.
-func (mock *MockS3API) PutBucketOwnershipControlsWithContext(contextMoqParam context.Context, putBucketOwnershipControlsInput *s3.PutBucketOwnershipControlsInput, options ...request.Option) (*s3.PutBucketOwnershipControlsOutput, error) {
+func (mock *MockS3API) PutBucketOwnershipControlsWithContext(v aws.Context, putBucketOwnershipControlsInput *s3.PutBucketOwnershipControlsInput, options ...request.Option) (*s3.PutBucketOwnershipControlsOutput, error) {
 	if mock.PutBucketOwnershipControlsWithContextFunc == nil {
 		panic("MockS3API.PutBucketOwnershipControlsWithContextFunc: method is nil but S3API.PutBucketOwnershipControlsWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam                 context.Context
+		V                               aws.Context
 		PutBucketOwnershipControlsInput *s3.PutBucketOwnershipControlsInput
 		Options                         []request.Option
 	}{
-		ContextMoqParam:                 contextMoqParam,
+		V:                               v,
 		PutBucketOwnershipControlsInput: putBucketOwnershipControlsInput,
 		Options:                         options,
 	}
 	mock.lockPutBucketOwnershipControlsWithContext.Lock()
 	mock.calls.PutBucketOwnershipControlsWithContext = append(mock.calls.PutBucketOwnershipControlsWithContext, callInfo)
 	mock.lockPutBucketOwnershipControlsWithContext.Unlock()
-	return mock.PutBucketOwnershipControlsWithContextFunc(contextMoqParam, putBucketOwnershipControlsInput, options...)
+	return mock.PutBucketOwnershipControlsWithContextFunc(v, putBucketOwnershipControlsInput, options...)
 }
 
 // PutBucketOwnershipControlsWithContextCalls gets all the calls that were made to PutBucketOwnershipControlsWithContext.
@@ -13186,12 +13186,12 @@ func (mock *MockS3API) PutBucketOwnershipControlsWithContext(contextMoqParam con
 //
 //	len(mockedS3API.PutBucketOwnershipControlsWithContextCalls())
 func (mock *MockS3API) PutBucketOwnershipControlsWithContextCalls() []struct {
-	ContextMoqParam                 context.Context
+	V                               aws.Context
 	PutBucketOwnershipControlsInput *s3.PutBucketOwnershipControlsInput
 	Options                         []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam                 context.Context
+		V                               aws.Context
 		PutBucketOwnershipControlsInput *s3.PutBucketOwnershipControlsInput
 		Options                         []request.Option
 	}
@@ -13266,23 +13266,23 @@ func (mock *MockS3API) PutBucketPolicyRequestCalls() []struct {
 }
 
 // PutBucketPolicyWithContext calls PutBucketPolicyWithContextFunc.
-func (mock *MockS3API) PutBucketPolicyWithContext(contextMoqParam context.Context, putBucketPolicyInput *s3.PutBucketPolicyInput, options ...request.Option) (*s3.PutBucketPolicyOutput, error) {
+func (mock *MockS3API) PutBucketPolicyWithContext(v aws.Context, putBucketPolicyInput *s3.PutBucketPolicyInput, options ...request.Option) (*s3.PutBucketPolicyOutput, error) {
 	if mock.PutBucketPolicyWithContextFunc == nil {
 		panic("MockS3API.PutBucketPolicyWithContextFunc: method is nil but S3API.PutBucketPolicyWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam      context.Context
+		V                    aws.Context
 		PutBucketPolicyInput *s3.PutBucketPolicyInput
 		Options              []request.Option
 	}{
-		ContextMoqParam:      contextMoqParam,
+		V:                    v,
 		PutBucketPolicyInput: putBucketPolicyInput,
 		Options:              options,
 	}
 	mock.lockPutBucketPolicyWithContext.Lock()
 	mock.calls.PutBucketPolicyWithContext = append(mock.calls.PutBucketPolicyWithContext, callInfo)
 	mock.lockPutBucketPolicyWithContext.Unlock()
-	return mock.PutBucketPolicyWithContextFunc(contextMoqParam, putBucketPolicyInput, options...)
+	return mock.PutBucketPolicyWithContextFunc(v, putBucketPolicyInput, options...)
 }
 
 // PutBucketPolicyWithContextCalls gets all the calls that were made to PutBucketPolicyWithContext.
@@ -13290,12 +13290,12 @@ func (mock *MockS3API) PutBucketPolicyWithContext(contextMoqParam context.Contex
 //
 //	len(mockedS3API.PutBucketPolicyWithContextCalls())
 func (mock *MockS3API) PutBucketPolicyWithContextCalls() []struct {
-	ContextMoqParam      context.Context
+	V                    aws.Context
 	PutBucketPolicyInput *s3.PutBucketPolicyInput
 	Options              []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam      context.Context
+		V                    aws.Context
 		PutBucketPolicyInput *s3.PutBucketPolicyInput
 		Options              []request.Option
 	}
@@ -13370,23 +13370,23 @@ func (mock *MockS3API) PutBucketReplicationRequestCalls() []struct {
 }
 
 // PutBucketReplicationWithContext calls PutBucketReplicationWithContextFunc.
-func (mock *MockS3API) PutBucketReplicationWithContext(contextMoqParam context.Context, putBucketReplicationInput *s3.PutBucketReplicationInput, options ...request.Option) (*s3.PutBucketReplicationOutput, error) {
+func (mock *MockS3API) PutBucketReplicationWithContext(v aws.Context, putBucketReplicationInput *s3.PutBucketReplicationInput, options ...request.Option) (*s3.PutBucketReplicationOutput, error) {
 	if mock.PutBucketReplicationWithContextFunc == nil {
 		panic("MockS3API.PutBucketReplicationWithContextFunc: method is nil but S3API.PutBucketReplicationWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam           context.Context
+		V                         aws.Context
 		PutBucketReplicationInput *s3.PutBucketReplicationInput
 		Options                   []request.Option
 	}{
-		ContextMoqParam:           contextMoqParam,
+		V:                         v,
 		PutBucketReplicationInput: putBucketReplicationInput,
 		Options:                   options,
 	}
 	mock.lockPutBucketReplicationWithContext.Lock()
 	mock.calls.PutBucketReplicationWithContext = append(mock.calls.PutBucketReplicationWithContext, callInfo)
 	mock.lockPutBucketReplicationWithContext.Unlock()
-	return mock.PutBucketReplicationWithContextFunc(contextMoqParam, putBucketReplicationInput, options...)
+	return mock.PutBucketReplicationWithContextFunc(v, putBucketReplicationInput, options...)
 }
 
 // PutBucketReplicationWithContextCalls gets all the calls that were made to PutBucketReplicationWithContext.
@@ -13394,12 +13394,12 @@ func (mock *MockS3API) PutBucketReplicationWithContext(contextMoqParam context.C
 //
 //	len(mockedS3API.PutBucketReplicationWithContextCalls())
 func (mock *MockS3API) PutBucketReplicationWithContextCalls() []struct {
-	ContextMoqParam           context.Context
+	V                         aws.Context
 	PutBucketReplicationInput *s3.PutBucketReplicationInput
 	Options                   []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam           context.Context
+		V                         aws.Context
 		PutBucketReplicationInput *s3.PutBucketReplicationInput
 		Options                   []request.Option
 	}
@@ -13474,23 +13474,23 @@ func (mock *MockS3API) PutBucketRequestPaymentRequestCalls() []struct {
 }
 
 // PutBucketRequestPaymentWithContext calls PutBucketRequestPaymentWithContextFunc.
-func (mock *MockS3API) PutBucketRequestPaymentWithContext(contextMoqParam context.Context, putBucketRequestPaymentInput *s3.PutBucketRequestPaymentInput, options ...request.Option) (*s3.PutBucketRequestPaymentOutput, error) {
+func (mock *MockS3API) PutBucketRequestPaymentWithContext(v aws.Context, putBucketRequestPaymentInput *s3.PutBucketRequestPaymentInput, options ...request.Option) (*s3.PutBucketRequestPaymentOutput, error) {
 	if mock.PutBucketRequestPaymentWithContextFunc == nil {
 		panic("MockS3API.PutBucketRequestPaymentWithContextFunc: method is nil but S3API.PutBucketRequestPaymentWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam              context.Context
+		V                            aws.Context
 		PutBucketRequestPaymentInput *s3.PutBucketRequestPaymentInput
 		Options                      []request.Option
 	}{
-		ContextMoqParam:              contextMoqParam,
+		V:                            v,
 		PutBucketRequestPaymentInput: putBucketRequestPaymentInput,
 		Options:                      options,
 	}
 	mock.lockPutBucketRequestPaymentWithContext.Lock()
 	mock.calls.PutBucketRequestPaymentWithContext = append(mock.calls.PutBucketRequestPaymentWithContext, callInfo)
 	mock.lockPutBucketRequestPaymentWithContext.Unlock()
-	return mock.PutBucketRequestPaymentWithContextFunc(contextMoqParam, putBucketRequestPaymentInput, options...)
+	return mock.PutBucketRequestPaymentWithContextFunc(v, putBucketRequestPaymentInput, options...)
 }
 
 // PutBucketRequestPaymentWithContextCalls gets all the calls that were made to PutBucketRequestPaymentWithContext.
@@ -13498,12 +13498,12 @@ func (mock *MockS3API) PutBucketRequestPaymentWithContext(contextMoqParam contex
 //
 //	len(mockedS3API.PutBucketRequestPaymentWithContextCalls())
 func (mock *MockS3API) PutBucketRequestPaymentWithContextCalls() []struct {
-	ContextMoqParam              context.Context
+	V                            aws.Context
 	PutBucketRequestPaymentInput *s3.PutBucketRequestPaymentInput
 	Options                      []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam              context.Context
+		V                            aws.Context
 		PutBucketRequestPaymentInput *s3.PutBucketRequestPaymentInput
 		Options                      []request.Option
 	}
@@ -13578,23 +13578,23 @@ func (mock *MockS3API) PutBucketTaggingRequestCalls() []struct {
 }
 
 // PutBucketTaggingWithContext calls PutBucketTaggingWithContextFunc.
-func (mock *MockS3API) PutBucketTaggingWithContext(contextMoqParam context.Context, putBucketTaggingInput *s3.PutBucketTaggingInput, options ...request.Option) (*s3.PutBucketTaggingOutput, error) {
+func (mock *MockS3API) PutBucketTaggingWithContext(v aws.Context, putBucketTaggingInput *s3.PutBucketTaggingInput, options ...request.Option) (*s3.PutBucketTaggingOutput, error) {
 	if mock.PutBucketTaggingWithContextFunc == nil {
 		panic("MockS3API.PutBucketTaggingWithContextFunc: method is nil but S3API.PutBucketTaggingWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam       context.Context
+		V                     aws.Context
 		PutBucketTaggingInput *s3.PutBucketTaggingInput
 		Options               []request.Option
 	}{
-		ContextMoqParam:       contextMoqParam,
+		V:                     v,
 		PutBucketTaggingInput: putBucketTaggingInput,
 		Options:               options,
 	}
 	mock.lockPutBucketTaggingWithContext.Lock()
 	mock.calls.PutBucketTaggingWithContext = append(mock.calls.PutBucketTaggingWithContext, callInfo)
 	mock.lockPutBucketTaggingWithContext.Unlock()
-	return mock.PutBucketTaggingWithContextFunc(contextMoqParam, putBucketTaggingInput, options...)
+	return mock.PutBucketTaggingWithContextFunc(v, putBucketTaggingInput, options...)
 }
 
 // PutBucketTaggingWithContextCalls gets all the calls that were made to PutBucketTaggingWithContext.
@@ -13602,12 +13602,12 @@ func (mock *MockS3API) PutBucketTaggingWithContext(contextMoqParam context.Conte
 //
 //	len(mockedS3API.PutBucketTaggingWithContextCalls())
 func (mock *MockS3API) PutBucketTaggingWithContextCalls() []struct {
-	ContextMoqParam       context.Context
+	V                     aws.Context
 	PutBucketTaggingInput *s3.PutBucketTaggingInput
 	Options               []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam       context.Context
+		V                     aws.Context
 		PutBucketTaggingInput *s3.PutBucketTaggingInput
 		Options               []request.Option
 	}
@@ -13682,23 +13682,23 @@ func (mock *MockS3API) PutBucketVersioningRequestCalls() []struct {
 }
 
 // PutBucketVersioningWithContext calls PutBucketVersioningWithContextFunc.
-func (mock *MockS3API) PutBucketVersioningWithContext(contextMoqParam context.Context, putBucketVersioningInput *s3.PutBucketVersioningInput, options ...request.Option) (*s3.PutBucketVersioningOutput, error) {
+func (mock *MockS3API) PutBucketVersioningWithContext(v aws.Context, putBucketVersioningInput *s3.PutBucketVersioningInput, options ...request.Option) (*s3.PutBucketVersioningOutput, error) {
 	if mock.PutBucketVersioningWithContextFunc == nil {
 		panic("MockS3API.PutBucketVersioningWithContextFunc: method is nil but S3API.PutBucketVersioningWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam          context.Context
+		V                        aws.Context
 		PutBucketVersioningInput *s3.PutBucketVersioningInput
 		Options                  []request.Option
 	}{
-		ContextMoqParam:          contextMoqParam,
+		V:                        v,
 		PutBucketVersioningInput: putBucketVersioningInput,
 		Options:                  options,
 	}
 	mock.lockPutBucketVersioningWithContext.Lock()
 	mock.calls.PutBucketVersioningWithContext = append(mock.calls.PutBucketVersioningWithContext, callInfo)
 	mock.lockPutBucketVersioningWithContext.Unlock()
-	return mock.PutBucketVersioningWithContextFunc(contextMoqParam, putBucketVersioningInput, options...)
+	return mock.PutBucketVersioningWithContextFunc(v, putBucketVersioningInput, options...)
 }
 
 // PutBucketVersioningWithContextCalls gets all the calls that were made to PutBucketVersioningWithContext.
@@ -13706,12 +13706,12 @@ func (mock *MockS3API) PutBucketVersioningWithContext(contextMoqParam context.Co
 //
 //	len(mockedS3API.PutBucketVersioningWithContextCalls())
 func (mock *MockS3API) PutBucketVersioningWithContextCalls() []struct {
-	ContextMoqParam          context.Context
+	V                        aws.Context
 	PutBucketVersioningInput *s3.PutBucketVersioningInput
 	Options                  []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam          context.Context
+		V                        aws.Context
 		PutBucketVersioningInput *s3.PutBucketVersioningInput
 		Options                  []request.Option
 	}
@@ -13786,23 +13786,23 @@ func (mock *MockS3API) PutBucketWebsiteRequestCalls() []struct {
 }
 
 // PutBucketWebsiteWithContext calls PutBucketWebsiteWithContextFunc.
-func (mock *MockS3API) PutBucketWebsiteWithContext(contextMoqParam context.Context, putBucketWebsiteInput *s3.PutBucketWebsiteInput, options ...request.Option) (*s3.PutBucketWebsiteOutput, error) {
+func (mock *MockS3API) PutBucketWebsiteWithContext(v aws.Context, putBucketWebsiteInput *s3.PutBucketWebsiteInput, options ...request.Option) (*s3.PutBucketWebsiteOutput, error) {
 	if mock.PutBucketWebsiteWithContextFunc == nil {
 		panic("MockS3API.PutBucketWebsiteWithContextFunc: method is nil but S3API.PutBucketWebsiteWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam       context.Context
+		V                     aws.Context
 		PutBucketWebsiteInput *s3.PutBucketWebsiteInput
 		Options               []request.Option
 	}{
-		ContextMoqParam:       contextMoqParam,
+		V:                     v,
 		PutBucketWebsiteInput: putBucketWebsiteInput,
 		Options:               options,
 	}
 	mock.lockPutBucketWebsiteWithContext.Lock()
 	mock.calls.PutBucketWebsiteWithContext = append(mock.calls.PutBucketWebsiteWithContext, callInfo)
 	mock.lockPutBucketWebsiteWithContext.Unlock()
-	return mock.PutBucketWebsiteWithContextFunc(contextMoqParam, putBucketWebsiteInput, options...)
+	return mock.PutBucketWebsiteWithContextFunc(v, putBucketWebsiteInput, options...)
 }
 
 // PutBucketWebsiteWithContextCalls gets all the calls that were made to PutBucketWebsiteWithContext.
@@ -13810,12 +13810,12 @@ func (mock *MockS3API) PutBucketWebsiteWithContext(contextMoqParam context.Conte
 //
 //	len(mockedS3API.PutBucketWebsiteWithContextCalls())
 func (mock *MockS3API) PutBucketWebsiteWithContextCalls() []struct {
-	ContextMoqParam       context.Context
+	V                     aws.Context
 	PutBucketWebsiteInput *s3.PutBucketWebsiteInput
 	Options               []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam       context.Context
+		V                     aws.Context
 		PutBucketWebsiteInput *s3.PutBucketWebsiteInput
 		Options               []request.Option
 	}
@@ -13922,23 +13922,23 @@ func (mock *MockS3API) PutObjectAclRequestCalls() []struct {
 }
 
 // PutObjectAclWithContext calls PutObjectAclWithContextFunc.
-func (mock *MockS3API) PutObjectAclWithContext(contextMoqParam context.Context, putObjectAclInput *s3.PutObjectAclInput, options ...request.Option) (*s3.PutObjectAclOutput, error) {
+func (mock *MockS3API) PutObjectAclWithContext(v aws.Context, putObjectAclInput *s3.PutObjectAclInput, options ...request.Option) (*s3.PutObjectAclOutput, error) {
 	if mock.PutObjectAclWithContextFunc == nil {
 		panic("MockS3API.PutObjectAclWithContextFunc: method is nil but S3API.PutObjectAclWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam   context.Context
+		V                 aws.Context
 		PutObjectAclInput *s3.PutObjectAclInput
 		Options           []request.Option
 	}{
-		ContextMoqParam:   contextMoqParam,
+		V:                 v,
 		PutObjectAclInput: putObjectAclInput,
 		Options:           options,
 	}
 	mock.lockPutObjectAclWithContext.Lock()
 	mock.calls.PutObjectAclWithContext = append(mock.calls.PutObjectAclWithContext, callInfo)
 	mock.lockPutObjectAclWithContext.Unlock()
-	return mock.PutObjectAclWithContextFunc(contextMoqParam, putObjectAclInput, options...)
+	return mock.PutObjectAclWithContextFunc(v, putObjectAclInput, options...)
 }
 
 // PutObjectAclWithContextCalls gets all the calls that were made to PutObjectAclWithContext.
@@ -13946,12 +13946,12 @@ func (mock *MockS3API) PutObjectAclWithContext(contextMoqParam context.Context, 
 //
 //	len(mockedS3API.PutObjectAclWithContextCalls())
 func (mock *MockS3API) PutObjectAclWithContextCalls() []struct {
-	ContextMoqParam   context.Context
+	V                 aws.Context
 	PutObjectAclInput *s3.PutObjectAclInput
 	Options           []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam   context.Context
+		V                 aws.Context
 		PutObjectAclInput *s3.PutObjectAclInput
 		Options           []request.Option
 	}
@@ -14026,23 +14026,23 @@ func (mock *MockS3API) PutObjectLegalHoldRequestCalls() []struct {
 }
 
 // PutObjectLegalHoldWithContext calls PutObjectLegalHoldWithContextFunc.
-func (mock *MockS3API) PutObjectLegalHoldWithContext(contextMoqParam context.Context, putObjectLegalHoldInput *s3.PutObjectLegalHoldInput, options ...request.Option) (*s3.PutObjectLegalHoldOutput, error) {
+func (mock *MockS3API) PutObjectLegalHoldWithContext(v aws.Context, putObjectLegalHoldInput *s3.PutObjectLegalHoldInput, options ...request.Option) (*s3.PutObjectLegalHoldOutput, error) {
 	if mock.PutObjectLegalHoldWithContextFunc == nil {
 		panic("MockS3API.PutObjectLegalHoldWithContextFunc: method is nil but S3API.PutObjectLegalHoldWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam         context.Context
+		V                       aws.Context
 		PutObjectLegalHoldInput *s3.PutObjectLegalHoldInput
 		Options                 []request.Option
 	}{
-		ContextMoqParam:         contextMoqParam,
+		V:                       v,
 		PutObjectLegalHoldInput: putObjectLegalHoldInput,
 		Options:                 options,
 	}
 	mock.lockPutObjectLegalHoldWithContext.Lock()
 	mock.calls.PutObjectLegalHoldWithContext = append(mock.calls.PutObjectLegalHoldWithContext, callInfo)
 	mock.lockPutObjectLegalHoldWithContext.Unlock()
-	return mock.PutObjectLegalHoldWithContextFunc(contextMoqParam, putObjectLegalHoldInput, options...)
+	return mock.PutObjectLegalHoldWithContextFunc(v, putObjectLegalHoldInput, options...)
 }
 
 // PutObjectLegalHoldWithContextCalls gets all the calls that were made to PutObjectLegalHoldWithContext.
@@ -14050,12 +14050,12 @@ func (mock *MockS3API) PutObjectLegalHoldWithContext(contextMoqParam context.Con
 //
 //	len(mockedS3API.PutObjectLegalHoldWithContextCalls())
 func (mock *MockS3API) PutObjectLegalHoldWithContextCalls() []struct {
-	ContextMoqParam         context.Context
+	V                       aws.Context
 	PutObjectLegalHoldInput *s3.PutObjectLegalHoldInput
 	Options                 []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam         context.Context
+		V                       aws.Context
 		PutObjectLegalHoldInput *s3.PutObjectLegalHoldInput
 		Options                 []request.Option
 	}
@@ -14130,23 +14130,23 @@ func (mock *MockS3API) PutObjectLockConfigurationRequestCalls() []struct {
 }
 
 // PutObjectLockConfigurationWithContext calls PutObjectLockConfigurationWithContextFunc.
-func (mock *MockS3API) PutObjectLockConfigurationWithContext(contextMoqParam context.Context, putObjectLockConfigurationInput *s3.PutObjectLockConfigurationInput, options ...request.Option) (*s3.PutObjectLockConfigurationOutput, error) {
+func (mock *MockS3API) PutObjectLockConfigurationWithContext(v aws.Context, putObjectLockConfigurationInput *s3.PutObjectLockConfigurationInput, options ...request.Option) (*s3.PutObjectLockConfigurationOutput, error) {
 	if mock.PutObjectLockConfigurationWithContextFunc == nil {
 		panic("MockS3API.PutObjectLockConfigurationWithContextFunc: method is nil but S3API.PutObjectLockConfigurationWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam                 context.Context
+		V                               aws.Context
 		PutObjectLockConfigurationInput *s3.PutObjectLockConfigurationInput
 		Options                         []request.Option
 	}{
-		ContextMoqParam:                 contextMoqParam,
+		V:                               v,
 		PutObjectLockConfigurationInput: putObjectLockConfigurationInput,
 		Options:                         options,
 	}
 	mock.lockPutObjectLockConfigurationWithContext.Lock()
 	mock.calls.PutObjectLockConfigurationWithContext = append(mock.calls.PutObjectLockConfigurationWithContext, callInfo)
 	mock.lockPutObjectLockConfigurationWithContext.Unlock()
-	return mock.PutObjectLockConfigurationWithContextFunc(contextMoqParam, putObjectLockConfigurationInput, options...)
+	return mock.PutObjectLockConfigurationWithContextFunc(v, putObjectLockConfigurationInput, options...)
 }
 
 // PutObjectLockConfigurationWithContextCalls gets all the calls that were made to PutObjectLockConfigurationWithContext.
@@ -14154,12 +14154,12 @@ func (mock *MockS3API) PutObjectLockConfigurationWithContext(contextMoqParam con
 //
 //	len(mockedS3API.PutObjectLockConfigurationWithContextCalls())
 func (mock *MockS3API) PutObjectLockConfigurationWithContextCalls() []struct {
-	ContextMoqParam                 context.Context
+	V                               aws.Context
 	PutObjectLockConfigurationInput *s3.PutObjectLockConfigurationInput
 	Options                         []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam                 context.Context
+		V                               aws.Context
 		PutObjectLockConfigurationInput *s3.PutObjectLockConfigurationInput
 		Options                         []request.Option
 	}
@@ -14266,23 +14266,23 @@ func (mock *MockS3API) PutObjectRetentionRequestCalls() []struct {
 }
 
 // PutObjectRetentionWithContext calls PutObjectRetentionWithContextFunc.
-func (mock *MockS3API) PutObjectRetentionWithContext(contextMoqParam context.Context, putObjectRetentionInput *s3.PutObjectRetentionInput, options ...request.Option) (*s3.PutObjectRetentionOutput, error) {
+func (mock *MockS3API) PutObjectRetentionWithContext(v aws.Context, putObjectRetentionInput *s3.PutObjectRetentionInput, options ...request.Option) (*s3.PutObjectRetentionOutput, error) {
 	if mock.PutObjectRetentionWithContextFunc == nil {
 		panic("MockS3API.PutObjectRetentionWithContextFunc: method is nil but S3API.PutObjectRetentionWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam         context.Context
+		V                       aws.Context
 		PutObjectRetentionInput *s3.PutObjectRetentionInput
 		Options                 []request.Option
 	}{
-		ContextMoqParam:         contextMoqParam,
+		V:                       v,
 		PutObjectRetentionInput: putObjectRetentionInput,
 		Options:                 options,
 	}
 	mock.lockPutObjectRetentionWithContext.Lock()
 	mock.calls.PutObjectRetentionWithContext = append(mock.calls.PutObjectRetentionWithContext, callInfo)
 	mock.lockPutObjectRetentionWithContext.Unlock()
-	return mock.PutObjectRetentionWithContextFunc(contextMoqParam, putObjectRetentionInput, options...)
+	return mock.PutObjectRetentionWithContextFunc(v, putObjectRetentionInput, options...)
 }
 
 // PutObjectRetentionWithContextCalls gets all the calls that were made to PutObjectRetentionWithContext.
@@ -14290,12 +14290,12 @@ func (mock *MockS3API) PutObjectRetentionWithContext(contextMoqParam context.Con
 //
 //	len(mockedS3API.PutObjectRetentionWithContextCalls())
 func (mock *MockS3API) PutObjectRetentionWithContextCalls() []struct {
-	ContextMoqParam         context.Context
+	V                       aws.Context
 	PutObjectRetentionInput *s3.PutObjectRetentionInput
 	Options                 []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam         context.Context
+		V                       aws.Context
 		PutObjectRetentionInput *s3.PutObjectRetentionInput
 		Options                 []request.Option
 	}
@@ -14370,23 +14370,23 @@ func (mock *MockS3API) PutObjectTaggingRequestCalls() []struct {
 }
 
 // PutObjectTaggingWithContext calls PutObjectTaggingWithContextFunc.
-func (mock *MockS3API) PutObjectTaggingWithContext(contextMoqParam context.Context, putObjectTaggingInput *s3.PutObjectTaggingInput, options ...request.Option) (*s3.PutObjectTaggingOutput, error) {
+func (mock *MockS3API) PutObjectTaggingWithContext(v aws.Context, putObjectTaggingInput *s3.PutObjectTaggingInput, options ...request.Option) (*s3.PutObjectTaggingOutput, error) {
 	if mock.PutObjectTaggingWithContextFunc == nil {
 		panic("MockS3API.PutObjectTaggingWithContextFunc: method is nil but S3API.PutObjectTaggingWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam       context.Context
+		V                     aws.Context
 		PutObjectTaggingInput *s3.PutObjectTaggingInput
 		Options               []request.Option
 	}{
-		ContextMoqParam:       contextMoqParam,
+		V:                     v,
 		PutObjectTaggingInput: putObjectTaggingInput,
 		Options:               options,
 	}
 	mock.lockPutObjectTaggingWithContext.Lock()
 	mock.calls.PutObjectTaggingWithContext = append(mock.calls.PutObjectTaggingWithContext, callInfo)
 	mock.lockPutObjectTaggingWithContext.Unlock()
-	return mock.PutObjectTaggingWithContextFunc(contextMoqParam, putObjectTaggingInput, options...)
+	return mock.PutObjectTaggingWithContextFunc(v, putObjectTaggingInput, options...)
 }
 
 // PutObjectTaggingWithContextCalls gets all the calls that were made to PutObjectTaggingWithContext.
@@ -14394,12 +14394,12 @@ func (mock *MockS3API) PutObjectTaggingWithContext(contextMoqParam context.Conte
 //
 //	len(mockedS3API.PutObjectTaggingWithContextCalls())
 func (mock *MockS3API) PutObjectTaggingWithContextCalls() []struct {
-	ContextMoqParam       context.Context
+	V                     aws.Context
 	PutObjectTaggingInput *s3.PutObjectTaggingInput
 	Options               []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam       context.Context
+		V                     aws.Context
 		PutObjectTaggingInput *s3.PutObjectTaggingInput
 		Options               []request.Option
 	}
@@ -14410,23 +14410,23 @@ func (mock *MockS3API) PutObjectTaggingWithContextCalls() []struct {
 }
 
 // PutObjectWithContext calls PutObjectWithContextFunc.
-func (mock *MockS3API) PutObjectWithContext(contextMoqParam context.Context, putObjectInput *s3.PutObjectInput, options ...request.Option) (*s3.PutObjectOutput, error) {
+func (mock *MockS3API) PutObjectWithContext(v aws.Context, putObjectInput *s3.PutObjectInput, options ...request.Option) (*s3.PutObjectOutput, error) {
 	if mock.PutObjectWithContextFunc == nil {
 		panic("MockS3API.PutObjectWithContextFunc: method is nil but S3API.PutObjectWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam context.Context
-		PutObjectInput  *s3.PutObjectInput
-		Options         []request.Option
+		V              aws.Context
+		PutObjectInput *s3.PutObjectInput
+		Options        []request.Option
 	}{
-		ContextMoqParam: contextMoqParam,
-		PutObjectInput:  putObjectInput,
-		Options:         options,
+		V:              v,
+		PutObjectInput: putObjectInput,
+		Options:        options,
 	}
 	mock.lockPutObjectWithContext.Lock()
 	mock.calls.PutObjectWithContext = append(mock.calls.PutObjectWithContext, callInfo)
 	mock.lockPutObjectWithContext.Unlock()
-	return mock.PutObjectWithContextFunc(contextMoqParam, putObjectInput, options...)
+	return mock.PutObjectWithContextFunc(v, putObjectInput, options...)
 }
 
 // PutObjectWithContextCalls gets all the calls that were made to PutObjectWithContext.
@@ -14434,14 +14434,14 @@ func (mock *MockS3API) PutObjectWithContext(contextMoqParam context.Context, put
 //
 //	len(mockedS3API.PutObjectWithContextCalls())
 func (mock *MockS3API) PutObjectWithContextCalls() []struct {
-	ContextMoqParam context.Context
-	PutObjectInput  *s3.PutObjectInput
-	Options         []request.Option
+	V              aws.Context
+	PutObjectInput *s3.PutObjectInput
+	Options        []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam context.Context
-		PutObjectInput  *s3.PutObjectInput
-		Options         []request.Option
+		V              aws.Context
+		PutObjectInput *s3.PutObjectInput
+		Options        []request.Option
 	}
 	mock.lockPutObjectWithContext.RLock()
 	calls = mock.calls.PutObjectWithContext
@@ -14514,23 +14514,23 @@ func (mock *MockS3API) PutPublicAccessBlockRequestCalls() []struct {
 }
 
 // PutPublicAccessBlockWithContext calls PutPublicAccessBlockWithContextFunc.
-func (mock *MockS3API) PutPublicAccessBlockWithContext(contextMoqParam context.Context, putPublicAccessBlockInput *s3.PutPublicAccessBlockInput, options ...request.Option) (*s3.PutPublicAccessBlockOutput, error) {
+func (mock *MockS3API) PutPublicAccessBlockWithContext(v aws.Context, putPublicAccessBlockInput *s3.PutPublicAccessBlockInput, options ...request.Option) (*s3.PutPublicAccessBlockOutput, error) {
 	if mock.PutPublicAccessBlockWithContextFunc == nil {
 		panic("MockS3API.PutPublicAccessBlockWithContextFunc: method is nil but S3API.PutPublicAccessBlockWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam           context.Context
+		V                         aws.Context
 		PutPublicAccessBlockInput *s3.PutPublicAccessBlockInput
 		Options                   []request.Option
 	}{
-		ContextMoqParam:           contextMoqParam,
+		V:                         v,
 		PutPublicAccessBlockInput: putPublicAccessBlockInput,
 		Options:                   options,
 	}
 	mock.lockPutPublicAccessBlockWithContext.Lock()
 	mock.calls.PutPublicAccessBlockWithContext = append(mock.calls.PutPublicAccessBlockWithContext, callInfo)
 	mock.lockPutPublicAccessBlockWithContext.Unlock()
-	return mock.PutPublicAccessBlockWithContextFunc(contextMoqParam, putPublicAccessBlockInput, options...)
+	return mock.PutPublicAccessBlockWithContextFunc(v, putPublicAccessBlockInput, options...)
 }
 
 // PutPublicAccessBlockWithContextCalls gets all the calls that were made to PutPublicAccessBlockWithContext.
@@ -14538,12 +14538,12 @@ func (mock *MockS3API) PutPublicAccessBlockWithContext(contextMoqParam context.C
 //
 //	len(mockedS3API.PutPublicAccessBlockWithContextCalls())
 func (mock *MockS3API) PutPublicAccessBlockWithContextCalls() []struct {
-	ContextMoqParam           context.Context
+	V                         aws.Context
 	PutPublicAccessBlockInput *s3.PutPublicAccessBlockInput
 	Options                   []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam           context.Context
+		V                         aws.Context
 		PutPublicAccessBlockInput *s3.PutPublicAccessBlockInput
 		Options                   []request.Option
 	}
@@ -14618,23 +14618,23 @@ func (mock *MockS3API) RestoreObjectRequestCalls() []struct {
 }
 
 // RestoreObjectWithContext calls RestoreObjectWithContextFunc.
-func (mock *MockS3API) RestoreObjectWithContext(contextMoqParam context.Context, restoreObjectInput *s3.RestoreObjectInput, options ...request.Option) (*s3.RestoreObjectOutput, error) {
+func (mock *MockS3API) RestoreObjectWithContext(v aws.Context, restoreObjectInput *s3.RestoreObjectInput, options ...request.Option) (*s3.RestoreObjectOutput, error) {
 	if mock.RestoreObjectWithContextFunc == nil {
 		panic("MockS3API.RestoreObjectWithContextFunc: method is nil but S3API.RestoreObjectWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam    context.Context
+		V                  aws.Context
 		RestoreObjectInput *s3.RestoreObjectInput
 		Options            []request.Option
 	}{
-		ContextMoqParam:    contextMoqParam,
+		V:                  v,
 		RestoreObjectInput: restoreObjectInput,
 		Options:            options,
 	}
 	mock.lockRestoreObjectWithContext.Lock()
 	mock.calls.RestoreObjectWithContext = append(mock.calls.RestoreObjectWithContext, callInfo)
 	mock.lockRestoreObjectWithContext.Unlock()
-	return mock.RestoreObjectWithContextFunc(contextMoqParam, restoreObjectInput, options...)
+	return mock.RestoreObjectWithContextFunc(v, restoreObjectInput, options...)
 }
 
 // RestoreObjectWithContextCalls gets all the calls that were made to RestoreObjectWithContext.
@@ -14642,12 +14642,12 @@ func (mock *MockS3API) RestoreObjectWithContext(contextMoqParam context.Context,
 //
 //	len(mockedS3API.RestoreObjectWithContextCalls())
 func (mock *MockS3API) RestoreObjectWithContextCalls() []struct {
-	ContextMoqParam    context.Context
+	V                  aws.Context
 	RestoreObjectInput *s3.RestoreObjectInput
 	Options            []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam    context.Context
+		V                  aws.Context
 		RestoreObjectInput *s3.RestoreObjectInput
 		Options            []request.Option
 	}
@@ -14722,23 +14722,23 @@ func (mock *MockS3API) SelectObjectContentRequestCalls() []struct {
 }
 
 // SelectObjectContentWithContext calls SelectObjectContentWithContextFunc.
-func (mock *MockS3API) SelectObjectContentWithContext(contextMoqParam context.Context, selectObjectContentInput *s3.SelectObjectContentInput, options ...request.Option) (*s3.SelectObjectContentOutput, error) {
+func (mock *MockS3API) SelectObjectContentWithContext(v aws.Context, selectObjectContentInput *s3.SelectObjectContentInput, options ...request.Option) (*s3.SelectObjectContentOutput, error) {
 	if mock.SelectObjectContentWithContextFunc == nil {
 		panic("MockS3API.SelectObjectContentWithContextFunc: method is nil but S3API.SelectObjectContentWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam          context.Context
+		V                        aws.Context
 		SelectObjectContentInput *s3.SelectObjectContentInput
 		Options                  []request.Option
 	}{
-		ContextMoqParam:          contextMoqParam,
+		V:                        v,
 		SelectObjectContentInput: selectObjectContentInput,
 		Options:                  options,
 	}
 	mock.lockSelectObjectContentWithContext.Lock()
 	mock.calls.SelectObjectContentWithContext = append(mock.calls.SelectObjectContentWithContext, callInfo)
 	mock.lockSelectObjectContentWithContext.Unlock()
-	return mock.SelectObjectContentWithContextFunc(contextMoqParam, selectObjectContentInput, options...)
+	return mock.SelectObjectContentWithContextFunc(v, selectObjectContentInput, options...)
 }
 
 // SelectObjectContentWithContextCalls gets all the calls that were made to SelectObjectContentWithContext.
@@ -14746,12 +14746,12 @@ func (mock *MockS3API) SelectObjectContentWithContext(contextMoqParam context.Co
 //
 //	len(mockedS3API.SelectObjectContentWithContextCalls())
 func (mock *MockS3API) SelectObjectContentWithContextCalls() []struct {
-	ContextMoqParam          context.Context
+	V                        aws.Context
 	SelectObjectContentInput *s3.SelectObjectContentInput
 	Options                  []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam          context.Context
+		V                        aws.Context
 		SelectObjectContentInput *s3.SelectObjectContentInput
 		Options                  []request.Option
 	}
@@ -14858,23 +14858,23 @@ func (mock *MockS3API) UploadPartCopyRequestCalls() []struct {
 }
 
 // UploadPartCopyWithContext calls UploadPartCopyWithContextFunc.
-func (mock *MockS3API) UploadPartCopyWithContext(contextMoqParam context.Context, uploadPartCopyInput *s3.UploadPartCopyInput, options ...request.Option) (*s3.UploadPartCopyOutput, error) {
+func (mock *MockS3API) UploadPartCopyWithContext(v aws.Context, uploadPartCopyInput *s3.UploadPartCopyInput, options ...request.Option) (*s3.UploadPartCopyOutput, error) {
 	if mock.UploadPartCopyWithContextFunc == nil {
 		panic("MockS3API.UploadPartCopyWithContextFunc: method is nil but S3API.UploadPartCopyWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam     context.Context
+		V                   aws.Context
 		UploadPartCopyInput *s3.UploadPartCopyInput
 		Options             []request.Option
 	}{
-		ContextMoqParam:     contextMoqParam,
+		V:                   v,
 		UploadPartCopyInput: uploadPartCopyInput,
 		Options:             options,
 	}
 	mock.lockUploadPartCopyWithContext.Lock()
 	mock.calls.UploadPartCopyWithContext = append(mock.calls.UploadPartCopyWithContext, callInfo)
 	mock.lockUploadPartCopyWithContext.Unlock()
-	return mock.UploadPartCopyWithContextFunc(contextMoqParam, uploadPartCopyInput, options...)
+	return mock.UploadPartCopyWithContextFunc(v, uploadPartCopyInput, options...)
 }
 
 // UploadPartCopyWithContextCalls gets all the calls that were made to UploadPartCopyWithContext.
@@ -14882,12 +14882,12 @@ func (mock *MockS3API) UploadPartCopyWithContext(contextMoqParam context.Context
 //
 //	len(mockedS3API.UploadPartCopyWithContextCalls())
 func (mock *MockS3API) UploadPartCopyWithContextCalls() []struct {
-	ContextMoqParam     context.Context
+	V                   aws.Context
 	UploadPartCopyInput *s3.UploadPartCopyInput
 	Options             []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam     context.Context
+		V                   aws.Context
 		UploadPartCopyInput *s3.UploadPartCopyInput
 		Options             []request.Option
 	}
@@ -14930,23 +14930,23 @@ func (mock *MockS3API) UploadPartRequestCalls() []struct {
 }
 
 // UploadPartWithContext calls UploadPartWithContextFunc.
-func (mock *MockS3API) UploadPartWithContext(contextMoqParam context.Context, uploadPartInput *s3.UploadPartInput, options ...request.Option) (*s3.UploadPartOutput, error) {
+func (mock *MockS3API) UploadPartWithContext(v aws.Context, uploadPartInput *s3.UploadPartInput, options ...request.Option) (*s3.UploadPartOutput, error) {
 	if mock.UploadPartWithContextFunc == nil {
 		panic("MockS3API.UploadPartWithContextFunc: method is nil but S3API.UploadPartWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam context.Context
+		V               aws.Context
 		UploadPartInput *s3.UploadPartInput
 		Options         []request.Option
 	}{
-		ContextMoqParam: contextMoqParam,
+		V:               v,
 		UploadPartInput: uploadPartInput,
 		Options:         options,
 	}
 	mock.lockUploadPartWithContext.Lock()
 	mock.calls.UploadPartWithContext = append(mock.calls.UploadPartWithContext, callInfo)
 	mock.lockUploadPartWithContext.Unlock()
-	return mock.UploadPartWithContextFunc(contextMoqParam, uploadPartInput, options...)
+	return mock.UploadPartWithContextFunc(v, uploadPartInput, options...)
 }
 
 // UploadPartWithContextCalls gets all the calls that were made to UploadPartWithContext.
@@ -14954,12 +14954,12 @@ func (mock *MockS3API) UploadPartWithContext(contextMoqParam context.Context, up
 //
 //	len(mockedS3API.UploadPartWithContextCalls())
 func (mock *MockS3API) UploadPartWithContextCalls() []struct {
-	ContextMoqParam context.Context
+	V               aws.Context
 	UploadPartInput *s3.UploadPartInput
 	Options         []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam context.Context
+		V               aws.Context
 		UploadPartInput *s3.UploadPartInput
 		Options         []request.Option
 	}
@@ -15002,23 +15002,23 @@ func (mock *MockS3API) WaitUntilBucketExistsCalls() []struct {
 }
 
 // WaitUntilBucketExistsWithContext calls WaitUntilBucketExistsWithContextFunc.
-func (mock *MockS3API) WaitUntilBucketExistsWithContext(contextMoqParam context.Context, headBucketInput *s3.HeadBucketInput, waiterOptions ...request.WaiterOption) error {
+func (mock *MockS3API) WaitUntilBucketExistsWithContext(v aws.Context, headBucketInput *s3.HeadBucketInput, waiterOptions ...request.WaiterOption) error {
 	if mock.WaitUntilBucketExistsWithContextFunc == nil {
 		panic("MockS3API.WaitUntilBucketExistsWithContextFunc: method is nil but S3API.WaitUntilBucketExistsWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam context.Context
+		V               aws.Context
 		HeadBucketInput *s3.HeadBucketInput
 		WaiterOptions   []request.WaiterOption
 	}{
-		ContextMoqParam: contextMoqParam,
+		V:               v,
 		HeadBucketInput: headBucketInput,
 		WaiterOptions:   waiterOptions,
 	}
 	mock.lockWaitUntilBucketExistsWithContext.Lock()
 	mock.calls.WaitUntilBucketExistsWithContext = append(mock.calls.WaitUntilBucketExistsWithContext, callInfo)
 	mock.lockWaitUntilBucketExistsWithContext.Unlock()
-	return mock.WaitUntilBucketExistsWithContextFunc(contextMoqParam, headBucketInput, waiterOptions...)
+	return mock.WaitUntilBucketExistsWithContextFunc(v, headBucketInput, waiterOptions...)
 }
 
 // WaitUntilBucketExistsWithContextCalls gets all the calls that were made to WaitUntilBucketExistsWithContext.
@@ -15026,12 +15026,12 @@ func (mock *MockS3API) WaitUntilBucketExistsWithContext(contextMoqParam context.
 //
 //	len(mockedS3API.WaitUntilBucketExistsWithContextCalls())
 func (mock *MockS3API) WaitUntilBucketExistsWithContextCalls() []struct {
-	ContextMoqParam context.Context
+	V               aws.Context
 	HeadBucketInput *s3.HeadBucketInput
 	WaiterOptions   []request.WaiterOption
 } {
 	var calls []struct {
-		ContextMoqParam context.Context
+		V               aws.Context
 		HeadBucketInput *s3.HeadBucketInput
 		WaiterOptions   []request.WaiterOption
 	}
@@ -15074,23 +15074,23 @@ func (mock *MockS3API) WaitUntilBucketNotExistsCalls() []struct {
 }
 
 // WaitUntilBucketNotExistsWithContext calls WaitUntilBucketNotExistsWithContextFunc.
-func (mock *MockS3API) WaitUntilBucketNotExistsWithContext(contextMoqParam context.Context, headBucketInput *s3.HeadBucketInput, waiterOptions ...request.WaiterOption) error {
+func (mock *MockS3API) WaitUntilBucketNotExistsWithContext(v aws.Context, headBucketInput *s3.HeadBucketInput, waiterOptions ...request.WaiterOption) error {
 	if mock.WaitUntilBucketNotExistsWithContextFunc == nil {
 		panic("MockS3API.WaitUntilBucketNotExistsWithContextFunc: method is nil but S3API.WaitUntilBucketNotExistsWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam context.Context
+		V               aws.Context
 		HeadBucketInput *s3.HeadBucketInput
 		WaiterOptions   []request.WaiterOption
 	}{
-		ContextMoqParam: contextMoqParam,
+		V:               v,
 		HeadBucketInput: headBucketInput,
 		WaiterOptions:   waiterOptions,
 	}
 	mock.lockWaitUntilBucketNotExistsWithContext.Lock()
 	mock.calls.WaitUntilBucketNotExistsWithContext = append(mock.calls.WaitUntilBucketNotExistsWithContext, callInfo)
 	mock.lockWaitUntilBucketNotExistsWithContext.Unlock()
-	return mock.WaitUntilBucketNotExistsWithContextFunc(contextMoqParam, headBucketInput, waiterOptions...)
+	return mock.WaitUntilBucketNotExistsWithContextFunc(v, headBucketInput, waiterOptions...)
 }
 
 // WaitUntilBucketNotExistsWithContextCalls gets all the calls that were made to WaitUntilBucketNotExistsWithContext.
@@ -15098,12 +15098,12 @@ func (mock *MockS3API) WaitUntilBucketNotExistsWithContext(contextMoqParam conte
 //
 //	len(mockedS3API.WaitUntilBucketNotExistsWithContextCalls())
 func (mock *MockS3API) WaitUntilBucketNotExistsWithContextCalls() []struct {
-	ContextMoqParam context.Context
+	V               aws.Context
 	HeadBucketInput *s3.HeadBucketInput
 	WaiterOptions   []request.WaiterOption
 } {
 	var calls []struct {
-		ContextMoqParam context.Context
+		V               aws.Context
 		HeadBucketInput *s3.HeadBucketInput
 		WaiterOptions   []request.WaiterOption
 	}
@@ -15146,23 +15146,23 @@ func (mock *MockS3API) WaitUntilObjectExistsCalls() []struct {
 }
 
 // WaitUntilObjectExistsWithContext calls WaitUntilObjectExistsWithContextFunc.
-func (mock *MockS3API) WaitUntilObjectExistsWithContext(contextMoqParam context.Context, headObjectInput *s3.HeadObjectInput, waiterOptions ...request.WaiterOption) error {
+func (mock *MockS3API) WaitUntilObjectExistsWithContext(v aws.Context, headObjectInput *s3.HeadObjectInput, waiterOptions ...request.WaiterOption) error {
 	if mock.WaitUntilObjectExistsWithContextFunc == nil {
 		panic("MockS3API.WaitUntilObjectExistsWithContextFunc: method is nil but S3API.WaitUntilObjectExistsWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam context.Context
+		V               aws.Context
 		HeadObjectInput *s3.HeadObjectInput
 		WaiterOptions   []request.WaiterOption
 	}{
-		ContextMoqParam: contextMoqParam,
+		V:               v,
 		HeadObjectInput: headObjectInput,
 		WaiterOptions:   waiterOptions,
 	}
 	mock.lockWaitUntilObjectExistsWithContext.Lock()
 	mock.calls.WaitUntilObjectExistsWithContext = append(mock.calls.WaitUntilObjectExistsWithContext, callInfo)
 	mock.lockWaitUntilObjectExistsWithContext.Unlock()
-	return mock.WaitUntilObjectExistsWithContextFunc(contextMoqParam, headObjectInput, waiterOptions...)
+	return mock.WaitUntilObjectExistsWithContextFunc(v, headObjectInput, waiterOptions...)
 }
 
 // WaitUntilObjectExistsWithContextCalls gets all the calls that were made to WaitUntilObjectExistsWithContext.
@@ -15170,12 +15170,12 @@ func (mock *MockS3API) WaitUntilObjectExistsWithContext(contextMoqParam context.
 //
 //	len(mockedS3API.WaitUntilObjectExistsWithContextCalls())
 func (mock *MockS3API) WaitUntilObjectExistsWithContextCalls() []struct {
-	ContextMoqParam context.Context
+	V               aws.Context
 	HeadObjectInput *s3.HeadObjectInput
 	WaiterOptions   []request.WaiterOption
 } {
 	var calls []struct {
-		ContextMoqParam context.Context
+		V               aws.Context
 		HeadObjectInput *s3.HeadObjectInput
 		WaiterOptions   []request.WaiterOption
 	}
@@ -15218,23 +15218,23 @@ func (mock *MockS3API) WaitUntilObjectNotExistsCalls() []struct {
 }
 
 // WaitUntilObjectNotExistsWithContext calls WaitUntilObjectNotExistsWithContextFunc.
-func (mock *MockS3API) WaitUntilObjectNotExistsWithContext(contextMoqParam context.Context, headObjectInput *s3.HeadObjectInput, waiterOptions ...request.WaiterOption) error {
+func (mock *MockS3API) WaitUntilObjectNotExistsWithContext(v aws.Context, headObjectInput *s3.HeadObjectInput, waiterOptions ...request.WaiterOption) error {
 	if mock.WaitUntilObjectNotExistsWithContextFunc == nil {
 		panic("MockS3API.WaitUntilObjectNotExistsWithContextFunc: method is nil but S3API.WaitUntilObjectNotExistsWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam context.Context
+		V               aws.Context
 		HeadObjectInput *s3.HeadObjectInput
 		WaiterOptions   []request.WaiterOption
 	}{
-		ContextMoqParam: contextMoqParam,
+		V:               v,
 		HeadObjectInput: headObjectInput,
 		WaiterOptions:   waiterOptions,
 	}
 	mock.lockWaitUntilObjectNotExistsWithContext.Lock()
 	mock.calls.WaitUntilObjectNotExistsWithContext = append(mock.calls.WaitUntilObjectNotExistsWithContext, callInfo)
 	mock.lockWaitUntilObjectNotExistsWithContext.Unlock()
-	return mock.WaitUntilObjectNotExistsWithContextFunc(contextMoqParam, headObjectInput, waiterOptions...)
+	return mock.WaitUntilObjectNotExistsWithContextFunc(v, headObjectInput, waiterOptions...)
 }
 
 // WaitUntilObjectNotExistsWithContextCalls gets all the calls that were made to WaitUntilObjectNotExistsWithContext.
@@ -15242,12 +15242,12 @@ func (mock *MockS3API) WaitUntilObjectNotExistsWithContext(contextMoqParam conte
 //
 //	len(mockedS3API.WaitUntilObjectNotExistsWithContextCalls())
 func (mock *MockS3API) WaitUntilObjectNotExistsWithContextCalls() []struct {
-	ContextMoqParam context.Context
+	V               aws.Context
 	HeadObjectInput *s3.HeadObjectInput
 	WaiterOptions   []request.WaiterOption
 } {
 	var calls []struct {
-		ContextMoqParam context.Context
+		V               aws.Context
 		HeadObjectInput *s3.HeadObjectInput
 		WaiterOptions   []request.WaiterOption
 	}
@@ -15322,23 +15322,23 @@ func (mock *MockS3API) WriteGetObjectResponseRequestCalls() []struct {
 }
 
 // WriteGetObjectResponseWithContext calls WriteGetObjectResponseWithContextFunc.
-func (mock *MockS3API) WriteGetObjectResponseWithContext(contextMoqParam context.Context, writeGetObjectResponseInput *s3.WriteGetObjectResponseInput, options ...request.Option) (*s3.WriteGetObjectResponseOutput, error) {
+func (mock *MockS3API) WriteGetObjectResponseWithContext(v aws.Context, writeGetObjectResponseInput *s3.WriteGetObjectResponseInput, options ...request.Option) (*s3.WriteGetObjectResponseOutput, error) {
 	if mock.WriteGetObjectResponseWithContextFunc == nil {
 		panic("MockS3API.WriteGetObjectResponseWithContextFunc: method is nil but S3API.WriteGetObjectResponseWithContext was just called")
 	}
 	callInfo := struct {
-		ContextMoqParam             context.Context
+		V                           aws.Context
 		WriteGetObjectResponseInput *s3.WriteGetObjectResponseInput
 		Options                     []request.Option
 	}{
-		ContextMoqParam:             contextMoqParam,
+		V:                           v,
 		WriteGetObjectResponseInput: writeGetObjectResponseInput,
 		Options:                     options,
 	}
 	mock.lockWriteGetObjectResponseWithContext.Lock()
 	mock.calls.WriteGetObjectResponseWithContext = append(mock.calls.WriteGetObjectResponseWithContext, callInfo)
 	mock.lockWriteGetObjectResponseWithContext.Unlock()
-	return mock.WriteGetObjectResponseWithContextFunc(contextMoqParam, writeGetObjectResponseInput, options...)
+	return mock.WriteGetObjectResponseWithContextFunc(v, writeGetObjectResponseInput, options...)
 }
 
 // WriteGetObjectResponseWithContextCalls gets all the calls that were made to WriteGetObjectResponseWithContext.
@@ -15346,12 +15346,12 @@ func (mock *MockS3API) WriteGetObjectResponseWithContext(contextMoqParam context
 //
 //	len(mockedS3API.WriteGetObjectResponseWithContextCalls())
 func (mock *MockS3API) WriteGetObjectResponseWithContextCalls() []struct {
-	ContextMoqParam             context.Context
+	V                           aws.Context
 	WriteGetObjectResponseInput *s3.WriteGetObjectResponseInput
 	Options                     []request.Option
 } {
 	var calls []struct {
-		ContextMoqParam             context.Context
+		V                           aws.Context
 		WriteGetObjectResponseInput *s3.WriteGetObjectResponseInput
 		Options                     []request.Option
 	}
