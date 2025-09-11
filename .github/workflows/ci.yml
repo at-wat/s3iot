@@ -83,7 +83,10 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v6
         with:
-          go-version-file: go.mod
+          go-version-file: tools/go.mod
+      - name: Install moq
+        working-directory: tools
+        run: go install github.com/matryer/moq
       - name: Generate mock
         run: |
           find . -name go.mod | while read gomod
