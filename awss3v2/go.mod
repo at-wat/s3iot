@@ -12,7 +12,6 @@ require (
 	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.19.6
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.88.1
 	github.com/aws/smithy-go v1.23.0
-	github.com/matryer/moq v0.3.4
 )
 
 require (
@@ -29,6 +28,4 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/sso v1.29.3 // indirect
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.34.4 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sts v1.38.4 // indirect
-	golang.org/x/mod v0.14.0 // indirect
-	golang.org/x/tools v0.17.0 // indirect
 )
