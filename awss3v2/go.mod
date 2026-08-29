@@ -1,6 +1,6 @@
 module github.com/at-wat/s3iot/awss3v2
 
-go 1.22
+go 1.24
 
 replace github.com/at-wat/s3iot => ../
 
@@ -11,7 +11,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/credentials v1.18.12
 	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.19.6
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.88.1
-	github.com/aws/smithy-go v1.23.0
+	github.com/aws/smithy-go v1.28.1
 )
 
 require (
