@@ -19,16 +19,6 @@
       "matchPackageNames": [
         "/^github.com/aws/aws-sdk-go-v2/"
       ]
-    },
-    {
-      "matchFileNames": [
-        "awss3v2-1.22.2/**"
-      ],
-      "enabled": false,
-      "matchPackageNames": [
-        "/^github.com/aws/aws-sdk-go-v2/",
-        "/^github.com/aws/smithy-go/"
-      ]
     }
   ]
 }
