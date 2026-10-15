@@ -22,6 +22,7 @@ jobs:
           - ./
           - ./awss3v1/
           - ./awss3v2/
+          - ./awss3v2-1.22.2/
           - ./examples/
     env:
       GO111MODULE: on
