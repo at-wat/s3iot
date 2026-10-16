@@ -5,6 +5,7 @@ import (
 	"io"
 	"sync"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
 	tm "github.com/aws/aws-sdk-go-v2/feature/s3/transfermanager"
 
 	"github.com/at-wat/s3iot"
@@ -51,7 +52,7 @@ func (u *sdkDownloader) Download(ctx context.Context, w io.WriterAt, input *s3io
 		out, err := u.u.DownloadObject(ctx, in)
 		dc.mu.Lock()
 		dc.err = err
-		dc.status.CompletedSize = *out.ContentLength
+		dc.status.CompletedSize = aws.ToInt64(out.ContentLength)
 		dc.mu.Unlock()
 		cancel()
 	}()
