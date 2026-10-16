@@ -28,6 +28,7 @@ func TestNewAWSSDKDownloader(t *testing.T) {
 	expectedStatus := s3iot.DownloadStatus{
 		Status: s3iot.Status{
 			CompletedSize: expectedLen,
+			Size:          expectedLen,
 		},
 	}
 	expectedErr := errors.New("a error")

@@ -51,6 +51,9 @@ func (u *sdkDownloader) Download(ctx context.Context, w io.WriterAt, input *s3io
 		dc.mu.Lock()
 		dc.err = err
 		dc.status.CompletedSize = n
+		if err == nil {
+			dc.status.Size = n
+		}
 		dc.mu.Unlock()
 		cancel()
 	}()
