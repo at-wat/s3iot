@@ -52,7 +52,9 @@ func (u *sdkDownloader) Download(ctx context.Context, w io.WriterAt, input *s3io
 		out, err := u.u.DownloadObject(ctx, in)
 		dc.mu.Lock()
 		dc.err = err
-		dc.status.CompletedSize = aws.ToInt64(out.ContentLength)
+		if out != nil {
+			dc.status.CompletedSize = aws.ToInt64(out.ContentLength)
+		}
 		dc.mu.Unlock()
 		cancel()
 	}()
