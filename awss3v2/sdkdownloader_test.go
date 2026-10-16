@@ -3,25 +3,23 @@ package awss3v2
 import (
 	"context"
 	"errors"
-	"io"
 	"reflect"
 	"testing"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
-	"github.com/aws/aws-sdk-go-v2/service/s3"
+	tm "github.com/aws/aws-sdk-go-v2/feature/s3/transfermanager"
 
 	"github.com/at-wat/s3iot"
-	mock_s3manageriface "github.com/at-wat/s3iot/awss3v2/internal/moq/s3manageriface"
+	mock_transfermanageriface "github.com/at-wat/s3iot/awss3v2/internal/moq/transfermanageriface"
 	"github.com/at-wat/s3iot/internal/iotest"
 )
 
 func TestNewAWSSDKDownloader(t *testing.T) {
 	ctx := context.Background()
-	expectedInput := s3.GetObjectInput{
+	expectedInput := tm.DownloadObjectInput{
 		Bucket:    aws.String("bucket"),
 		Key:       aws.String("key"),
-		VersionId: aws.String("version-id"),
+		VersionID: aws.String("version-id"),
 	}
 	expectedLen := int64(100)
 	expectedOutput := s3iot.DownloadOutput{
@@ -33,21 +31,27 @@ func TestNewAWSSDKDownloader(t *testing.T) {
 		},
 	}
 	expectedErr := errors.New("a error")
-	expectedWriter := iotest.BufferAt{}
+	expectedWriter := &iotest.BufferAt{}
 
-	api := &mock_s3manageriface.MockDownloader{
-		DownloadFunc: func(ctx context.Context, w io.WriterAt, input *s3.GetObjectInput, opts ...func(*manager.Downloader)) (int64, error) {
+	api := &mock_transfermanageriface.MockClient{
+		DownloadObjectFunc: func(ctx context.Context, input *tm.DownloadObjectInput, opts ...func(*tm.Options)) (*tm.DownloadObjectOutput, error) {
+			if input.WriterAt != expectedWriter {
+				t.Errorf("Unexpected writer")
+			}
+			input.WriterAt = nil
 			if !reflect.DeepEqual(expectedInput, *input) {
 				t.Errorf("Expected: %v, got: %v", expectedInput, *input)
 			}
-			return expectedLen, expectedErr
+			return &tm.DownloadObjectOutput{
+				ContentLength: aws.Int64(expectedLen),
+			}, expectedErr
 		},
 	}
 	u := NewAWSSDKDownloader(api)
 	uc, err := u.Download(ctx, expectedWriter, &s3iot.DownloadInput{
 		Bucket:    expectedInput.Bucket,
 		Key:       expectedInput.Key,
-		VersionID: expectedInput.VersionId,
+		VersionID: expectedInput.VersionID,
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -70,7 +74,7 @@ func TestNewAWSSDKDownloader(t *testing.T) {
 	if !reflect.DeepEqual(expectedOutput, res) {
 		t.Errorf("Expected: %v, got: %v", expectedOutput, res)
 	}
-	if n := len(api.DownloadCalls()); n != 1 {
+	if n := len(api.DownloadObjectCalls()); n != 1 {
 		t.Fatalf("Expected 1 call, called %d", n)
 	}
 }

@@ -4,6 +4,11 @@
 
 ## News
 
+### October 2026: awss3v2 adapter internally uses feature/s3/transfermanager
+https://github.com/aws/aws-sdk-go-v2 deprecates the previously used `feature/s3/manager`.
+The adapter `awss3v2` now uses `feature/s3/transfermanager` instead of `feature/s3/manager`.
+If you want to use ``feature/s3/manager`, import `github.com/at-wat/s3iot/awss3v2-s3manager` instead of `github.com/at-wat/s3iot/awss3v2`.
+
 ### November 2023: API breaking change in aws-sdk-go-v2
 https://github.com/aws/aws-sdk-go-v2 made a API breaking change in v1.23.0 (service/s3 v1.42.2).
 If you want to use the earlier versions, import `github.com/at-wat/s3iot/awss3v2-1.22.2` instead of `github.com/at-wat/s3iot/awss3v2`.
@@ -16,6 +21,13 @@ Main features:
 - Programmable retry
 - Pause/resume
 - Bandwidth control (uploader only)
+
+## SDK Adapters
+
+- `awss3v1`: aws-sdk-go (v1)
+- `awss3v2-1.22.2`: aws-sdk-go-v2\<=v1.22.0 with `github.com/aws/aws-sdk-go-v2/feature/s3/manager`
+- `awss3v2-s3manager`: aws-sdk-go-v2 with `github.com/aws/aws-sdk-go-v2/feature/s3/manager`
+- `awss3v2`: aws-sdk-go-v2 with `github.com/aws/aws-sdk-go-v2/feature/s3/transfermanager`
 
 ## Examples
 

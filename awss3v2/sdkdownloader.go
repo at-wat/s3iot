@@ -5,22 +5,23 @@ import (
 	"io"
 	"sync"
 
-	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	tm "github.com/aws/aws-sdk-go-v2/feature/s3/transfermanager"
 
 	"github.com/at-wat/s3iot"
-	"github.com/at-wat/s3iot/awss3v2/s3manageriface"
+	"github.com/at-wat/s3iot/awss3v2/transfermanageriface"
 	"github.com/at-wat/s3iot/s3iotiface"
 )
 
 // NewAWSSDKDownloader wraps aws-sdk-go-v2 s3manager as s3iotiface.Downloader.
 // Some fields of download status and result is not provided.
 // Pause/resume feature is unavailable.
-func NewAWSSDKDownloader(u s3manageriface.Downloader) s3iotiface.Downloader {
+func NewAWSSDKDownloader(u transfermanageriface.Client) s3iotiface.Downloader {
 	return &sdkDownloader{u: u}
 }
 
 type sdkDownloader struct {
-	u s3manageriface.Downloader
+	u transfermanageriface.Client
 }
 
 type sdkDownloaderContext struct {
@@ -41,16 +42,19 @@ func (u *sdkDownloader) Download(ctx context.Context, w io.WriterAt, input *s3io
 			VersionID: input.VersionID,
 		},
 	}
-	in := &s3.GetObjectInput{
+	in := &tm.DownloadObjectInput{
 		Bucket:    input.Bucket,
 		Key:       input.Key,
-		VersionId: input.VersionID,
+		VersionID: input.VersionID,
+		WriterAt:  w,
 	}
 	go func() {
-		n, err := u.u.Download(ctx, w, in)
+		out, err := u.u.DownloadObject(ctx, in)
 		dc.mu.Lock()
 		dc.err = err
-		dc.status.CompletedSize = n
+		if out != nil {
+			dc.status.CompletedSize = aws.ToInt64(out.ContentLength)
+		}
 		dc.mu.Unlock()
 		cancel()
 	}()

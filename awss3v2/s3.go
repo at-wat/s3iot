@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package awss3v2 provides s3iot.Uploader with aws-sdk-go-v2.
+// Package awss3v2 provides s3iot.Uploader with aws-sdk-go-v2 feature/s3/transfermanager.
 package awss3v2
 
 import (

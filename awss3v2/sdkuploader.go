@@ -4,23 +4,23 @@ import (
 	"context"
 	"sync"
 
-	"github.com/aws/aws-sdk-go-v2/service/s3"
-	"github.com/aws/aws-sdk-go-v2/service/s3/types"
+	tm "github.com/aws/aws-sdk-go-v2/feature/s3/transfermanager"
+	"github.com/aws/aws-sdk-go-v2/feature/s3/transfermanager/types"
 
 	"github.com/at-wat/s3iot"
-	"github.com/at-wat/s3iot/awss3v2/s3manageriface"
+	"github.com/at-wat/s3iot/awss3v2/transfermanageriface"
 	"github.com/at-wat/s3iot/s3iotiface"
 )
 
 // NewAWSSDKUploader wraps aws-sdk-go-v2 s3manager as s3iotiface.Uploader.
 // Some fields of download status and result is not provided.
 // Pause/resume feature is unavailable.
-func NewAWSSDKUploader(u s3manageriface.Uploader) s3iotiface.Uploader {
+func NewAWSSDKUploader(u transfermanageriface.Client) s3iotiface.Uploader {
 	return &sdkUploader{u: u}
 }
 
 type sdkUploader struct {
-	u s3manageriface.Uploader
+	u transfermanageriface.Client
 }
 
 type sdkUploaderContext struct {
@@ -39,7 +39,7 @@ func (u *sdkUploader) Upload(ctx context.Context, input *s3iot.UploadInput) (s3i
 	if input.ACL != nil {
 		acl = types.ObjectCannedACL(*input.ACL)
 	}
-	in := &s3.PutObjectInput{
+	in := &tm.UploadObjectInput{
 		ACL:         acl,
 		Body:        input.Body,
 		Bucket:      input.Bucket,
@@ -47,13 +47,13 @@ func (u *sdkUploader) Upload(ctx context.Context, input *s3iot.UploadInput) (s3i
 		Key:         input.Key,
 	}
 	go func() {
-		out, err := u.u.Upload(ctx, in)
+		out, err := u.u.UploadObject(ctx, in)
 		uc.mu.Lock()
 		uc.err = err
 		if out != nil {
 			uc.output.ETag = out.ETag
 			uc.output.VersionID = out.VersionID
-			uc.output.Location = &out.Location
+			uc.output.Location = out.Location
 		}
 		uc.mu.Unlock()
 		cancel()
