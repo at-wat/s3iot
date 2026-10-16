@@ -15,67 +15,90 @@ import (
 )
 
 func TestNewAWSSDKDownloader(t *testing.T) {
-	ctx := context.Background()
-	expectedInput := tm.DownloadObjectInput{
-		Bucket:    aws.String("bucket"),
-		Key:       aws.String("key"),
-		VersionID: aws.String("version-id"),
-	}
-	expectedLen := int64(100)
-	expectedOutput := s3iot.DownloadOutput{
-		VersionID: aws.String("version-id"),
-	}
-	expectedStatus := s3iot.DownloadStatus{
-		Status: s3iot.Status{
-			CompletedSize: expectedLen,
-			Size:          expectedLen,
-		},
-	}
-	expectedErr := errors.New("a error")
-	expectedWriter := &iotest.BufferAt{}
+	const expectedLen = 100
 
-	api := &mock_transfermanageriface.MockClient{
-		DownloadObjectFunc: func(ctx context.Context, input *tm.DownloadObjectInput, opts ...func(*tm.Options)) (*tm.DownloadObjectOutput, error) {
-			if input.WriterAt != expectedWriter {
-				t.Errorf("Unexpected writer")
-			}
-			input.WriterAt = nil
-			if !reflect.DeepEqual(expectedInput, *input) {
-				t.Errorf("Expected: %v, got: %v", expectedInput, *input)
-			}
-			return &tm.DownloadObjectOutput{
-				ContentLength: aws.Int64(expectedLen),
-			}, expectedErr
+	for name, testCase := range map[string]struct {
+		expectedStatus s3iot.DownloadStatus
+		expectedErr    error
+	}{
+		"Normal": {
+			expectedStatus: s3iot.DownloadStatus{
+				Status: s3iot.Status{
+					CompletedSize: expectedLen,
+					Size:          expectedLen,
+				},
+			},
+			expectedErr: nil,
 		},
-	}
-	u := NewAWSSDKDownloader(api)
-	uc, err := u.Download(ctx, expectedWriter, &s3iot.DownloadInput{
-		Bucket:    expectedInput.Bucket,
-		Key:       expectedInput.Key,
-		VersionID: expectedInput.VersionID,
-	})
-	if err != nil {
-		t.Fatal(err)
-	}
-	uc.Pause()
-	uc.Resume()
-	<-uc.Done()
+		"Error": {
+			expectedStatus: s3iot.DownloadStatus{
+				Status: s3iot.Status{
+					CompletedSize: 0,
+					Size:          0,
+				},
+			},
+			expectedErr: errors.New("a error"),
+		},
+	} {
+		t.Run(name, func(t *testing.T) {
+			ctx := context.Background()
+			expectedInput := tm.DownloadObjectInput{
+				Bucket:    aws.String("bucket"),
+				Key:       aws.String("key"),
+				VersionID: aws.String("version-id"),
+			}
+			expectedOutput := s3iot.DownloadOutput{
+				VersionID: aws.String("version-id"),
+			}
+			expectedWriter := &iotest.BufferAt{}
 
-	st, err := uc.Status()
-	if expectedErr != err {
-		t.Errorf("Expected error '%v', got '%v'", expectedErr, err)
-	}
-	if !reflect.DeepEqual(expectedStatus, st) {
-		t.Errorf("Expected: %v, got: %v", expectedStatus, st)
-	}
-	res, err := uc.Result()
-	if expectedErr != err {
-		t.Errorf("Expected error '%v', got '%v'", expectedErr, err)
-	}
-	if !reflect.DeepEqual(expectedOutput, res) {
-		t.Errorf("Expected: %v, got: %v", expectedOutput, res)
-	}
-	if n := len(api.DownloadObjectCalls()); n != 1 {
-		t.Fatalf("Expected 1 call, called %d", n)
+			api := &mock_transfermanageriface.MockClient{
+				DownloadObjectFunc: func(ctx context.Context, input *tm.DownloadObjectInput, opts ...func(*tm.Options)) (*tm.DownloadObjectOutput, error) {
+					if input.WriterAt != expectedWriter {
+						t.Errorf("Unexpected writer")
+					}
+					input.WriterAt = nil
+					if !reflect.DeepEqual(expectedInput, *input) {
+						t.Errorf("Expected: %v, got: %v", expectedInput, *input)
+					}
+					if testCase.expectedErr != nil {
+						return nil, testCase.expectedErr
+					}
+					return &tm.DownloadObjectOutput{
+						ContentLength: aws.Int64(expectedLen),
+					}, nil
+				},
+			}
+			u := NewAWSSDKDownloader(api)
+			uc, err := u.Download(ctx, expectedWriter, &s3iot.DownloadInput{
+				Bucket:    expectedInput.Bucket,
+				Key:       expectedInput.Key,
+				VersionID: expectedInput.VersionID,
+			})
+			if err != nil {
+				t.Fatal(err)
+			}
+			uc.Pause()
+			uc.Resume()
+			<-uc.Done()
+
+			st, err := uc.Status()
+			if testCase.expectedErr != err {
+				t.Errorf("Expected error '%v', got '%v'", testCase.expectedErr, err)
+			}
+			if !reflect.DeepEqual(testCase.expectedStatus, st) {
+				t.Errorf("Expected: %v, got: %v", testCase.expectedStatus, st)
+			}
+			res, err := uc.Result()
+			if testCase.expectedErr != err {
+				t.Errorf("Expected error '%v', got '%v'", testCase.expectedErr, err)
+			}
+			if !reflect.DeepEqual(expectedOutput, res) {
+				t.Errorf("Expected: %v, got: %v", expectedOutput, res)
+			}
+			if n := len(api.DownloadObjectCalls()); n != 1 {
+				t.Fatalf("Expected 1 call, called %d", n)
+			}
+		})
 	}
 }
