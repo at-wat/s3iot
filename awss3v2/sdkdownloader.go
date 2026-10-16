@@ -15,6 +15,7 @@ import (
 
 // NewAWSSDKDownloader wraps aws-sdk-go-v2 s3manager as s3iotiface.Downloader.
 // Some fields of download status and result is not provided.
+// Status().CompletedSize on download failure is implementation dependent.
 // Pause/resume feature is unavailable.
 func NewAWSSDKDownloader(u transfermanageriface.Client) s3iotiface.Downloader {
 	return &sdkDownloader{u: u}
@@ -54,6 +55,9 @@ func (u *sdkDownloader) Download(ctx context.Context, w io.WriterAt, input *s3io
 		dc.err = err
 		if out != nil {
 			dc.status.CompletedSize = aws.ToInt64(out.ContentLength)
+			if err == nil {
+				dc.status.Size = aws.ToInt64(out.ContentLength)
+			}
 		}
 		dc.mu.Unlock()
 		cancel()
