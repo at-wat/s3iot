@@ -7,24 +7,23 @@ import (
 	"testing"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
-	"github.com/aws/aws-sdk-go-v2/service/s3"
-	"github.com/aws/aws-sdk-go-v2/service/s3/types"
+	tm "github.com/aws/aws-sdk-go-v2/feature/s3/transfermanager"
+	"github.com/aws/aws-sdk-go-v2/feature/s3/transfermanager/types"
 
 	"github.com/at-wat/s3iot"
-	mock_s3manageriface "github.com/at-wat/s3iot/awss3v2/internal/moq/s3manageriface"
+	mock_transfermanageriface "github.com/at-wat/s3iot/awss3v2/internal/moq/transfermanageriface"
 )
 
 func TestNewAWSSDKUploader(t *testing.T) {
 	ctx := context.Background()
 
 	testCases := map[string]struct {
-		expectedInput  s3.PutObjectInput
+		expectedInput  tm.UploadObjectInput
 		expectedOutput s3iot.UploadOutput
 		expectedErr    error
 	}{
 		"Normal": {
-			expectedInput: s3.PutObjectInput{
+			expectedInput: tm.UploadObjectInput{
 				ACL:         types.ObjectCannedACLPrivate,
 				Bucket:      aws.String("bucket"),
 				ContentType: aws.String("content-type"),
@@ -37,7 +36,7 @@ func TestNewAWSSDKUploader(t *testing.T) {
 			},
 		},
 		"NilACL": {
-			expectedInput: s3.PutObjectInput{
+			expectedInput: tm.UploadObjectInput{
 				Bucket:      aws.String("bucket"),
 				ContentType: aws.String("content-type"),
 				Key:         aws.String("key"),
@@ -49,7 +48,7 @@ func TestNewAWSSDKUploader(t *testing.T) {
 			},
 		},
 		"Error": {
-			expectedInput: s3.PutObjectInput{
+			expectedInput: tm.UploadObjectInput{
 				Bucket:      aws.String("bucket"),
 				ContentType: aws.String("content-type"),
 				Key:         aws.String("key"),
@@ -61,18 +60,18 @@ func TestNewAWSSDKUploader(t *testing.T) {
 		tt := tt
 		t.Run(name, func(t *testing.T) {
 
-			api := &mock_s3manageriface.MockUploader{
-				UploadFunc: func(uCtx context.Context, input *s3.PutObjectInput, opts ...func(*manager.Uploader)) (*manager.UploadOutput, error) {
+			api := &mock_transfermanageriface.MockClient{
+				UploadObjectFunc: func(uCtx context.Context, input *tm.UploadObjectInput, opts ...func(*tm.Options)) (*tm.UploadObjectOutput, error) {
 					if !reflect.DeepEqual(tt.expectedInput, *input) {
 						t.Errorf("Expected: %v, got: %v", tt.expectedInput, *input)
 					}
 					if tt.expectedErr != nil {
 						return nil, tt.expectedErr
 					}
-					return &manager.UploadOutput{
+					return &tm.UploadObjectOutput{
 						ETag:      tt.expectedOutput.ETag,
 						VersionID: tt.expectedOutput.VersionID,
-						Location:  *tt.expectedOutput.Location,
+						Location:  tt.expectedOutput.Location,
 					}, nil
 				},
 			}
@@ -100,7 +99,7 @@ func TestNewAWSSDKUploader(t *testing.T) {
 			if !reflect.DeepEqual(tt.expectedOutput, res) {
 				t.Errorf("Expected: %v, got: %v", tt.expectedOutput, res)
 			}
-			if n := len(api.UploadCalls()); n != 1 {
+			if n := len(api.UploadObjectCalls()); n != 1 {
 				t.Fatalf("Expected 1 call, called %d", n)
 			}
 		})

@@ -5,7 +5,7 @@ package mock_s3manageriface
 
 import (
 	"context"
-	"github.com/at-wat/s3iot/awss3v2/s3manageriface"
+	"github.com/at-wat/s3iot/awss3v2-s3manager/s3manageriface"
 	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"io"

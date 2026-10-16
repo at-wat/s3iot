@@ -13,6 +13,8 @@
 // limitations under the License.
 
 // Package awss3v1 provides s3iot.Uploader with aws-sdk-go (v1).
+//
+// Deprecated: Recommended to migrate to aws-sdk-go-v2.
 package awss3v1
 
 import (
