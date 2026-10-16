@@ -38,6 +38,9 @@ func TestNewAWSSDKDownloader(t *testing.T) {
 
 	api := &mock_s3manageriface.MockDownloader{
 		DownloadFunc: func(ctx context.Context, w io.WriterAt, input *s3.GetObjectInput, opts ...func(*manager.Downloader)) (int64, error) {
+			if w != expectedWriter {
+				t.Errorf("Unexpected writer")
+			}
 			if !reflect.DeepEqual(expectedInput, *input) {
 				t.Errorf("Expected: %v, got: %v", expectedInput, *input)
 			}
